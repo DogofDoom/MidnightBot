@@ -1,0 +1,277 @@
+[
+  {
+    "Category": "Tiere",
+    "Question": "Ein Delfin kann besser bestimmte ______ erkennen, als ein Mensch",
+    "Answer": "Töne"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Gemäß einer Geschichte: Welche Tiere haben ein untergegangenes Schiff überlebt?",
+    "Answer": "Ratten"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "HDMI",
+    "Answer": "High Definition Multimedia Interface"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "HD",
+    "Answer": "High Definition"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "GG",
+    "Answer": "Good Game"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "1337",
+    "Answer": "Leet"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "AFK",
+    "Answer": "Away from Keyboard"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "ASAP",
+    "Answer": "As soon as possible"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "FPS",
+    "Answer": "Frames per seconds"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "BIOS",
+    "Answer": "Basic Input Output System"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "FAQ",
+    "Answer": "Frequently Asked Questions"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "HGW",
+    "Answer": "Herzlichen Glückwunsch"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "kA",
+    "Answer": "keine Ahnung"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "MfG",
+    "Answer": "Mit freundlichen Grüßen"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "mom",
+    "Answer": "Moment"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "OT",
+    "Answer": "Off Topic"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "Q&A",
+    "Answer": "Questions and answers"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "w8",
+    "Answer": "wait"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": "YOLO",
+    "Answer": "You only live once"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": " HTTP",
+    "Answer": "hyper text transfer protocol"
+  },
+  {
+    "Category": "Abkürzungen",
+    "Question": " VR",
+    "Answer": "virtual reality"
+  },
+  {
+  	 "Category": "Allgemeinwissen",
+    "Question": "Luft besteht aus: 78% Stickstoff, 21% ______ und 1% andere Gase",
+    "Answer": "Sauerstoff"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Ein Tier gilt als Fisch wenn es _________ hat",
+    "Answer": "Kiemen"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wie viele Beine hat eine Spinne?",
+    "Answer": "8"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wo leben die größten Tiere?",
+    "Answer": "Meer"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Was können Maulwürfe nicht?",
+    "Answer": "sehen"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Welche Vögel können nicht singen?",
+    "Answer": "Kolibris"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Was sind die größten Nagetiere des Nordens?",
+    "Answer": "Bieber"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wie viel Schlaf benötigt eine Katze: **a** 6 Stunden, **b** 12 Stunden, **c** 16 Stunden oder **d** 20 Stunden?",
+    "Answer": "c"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Welcher Fisch erzeugt Elektrizität?",
+    "Answer": "Zitteraal"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wie nennt man die Verwandlung einer Raupe in einen Schmetterling?",
+    "Answer": "Metamorphose"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wie viele Zähne hat ein Blauwal?",
+    "Answer": "0"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Welches ist die größte Raubkatze der Welt?",
+    "Answer": "Tiger"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wie alt kann ein Hecht werden: **a** 50 Jahre, **b** 100 Jahre, **c** 150 Jahre oder **d** 200 Jahre?",
+    "Answer": "b"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Was frisst die größte Spinne der Welt?",
+    "Answer": "Vögel"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Was ist das älteste bekannteste Haustier der Menschen?",
+    "Answer": "Hund"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wovon ernähren sind Wale?",
+    "Answer": "Plankton"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wie oft schlägt ein Kolibri die Flügel in der Sekunde: **a** 20 mal, **b** 40 mal, **c** 60 mal oder **d** 80 mal?",
+    "Answer": "c"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Welcher Vogel legt seine Eier in die Nester anderer Vögel?",
+    "Answer": "Kuckuck"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wie heißt der australische Wildhund?",
+    "Answer": "Dingo"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Welche Augenfarbe haben weiße Mäuse?",
+    "Answer": "Rot"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Junge Frösche nennt man auch?",
+    "Answer": "Kaulquappen"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Welche Bären leben in deutschen Wäldern?",
+    "Answer": "Waschbären"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wie viele Tage kann ein Kamel ohne Wasser auskommen: **a** 6 Tage, **b** 10 Tage, **c** 14 Tage oder **d** 18 Tage?",
+    "Answer": "c"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Welche Farbe hat ein Rotkehlchen-Ei: **a** Rot, **b** Blau, **c** Gelb oder **d** Grün?",
+    "Answer": "b"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wie viele Fangarme hat ein Oktopus: **a** 4, **b** 6, **c** 8 oder **d** 10?",
+    "Answer": "c"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Kiwis nennt man auch eine ______-Art",
+    "Answer": "Vogel"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wie viel Wasser verdunstet eine Sonnenblume am Tag: **a** 1 Liter, **b** 1,5 Liter, **c** 2 Liter oder **d** 2,5 Liter?",
+    "Answer": "b"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Welches Reptil kann an einer glatten Zimmerdecke kleben?",
+    "Answer": "Gecko"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Welches Tier besteht aus 85% aus Wasser?",
+    "Answer": "Qualle"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Welches ist die schnellste Wildkatze der Welt?",
+    "Answer": "Gepard"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wie wird die Lebensgemeinschaft von Wölfen genannt?",
+    "Answer": "Rudel"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wie heißt der größte Fisch?",
+    "Answer": "Walhai"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wie heißt die Hülle einer Insektenpuppe?",
+    "Answer": "Kokon"
+  },
+  {
+    "Category": "Tiere",
+    "Question": "Wie groß kann ein Grizzlybär werden: **a** 1,50 Meter, **b** 2,50 Meter, **c** 3,00 Meter oder **d** 3,50 Meter?",
+    "Answer": "b"
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "PermissionsControllerRole": "Nadeko",
+  "Verbose": true,
+  "Id": 148181171845595136,
+  "Permissions": {
+    "Name": "Testserver",
+    "Modules": {
+      "NSFW": true
+    },
+    "Commands": {},
+    "FilterInvites": true,
+    "FilterWords": false
+  },
+  "Words": [],
+  "UserPermissions": {},
+  "ChannelPermissions": {},
+  "RolePermissions": {
+    "148181171845595136": {
+      "Name": "@everyone",
+      "Modules": {
+        "Conversations": true,
+        "Games": true,
+        "Sounds": true,
+        "Extra": true,
+        "Help": true,
+        "Pokegame": true,
+        "NSFW": true,
+        "ClashOfClans": true,
+        "Permissions": true,
+        "Music": true,
+        "Searches": true,
+        "Translator": true,
+        "Gambling": true,
+        "Administration": true
+      },
+      "Commands": {},
+      "FilterInvites": true,
+      "FilterWords": false
+    }
+  }
+}
