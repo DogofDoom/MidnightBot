@@ -231,7 +231,10 @@ namespace NadekoBot
                 }
 
                 Client.SetGame ("Channel-Bot");
-
+                foreach (var ch in NadekoBot.Client.Servers.Select (s => s.DefaultChannel))
+                {
+                    await ch.SendMessage ("`Hallo. Ich bin wieder da!`");
+                }
                 Client.ClientAPI.SendingRequest += ( s,e ) =>
                 {
                     var request = e.Request as Discord.API.Client.Rest.SendMessageRequest;

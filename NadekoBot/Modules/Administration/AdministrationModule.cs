@@ -953,7 +953,7 @@ namespace NadekoBot.Modules.Administration
                            await ch.SendMessage (e.GetArg ("msg"));
                        }
 
-                       await e.Channel.SendMessage (":ok:");
+                       await e.User.SendMessage (":ok:");
                    });
             });
         }

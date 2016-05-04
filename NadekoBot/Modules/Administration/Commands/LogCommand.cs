@@ -46,7 +46,7 @@ namespace NadekoBot.Modules.Administration.Commands
                     var usr = e.Message.MentionedUsers.FirstOrDefault (u => u != e.User);
                     if (usr?.Status != UserStatus.Offline)
                         return;
-                    await e.Channel.SendMessage ($"Benutzer `{usr.Name}` ist offline. PM gesendet.").ConfigureAwait (false);
+                    //await e.Channel.SendMessage ($"Benutzer `{usr.Name}` ist offline. PM gesendet.").ConfigureAwait (false);
                     await usr.SendMessage (
                     $"Benutzer `{e.User.Name}` hat dich erwähnt auf dem Server " +
                     $"`{e.Server.Name}` während du offline warst.\n" +
@@ -310,7 +310,7 @@ namespace NadekoBot.Modules.Administration.Commands
                             await e.Channel.SendMessage (":ok: I won't send private messages " +
                             "to mentioned offline users anymore.").ConfigureAwait (false);
                 });
-            
+
             cgb.CreateCommand(Module.Prefix + "logserver")
                   .Description("Toggles logging in this channel. Logs every message sent/deleted/edited on the server. **Owner Only!**")
                   .AddCheck (SimpleCheckers.OwnerOnly ())

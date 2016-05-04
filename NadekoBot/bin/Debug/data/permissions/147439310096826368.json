@@ -7,7 +7,8 @@
     "Modules": {
       "NSFW": false,
       "Pokegame": true,
-      "Sounds": true
+      "Sounds": true,
+      "Music": false
     },
     "Commands": {},
     "FilterInvites": true,
@@ -16,7 +17,17 @@
   "Words": [
     "hitler"
   ],
-  "UserPermissions": {},
+  "UserPermissions": {
+    "147390060742967296": {
+      "Name": "GimliBoy",
+      "Modules": {},
+      "Commands": {
+        ".restart": false
+      },
+      "FilterInvites": true,
+      "FilterWords": false
+    }
+  },
   "ChannelPermissions": {
     "150546367972900864": {
       "Name": "admin",
