@@ -576,11 +576,12 @@ namespace NadekoBot.Modules.Administration
                        var heap = await Task.Run (() => NadekoStats.Instance.Heap ()).ConfigureAwait (false);
                        await e.Channel.SendMessage ($"`Heap Size:` {heap}").ConfigureAwait (false);
                    });
+
                 cgb.CreateCommand (Prefix + "prune")
-                    .Alias (".clr")
+                    .Alias (Prefix + "clr")
                     .Description ("Entfernt eine Anzahl von Nachrichten im Chat.\n**Benutzung**: .prune 5")
-                    .Parameter ("user_or_num",ParameterType.Optional)
                     .Parameter ("num",ParameterType.Required)
+                    .Parameter ("user_or_num",ParameterType.Optional)
                     .Do (async e =>
                      {
                      if (string.IsNullOrWhiteSpace ("user_or_num")) // if nothing is set, clear nadeko's messages, no permissions required
