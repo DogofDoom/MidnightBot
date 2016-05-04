@@ -36,3 +36,4 @@ NadekoBot/bin/Debug/data/nadekobot.sqlite
 NadekoBot/bin/Debug/data/nadekobotKopie.sqlite
 NadekoBot/bin/Debug/data/config.json
 NadekoBot/Bin/Debug/data/incidents/*
+NadekoBot/Bin/Debug/data/permissions/*
