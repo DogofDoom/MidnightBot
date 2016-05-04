@@ -58,6 +58,91 @@ namespace NadekoBot.Modules.Permissions
                          await e.Channel.SendMessage ($"Rolle `{role.Name}` ist nun benötigt um die Berechtigungen zu bearbeiten.").ConfigureAwait (false);
                      });
 
+                cgb.CreateCommand (Prefix + "rpc")
+                    .Alias (Prefix + "rolepermissionscopy")
+                    .Description ($"Kopiert BOT BERECHTIGUNGEN (nicht Discord Berechtigungen) von einer Rolle zu einer anderen.\n**Benutzung**:`{Prefix}rpc Some Role ~ Some other role`")
+                    .Parameter ("from_to",ParameterType.Unparsed)
+                    .Do (async e =>
+                    {
+                        var arg = e.GetArg ("from_to")?.Trim ();
+                        if (string.IsNullOrWhiteSpace (arg) || !arg.Contains ('~'))
+                            return;
+                        var args = arg.Split ('~').Select (a => a.Trim ()).ToArray ();
+                        if (args.Length > 2)
+                        {
+                            await e.Channel.SendMessage ("💢Ungültige Anzahl von '~'s in den Argumenten.");
+                            return;
+                        }
+                        try
+                        {
+                            var fromRole = PermissionHelper.ValidateRole (e.Server,args[0]);
+                            var toRole = PermissionHelper.ValidateRole (e.Server,args[1]);
+
+                            PermissionsHandler.CopyRolePermissions (fromRole,toRole);
+                            await e.Channel.SendMessage ($"CBerechtigungseinstellungen von **{fromRole.Name}** zu **{toRole.Name}** kopiert.");
+                        }
+                        catch (Exception ex)
+                        {
+                            await e.Channel.SendMessage ($"💢{ex.Message}");
+                        }
+                    });
+                cgb.CreateCommand (Prefix + "cpc")
+                    .Alias (Prefix + "channelpermissionscopy")
+                    .Description ($"Kopiert BOT BERECHTIGUNGEN (nicht Discord Berechtigungen) von einem Channel zu einem anderen.\n**Benutzung**:`{Prefix}cpc Some Channel ~ Some other channel`")
+                    .Parameter ("from_to",ParameterType.Unparsed)
+                    .Do (async e =>
+                    {
+                        var arg = e.GetArg ("from_to")?.Trim ();
+                        if (string.IsNullOrWhiteSpace (arg) || !arg.Contains ('~'))
+                            return;
+                        var args = arg.Split ('~').Select (a => a.Trim ()).ToArray ();
+                        if (args.Length > 2)
+                        {
+                            await e.Channel.SendMessage ("💢Ungültige Anzahl von '~'s in den Argumenten.");
+                            return;
+                        }
+                        try
+                        {
+                            var fromChannel = PermissionHelper.ValidateChannel (e.Server,args[0]);
+                            var toChannel = PermissionHelper.ValidateChannel (e.Server,args[1]);
+
+                            PermissionsHandler.CopyChannelPermissions (fromChannel,toChannel);
+                            await e.Channel.SendMessage ($"Berechtigungseinstellungen von **{fromChannel.Name}** zu **{toChannel.Name}** kopiert.");
+                        }
+                        catch (Exception ex)
+                        {
+                            await e.Channel.SendMessage ($"💢{ex.Message}");
+                        }
+                    });
+                cgb.CreateCommand (Prefix + "upc")
+                    .Alias (Prefix + "userpermissionscopy")
+                    .Description ($"Kopiert BOT BERECHTIGUNGEN (nicht Discord Berechtigungen) von einem Benutzer, zu einem anderen.\n**Benutzung**:`{Prefix}upc @SomeUser ~ @SomeOtherUser`")
+                    .Parameter ("from_to",ParameterType.Unparsed)
+                    .Do (async e =>
+                    {
+                        var arg = e.GetArg ("from_to")?.Trim ();
+                        if (string.IsNullOrWhiteSpace (arg) || !arg.Contains ('~'))
+                            return;
+                        var args = arg.Split ('~').Select (a => a.Trim ()).ToArray ();
+                        if (args.Length > 2)
+                        {
+                            await e.Channel.SendMessage ("💢Ungültige Anzahl von '~'s in den Argumenten.");
+                            return;
+                        }
+                        try
+                        {
+                            var fromUser = PermissionHelper.ValidateUser (e.Server,args[0]);
+                            var toUser = PermissionHelper.ValidateUser (e.Server,args[1]);
+
+                            PermissionsHandler.CopyUserPermissions (fromUser,toUser);
+                            await e.Channel.SendMessage ($"Berechtigungseinstellungen von **{fromUser.ToString ()}** zu * *{toUser.ToString ()}** kopiert.");
+                        }
+                        catch (Exception ex)
+                        {
+                            await e.Channel.SendMessage ($"💢{ex.Message}");
+                        }
+                    });
+
                 cgb.CreateCommand (Prefix + "verbose")
                     .Alias (Prefix + "v")
                     .Description ("Ändert ob das blocken/entblocken eines Modules/Befehls angezeigt wird.\n**Benutzung**: ;verbose true")

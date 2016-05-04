@@ -17,7 +17,7 @@ namespace NadekoBot.Modules.Administration.Commands
         private readonly ConcurrentDictionary<Server, Channel> loggingPresences = new ConcurrentDictionary<Server, Channel>();
         private readonly ConcurrentDictionary<Channel, Channel> voiceChannelLog = new ConcurrentDictionary<Channel, Channel>();
 
-        private string prettyCurrentTime => $"{DateTime.Now:HH:mm:ss}";
+        private string prettyCurrentTime => $"【{DateTime.Now:HH:mm:ss}】";
 
         public LogCommand(DiscordModule module) : base(module)
         {
@@ -28,6 +28,10 @@ namespace NadekoBot.Modules.Administration.Commands
             NadekoBot.Client.UserBanned += UsrBanned;
             NadekoBot.Client.UserLeft += UsrLeft;
             NadekoBot.Client.UserJoined += UsrJoined;
+            NadekoBot.Client.UserUnbanned += UsrUnbanned;
+            NadekoBot.Client.ChannelCreated += ChannelCreated;
+            NadekoBot.Client.ChannelDestroyed += ChannelDestroyed;
+            NadekoBot.Client.ChannelUpdated += ChannelUpdated;
 
             NadekoBot.Client.MessageReceived += async (s, e) => 
             {
@@ -52,9 +56,76 @@ namespace NadekoBot.Modules.Administration.Commands
                 };
         }
 
+        private async void ChannelUpdated ( object sender,ChannelUpdatedEventArgs e )
+        {
+            try
+            {
+                Channel ch;
+                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                if (!logs.TryGetValue (e.Server,out ch))
+                    return;
+                if (e.Before.Name != e.After.Name)
+                    await OwnerPrivateChannel.SendMessage ($@"`{prettyCurrentTime}` **Channel Name geändert** `#{e.Before.Name}` (*{e.After.Id}*)
+                                          `Neu:` {e.After.Name}").ConfigureAwait (false);
+                else if (e.Before.Topic != e.After.Topic)
+                    await OwnerPrivateChannel.SendMessage ($@"`{prettyCurrentTime}` **Channel Topic geändert** `#{e.After.Name}` (*{e.After.Id}*)
+                                          `Alt:` {e.Before.Topic}
+                                          `Neu:` {e.After.Topic}").ConfigureAwait (false);
+            }
+            catch { }
+        }
+
+        private async void ChannelDestroyed ( object sender,ChannelEventArgs e )
+        {
+            try
+            {
+                Channel ch;
+                if (!logs.TryGetValue (e.Server,out ch))
+                    return;
+                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                await OwnerPrivateChannel.SendMessage ($"❗`{prettyCurrentTime}` `Channel Gelöscht:` #{e.Channel.Name} (*{e.Channel.Id}*)").ConfigureAwait (false);
+            }
+            catch { }
+        }
+
+        private async void ChannelCreated ( object sender,ChannelEventArgs e )
+        {
+            try
+            {
+                Channel ch;
+                if (!logs.TryGetValue (e.Server,out ch))
+                    return;
+                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}` `Channel Erstellt:` #{e.Channel.Mention} (*{e.Channel.Id}*)").ConfigureAwait (false);
+            }
+            catch { }
+        }
+
+        private async void UsrUnbanned ( object sender,UserEventArgs e )
+        {
+            try
+            {
+                Channel ch;
+                if (!logs.TryGetValue (e.Server,out ch))
+                    return;
+                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}` `Benutzer wurde entbannt:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
+            }
+            catch { }
+        }
+
+
         private async void UsrJoined ( object sender,UserEventArgs e )
         {
-            throw new NotImplementedException ();
+            try
+            {
+                Channel ch;
+                if (!logs.TryGetValue (e.Server,out ch))
+                    return;
+                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}` `User joined:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
+            }
+            catch { }
         }
 
         private async void UsrLeft ( object sender,UserEventArgs e )
@@ -64,7 +135,8 @@ namespace NadekoBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
-                await ch.SendMessage ($"`[{prettyCurrentTime}]` `User left the server:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
+                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}` `Benutzer verließ den Server:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
             }
             catch { }
         }
@@ -76,7 +148,8 @@ namespace NadekoBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue (e.Server, out ch))
                     return;
-                await ch.SendMessage ($"❗`[{prettyCurrentTime}]` `User gebannt:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
+                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                await OwnerPrivateChannel.SendMessage ($"❗`{prettyCurrentTime}` `User gebannt:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
             }
             catch { }
         }
@@ -88,7 +161,7 @@ namespace NadekoBot.Modules.Administration.Commands
             {
                 logs.TryAdd(e.Server, e.Channel);
                 Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
-                await e.Channel.SendMessage($"**Logging gestartet**").ConfigureAwait (false);
+                await OwnerPrivateChannel.SendMessage($"❗**Logging gestartet**❗").ConfigureAwait (false);
                 return;
             }
 
@@ -107,7 +180,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
                 await OwnerPrivateChannel.SendMessage
                     (
-                        $@"🕔`[{prettyCurrentTime}]` **Neue Nachricht** `#{e.Channel.Name}`
+                        $@"🕔`{prettyCurrentTime}` **Neue Nachricht** `#{e.Channel.Name}`
                         👤`{e.User?.ToString () ?? ("NULL")}` {e.Message.Text}"
                     ).ConfigureAwait (false);
             }
@@ -125,7 +198,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
                 await OwnerPrivateChannel.SendMessage 
                     (
-                        $@"🕔`[{prettyCurrentTime}]` **Nachricht** 🚮 `#{e.Channel.Name}`
+                        $@"🕔`{prettyCurrentTime}` **Nachricht** 🚮 `#{e.Channel.Name}`
                         👤`{e.User?.ToString () ?? ("NULL")}` {e.Message.Text}"
                     ).ConfigureAwait (false);
             }
@@ -143,7 +216,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
                 await OwnerPrivateChannel.SendMessage 
                     (
-                        $@"🕔`[{prettyCurrentTime}]` **Nachricht** 📝 `#{e.Channel.Name}`
+                        $@"🕔`{prettyCurrentTime}` **Nachricht** 📝 `#{e.Channel.Name}`
                         👤`{e.User?.ToString () ?? ("NULL")}`
                         `Alt:` {e.Before.Text}
                         `Neu:` {e.After.Text}"
@@ -186,9 +259,11 @@ namespace NadekoBot.Modules.Administration.Commands
                 Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
                 if (!logs.TryGetValue(e.Server, out ch))
                     return;
-                string str = $"🕔`[{prettyCurrentTime}]`";
+                string str = $"🕔`{prettyCurrentTime}`";
                 if (e.Before.Name != e.After.Name)
-                    str += $"**Name geändert**\n\t`{e.Before.Name}` => `{e.After.Name}`";
+                    str += $"**Name geändert**👤`{e.Before?.ToString ()}`\n\t\t`Neu:`{e.After.ToString ()}`";
+                else if (e.Before.Nickname != e.After.Nickname)
+                    str += $"**Nickname geändert**👤`{e.Before?.ToString ()}`\n\t\t`Alt:` {e.Before.Nickname}#{e.Before.Discriminator}\n\t\t`Neu:` {e.After.Nickname}#{e.After.Discriminator}";
                 else if (e.Before.AvatarUrl != e.After.AvatarUrl)
                     str += $"**Neuer Avatar**👤`{e.Before?.ToString ()}`\n\t {await e.Before.AvatarUrl.ShortenUrl ()} `=>` {await e.After.AvatarUrl.ShortenUrl ()}";
                 else if (!e.Before.Roles.SequenceEqual (e.After.Roles))
@@ -196,12 +271,12 @@ namespace NadekoBot.Modules.Administration.Commands
                     if (e.Before.Roles.Count () < e.After.Roles.Count ())
                     {
                         var diffRoles = e.After.Roles.Where (r => !e.Before.Roles.Contains (r)).Select (r => "`" + r.Name + "`");
-                        str += $"**Benutzer Rollen geändert +**👤`{e.Before?.ToString ()}`\n\tHat nun die {string.Join (", ",diffRoles)} Rolle.";
+                        str += $"**Benutzer Rollen geändert ➕**👤`{e.Before?.ToString ()}`\n\tHat nun die {string.Join (", ",diffRoles)} Rolle.";
                     }
                     else if (e.Before.Roles.Count () > e.After.Roles.Count ())
                     {
                         var diffRoles = e.Before.Roles.Where (r => !e.After.Roles.Contains (r)).Select (r => "`" + r.Name + "`");
-                        str += $"**Benutzer Rollen geändert -**👤`{e.Before?.ToString ()}`\n\tHat nicht länger die {string.Join (", ",diffRoles)} Rolle.";
+                        str += $"**Benutzer Rollen geändert ➖**👤`{e.Before?.ToString ()}`\n\tHat nicht länger die {string.Join (", ",diffRoles)} Rolle.";
                     }
                     else
                     {

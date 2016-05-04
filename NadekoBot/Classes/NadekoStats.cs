@@ -31,6 +31,9 @@ namespace NadekoBot
         private readonly Timer commandLogTimer = new Timer () { Interval = 10000 };
         private readonly Timer carbonStatusTimer = new Timer () { Interval = 3600000 };
 
+        private static ulong messageCounter = 0;
+        public static ulong MessageCounter => messageCounter;
+
         static NadekoStats () { }
 
         private NadekoStats ()
@@ -50,6 +53,7 @@ namespace NadekoBot
             TextChannelsCount = channelsArray.Count (c => c.Type == ChannelType.Text);
             VoiceChannelsCount = channelsArray.Count () - TextChannelsCount;
 
+            NadekoBot.Client.MessageReceived += ( s,e ) => messageCounter++;
 
             NadekoBot.Client.JoinedServer += ( s,e ) =>
             {
@@ -134,7 +138,7 @@ namespace NadekoBot
 
         public string GetUptimeString ()
         {
-            var time = (DateTime.Now - Process.GetCurrentProcess ().StartTime);
+            var time = GetUptime ();
             return time.Days + " Tage, " + time.Hours + " Stunden und " + time.Minutes + " Minuten.";
         }
 
@@ -157,7 +161,7 @@ namespace NadekoBot
                  sb.Append ($"`Gegrüßt: {ServerGreetCommand.Greeted} mal.`");
                  sb.AppendLine ($" `| Spielt {songs} Lieder, ".SnPl (songs) +
                                $"{MusicModule.MusicPlayers.Sum (kvp => kvp.Value.Playlist.Count)} queued.`");
-                 sb.AppendLine ($"`Heap: {Heap (false)}`");
+                 sb.AppendLine ($"`Nachrichten: {messageCounter} ({messageCounter / (double)GetUptime ().TotalSeconds:F2}/sec)`  `Heap: {Heap (false)}`");
                  statsCache = sb.ToString ();
              });
 

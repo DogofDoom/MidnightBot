@@ -352,7 +352,7 @@ namespace NadekoBot.Modules.Music
                      });
 
                 cgb.CreateCommand (Prefix + "lo")
-                    .Description ("Listet einen lokalen Song mit vollen Pfad. **Owner Only!**")
+                    .Description ("Listet einen lokalen Song mit vollen Pfad. **Owner Only!**\n**Benutzung**: `!lo C:/music/mysong.mp3`")
                     .Parameter ("path",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>

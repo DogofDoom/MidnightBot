@@ -509,16 +509,28 @@ namespace NadekoBot.Modules.Administration
 
                 cgb.CreateCommand (Prefix + "st").Alias (Prefix + "settopic")
                     .Alias (Prefix + "topic")
-                    .Description ("Setzt eine Beschreibung für den derzeitigen Channel.")
+                    .Description ("Setzt eine Beschreibung für den derzeitigen Channel.\n**Benutzung**: `{Prefix}st My new topic`")
                     .AddCheck (SimpleCheckers.ManageChannels ())
                     .Parameter ("topic",ParameterType.Unparsed)
                     .Do (async e =>
                     {
-                        var topic = e.GetArg ("topic");
-                        if (string.IsNullOrWhiteSpace (topic))
-                            return;
+                        var topic = e.GetArg ("topic")?.Trim () ?? "";
                         await e.Channel.Edit (topic: topic).ConfigureAwait (false);
                         await e.Channel.SendMessage (":ok: **Channel Topic gesetzt.**").ConfigureAwait (false);
+                    });
+
+                cgb.CreateCommand (Prefix + "schn").Alias (Prefix + "setchannelname")
+                    .Alias (Prefix + "topic")
+                    .Description ("Ändert den Namen des derzeitigen Channels.")
+                    .AddCheck (SimpleCheckers.ManageChannels ())
+                    .Parameter ("name",ParameterType.Unparsed)
+                    .Do (async e =>
+                    {
+                        var name = e.GetArg ("name");
+                        if (string.IsNullOrWhiteSpace (name))
+                            return;
+                        await e.Channel.Edit (name: name).ConfigureAwait (false);
+                        await e.Channel.SendMessage (":ok: **Neuer Channel Name gesetzt.**").ConfigureAwait (false);
                     });
 
                 cgb.CreateCommand (Prefix + "uid").Alias (Prefix + "userid")
@@ -565,51 +577,17 @@ namespace NadekoBot.Modules.Administration
                        await e.Channel.SendMessage ($"`Heap Size:` {heap}").ConfigureAwait (false);
                    });
                 cgb.CreateCommand (Prefix + "prune")
-                    .Parameter ("num",ParameterType.Required)
+                    .Alias (".clr")
                     .Description ("Entfernt eine Anzahl von Nachrichten im Chat.\n**Benutzung**: .prune 5")
+                    .Parameter ("user_or_num",ParameterType.Optional)
+                    .Parameter ("num",ParameterType.Required)
                     .Do (async e =>
                      {
-                         if (!e.User.ServerPermissions.ManageMessages)
-                             return;
-                         int val;
-                         if (string.IsNullOrWhiteSpace (e.GetArg ("num")) || !int.TryParse (e.GetArg ("num"),out val) || val < 0)
-                             return;
-
-                         foreach (var msg in await e.Channel.DownloadMessages (val).ConfigureAwait (false))
-                         {
-                             await msg.Delete ().ConfigureAwait (false);
-                             await Task.Delay (100).ConfigureAwait (false);
-                         }
-                     });
-
-                cgb.CreateCommand (Prefix + "die")
-                    .Alias (Prefix + "graceful")
-                    .Description ("Stoppt den Bot und benachrichtigt alle Benutzer darüber. **Owner Only!**")
-                    .Do (async e =>
+                     if (string.IsNullOrWhiteSpace ("user_or_num")) // if nothing is set, clear nadeko's messages, no permissions required
                      {
-                         if (NadekoBot.IsOwner (e.User.Id))
-                         {
-                             await e.Channel.SendMessage ("`Fährt herunter.`").ConfigureAwait (false);
-                             await Task.Delay (2000).ConfigureAwait (false);
-                             Environment.Exit (0);
-                         }
-                     });
-
-                cgb.CreateCommand (Prefix + "clr")
-                    .Description ("Entfernt ein paar von MidnightBots Nachrichten aus dem Chat. (Oder eines anderen Users, wenn genannt.**Owner Only!**) \n**UBenutzung**: .clr @X")
-                    .Parameter ("user",ParameterType.Unparsed)
-                    .Do (async e =>
-                     {
-                         var usrId = NadekoBot.Client.CurrentUser.Id;
-                         if (!string.IsNullOrWhiteSpace (e.GetArg ("user")) && e.User.ServerPermissions.ManageMessages)
-                         {
-                             var usr = e.Server.FindUsers (e.GetArg ("user")).FirstOrDefault ();
-                             if (usr != null)
-                                 usrId = usr.Id;
-                         }
                          await Task.Run (async () =>
                          {
-                             var msgs = (await e.Channel.DownloadMessages (100).ConfigureAwait (false)).Where (m => m.User.Id == usrId);
+                             var msgs = (await e.Channel.DownloadMessages (100).ConfigureAwait (false)).Where (m => m.User.Id == e.Server.CurrentUser.Id);
                              foreach (var m in msgs)
                              {
                                  try
@@ -617,21 +595,88 @@ namespace NadekoBot.Modules.Administration
                                      await m.Delete ().ConfigureAwait (false);
                                  }
                                  catch { }
-                                 await Task.Delay (200).ConfigureAwait (false);
+                                 await Task.Delay (100).ConfigureAwait (false);
+                             }
+
+                         }).ConfigureAwait (false);
+                             return;
+                         }
+                         if (!e.User.ServerPermissions.ManageMessages)
+                             return;
+                         else if (e.Server.CurrentUser.ServerPermissions.ManageMessages)
+                         {
+                             await e.Channel.SendMessage ("💢Ich habe keine Berechtigungen um Nachrichten zu löschen.");
+                             return;
+                         }
+                         int val;
+                         if (int.TryParse (e.GetArg ("user_or_num"),out val)) // if num is set in the first argument, 
+                                                                              //delete that number of messages.
+                         {
+                             if (val <= 0)
+                                 return;
+                             val++;
+                             foreach (var msg in await e.Channel.DownloadMessages (val).ConfigureAwait (false))
+                             {
+                                 await msg.Delete ().ConfigureAwait (false);
+                                 await Task.Delay (100).ConfigureAwait (false);
+                             }
+                         }
+                         //else if first argument is user
+                         var usr = e.Server.FindUsers (e.GetArg ("user_or_num")).FirstOrDefault ();
+                         if (usr == null)
+                             return;
+                         val = 100;
+                         int.TryParse ("num",out val);
+                         if (val <= 0)
+                             return;
+
+                         await Task.Run (async () =>
+                         {
+                             var msgs = (await e.Channel.DownloadMessages (100).ConfigureAwait (false)).Where (m => m.User.Id == usr.Id).Take (val);
+                             foreach (var m in msgs)
+                             {
+                                 try
+                                 {
+                                     await m.Delete ().ConfigureAwait (false);
+                                 }
+                                 catch { }
+                                 await Task.Delay (100).ConfigureAwait (false);
                              }
 
                          }).ConfigureAwait (false);
                      });
-                
+
+                cgb.CreateCommand (Prefix + "die")
+                    .Alias (Prefix + "graceful")
+                    .Description ("Fährt den Bot herunter und benachrichtigt Benutzer über den Neustart. **Owner Only!**")
+                    .AddCheck (SimpleCheckers.OwnerOnly ())
+                    .Do (async e =>
+                    {
+                        await e.Channel.SendMessage ("`Fährt herunter.`").ConfigureAwait (false);
+                        await Task.Delay (2000).ConfigureAwait (false);
+                        Environment.Exit (0);
+                    });
+
+                //cgb.CreateCommand(Prefix + "newnick")
+                //    .Alias(Prefix + "setnick")
+                //    .Description("Gibt dem Bot einen neuen Nicknamen. Du benötigst 'manage server permissions'.")
+                //    .Parameter("new_nick", ParameterType.Unparsed)
+                //    .AddCheck(SimpleCheckers.ManageServer())
+                //    .Do(async e =>
+                //    {
+                //        if (e.GetArg("new_nick") == null) return;
+
+                //        await client.CurrentUser.Edit(NadekoBot.Creds.Password, e.GetArg("new_nick")).ConfigureAwait(false);
+                //    });
 
                 cgb.CreateCommand (Prefix + "newname")
                     .Alias (Prefix + "setname")
                     .Description ("Gibt dem Bot einen neuen Namen. **Owner Only!**")
                     .Parameter ("new_name",ParameterType.Unparsed)
+                    .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
                      {
-                         if (!NadekoBot.IsOwner (e.User.Id) || e.GetArg ("new_name") == null)
-                             return;
+                         if (e.GetArg("new_name") == null) return;
 
                          await client.CurrentUser.Edit (NadekoBot.Creds.Password,e.GetArg ("new_name")).ConfigureAwait (false);
                      });
@@ -640,19 +685,20 @@ namespace NadekoBot.Modules.Administration
                     .Alias (Prefix + "setavatar")
                     .Description ("Setzt ein neues Profilbild für MidnightBot. **Owner Only!**")
                     .Parameter ("img",ParameterType.Unparsed)
+                    .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
                      {
-                         if (!NadekoBot.IsOwner (e.User.Id) || string.IsNullOrWhiteSpace (e.GetArg ("img")))
+                         if (string.IsNullOrWhiteSpace (e.GetArg ("img")))
                              return;
-                        // Gather user provided URL.
-                        var avatarAddress = e.GetArg ("img");
+                         // Gather user provided URL.
+                         var avatarAddress = e.GetArg ("img");
                          var imageStream = await SearchHelper.GetResponseStreamAsync (avatarAddress).ConfigureAwait (false);
                          var image = System.Drawing.Image.FromStream (imageStream);
-                        // Save the image to disk.
-                        image.Save ("data/avatar.png",System.Drawing.Imaging.ImageFormat.Png);
+                         // Save the image to disk.
+                         image.Save ("data/avatar.png",System.Drawing.Imaging.ImageFormat.Png);
                          await client.CurrentUser.Edit (NadekoBot.Creds.Password,avatar: image.ToStream ()).ConfigureAwait (false);
-                        // Send confirm.
-                        await e.Channel.SendMessage ("Neuer Avatar gesetzt.").ConfigureAwait (false);
+                         // Send confirm.
+                         await e.Channel.SendMessage ("Neuer Avatar gesetzt.").ConfigureAwait (false);
                      });
 
                 cgb.CreateCommand (Prefix + "setgame")
@@ -686,10 +732,9 @@ namespace NadekoBot.Modules.Administration
                 cgb.CreateCommand (Prefix + "commsuser")
                     .Description ("Setzt einen Benutzer für die Throug-Bot Kommunikation. Funktioniert nur, wenn Server gesetzt ist. Resettet commschannel. **Owner Only!**")
                     .Parameter ("name",ParameterType.Unparsed)
+                    .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
                      {
-                         if (!NadekoBot.IsOwner (e.User.Id))
-                             return;
                          commsUser = commsServer?.FindUsers (e.GetArg ("name")).FirstOrDefault ();
                          if (commsUser != null)
                          {
@@ -703,10 +748,9 @@ namespace NadekoBot.Modules.Administration
                 cgb.CreateCommand (Prefix + "commsserver")
                     .Description ("Setzt einen Server für Through-Bot Kommunikation. **Owner Only!**")
                     .Parameter ("server",ParameterType.Unparsed)
+                    .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
                      {
-                         if (!NadekoBot.IsOwner (e.User.Id))
-                             return;
                          commsServer = client.FindServers (e.GetArg ("server")).FirstOrDefault ();
                          if (commsServer != null)
                              await e.Channel.SendMessage ("Server for Kommunikation gesetzt.").ConfigureAwait (false);
@@ -717,10 +761,9 @@ namespace NadekoBot.Modules.Administration
                 cgb.CreateCommand (Prefix + "commschannel")
                     .Description ("Setzt einen Channel für Through-Bot Kommunikation. Funktioniert nur, wenn Server gesetzt ist. Resettet commsuser. **Owner Only!**")
                     .Parameter ("ch",ParameterType.Unparsed)
+                    .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
                      {
-                         if (!NadekoBot.IsOwner (e.User.Id))
-                             return;
                          commsChannel = commsServer?.FindChannels (e.GetArg ("ch"),ChannelType.Text).FirstOrDefault ();
                          if (commsChannel != null)
                          {
@@ -734,10 +777,9 @@ namespace NadekoBot.Modules.Administration
                 cgb.CreateCommand (Prefix + "send")
                     .Description ("Sende eine Nachricht an einen User auf einem anderen Server über den Bot..**Owner Only!****\n **Benutzung**: .send Message text multi word!")
                     .Parameter ("msg",ParameterType.Unparsed)
+                    .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
                      {
-                         if (!NadekoBot.IsOwner (e.User.Id))
-                             return;
                          if (commsUser != null)
                              await commsUser.SendMessage (e.GetArg ("msg")).ConfigureAwait (false);
                          else if (commsChannel != null)
@@ -782,10 +824,9 @@ namespace NadekoBot.Modules.Administration
 
                 cgb.CreateCommand (Prefix + "parsetosql")
                   .Description ("Lädt exportierte Parsedata von /data/parsedata/ in Sqlite Datenbank.")
+                  .AddCheck (SimpleCheckers.OwnerOnly ())
                   .Do (async e =>
                    {
-                       if (!NadekoBot.IsOwner (e.User.Id))
-                           return;
                        await Task.Run (() =>
                        {
                            SaveParseToDb<Announcement> ("data/parsedata/Announcements.json");
@@ -860,8 +901,6 @@ namespace NadekoBot.Modules.Administration
                     {
                         await Task.Run (() =>
                          {
-                             if (!NadekoBot.IsOwner (e.User.Id))
-                                 return;
                              var donator = e.Server.FindUsers (e.GetArg ("donator")).FirstOrDefault ();
                              var amount = int.Parse (e.GetArg ("amount"));
                              if (donator == null)

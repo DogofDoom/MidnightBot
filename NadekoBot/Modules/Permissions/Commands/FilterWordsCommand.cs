@@ -53,7 +53,7 @@ namespace NadekoBot.Modules.Permissions.Commands
                 .Alias(Module.Prefix + "channelfilterwords")
                 .Description("Aktiviert, oder deaktiviert automatische Löschung von Nachrichten auf diesem Channel, die gebannte Wörter beinhalten." +
                              "Wenn kein Channel ausgewählt, dieser hier. Benutze ALL um auf alle derzeit existierenden Channel zu aktivieren." +
-                             "\n**Usage**: ;cfi enable #general-chat")
+                             "\n**Usage**: ;cfw enable #general-chat")
                 .Parameter("bool")
                 .Parameter("channel", ParameterType.Optional)
                 .Do(async e =>
@@ -92,7 +92,7 @@ namespace NadekoBot.Modules.Permissions.Commands
             cgb.CreateCommand(Module.Prefix + "afw")
                .Alias(Module.Prefix + "addfilteredword")
                .Description("Fügt ein neues Wort zur Liste der gefilterten Wörter hinzu." +
-                            "\n**Benutzung**: ;aw poop")
+                            "\n**Benutzung**: ;afw poop")
                .Parameter("word", ParameterType.Unparsed)
                .Do(async e => 
                {
