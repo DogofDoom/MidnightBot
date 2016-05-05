@@ -28,6 +28,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NadekoBot.Modules.CustomReactions;
 
 namespace NadekoBot
 {
@@ -187,7 +188,7 @@ namespace NadekoBot
             modules.Add (new NSFWModule (),"NSFW",ModuleFilter.None);
             modules.Add (new SoundsModule (),"Sounds",ModuleFilter.None);
             modules.Add (new ClashOfClansModule (),"ClashOfClans",ModuleFilter.None);
-            //modules.Add(new ProgrammingModule(), "Programming", ModuleFilter.None);
+            modules.Add (new CustomReactionsModule (),"Customreactions",ModuleFilter.None);
 
             if (!string.IsNullOrWhiteSpace (Creds.TrelloAppKey))
                 modules.Add (new TrelloModule (),"Trello",ModuleFilter.None);
