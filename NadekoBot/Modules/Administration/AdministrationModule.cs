@@ -579,13 +579,13 @@ namespace NadekoBot.Modules.Administration
 
                 cgb.CreateCommand (Prefix + "prune")
                     .Alias (Prefix + "clr")
-                    .Description ("Entfernt eine Anzahl von Nachrichten im Chat.\n**Benutzung**: .prune 5")
-                    .Parameter ("num",ParameterType.Required)
+                    .Description (@"`.prune` alle von MidnightBots Nachrichten, in den letzten 100 Nachrichten.`.prune X` entfernt die letzten X Nachrichten von diesem Channel (bis zu 100)`.prune @Someone` Entfernt alle Nachrichten einer Person. in den letzten 100 Nachrichten.`.prune @Someone X` Entfernt die letzen X Nachrichten einer Person in diesem Channel.\n**Benutzung**: `.prune` oder `.prune 5` oder `.prune @Someone` oder `.prune @Someone X`")
                     .Parameter ("user_or_num",ParameterType.Optional)
+                    .Parameter ("num",ParameterType.Optional)
                     .Do (async e =>
                      {
-                     if (string.IsNullOrWhiteSpace ("user_or_num")) // if nothing is set, clear nadeko's messages, no permissions required
-                     {
+                         if (string.IsNullOrWhiteSpace (e.GetArg ("user_or_num"))) // if nothing is set, clear nadeko's messages, no permissions required
+                         {
                          await Task.Run (async () =>
                          {
                              var msgs = (await e.Channel.DownloadMessages (100).ConfigureAwait (false)).Where (m => m.User.Id == e.Server.CurrentUser.Id);
@@ -602,9 +602,9 @@ namespace NadekoBot.Modules.Administration
                          }).ConfigureAwait (false);
                              return;
                          }
-                         if (!e.User.ServerPermissions.ManageMessages)
+                         if (!e.User.GetPermissions (e.Channel).ManageMessages)
                              return;
-                         else if (e.Server.CurrentUser.ServerPermissions.ManageMessages)
+                         else if (!e.Server.CurrentUser.GetPermissions (e.Channel).ManageMessages)
                          {
                              await e.Channel.SendMessage ("💢Ich habe keine Berechtigungen um Nachrichten zu löschen.");
                              return;
@@ -621,15 +621,15 @@ namespace NadekoBot.Modules.Administration
                                  await msg.Delete ().ConfigureAwait (false);
                                  await Task.Delay (100).ConfigureAwait (false);
                              }
+                             return;
                          }
                          //else if first argument is user
                          var usr = e.Server.FindUsers (e.GetArg ("user_or_num")).FirstOrDefault ();
                          if (usr == null)
                              return;
                          val = 100;
-                         int.TryParse ("num",out val);
-                         if (val <= 0)
-                             return;
+                         if (!int.TryParse (e.GetArg ("num"),out val))
+                             val = 100;
 
                          await Task.Run (async () =>
                          {
@@ -653,7 +653,11 @@ namespace NadekoBot.Modules.Administration
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
                     {
-                        await e.Channel.SendMessage ("`Fährt herunter.`").ConfigureAwait (false);
+                        foreach (var ch in NadekoBot.Client.Servers.Select (s => s.DefaultChannel))
+                        {
+                            await ch.SendMessage ("`Fährt herunter.`");
+                        }
+                        //await e.Channel.SendMessage ("`Fährt herunter.`").ConfigureAwait (false);
                         await Task.Delay (2000).ConfigureAwait (false);
                         Environment.Exit (0);
                     });

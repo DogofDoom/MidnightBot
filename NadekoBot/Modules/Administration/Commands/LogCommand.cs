@@ -233,22 +233,41 @@ namespace NadekoBot.Modules.Administration.Commands
                     if (e.Before.Status != e.After.Status)
                     {
                         Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
-                        await OwnerPrivateChannel.SendMessage ($"`[{DateTime.Now:HH:mm:ss}]`**{e.Before.Name}** ist nun **{e.After.Status}**.").ConfigureAwait (false);
+                        await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}`**{e.Before.Name}** is now **{e.After.Status}**.").ConfigureAwait (false);
                     }
             }
             catch { }
 
             try
             {
-                if (e.Before.VoiceChannel != null && voiceChannelLog.ContainsKey(e.Before.VoiceChannel))
+                Channel notifyChBefore = null;
+                Channel notifyChAfter = null;
+                var beforeVch = e.Before.VoiceChannel;
+                var afterVch = e.After.VoiceChannel;
+                var notifyLeave = false;
+                var notifyJoin = false;
+                if ((beforeVch != null || afterVch != null) && (beforeVch != afterVch)) // this means we need to notify for sure.
                 {
-                    if (e.After.VoiceChannel != e.Before.VoiceChannel)
-                        await voiceChannelLog[e.Before.VoiceChannel].SendMessage($"🎼`{e.Before.Name} hat den Voice-Channel` {e.Before.VoiceChannel.Mention} `verlassen.`").ConfigureAwait (false);
-                }
-                if (e.After.VoiceChannel != null && voiceChannelLog.ContainsKey(e.After.VoiceChannel))
-                {
-                    if (e.After.VoiceChannel != e.Before.VoiceChannel)
-                        await voiceChannelLog[e.After.VoiceChannel].SendMessage($"🎼`{e.After.Name} hat den Voice-Channel`{e.After.VoiceChannel.Mention} ` betreten.`").ConfigureAwait (false);
+                    if (beforeVch != null && voiceChannelLog.TryGetValue (beforeVch,out notifyChBefore))
+                    {
+                        notifyLeave = true;
+                    }
+                    if (afterVch != null && voiceChannelLog.TryGetValue (afterVch,out notifyChAfter))
+                    {
+                        notifyJoin = true;
+                    }
+                    if ((notifyLeave && notifyJoin) && (notifyChAfter == notifyChBefore))
+                    {
+                        await notifyChAfter.SendMessage ($"🎼`{prettyCurrentTime}` {e.Before.Name} ging vom **{beforeVch.Mention}** zum **{afterVch.Mention}** Voice Channel.").ConfigureAwait (false);
+                    }
+                    else if (notifyJoin)
+                    {
+                        await notifyChAfter.SendMessage ($"🎼`{prettyCurrentTime}` {e.Before.Name} betrat den **{afterVch.Mention}** Voice Channel.").ConfigureAwait (false);
+                    }
+                    else if (notifyLeave)
+                    {
+                        await notifyChBefore.SendMessage ($"🎼`{prettyCurrentTime}` {e.Before.Name} verlies den **{beforeVch.Mention}** Voice Channel.").ConfigureAwait (false);
+                    }
                 }
             }
             catch { }

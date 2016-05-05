@@ -121,12 +121,7 @@ namespace NadekoBot.Modules.Gambling
             return async e =>
             {
                 var pts = GetUserFlowers (e.User.Id);
-                var str = $"`Du hast {pts} {NadekoBot.Config.CurrencyName}.".SnPl ((int)pts) + "`\n";
-                for (var i = 0; i < pts; i++)
-                {
-                    str += NadekoBot.Config.CurrencySign;
-                }
-
+                var str = $"`Du hast {pts} {NadekoBot.Config.CurrencySign}";
                 await e.User.SendMessage (str).ConfigureAwait (false);
             };
         }
