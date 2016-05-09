@@ -160,7 +160,85 @@ namespace NadekoBot.Modules.Conversations
                             await e.Channel.SendMessage (e.User.Mention + " Ich bin traurig. Mein Meister ist nicht hier.").ConfigureAwait (false);
                         }
                     });
-                
+
+                cgb.CreateCommand ("insult")
+                    .Parameter ("mention",ParameterType.Required)
+                    .Description ("Beleidigt @X Person.\n**Benutzung**: @MidnightBot insult @X.")
+                    .Do (async e =>
+                    {
+                        var u = e.Channel.FindUsers (e.GetArg ("mention")).FirstOrDefault ();
+                        if (u == null)
+                        {
+                            await e.Channel.SendMessage ("Ungültiger Benutzer.").ConfigureAwait (false);
+                            return;
+                        }
+
+                        if (NadekoBot.IsOwner (u.Id))
+                        {
+                            await e.Channel.SendMessage ("Ich würde nie meinen Meister beleidigen. <3").ConfigureAwait (false);
+                            return;
+                        }
+                        else if (u.Id == e.User.Id)
+                        {
+                            await e.Channel.SendMessage ("Man muss schon doof sein, wenn man sich selber beleidigen will.")
+                            .ConfigureAwait (false);
+                            return;
+                        }
+                        else if (u.Id == NadekoBot.Client.CurrentUser.Id)
+                        {
+                            await e.Channel.SendMessage (e.User.Mention + " Denkst du wirklich ich beleidige mich selbst, du Schwachkopf. :P")
+                            .ConfigureAwait (false);
+                            return;
+                        }
+                        else
+                        {
+
+                            tester = 0;
+                            //var msgs = (await e.Channel.DownloadMessages (100)).Where (m => m.User.Id == NadekoBot.client.CurrentUser.Id);
+                            foreach (var m in (await e.Channel.DownloadMessages (10)).Where (m => m.User.Id == e.User.Id))
+                            {
+                                if (tester == 0)
+                                {
+                                    await m.Delete ();
+                                    tester++;
+                                }
+                            }
+                            await e.Channel.SendMessage (u.Mention + NadekoBot.Locale.Insults[rng.Next (0,NadekoBot.Locale.Insults.Length)])
+                            .ConfigureAwait (false);
+                        }
+
+                    });
+
+                cgb.CreateCommand ("praise")
+                    .Description ("Lobt @X Person.\n**Benutzung**: @MidnightBot praise @X.")
+                    .Parameter ("mention",ParameterType.Required)
+                    .Do (async e =>
+                    {
+                        var u = e.Channel.FindUsers (e.GetArg ("mention")).FirstOrDefault ();
+
+                        if (u == null)
+                        {
+                            await e.Channel.SendMessage ("Ungültiger Benutzer.").ConfigureAwait (false);
+                            return;
+                        }
+
+                        if (NadekoBot.IsOwner (u.Id))
+                        {
+                            await e.Channel.SendMessage (e.User.Mention + " Ich brauche deine Erlaubnis nicht, um meinen Meister zu loben <3")
+                            .ConfigureAwait (false);
+                            return;
+                        }
+                        else if (u.Id == e.User.Id)
+                        {
+                            await e.Channel.SendMessage ($"Eigenlob stinkt {e.User.Mention}")
+                            .ConfigureAwait (false);
+                            return;
+                        }
+                        else
+                            await e.Channel.SendMessage (u.Mention + NadekoBot.Locale.Praises[rng.Next (0,NadekoBot.Locale.Praises.Length)])
+                            .ConfigureAwait (false);
+                    });
+
                 cgb.CreateCommand ("fire")
                     .Description ("Zeigt eine unicode Feuer Nachricht. Optionaler Parameter [x] sagt ihm wie oft er das Feuer wiederholen soll.\n**Benutzung**: @MidnightBot fire [x]")
                     .Parameter ("times",ParameterType.Optional)

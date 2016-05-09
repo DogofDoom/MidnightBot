@@ -15,21 +15,6 @@
     "comeatmebro": [
       "%target% (ง’̀-‘́)ง"
     ],
-    "e": [
-      "%user% did it 😒 🔫",
-      "%target% did it 😒 🔫"
-    ],
-    "%mention% insult": [
-      "%target% Du bist Scheiße.",
-      "%target% Du bist ein Idiot.",
-      "%target% I will eat you when I get my powers back."
-    ],
-    "%mention% praise": [
-      "%target% Du bist cool.",
-      "%target% Du bist nett!",
-      "%target% Du hast eine gute Arbeit geleistet.",
-      "%target% ist Wunderbar!"
-    ],
     "%mention% pat": [
       "http://i.imgur.com/IiQwK12.gif",
       "http://i.imgur.com/JCXj8yD.gif",
@@ -115,7 +100,7 @@
     "Definitiv nein",
     "NEIN - Es würde eine Krankheit auslösen"
   ],
-  "CurrencySign": "🌸",
-  "CurrencyName": "Coins",
+  "CurrencySign": ":euro:",
+  "CurrencyName": "Euro",
   "DMHelpString": "Gib `-h` ein für Hilfe."
 }

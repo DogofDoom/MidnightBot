@@ -23,26 +23,14 @@ namespace NadekoBot.Classes.JSONModels
             { "/o/" } },
             {"/o/", new List<string>()
             { @"\o\" } },
-            {"moveto", new List<string>() {
-                @"(👉 ͡° ͜ʖ ͡°)👉 %target%" } },
-            {"comeatmebro", new List<string>() {
-                "%target% (ง’̀-‘́)ง" } },
-            {"e", new List<string>() {
-                "%user% did it 😒 🔫",
-                "%target% did it 😒 🔫" } },
-            {"%mention% insult", new List<string>() {
-                "%target% Du bist Scheiße.",
-                "%target% Du bist ein Idiot.",
-                "%target% I will eat you when I get my powers back."
-                 } },
-            {"%mention% praise", new List<string>()
+            {"moveto", new List<string>()
             {
-                "%target% Du bist cool.",
-                "%target% Du bist nett!",
-                "%target% Du hast eine gute Arbeit geleistet.",
-                "%target% ist Wunderbar!"
-            } },
-            {"%mention% pat", new List<string>() {
+                @"(👉 ͡° ͜ʖ ͡°)👉 %target%" } },
+            {"comeatmebro", new List<string>()
+            {
+                "%target% (ง’̀-‘́)ง" } },
+            {"%mention% pat", new List<string>()
+            {
                 "http://i.imgur.com/IiQwK12.gif",
                 "http://i.imgur.com/JCXj8yD.gif",
                 "http://i.imgur.com/qqBl2bm.gif",
@@ -68,17 +56,20 @@ namespace NadekoBot.Classes.JSONModels
             {
                 "Ja. :)"
             } },
-            {"%mention% draw", new List<string>() {
+            {"%mention% draw", new List<string>()
+            {
                 "Sorry, ich spiele nicht, gib $draw für diese Funktion ein."
             } },
             {"%mention% bb", new List<string>()
             {
                 "Aufwiedersehen %target%"
             } },
-            {"%mention% call", new List<string>() {
+            {"%mention% call", new List<string>()
+            {
                 "Calling %target%"
             } },
-            {"%mention% disguise", new List<string>() {
+            {"%mention% disguise", new List<string>()
+            {
                 "https://cdn.discordapp.com/attachments/140007341880901632/156721710458994690/Cc5mixjUYAADgBs.jpg",
                 "https://cdn.discordapp.com/attachments/140007341880901632/156721715831898113/hqdefault.jpg",
                 "https://cdn.discordapp.com/attachments/140007341880901632/156721724430352385/okawari_01_haruka_weird_mask.jpg",
@@ -127,8 +118,8 @@ namespace NadekoBot.Classes.JSONModels
                 "NEIN - Es würde eine Krankheit auslösen"
             };
 
-        public string CurrencySign { get; set; } = "🌸";
-        public string CurrencyName { get; set; } = "Coins";
+        public string CurrencySign { get; set; } = ":euro:";
+        public string CurrencyName { get; set; } = "Euro";
 
         public string DMHelpString { get; set; } = "Gib `-h` ein für Hilfe.";
     }

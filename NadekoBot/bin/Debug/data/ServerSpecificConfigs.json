@@ -1,7 +1,7 @@
 {
   "147439310096826368": {
     "VoicePlusTextEnabled": false,
-    "SendPrivateMessageOnMention": true,
+    "SendPrivateMessageOnMention": false,
     "ListOfSelfAssignableRoles": [],
     "ObservingStreams": []
   },

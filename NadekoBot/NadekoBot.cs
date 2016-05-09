@@ -7,6 +7,7 @@ using NadekoBot.Classes.JSONModels;
 using NadekoBot.Modules.Administration;
 using NadekoBot.Modules.ClashOfClans;
 using NadekoBot.Modules.Conversations;
+using NadekoBot.Modules.CustomReactions;
 using NadekoBot.Modules.Extra;
 using NadekoBot.Modules.Gambling;
 using NadekoBot.Modules.Games;
@@ -28,7 +29,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NadekoBot.Modules.CustomReactions;
 
 namespace NadekoBot
 {

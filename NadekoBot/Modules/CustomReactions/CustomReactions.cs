@@ -32,9 +32,11 @@ namespace NadekoBot.Modules.CustomReactions
                 {
                     var commandName = command.Key.Replace ("%mention%",NadekoBot.BotMention);
 
-                    cgb.CreateCommand (commandName)
-                         .Description ($"Custom Reaction.\n**Benutzung**:{command.Key}")
-                         .Parameter ("args",ParameterType.Unparsed)
+                    var c = cgb.CreateCommand (commandName);
+                    if (commandName.Contains (NadekoBot.BotMention))
+                       c.Alias (commandName.Replace ("<@","<@!"));
+                       c.Description ($"Custom Reaction.\n**Benutzung**:{command.Key}")
+                        .Parameter ("args",ParameterType.Unparsed)
                          .Do (async e =>
                          {
                              string str = command.Value[range.Next (0,command.Value.Count ())];
