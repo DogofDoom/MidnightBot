@@ -145,18 +145,15 @@ namespace NadekoBot.Modules.Gambling
                             return;
                         await e.Channel.SendMessage
                         (
-                            richest.Aggregate (new StringBuilder
-                            (
-                                $@"```xl
-                                ┏━━━━━━━━━━━━━━━━━━━┳━━━━━━━┓
-                                ┃        Id         ┃  $$$  ┃
-                            "),
-                            ( cur,cs ) => cur.AppendLine
-                            (
-                             $@"┣━━━━━━━━━━━━━━━━━━━╋━━━━━━━┫
-                                ┃{cs.UserId,-18} ┃ {cs.Value,5} ┃"
-                            )
-                        ).ToString () + "┗━━━━━━━━━━━━━━━━━━━┻━━━━━━━┛```");
+                            richest.Aggregate (new StringBuilder (
+$@"```xl
+┏━━━━━━━━━━━━━━━━━━━┳━━━━━━━┓
+┃        Id         ┃  $$$  ┃
+"),
+                            ( cur,cs ) => cur.AppendLine (
+$@"┣━━━━━━━━━━━━━━━━━━━╋━━━━━━━┫
+┃{cs.UserId,-18} ┃ {cs.Value,5} ┃")
+                                ).ToString () + "┗━━━━━━━━━━━━━━━━━━━┻━━━━━━━┛```");
                     });
            });
         }
