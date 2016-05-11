@@ -29,6 +29,7 @@ namespace NadekoBot.Modules.Administration
             commands.Add (new Remind (this));
             commands.Add (new InfoCommands (this));
             commands.Add (new CustomReactionsCommands (this));
+            commands.Add (new AutoAssignRole (this));
         }
 
         public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.Administration;
@@ -143,6 +144,40 @@ namespace NadekoBot.Modules.Administration
                              await e.Channel.SendMessage ("Entfernen von Rolle fehlgeschlagen. Wahrscheinlicher Grund: Nicht genug Berechtigung.").ConfigureAwait (false);
                          }
                      });
+
+                cgb.CreateCommand (Prefix + "renr")
+                    .Alias (Prefix + "renamerole")
+                    .Description ($"Benennt eine Rolle um. Rolle die umbenannt werden soll muss muss in Liste niedriger sein als die höchste Rolle des Bots.\n**Benutzung**: `{Prefix}renr \"Erste Rolle\" ZweiteRolle`")
+                    .Parameter ("r1",ParameterType.Required)
+                    .Parameter ("r2",ParameterType.Required)
+                    .AddCheck (new SimpleCheckers.ManageRoles ())
+                    .Do (async e =>
+                    {
+                        var r1 = e.GetArg ("r1").Trim ();
+                        var r2 = e.GetArg ("r2").Trim ();
+
+                        var roleToEdit = e.Server.FindRoles (r1).FirstOrDefault ();
+                        if (roleToEdit == null)
+                        {
+                            await e.Channel.SendMessage ("Kann diese Rolle nicht finden.");
+                            return;
+                        }
+
+                        try
+                        {
+                            if (roleToEdit.Position > e.Server.CurrentUser.Roles.Max (r => r.Position))
+                            {
+                                await e.Channel.SendMessage ("Ich kann Rollen die höher sind als meine nicht bearbeiten.");
+                                return;
+                            }
+                            await roleToEdit.Edit (r2);
+                            await e.Channel.SendMessage ("Rolle umbenannt.");
+                        }
+                        catch (Exception)
+                        {
+                            await e.Channel.SendMessage ("Fehler beim umbennennen der Rolle. Wahrscheinlich nicht genug Rechte.");
+                        }
+                    });
 
                 cgb.CreateCommand (Prefix + "rar").Alias (Prefix + "removeallroles")
                     .Description ("Entfernt alle Rollen eines Benutzers.\n**Benutzung**: .rar @User")

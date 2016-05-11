@@ -109,6 +109,19 @@ namespace NadekoBot.Classes
         }
 
         [JsonIgnore]
+        private ulong autoAssignedRole = 0;
+        public ulong AutoAssignedRole
+        {
+            get { return autoAssignedRole; }
+            set {
+                autoAssignedRole = value;
+                if (!SpecificConfigurations.Instantiated)
+                    return;
+                OnPropertyChanged ();
+            }
+        }
+
+        [JsonIgnore]
         private ObservableCollection<StreamNotificationConfig> observingStreams;
         public ObservableCollection<StreamNotificationConfig> ObservingStreams
         {

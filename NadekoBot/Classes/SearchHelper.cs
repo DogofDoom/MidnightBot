@@ -207,24 +207,36 @@ namespace NadekoBot.Classes
             return data.items.Length > 0 ? data.items[0].id.playlistId.ToString () : null;
         }
 
-        public static async Task<IEnumerable<string>> GetVideoIDs ( string playlist,int number = 50 )
+        public static async Task<IList<string>> GetVideoIDs ( string playlist,int number = 50 )
         {
             if (string.IsNullOrWhiteSpace (NadekoBot.Creds.GoogleAPIKey))
             {
                 throw new ArgumentNullException (nameof (playlist));
             }
-            if (number < 1 || number > 100)
+            if (number < 1)
                 throw new ArgumentOutOfRangeException ();
-            var link =
-                $"https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails" +
-                $"&maxResults={number}" +
-                $"&playlistId={playlist}" +
-                $"&key={NadekoBot.Creds.GoogleAPIKey}";
+            string nextPageToken = null;
 
-            var response = await GetResponseStringAsync (link).ConfigureAwait (false);
-            var obj = await Task.Run (() => JObject.Parse (response)).ConfigureAwait (false);
+            List<string> toReturn = new List<string> ();
 
-            return obj["items"].Select (item => "http://www.youtube.com/watch?v=" + item["contentDetails"]["videoId"]);
+            do
+            {
+                var toGet = number > 50 ? 50 : number;
+                number -= toGet;
+                var link =
+                    $"https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails" +
+                    $"&maxResults={toGet}" +
+                    $"&playlistId={playlist}" +
+                    $"&key={NadekoBot.Creds.GoogleAPIKey}";
+                if (!string.IsNullOrWhiteSpace (nextPageToken))
+                    link += $"&pageToken={nextPageToken}";
+                var response = await GetResponseStringAsync (link).ConfigureAwait (false);
+                var data = await Task.Run (() => JsonConvert.DeserializeObject<PlaylistItemsSearch> (response)).ConfigureAwait (false);
+                nextPageToken = data.nextPageToken;
+                toReturn.AddRange (data.items.Select (i => i.contentDetails.videoId));
+            } while (number > 0 && !string.IsNullOrWhiteSpace (nextPageToken));
+
+            return toReturn;
         }
 
 
@@ -274,8 +286,12 @@ namespace NadekoBot.Classes
 
         public static async Task<string> GetGelbooruImageLink ( string tag )
         {
+            var headers = new Dictionary<string,string> () {
+                {"User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.202 Safari/535.1"},
+                {"Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" },
+            };
             var url = $"http://gelbooru.com/index.php?page=dapi&s=post&q=index&limit=100&tags={tag.Replace (" ","_")}";
-            var webpage = await GetResponseStringAsync (url).ConfigureAwait (false);
+            var webpage = await GetResponseStringAsync (url,headers).ConfigureAwait (false);
             var matches = Regex.Matches (webpage,"file_url=\"(?<url>.*?)\"");
             if (matches.Count == 0)
                 return null;

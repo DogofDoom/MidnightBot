@@ -83,7 +83,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
                 Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage ($"❗`{prettyCurrentTime}` `Channel Gelöscht:` #{e.Channel.Name} (*{e.Channel.Id}*)").ConfigureAwait (false);
+                await OwnerPrivateChannel.SendMessage ($"❗`{prettyCurrentTime}`❗`Channel Gelöscht:` #{e.Channel.Name} (*{e.Channel.Id}*)").ConfigureAwait (false);
             }
             catch { }
         }
@@ -96,7 +96,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
                 Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}` `Channel Erstellt:` #{e.Channel.Mention} (*{e.Channel.Id}*)").ConfigureAwait (false);
+                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}`🆕`Channel Erstellt:` #{e.Channel.Mention} (*{e.Channel.Id}*)").ConfigureAwait (false);
             }
             catch { }
         }
@@ -109,7 +109,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
                 Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}` `Benutzer wurde entbannt:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
+                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}`♻`Benutzer wurde entbannt:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
             }
             catch { }
         }
@@ -123,7 +123,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
                 Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}` `User joined:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
+                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}`✅`User joined:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
             }
             catch { }
         }
@@ -136,7 +136,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
                 Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}` `Benutzer verließ den Server:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
+                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}`❗`Benutzer verließ den Server:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
             }
             catch { }
         }
@@ -149,7 +149,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 if (!logs.TryGetValue (e.Server, out ch))
                     return;
                 Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage ($"❗`{prettyCurrentTime}` `User gebannt:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
+                await OwnerPrivateChannel.SendMessage ($"❗`{prettyCurrentTime}`❌`User gebannt:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
             }
             catch { }
         }
@@ -290,12 +290,12 @@ namespace NadekoBot.Modules.Administration.Commands
                     if (e.Before.Roles.Count () < e.After.Roles.Count ())
                     {
                         var diffRoles = e.After.Roles.Where (r => !e.Before.Roles.Contains (r)).Select (r => "`" + r.Name + "`");
-                        str += $"**Benutzer Rollen geändert ➕**👤`{e.Before?.ToString ()}`\n\tHat nun die {string.Join (", ",diffRoles)} Rolle.";
+                        str += $"**Benutzer Rollen geändert ⚔➕**👤`{e.Before?.ToString ()}`\n\tHat nun die {string.Join (", ",diffRoles)} Rolle.";
                     }
                     else if (e.Before.Roles.Count () > e.After.Roles.Count ())
                     {
                         var diffRoles = e.Before.Roles.Where (r => !e.After.Roles.Contains (r)).Select (r => "`" + r.Name + "`");
-                        str += $"**Benutzer Rollen geändert ➖**👤`{e.Before?.ToString ()}`\n\tHat nicht länger die {string.Join (", ",diffRoles)} Rolle.";
+                        str += $"**Benutzer Rollen geändert ⚔➖**👤`{e.Before?.ToString ()}`\n\tHat nicht länger die {string.Join (", ",diffRoles)} Rolle.";
                     }
                     else
                     {

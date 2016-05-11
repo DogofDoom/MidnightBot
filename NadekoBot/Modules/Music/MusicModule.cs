@@ -295,9 +295,14 @@ namespace NadekoBot.Modules.Music
                              await e.Channel.SendMessage ("Keine Suchergebnisse für diesen Begriff.");
                              return;
                          }
-                         var ids = await SearchHelper.GetVideoIDs (plId,50).ConfigureAwait (false);                         //todo TEMPORARY SOLUTION, USE RESOLVE QUEUE IN THE FUTURE
+                         var ids = await SearchHelper.GetVideoIDs (plId,500).ConfigureAwait (false);
+                         if (ids == null || ids.Count == 0)
+                         {
+                             await e.Channel.SendMessage ($"🎵`Keine Lieder gefunden.`");
+                             return;
+                         }
                          var idArray = ids as string[] ?? ids.ToArray ();
-                         var count = idArray.Count ();
+                         var count = idArray.Length;
                          var msg =
                              await e.Channel.SendMessage ($"🎵 `Versuche **{count}** Lieder zu listen".SnPl (count) + "...`").ConfigureAwait (false);
                          foreach (var id in idArray)

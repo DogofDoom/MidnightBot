@@ -2,6 +2,7 @@
 using Discord.Commands;
 using NadekoBot.Classes;
 using NadekoBot.DataModels;
+using NadekoBot.Modules.Permissions.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,13 @@ namespace NadekoBot.Modules.Administration.Commands
                                 RegexOptions.Compiled | RegexOptions.Multiline);
 
         List<Timer> reminders = new List<Timer> ();
+
+        IDictionary<string,Func<Reminder,string>> replacements = new Dictionary<string,Func<Reminder,string>>
+        {
+            { "%message%" , (r) => r.Message },
+            { "%user%", (r) => $"<@!{r.UserId}>" },
+            { "%target%", (r) =>  r.IsPrivate ? "Direct Message" : $"<#{r.ChannelId}>"}
+        };
 
         public Remind ( DiscordModule module ) : base (module)
         {
@@ -53,7 +61,10 @@ namespace NadekoBot.Modules.Administration.Commands
                     if (ch == null)
                         return;
 
-                    await ch.SendMessage ($"❗⏰**Ich wurde gebeten dich jetzt zu erinnern an '{r.Message}', von <@{r.UserId}>.**⏰❗").ConfigureAwait (false);
+                    await ch.SendMessage (
+                                            replacements.Aggregate (NadekoBot.Config.RemindMessageFormat,
+                                            ( cur,replace ) => cur.Replace (replace.Key,replace.Value (r)))
+                                                ).ConfigureAwait (false); //it works trust me          
                 }
                 catch (Exception ex)
                 {
@@ -164,7 +175,22 @@ namespace NadekoBot.Modules.Administration.Commands
 
                     reminders.Add (StartNewReminder (rem));
 
-                    await e.Channel.SendMessage ($"⏰ Ich werde \"{ch.Name}\" erinnern an \"{e.GetArg ("message").ToString ()}\" in {output}. ({time:d.M.yyyy.} at {time:HH:m})").ConfigureAwait (false);
+                    await e.Channel.SendMessage ($"⏰ I will remind \"{ch.Name}\" to \"{e.GetArg ("message").ToString ()}\" in {output}. ({time:d.M.yyyy.} at {time:HH:mm})").ConfigureAwait (false);
+                });
+            cgb.CreateCommand (Module.Prefix + "remindmsg")
+                .Description ("Setzt Nachricht, wenn die Erinnerung ausgelöst wird. " +
+                    " Verfügbare Platzhalter sind %user% - Benutzer der den Command ausgeführt hat, %message% -" +
+                    " Nachricht spezifiziert in Erinnerung, %target% - Ziel Channel der Erinnerung. **Owner only!**")
+                .Parameter ("msg",ParameterType.Unparsed)
+                .AddCheck (SimpleCheckers.OwnerOnly ())
+                .Do (async e =>
+                {
+                    var arg = e.GetArg ("msg")?.Trim ();
+                    if (string.IsNullOrWhiteSpace (arg))
+                        return;
+
+                    NadekoBot.Config.RemindMessageFormat = arg;
+                    await e.Channel.SendMessage ("`New remind message set.`");
                 });
         }
     }

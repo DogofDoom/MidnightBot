@@ -2,6 +2,7 @@
   "DontJoinServers": false,
   "ForwardMessages": true,
   "IsRotatingStatus": false,
+  "RemindMessageFormat": "❗⏰**Mir wurde von %user% aufgetragen, dich an '%message%' zu erinnern.**⏰❗",
   "CustomReactions": {
     "\\o\\": [
       "/o/"
