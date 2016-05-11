@@ -231,11 +231,11 @@ namespace NadekoBot
                     Console.WriteLine ("Privater Channel mit 1. Owner in credentials.json konnte nicht erstellt werden.");
                 }
 
-                Client.SetGame ("Channel-Bot");
-                foreach (var ch in NadekoBot.Client.Servers.Select (s => s.DefaultChannel))
-                {
-                    await ch.SendMessage ("`Hallo. Ich bin wieder da!`");
-                }
+                //foreach (var ch in NadekoBot.Client.Servers.Select (s => s.DefaultChannel))
+                //{
+                //    await ch.SendMessage ("`Hallo. Ich bin wieder da!`");
+                //}
+
                 Client.ClientAPI.SendingRequest += ( s,e ) =>
                 {
                     var request = e.Request as Discord.API.Client.Rest.SendMessageRequest;

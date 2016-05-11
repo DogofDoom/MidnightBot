@@ -2,21 +2,22 @@
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
 #NadekoBot List Of Commands  
-Version: `MidnightBot v0.9.5962.22100`
+Version: `MidnightBot v0.9.5975.32361`
 ### Administration  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
+`.grdel`  |  Aktiviert oder deaktiviert automatische Löschung von Willkommens- und Verabschiedungsnachrichten.
 `.greet`  |  Aktiviert oder deaktiviert Benachrichtigungen auf dem derzeitigen Channel wenn jemand dem Server beitritt.
-`.greetmsg`  |  Setzt einen neuen Gruß. Gib %user% ein, wenn du den neuen Benutzer erwähnen möchtest. |  .greetmsg Welcome to the server, %user%.
+`.greetmsg`  |  Setzt einen neuen Gruß. Gib %user% ein, wenn du den neuen Benutzer erwähnen möchtest. Ohne nachfolgende Nachricht, zeigt es die derzeitige Nachricht. |  .greetmsg Welcome to the server, %user%.
 `.bye`  |  Aktiviert, oder deaktiviert Benachrichtigungen, wenn ein Benutzer den Server verlässt.
-`.byemsg`  |  Setzt eine neue Verabschiedung. Gib %user% ein, wenn du den Benutzer erwähnen möchtest. |  .byemsg %user% has left the server.
+`.byemsg`  |  Setzt eine neue Verabschiedung. Gib %user% ein, wenn du den Benutzer erwähnen möchtest. Ohne nachfolgende Nachricht, zeigt es die derzeitige Nachricht. |  .byemsg %user% has left the server.
 `.byepm`  |  Stellt ein ob die Verabschiedung im Channel, oder per PN geschickt wird.
 `.greetpm`  |  Stellt ein ob der Gruß im Channel, oder per PN geschickt wird.
 `.spmom`  |  Toggles whether mentions of other offline users on your server will send a pm to them.
 `.logserver`  |  Toggles logging in this channel. Logs every message sent/deleted/edited on the server. **Owner Only!**
 `.userpresence`  |  Starts logging to this channel when someone from the server goes online/offline/idle. **Owner Only!**
 `.voicepresence`  |  Toggles logging to this channel whenever someone joins or leaves a voice channel you are in right now. **Owner Only!**
-`.repeat`  |  Wiederholt eine Nachricht alle X Minuten. Falls nicht spezifiziert, Wiederholung ist deaktiviert. Benötigt 'manage messages'.
+`.repeat`  |  Wiederholt eine Nachricht alle X Minuten. Falls nicht spezifiziert, Wiederholung ist deaktiviert. Benötigt 'manage messages'. | `.repeat 5 Hello there`
 `.rotateplaying`, `.ropl`  |  Toggles rotation of playing status of the dynamic strings you specified earlier.
 `.addplaying`, `.adpl`  |  Adds a specified string to the list of playing strings to rotate. Supported placeholders: %servers%, %users%, %playing%, %queued%, %trivia%
 `.listplaying`, `.lipl`  |  Lists all playing statuses with their corresponding number.
@@ -35,12 +36,19 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.iamn`, `.iamnot`  |  Removes a role to you that you choose. Role must be on a list of self-assignable roles.
 **Usage**: .iamn Gamer
 `.remind`  |  Sendet nach einer bestimmten Zeit eine Nachricht in den Channel. Erstes Argument ist me/here/'channelname'. Zweites Argument ist die Zeit in absteigender Reihenfolge (mo>w>d>h>m) Beispiel: 1w5d3h10m. Drittes Argument ist eine (Multiwort)Nachricht.  |  `.remind me 1d5h Do something` or `.remind #general Start now!`
+`.remindmsg`  |  Setzt Nachricht, wenn die Erinnerung ausgelöst wird.  Verfügbare Platzhalter sind %user% - Benutzer der den Command ausgeführt hat, %message% - Nachricht spezifiziert in Erinnerung, %target% - Ziel Channel der Erinnerung. **Owner only!**
 `.sinfo`, `.serverinfo`  |  Zeigt Infos über den Server, auf dem der Bot läuft. Falls kein Server ausgewählt, derzeitiger wird ausgewählt. | .sinfo Some Server
 `.cinfo`, `.channelinfo`  |  Zeigt Infos über einen Channel. Wenn kein Channel ausgewählt, derzeitiger wird angegeben. | .cinfo #some-channel
 `.uinfo`, `.userinfo`  |  Zeigt eine Info über den User. Wenn kein User angegeben, User der den Befehl eingibt. | .uinfo @SomeUser
+`.addcustomreaction`, `.acr`  |  Fügt eine "Custom Reaction" hinzu. **Owner Only!** |  .acr "hello" I love saying hello to %user%
+`.listcustomreactions`, `.lcr`  |  Listet alle derzeitigen "Custom Reactions" (Seitenweise mit 5 Commands je Seite). | .lcr 1
+`.deletecustomreaction`, `.dcr`  |  Löscht eine "Custome Reaction" mit gegebenen Namen (und Index)
+`.aar`, `.autoassignrole`  |  Fügt automatisch jedem Benutzer der dem Server joint eine Rolle zu. Gib `.aar` ein um zu deaktivieren, `.aar Rollen Name` um zu aktivieren.
 `.rules`  |  Regeln
+`.restart`  |  Startet den Bot neu. Könnte nicht funktionieren.
 `.sr`, `.setrole`  |  Setzt die Rolle für einen gegebenen Benutzer. |  .sr @User Gast
 `.rr`, `.removerole`  |  Entfernt eine Rolle von einem gegebenen User. |  .rr @User Admin
+`.renr`, `.renamerole`  |  Benennt eine Rolle um. Rolle die umbenannt werden soll muss muss in Liste niedriger sein als die höchste Rolle des Bots. |  `.renr "Erste Rolle" ZweiteRolle`
 `.rar`, `.removeallroles`  |  Entfernt alle Rollen eines Benutzers. |  .rar @User
 `.r`, `.role`, `.cr`  |  Erstelle eine Rolle mit einem bestimmten Namen. |  `.r Awesome Role`
 `.rolecolor`, `.rc`  |  Setzt die Farbe einer Rolle zur Hex, oder RGB Farb-Value die gegeben wird. |  `.color Admin 255 200 100 oderr .color Admin ffba55`
@@ -55,17 +63,16 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.vch`, `.cvch`  |  Erstellt einen neuen Voice-Channel mit einem gegebenen Namen.
 `.rch`, `.rtch`  |  Entfernt einen Text-Channel mit einem gegebenen Namen.
 `.ch`, `.tch`  |  Erstellt einen Text-Channel mit einem gegebenen Namen.
-`.st`, `.settopic`, `.topic`  |  Setzt eine Beschreibung für den derzeitigen Channel.
+`.st`, `.settopic`, `.topic`  |  Setzt eine Beschreibung für den derzeitigen Channel. |  `{Prefix}st My new topic`
+`.schn`, `.setchannelname`, `.topic`  |  Ändert den Namen des derzeitigen Channels.
 `.uid`, `.userid`  |  Zeigt die ID eines Benutzers.
 `.cid`, `.channelid`  |  Zeigt ID des derzeitigen Channels
 `.sid`, `.serverid`  |  Zeigt ID des derzeitigen Servers.
 `.stats`  |  Zeigt ein paar Statisitken über MidnightBot.
 `.dysyd`  |  Zeigt ein paar Statisitken über MidnightBot.
 `.heap`  |  Zeigt benutzten Speicher - **Owner Only!**
-`.prune`  |  Entfernt eine Anzahl von Nachrichten im Chat. |  .prune 5
-`.die`, `.graceful`  |  Stoppt den Bot und benachrichtigt alle Benutzer darüber. **Owner Only!**
-`.clr`  |  Entfernt ein paar von MidnightBots Nachrichten aus dem Chat. (Oder eines anderen Users, wenn genannt.**Owner Only!**) 
-**UBenutzung**: .clr @X
+`.prune`, `.clr`  |  `.prune` alle von MidnightBots Nachrichten, in den letzten 100 Nachrichten.`.prune X` entfernt die letzten X Nachrichten von diesem Channel (bis zu 100)`.prune @Someone` Entfernt alle Nachrichten einer Person. in den letzten 100 Nachrichten.`.prune @Someone X` Entfernt die letzen X Nachrichten einer Person in diesem Channel.\n |  `.prune` oder `.prune 5` oder `.prune @Someone` oder `.prune @Someone X`
+`.die`, `.graceful`  |  Fährt den Bot herunter und benachrichtigt Benutzer über den Neustart. **Owner Only!**
 `.newname`, `.setname`  |  Gibt dem Bot einen neuen Namen. **Owner Only!**
 `.newavatar`, `.setavatar`  |  Setzt ein neues Profilbild für MidnightBot. **Owner Only!**
 `.setgame`  |  Setzt das Spiel des Bots. **Owner Only!**
@@ -102,12 +109,15 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `;cfi`, `;channelfilterinvites`  |  Aktiviert, oder deaktiviert automatische Löschung von Einladungen in diesem Channel.Falls kein Channel gewählt, derzeitige Channel. Benutze ALL um alle derzeitig existierenden Channel zu wählen. |  ;cfi enable #general-chat
 `;sfi`, `;serverfilterinvites`  |  Aktiviert, oder deaktiviert automatische Löschung von Einladungenauf diesem Server. |  ;sfi disable
 `;cfw`, `;channelfilterwords`  |  Aktiviert, oder deaktiviert automatische Löschung von Nachrichten auf diesem Channel, die gebannte Wörter beinhalten.Wenn kein Channel ausgewählt, dieser hier. Benutze ALL um auf alle derzeit existierenden Channel zu aktivieren.
-**Usage**: ;cfi enable #general-chat
-`;afw`, `;addfilteredword`  |  Fügt ein neues Wort zur Liste der gefilterten Wörter hinzu. |  ;aw poop
+**Usage**: ;cfw enable #general-chat
+`;afw`, `;addfilteredword`  |  Fügt ein neues Wort zur Liste der gefilterten Wörter hinzu. |  ;afw poop
 `;rfw`, `;removefilteredword`  |  Entfernt ein Wort von der Liste der gefilterten Wörter. |  ;rw poop
 `;lfw`, `;listfilteredwords`  |  Zeigt Liste der gefilterten Wörter. |  ;lfw
 `;sfw`, `;serverfilterwords`  |  Aktiviert, oder deaktiviert automatische Löschung von Nachrichten auf dem Server, die verbotene Wörter enthalten. |  ;sfi disable
 `;permrole`, `;pr`  |  Setzt eine Rolle, welche die Berechtigungen bearbeiten kann. Ohne Angabe wird die derzeitige Rolle gezeigt. Standard 'Pony'.
+`;rpc`, `;rolepermissionscopy`  |  Kopiert BOT BERECHTIGUNGEN (nicht Discord Berechtigungen) von einer Rolle zu einer anderen. | `;rpc Some Role ~ Some other role`
+`;cpc`, `;channelpermissionscopy`  |  Kopiert BOT BERECHTIGUNGEN (nicht Discord Berechtigungen) von einem Channel zu einem anderen. | `;cpc Some Channel ~ Some other channel`
+`;upc`, `;userpermissionscopy`  |  Kopiert BOT BERECHTIGUNGEN (nicht Discord Berechtigungen) von einem Benutzer, zu einem anderen. | `;upc @SomeUser ~ @SomeOtherUser`
 `;verbose`, `;v`  |  Ändert ob das blocken/entblocken eines Modules/Befehls angezeigt wird. |  ;verbose true
 `;serverperms`, `;sp`  |  Zeigt gebannte Berechtigungen für diesen Server.
 `;roleperms`, `;rp`  |  Zeigt gebannt Berechtigungen für eine bestimmte Rolle. Kein Argument bedeutet für alle. |  ;rp AwesomeRole
@@ -137,11 +147,6 @@ Befehl und Alternativen | Beschreibung | Benutzung
 ### Conversations  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
-`comeatmebro`  |  Come at me bro (ง’̀-‘́)ง  |  comeatmebro {target}
-`\o\`  |  MidnightBot antwortet mit /o/
-`/o/`  |  MidnightBot antwortet mit  \o\
-`moveto`  |  Schlägt vor die Unterhaltung in einem anderen Channel zu führen.
-**benutzung**: moveto #spam
 `..`  |  Fügt ein neues Zitat mit Namen(ein Wort) und Nachricht (kein Limit). |  .. abc My message
 `...`  |  Zeigt ein zufälliges Zitat eines Benutzers. |  .. abc
 `@BotName copyme`, `@BotName cm`  |  MidnightBot macht alles nach, was du schreibst. Deaktivieren mit cs
@@ -156,18 +161,9 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `@BotName how are you`, `@BotName how are you?`  |  Antwortet nur positiv, wenn der Owner online ist.
 `@BotName insult`  |  Beleidigt @X Person. |  @MidnightBot insult @X.
 `@BotName praise`  |  Lobt @X Person. |  @MidnightBot praise @X.
-`@BotName pat`  |  Streichle jemanden ^_^
-`@BotName cry`  |  Sag MidnightBot, dass er weinen soll. Du bist ein herzloses Monster, wenn du diesen Befehl benutzt.
-`@BotName disguise`  |  Sagt MidnightBot, er soll sich verstecken.
-`@BotName are you real`  |  Unnütz.
-`@BotName are you there`, `@BotName !`, `@BotName ?`  |  Checkt, ob MidnightBot funktioniert
-`@BotName draw`  |  MidnightBot sagt dir das du $draw schreiben sollst. Spiel Funktionen starten mit $
 `@BotName fire`  |  Zeigt eine unicode Feuer Nachricht. Optionaler Parameter [x] sagt ihm wie oft er das Feuer wiederholen soll. |  @MidnightBot fire [x]
 `@BotName rip`  |  Zeigt ein Grab von jemanden mit einem Startjahr |  @MidnightBot rip @Someone 2000
 `@BotName slm`  |  Zeigt die Nachricht in der du in diesem Channel zuletzt erwähnt wurdest (checked die letzten 10k Nachrichten)
-`@BotName bb`  |  Sagt bye zu jemanden.
- **Benutztung**: @MidnightBot bb @X
-`@BotName call`  |  Nutzlos. Schreibt calling @X in den Chat. |  @MidnightBot call @X 
 `@BotName hide`  |  Versteckt MidnightBot!11!!
 `@BotName unhide`  |  MidnightBot kommt aus seinem Versteck!1!!1
 `@BotName dump`  |  Dumped alle Einladungen die er findet in dump.txt.** Owner Only.**
@@ -184,15 +180,16 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `$roll`  |  Würfelt von 0-100. Wenn du eine Zahl [x] angibst werden bis zu 30 normale Würfel geworfen. Wenn du 2 Zahlen mit einem d trennst (xdy) werden x Würfel von 0 bis y geworfen. |  $roll oder $roll 7 oder $roll 3d5
 `$nroll`  |  Würfelt in einer gegebenen Zahlenreichweite. |  `$nroll 5` (rolls 0-5) or `$nroll 5-15`
 `$raffle`  |  Schreibt den Namen und die ID eines zufälligen Benutzers aus der Online Liste einer (optionalen) Rolle.
-`$$$`  |  Überprüft, wieviele Dollar du hast.
-`$award`  |  Gibt jemanden eine bestimmte Anzahl an Dollar. **Owner only!** |  $award 5 @Benutzer
-`$take`  |  Entfernt eine bestimmte Anzahl an Dollar von jemanden. **Owner only!** |  $take 5 @Benutzer
-`$give`  |  Gibt jemanden eine Anzahl Dollar. |  $give 5 @Benutzer
+`$$$`  |  Überprüft, wieviele Euro du hast.
+`$award`  |  Gibt jemanden eine bestimmte Anzahl an Euro. **Owner only!** |  $award 5 @Benutzer
+`$take`  |  Entfernt eine bestimmte Anzahl an Euro von jemanden. **Owner only!** |  $take 5 @Benutzer
+`$give`  |  Gibt jemanden eine Anzahl Euro. |  $give 5 @Benutzer
+`$leaderboard`, `$lb`  |  
 
 ### Games  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
-`>t`  |  Startet ein Quiz. Du kannst nohint hinzufügen um Tipps zu verhindern.Erster Spieler mit 10 Punkten gewinnt. 30 Skunden je Frage. | `>t nohint`
+`>t`  |  Startet ein Quiz. Du kannst nohint hinzufügen um Tipps zu verhindern.Erster Spieler mit 10 Punkten gewinnt. 30 Sekunden je Frage. | `>t nohint` oder `>t 5 nohint`
 `>tl`  |  Zeigt eine Rangliste des derzeitigen Quiz.
 `>tq`  |  Beendet Quiz nach der derzeitgen Frage.
 `>typestart`  |  Startet einen Tipp-Wettbewerb.
@@ -200,8 +197,8 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `>typeadd`  |  Fügt einen neuen Text hinzu. Owner only.
 `>poll`  |  Startet eine Umfrage, Nur Personen mit 'Manage Server' Berechtigungen können dies tun. |  >poll Question?;Answer1;Answ 2;A_3
 `>pollend`  |  Stoppt derzeitige Umfrage und gibt das Ergebnis aus.
-`>pick`  |  Nimmt einen in diesem Channel hinterlegten Dollar.
-`>plant`  |  Gib einen Dollar aus, um in in diesen Channel zu legen. (Wenn der Bot neustartet, oder crashed, ist der Dollar verloren)
+`>pick`  |  Nimmt einen in diesem Channel hinterlegten Euro.
+`>plant`  |  Gib einen Euro aus, um in in diesen Channel zu legen. (Wenn der Bot neustartet, oder crashed, ist der Euro verloren)
 `>leet`  |  Konvertiert einen Text zu Leetspeak mit 6 (1-6) Stärke-Graden.
 **Benutzung:** >leet 3 Hallo
 `>choose`  |  Sucht eine Sache aus einer Liste von Sachen aus. |  >choose Get up;Sleep;Sleep more
@@ -226,10 +223,10 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `!half`  |  Setzt die Lautstärke auf 50%.
 `!sh`  |  Mischt die derzeitiege Abspielliste.
 `!setgame`  |  Setzt das Spiel auf die Nummer der Lieder die gespielt werden. **Owner Only!**
-`!pl`, `!playlistrequest`  |  Listet bis zu 25 Lieder aus einer Youtubeplaylist, oder aus einem Suchbegriff.
-`!lopl`  |  Listet bis zu 50 Lieder von einem Verzeichnis. **Owner Only!**
+`!pl`, `!playlistrequest`  |  Listet bis zu 50 Lieder aus einer Youtubeplaylist, oder aus einem Suchbegriff.
+`!lopl`  |  Listet alle Lieder von einem Verzeichnis. **Owner Only!**
 `!radio`, `!ra`  |  Listet einen direkten Radio Stream von einem Link.
-`!lo`  |  Listet einen lokalen Song mit vollen Pfad. **Owner Only!**
+`!lo`  |  Listet einen lokalen Song mit vollen Pfad. **Owner Only!** |  `!lo C:/music/mysong.mp3`
 `!mv`  |  Verschiebt den Bot in den eigenen Voice-Channel. (Funktioniert nur, wenn schon Musik läuft)
 `!rm`  |  Entfernt einen Song mit seiner Id, oder 'all' um die komplette Liste zu löschen.
 `!cleanup`  |  Bereinigt hängende Voice-Verbindung. **Owner Only!**
@@ -238,14 +235,15 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `!save`  |  Speichert eine Playlist unter einem bestimmten Namen. Name darf nicht länger als 20 Zeichen sein und darf keine Kommas beinhalten.
 **Bentzung**: `!save classical1`
 `!load`  |  Lädt eine Playlist mit bestimmten Namen. |  `!load classical1`
-`!goto`  |  Goes to a specific time in seconds in a song.
+`!playlists`, `!pls`  |  Listet alle Playlisten. Seitenweiße. 20 je Seote. Standard-Seite ist 0. | `!pls 1`
+`!goto`  |  Skipped zu einer bestimmten Zeit in Sekunden im aktuellen Lied.
 `!getlink`, `!gl`  |  Zeigt einen Link zum derzeitigen Lied.
 
 ### Searches  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
 `~lolchamp`  |  Überprüft die Statistiken eines LOL Champions. Bei Leerzeichen zusammenschreiben. Optionale Rolle. | ~lolchamp Riven or ~lolchamp Annie sup
-`~lolban`  |  Zeigt die Top 6 gebannten LOL Champs. Banne diese 5 Champions und du wirst in kürzester Zeit Plat5 sein.
+`~lolban`  |  Zeigt die Top 12 gebannten LOL Champs. Banne diese 5 Champions und du wirst in kürzester Zeit Plat5 sein.
 `~hitbox`, `~hb`  |  Benachrichtigt diesen Channek wenn ein bestimmter User anfängt zu streamen. |  ~hitbox SomeStreamer
 `~twitch`, `~tw`  |  Benachrichtigt diesen Channek wenn ein bestimmter User anfängt zu streamen. |  ~twitch SomeStreamer
 `~beam`, `~bm`  |  Benachrichtigt diesen Channek wenn ein bestimmter User anfängt zu streamen. |  ~beam SomeStreamer
@@ -258,7 +256,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `~ani`, `~anime`, `~aq`  |  Durchsucht anilist nach einem Anime und zeigt das erste Ergebnis.
 `~imdb`  |  Durchsucht IMDB nach Filmen oder Serien und zeigt erstes Ergebnis.
 `~mang`, `~manga`, `~mq`  |  Durchsucht anilist nach einem Manga und zeigt das erste Ergebnis.
-`~randomcat`  |  Zeigt ein zufälliges Katzenbild.
+`~randomcat`, `~meow`  |  Zeigt ein zufälliges Katzenbild.
 `~i`  |  Zeigt das erste Ergebnis für eine Suche. Benutze ~ir für unterschiedliche Ergebnisse. |  ~i cute kitten
 `~ir`  |  Zeigt ein zufälliges Bild bei einem angegeben Suchwort. |  ~ir cute kitten
 `~lmgtfy`  |  Google etwas für einen Idioten.
@@ -276,6 +274,9 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `~revav`  |  Gibt ein Google Reverse Image Search für das Profilbild einer Person zurück.
 `~revimg`  |  Gibt eine 'Google Reverse Image Search' für ein Bild von einem Link zurück.
 `~safebooru`  |  Zeigt ein zufälliges Hentai Bild von safebooru  mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze + für mehrere Tags. |  ~safebooru yuri +kissing
+`~wiki`  |  Gibt einen Wikipedia-Link zurück.
+`~clr`  |  Zeigt dir die zum Hex zugehörige Farbe.
+**Benutztung**: `~clr 00ff00`
 
 ### Extra  
 Befehl und Alternativen | Beschreibung | Benutzung
@@ -294,10 +295,13 @@ Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
 `>attack`  |  Greift jemanden mit der angegebenen Attacke an.
 `>ml`, `>movelist`, `>listmoves`  |  Listet alle Attacken auf, die du benutzen kannst.
-`>heal`  |  Heilt jemanden. Belebt jene, die besiegt wurden. Kostet einen Dollar.  | >heal @someone
+`>heal`  |  Heilt jemanden. Belebt jene, die besiegt wurden. Kostet einen Euro.  | >heal @someone
 `>type`  |  Gibt den Typ des angegebenen Benutzers aus. |  >type @someone
-`>settype`  |  Setzt deinen Typen. Kostet einen Dollar.
+`>typelist`, `>listtypes`  |  Liste der möglichen Typen
+`>settype`  |  Setzt deinen Typen. Kostet einen Euro.
 **Benutzer**: >settype fire
+`>adminsettype`  |  Setzt den Typen eines Benutzers. **Owner only**.
+**Benutzer**: >adminsettype feuer @Benutzer
 
 ### Translator  
 Befehl und Alternativen | Beschreibung | Benutzung
@@ -321,6 +325,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
 `!patrick`  |  Hier ist Patrick!
+`!rage`  |  Das ist jetzt nicht euer Ernst!
 `!airhorn`  |  Airhorn!
 `!johncena`, `!cena`  |  JOHN CENA!
 `!e`, `!ethanbradberry`, `!h3h3`  |  Ethanbradberry!
@@ -342,3 +347,20 @@ Befehl und Alternativen | Beschreibung | Benutzung
 **Usage**: ,uc [war_number] [optional_other_name]
 `,endwar`, `,ew`  |  Ends the war with a given index.
 **Usage**:,ew [war_number]
+
+### Customreactions  
+Befehl und Alternativen | Beschreibung | Benutzung
+----------------|--------------|-------
+`\o\`  |  Custom Reaction. | \o\
+`/o/`  |  Custom Reaction. | /o/
+`moveto`  |  Custom Reaction. | moveto
+`comeatmebro`  |  Custom Reaction. | comeatmebro
+`@BotName pat`, `<@!170857522419204096> pat`  |  Custom Reaction. | %mention% pat
+`@BotName cry`, `<@!170857522419204096> cry`  |  Custom Reaction. | %mention% cry
+`@BotName are you real?`, `<@!170857522419204096> are you real?`  |  Custom Reaction. | %mention% are you real?
+`@BotName are you there?`, `<@!170857522419204096> are you there?`  |  Custom Reaction. | %mention% are you there?
+`@BotName draw`, `<@!170857522419204096> draw`  |  Custom Reaction. | %mention% draw
+`@BotName bb`, `<@!170857522419204096> bb`  |  Custom Reaction. | %mention% bb
+`@BotName call`, `<@!170857522419204096> call`  |  Custom Reaction. | %mention% call
+`@BotName disguise`, `<@!170857522419204096> disguise`  |  Custom Reaction. | %mention% disguise
+`Da ist die Tür`  |  Custom Reaction. | Da ist die Tür
