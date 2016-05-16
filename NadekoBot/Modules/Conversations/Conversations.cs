@@ -36,42 +36,42 @@ namespace NadekoBot.Modules.Conversations
                 cgb.AddCheck (PermissionChecker.Instance);
 
                 cgb.CreateCommand ("..")
-                        .Description ("Fügt ein neues Zitat mit Namen(ein Wort) und Nachricht (kein Limit).\n**Benutzung**: .. abc My message")
-                        .Parameter ("keyword",ParameterType.Required)
+                        .Description ("Fügt ein neues Zitat für sich selber hinzu.\n**Benutzung**: .. My message")
                         .Parameter ("text",ParameterType.Unparsed)
                         .Do (async e =>
                         {
                             var text = e.GetArg ("text");
                             if (string.IsNullOrWhiteSpace (text))
                                 return;
-                            if (NadekoBot.IsOwner (e.User.Id))
-                            {
                                 await Task.Run (() =>
                                  Classes.DbHandler.Instance.InsertData (new DataModels.UserQuote ()
                                  {
                                      DateAdded = DateTime.Now,
-                                     Keyword = e.GetArg ("keyword").ToLowerInvariant (),
+                                     Keyword = e.User.Name.ToLowerInvariant (),
                                      Text = text,
                                      UserName = e.User.Name,
                                  })).ConfigureAwait (false);
-                            }
-                            else if (e.User.Name.ToLowerInvariant () == e.GetArg ("keyword").ToLowerInvariant ())
-                            {
-                                await Task.Run (() =>
-                                 Classes.DbHandler.Instance.InsertData (new DataModels.UserQuote ()
-                                 {
-                                     DateAdded = DateTime.Now,
-                                     Keyword = e.GetArg ("keyword").ToLowerInvariant (),
-                                     Text = text,
-                                     UserName = e.User.Name,
-                                 })).ConfigureAwait (false);
-                            }
-                            else
-                            {
-                                await e.Channel.SendMessage ("`Hinzufügen von Zitaten nur von jeweiliger Person erlaubt!`").ConfigureAwait (false);
-                                return;
-                            }
+                            await e.Channel.SendMessage ("`Neues Zitat hinzugefügt.`").ConfigureAwait (false);
+                        });
 
+                cgb.CreateCommand ("..a")
+                        .Description ("Fügt ein neues Zitat mit Namen(ein Wort) und Nachricht (kein Limit).**Owner Only**\n**Benutzung**: ..a abc My message")
+                        .Parameter ("keyword",ParameterType.Required)
+                        .Parameter ("text",ParameterType.Unparsed)
+                        .AddCheck(SimpleCheckers.OwnerOnly())
+                        .Do (async e =>
+                        {
+                            var text = e.GetArg ("text");
+                            if (string.IsNullOrWhiteSpace (text))
+                                return;
+                                await Task.Run (() =>
+                                 Classes.DbHandler.Instance.InsertData (new DataModels.UserQuote ()
+                                 {
+                                     DateAdded = DateTime.Now,
+                                     Keyword = e.GetArg ("keyword").ToLowerInvariant (),
+                                     Text = text,
+                                     UserName = e.User.Name,
+                                 })).ConfigureAwait (false);
                             await e.Channel.SendMessage ("`Neues Zitat hinzugefügt.`").ConfigureAwait (false);
                         });
 
