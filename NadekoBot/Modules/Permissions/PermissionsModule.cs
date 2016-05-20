@@ -377,7 +377,8 @@ namespace NadekoBot.Modules.Permissions
                             var module = PermissionHelper.ValidateModule (e.GetArg ("module"));
                             var state = PermissionHelper.ValidateBool (e.GetArg ("bool"));
 
-                            if (e.GetArg ("channel")?.ToLower () == "all")
+                            var channelArg = e.GetArg ("channel");
+                            if (channelArg?.ToLower () == "all")
                             {
                                 foreach (var channel in e.Server.TextChannels)
                                 {
@@ -385,9 +386,14 @@ namespace NadekoBot.Modules.Permissions
                                 }
                                 await e.Channel.SendMessage ($"Modul **{module}** wurde **{(state ? "aktiviert" : "deaktiviert")}** auf **ALLEN** Channels.").ConfigureAwait (false);
                             }
+                            else if (string.IsNullOrWhiteSpace (channelArg))
+                            {
+                                PermissionsHandler.SetChannelModulePermission (e.Channel,module,state);
+                                await e.Channel.SendMessage ($"Modul **{module}** wurde **{(state ? "aktiviert" : "deaktiviert")}** im **{e.Channel.Name}** Channel.").ConfigureAwait (false);
+                            }
                             else
                             {
-                                var channel = PermissionHelper.ValidateChannel (e.Server,e.GetArg ("channel"));
+                                var channel = PermissionHelper.ValidateChannel (e.Server,channelArg);
 
                                 PermissionsHandler.SetChannelModulePermission (channel,module,state);
                                 await e.Channel.SendMessage ($"Modul **{module}** wurde **{(state ? "aktiviert" : "deaktiviert")}** für den **{channel.Name}** Channel.").ConfigureAwait (false);
@@ -554,7 +560,8 @@ namespace NadekoBot.Modules.Permissions
                         try
                         {
                             var state = PermissionHelper.ValidateBool (e.GetArg ("bool"));
-                            var channel = PermissionHelper.ValidateChannel (e.Server,e.GetArg ("channel"));
+                            var chArg = e.GetArg ("channel");
+                            var channel = string.IsNullOrWhiteSpace (chArg) ? e.Channel : PermissionHelper.ValidateChannel (e.Server,chArg);
                             foreach (var module in NadekoBot.Client.GetService<ModuleService> ().Modules)
                             {
                                 PermissionsHandler.SetChannelModulePermission (channel,module.Name,state);

@@ -178,11 +178,11 @@ namespace NadekoBot.Modules.Administration.Commands
                 if (!logs.TryGetValue(e.Server, out ch) || e.Channel == ch)
                     return;
                 Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage
-                    (
-                        $@"🕔`{prettyCurrentTime}` **Neue Nachricht** `#{e.Channel.Name}`
-                        👤`{e.User?.ToString () ?? ("NULL")}` {e.Message.Text}"
-                    ).ConfigureAwait (false);
+                //await OwnerPrivateChannel.SendMessage
+                //    (
+                //        $@"🕔`{prettyCurrentTime}` **Neue Nachricht** `#{e.Channel.Name}`
+                //        👤`{e.User?.ToString () ?? ("NULL")}` {e.Message.Text.Unmention()}"
+                //    ).ConfigureAwait (false);
             }
             catch { }
         }
@@ -199,7 +199,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 await OwnerPrivateChannel.SendMessage 
                     (
                         $@"🕔`{prettyCurrentTime}` **Nachricht** 🚮 `#{e.Channel.Name}`
-                        👤`{e.User?.ToString () ?? ("NULL")}` {e.Message.Text}"
+                        👤`{e.User?.ToString () ?? ("NULL")}` {e.Message.Text.Unmention ()}"
                     ).ConfigureAwait (false);
             }
             catch { }
@@ -218,8 +218,8 @@ namespace NadekoBot.Modules.Administration.Commands
                     (
                         $@"🕔`{prettyCurrentTime}` **Nachricht** 📝 `#{e.Channel.Name}`
                         👤`{e.User?.ToString () ?? ("NULL")}`
-                        `Alt:` {e.Before.Text}
-                        `Neu:` {e.After.Text}"
+                        `Alt:` {e.Before.Text.Unmention ()}
+                        `Neu:` {e.After.Text.Unmention ()}"
                     ).ConfigureAwait (false);
             }
             catch { }
