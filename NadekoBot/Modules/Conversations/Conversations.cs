@@ -126,7 +126,7 @@ namespace NadekoBot.Modules.Conversations
                             var quoteList = Classes.DbHandler.Instance.FindAll<UserQuote> (uq => uq.Keyword == text);
                             foreach(UserQuote quote in quoteList)
                             {
-                                allQuotes += $"{number}. {quote.Text} Hinzugefügt von: {quote.UserName}\n";
+                                allQuotes += $"{number}. `{quote.Text}` **Hinzugefügt von: {quote.UserName}**\n";
                                 number++;
                             }
                         }).ConfigureAwait (false);
