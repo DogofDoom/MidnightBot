@@ -2,7 +2,7 @@
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
 #NadekoBot List Of Commands  
-Version: `MidnightBot v0.9.5975.32361`
+Version: `MidnightBot v0.9.5984.38537`
 ### Administration  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
@@ -91,6 +91,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.adddon`, `.donadd`  |  Fügt einen Donator zur Datenbank hinzu.
 `.videocall`  |  Erstellt privaten appear.in Video Anruf Link für dich und eine erwähnte Person und sendet sie per privater Nachricht.
 `.announce`  |  Sends a message to all servers' general channel bot is connected to.**Owner Only!** |  .announce Useless spam
+`.whoplays`  |  Zeigt eine Liste von Benutzern die ein gewähltes Spiel spielen.
 
 ### Help  
 Befehl und Alternativen | Beschreibung | Benutzung
@@ -147,7 +148,8 @@ Befehl und Alternativen | Beschreibung | Benutzung
 ### Conversations  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
-`..`  |  Fügt ein neues Zitat mit Namen(ein Wort) und Nachricht (kein Limit). |  .. abc My message
+`..`  |  Fügt ein neues Zitat für sich selber hinzu. |  .. My message
+`..a`  |  Fügt ein neues Zitat mit Namen(ein Wort) und Nachricht (kein Limit).**Owner Only** |  ..a abc My message
 `...`  |  Zeigt ein zufälliges Zitat eines Benutzers. |  .. abc
 `@BotName copyme`, `@BotName cm`  |  MidnightBot macht alles nach, was du schreibst. Deaktivieren mit cs
 `@BotName cs`, `@BotName copystop`  |  MidnightBot kopiert dich nicht mehr.
@@ -251,6 +253,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `~liststreams`, `~ls`  |  Listet alle Streams die du auf diesem Server folgst. |  ~ls
 `~convert`  |  Konvertiert Einheiten von>zu. Beispiel: `~convert m>km 1000`
 `~convertlist`  |  Liste der kovertierbaren Dimensionen und Währungen.
+`~wowjoke`  |  Get one of Kwoth's penultimate WoW jokes.
 `~we`  |  Zeigt Wetter-Daten für eine genannte Stadt und ein Land. BEIDES IST BENÖTIGT. Wetter Api ist sehr zufällig, wenn du einen Fehler machst. |  ~we Moskau RF
 `~yt`  |  Durchsucht Youtube und zeigt das erste Ergebnis.
 `~ani`, `~anime`, `~aq`  |  Durchsucht anilist nach einem Anime und zeigt das erste Ergebnis.
@@ -364,3 +367,4 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `@BotName call`, `<@!170857522419204096> call`  |  Custom Reaction. | %mention% call
 `@BotName disguise`, `<@!170857522419204096> disguise`  |  Custom Reaction. | %mention% disguise
 `Da ist die Tür`  |  Custom Reaction. | Da ist die Tür
+`please stop`  |  Custom Reaction. | please stop

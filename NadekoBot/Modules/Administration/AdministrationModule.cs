@@ -863,6 +863,39 @@ namespace NadekoBot.Modules.Administration
                          }).ConfigureAwait (false);
                      });
 
+                cgb.CreateCommand (Prefix + "inrole")
+                    .Description ("Listet alle Benutzer von einer angegebenen Rolle, oder Rollen (getrennt mit einem ',') auf diesem Server.")
+                    .Parameter ("roles",ParameterType.Unparsed)
+                    .Do (async e =>
+                    {
+                        await Task.Run (async () =>
+                        {
+                            if (!e.User.ServerPermissions.MentionEveryone)
+                                return;
+                            var arg = e.GetArg ("roles").Split (',').Select (r => r.Trim ());
+                            string send = $"`Hier ist eine Liste alle Benutzer mit einer bestimmten Rolle:`";
+                            foreach (var roleStr in arg.Where (str => !string.IsNullOrWhiteSpace (str)))
+                            {
+                                var role = e.Server.FindRoles (roleStr).FirstOrDefault ();
+                                if (role == null)
+                                    continue;
+                                send += $"\n`{role.Name}`\n";
+                                send += string.Join (", ",role.Members.Select (r => "**" + r.Name + "**#" + r.Discriminator));
+                            }
+
+                            while (send.Length > 2000)
+                            {
+                                var curstr = send.Substring (0,2000);
+                                await
+                                    e.Channel.Send (curstr.Substring (0,
+                                        curstr.LastIndexOf (", ",StringComparison.Ordinal) + 1)).ConfigureAwait (false);
+                                send = curstr.Substring (curstr.LastIndexOf (", ",StringComparison.Ordinal) + 1) +
+                                       send.Substring (2000);
+                            }
+                            await e.Channel.Send (send).ConfigureAwait (false);
+                        }).ConfigureAwait (false);
+                    });
+
                 cgb.CreateCommand (Prefix + "parsetosql")
                   .Description ("Lädt exportierte Parsedata von /data/parsedata/ in Sqlite Datenbank.")
                   .AddCheck (SimpleCheckers.OwnerOnly ())
@@ -997,10 +1030,12 @@ namespace NadekoBot.Modules.Administration
                    });
                 cgb.CreateCommand (Prefix + "whoplays")
                     .Description ("Zeigt eine Liste von Benutzern die ein gewähltes Spiel spielen.")
-                    .Parameter ("game")
+                    .Parameter ("game",ParameterType.Unparsed)
                     .Do (async e =>
                     {
-                        var game = e.GetArg ("game").Trim ().ToUpperInvariant ();
+                        var game = e.GetArg ("game")?.Trim ().ToUpperInvariant ();
+                        if (string.IsNullOrWhiteSpace (game))
+                            return;
                         var en = e.Server.Users
                             .Where (u => u.CurrentGame?.ToUpperInvariant () == game)
                                 .Select (u => $"{u.Name}");

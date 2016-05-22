@@ -291,7 +291,7 @@ namespace NadekoBot.Modules.Searches.Commands
                   .Do(async e => 
                   {
 
-                      var showCount = 12;
+                      var showCount = 8;
                       //http://api.champion.gg/stats/champs/mostBanned?api_key=YOUR_API_TOKEN&page=1&limit=2
                       try
                       {
@@ -303,7 +303,7 @@ namespace NadekoBot.Modules.Searches.Commands
                                                           $"limit={showCount}")
                                                           .ConfigureAwait (false))["data"] as JArray;
 
-                          var dataList = data.Distinct (new ChampionNameComparer ()).Take (8).ToList ();
+                          var dataList = data.Distinct (new ChampionNameComparer ()).Take (showCount).ToList ();
                           var sb = new StringBuilder();
                           sb.AppendLine($"**Zeige {showCount} Top gebannte Champions.**");
                           sb.AppendLine($"`{trashTalk[new Random().Next(0, trashTalk.Length)]}`");

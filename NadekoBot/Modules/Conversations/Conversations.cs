@@ -3,6 +3,7 @@ using Discord.Commands;
 using Discord.Modules;
 using NadekoBot.Classes.Conversations.Commands;
 using NadekoBot.Extensions;
+using NadekoBot.DataModels;
 using NadekoBot.Modules.Permissions.Classes;
 using NadekoBot.Properties;
 using System;
@@ -36,44 +37,26 @@ namespace NadekoBot.Modules.Conversations
                 cgb.AddCheck (PermissionChecker.Instance);
 
                 cgb.CreateCommand ("..")
-                        .Description ("Fügt ein neues Zitat für sich selber hinzu.\n**Benutzung**: .. My message")
-                        .Parameter ("text",ParameterType.Unparsed)
-                        .Do (async e =>
-                        {
-                            var text = e.GetArg ("text");
-                            if (string.IsNullOrWhiteSpace (text))
-                                return;
-                                await Task.Run (() =>
-                                 Classes.DbHandler.Instance.InsertData (new DataModels.UserQuote ()
-                                 {
-                                     DateAdded = DateTime.Now,
-                                     Keyword = e.User.Name.ToLowerInvariant (),
-                                     Text = text,
-                                     UserName = e.User.Name,
-                                 })).ConfigureAwait (false);
-                            await e.Channel.SendMessage ("`Neues Zitat hinzugefügt.`").ConfigureAwait (false);
-                        });
+                    .Description ("Fügt ein neues Zitat mit Keyword (einzelnes Wort) und Nachricht (kein Limit).\n**Benutzung**: .. abc My message")
+                    .Parameter ("keyword",ParameterType.Required)
+                    .Parameter ("text",ParameterType.Unparsed)
+                    .Do (async e =>
+                    {
+                        var text = e.GetArg ("text");
+                        if (string.IsNullOrWhiteSpace (text))
+                            return;
+                        await Task.Run (() =>
+                             Classes.DbHandler.Instance.InsertData (new DataModels.UserQuote ()
+                             {
+                                 DateAdded = DateTime.Now,
+                                 Keyword = e.GetArg ("keyword").ToLowerInvariant (),
+                                 Text = text,
+                                 UserName = e.User.Name,
+                             })).ConfigureAwait (false);
 
-                cgb.CreateCommand ("..a")
-                        .Description ("Fügt ein neues Zitat mit Namen(ein Wort) und Nachricht (kein Limit).**Owner Only**\n**Benutzung**: ..a abc My message")
-                        .Parameter ("keyword",ParameterType.Required)
-                        .Parameter ("text",ParameterType.Unparsed)
-                        .AddCheck(SimpleCheckers.OwnerOnly())
-                        .Do (async e =>
-                        {
-                            var text = e.GetArg ("text");
-                            if (string.IsNullOrWhiteSpace (text))
-                                return;
-                                await Task.Run (() =>
-                                 Classes.DbHandler.Instance.InsertData (new DataModels.UserQuote ()
-                                 {
-                                     DateAdded = DateTime.Now,
-                                     Keyword = e.GetArg ("keyword").ToLowerInvariant (),
-                                     Text = text,
-                                     UserName = e.User.Name,
-                                 })).ConfigureAwait (false);
-                            await e.Channel.SendMessage ("`Neues Zitat hinzugefügt.`").ConfigureAwait (false);
-                        });
+                        await e.Channel.SendMessage ("`Neues Zitat hinzugefügt.`").ConfigureAwait (false);
+                    });
+
 
                 cgb.CreateCommand ("...")
                     .Description ("Zeigt ein zufälliges Zitat eines Benutzers.\n**Benutzung**: .. abc")
@@ -85,13 +68,57 @@ namespace NadekoBot.Modules.Conversations
                             return;
 
                         var quote =
-                            Classes.DbHandler.Instance.GetRandom<DataModels.UserQuote> (
+                            Classes.DbHandler.Instance.GetRandom<UserQuote> (
                                 uqm => uqm.Keyword == keyword);
 
                         if (quote != null)
                             await e.Channel.SendMessage ($"📣 {quote.Text}").ConfigureAwait (false);
                         else
                             await e.Channel.SendMessage ("💢`Kein Zitat gefunden.`").ConfigureAwait (false);
+                    });
+
+                cgb.CreateCommand ("..qdel")
+                    .Alias ("..quotedelete")
+                    .Description ("Löscht alle Zitate mit angegebenen Keyword. Du musst entweder der Bot-Besitzer oder der Ersteller des Quotes sein um es zu löschen.\n**Benutzung**: `..qdel abc`")
+                    .Parameter ("quote",ParameterType.Required)
+                    .Parameter ("number",ParameterType.Optional)
+                    .Do (async e =>
+                    {
+                        var text = e.GetArg ("quote")?.Trim ();
+                        if (string.IsNullOrWhiteSpace (text))
+                            return;
+                        await Task.Run (() =>
+                        {
+                            if (NadekoBot.IsOwner (e.User.Id))
+                                Classes.DbHandler.Instance.DeleteWhere<UserQuote> (uq => uq.Keyword == text);
+                            else
+                                Classes.DbHandler.Instance.DeleteWhere<UserQuote> (uq => uq.Keyword == text && uq.UserName == e.User.Name || uq.Keyword == e.User.Name.ToLowerInvariant());
+                        }).ConfigureAwait (false);
+
+                        await e.Channel.SendMessage ("`Erledigt.`").ConfigureAwait (false);
+                    });
+
+                cgb.CreateCommand ("..qshow")
+                    .Description ("Zeigt alle Zitate mit angegebenen Keyword.\n**Benutzung**: `..qshow abc`")
+                    .Parameter ("quote",ParameterType.Required)
+                    .Do (async e =>
+                    {
+                        var text = e.GetArg ("quote")?.Trim ();
+                        var allQuotes = "";
+                        var number = 1;
+                        if (string.IsNullOrWhiteSpace (text))
+                            return;
+                        await Task.Run (() =>
+                        {
+                            var quoteList = Classes.DbHandler.Instance.FindAll<UserQuote> (uq => uq.Keyword == text);
+                            foreach(UserQuote quote in quoteList)
+                            {
+                                allQuotes += $"{number}. {quote.Text}\n";
+                                number++;
+                            }
+                        }).ConfigureAwait (false);
+
+                        await e.Channel.SendMessage (allQuotes).ConfigureAwait (false);
                     });
             });
 
