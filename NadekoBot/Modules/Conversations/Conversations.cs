@@ -81,7 +81,6 @@ namespace NadekoBot.Modules.Conversations
                     .Alias ("..quotedelete")
                     .Description ("Löscht alle Zitate mit angegebenen Keyword. Du musst entweder der Bot-Besitzer oder der Ersteller des Quotes sein um es zu löschen.\n**Benutzung**: `..qdel abc`")
                     .Parameter ("quote",ParameterType.Required)
-                    .Parameter ("number",ParameterType.Optional)
                     .Do (async e =>
                     {
                         var text = e.GetArg ("quote")?.Trim ();
@@ -93,6 +92,20 @@ namespace NadekoBot.Modules.Conversations
                                 Classes.DbHandler.Instance.DeleteWhere<UserQuote> (uq => uq.Keyword == text);
                             else
                                 Classes.DbHandler.Instance.DeleteWhere<UserQuote> (uq => uq.Keyword == text && uq.UserName == e.User.Name || uq.Keyword == e.User.Name.ToLowerInvariant());
+                        }).ConfigureAwait (false);
+
+                        await e.Channel.SendMessage ("`Erledigt.`").ConfigureAwait (false);
+                    });
+
+                cgb.CreateCommand ("..qdelothers")
+                    .Alias ("..quotedeleteothers")
+                    .Description ("Löscht alle Zitate mit eigenem Namen als Keyword, welche von anderen geaddet wurden. \n**Benutzung**: `..qdelothers`")
+                    .Do (async e =>
+                    {
+                        var text = e.User.Name.ToLowerInvariant ();
+                        await Task.Run (() =>
+                        {
+                            Classes.DbHandler.Instance.DeleteWhere<UserQuote> (uq => uq.Keyword == text && uq.UserName != e.User.Name);
                         }).ConfigureAwait (false);
 
                         await e.Channel.SendMessage ("`Erledigt.`").ConfigureAwait (false);
