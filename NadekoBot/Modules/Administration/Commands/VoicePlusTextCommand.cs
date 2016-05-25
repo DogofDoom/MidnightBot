@@ -86,6 +86,22 @@ namespace NadekoBot.Modules.Administration.Commands
 
         internal override void Init ( CommandGroupBuilder cgb )
         {
+            cgb.CreateCommand (Module.Prefix + "cleanv+t")
+                .Description ("Löscht alle Text-Channel die auf `-voice` enden für die keine Voicechannels gefunden werden. **Benutzung auf eigene Gefahr.**")
+                .AddCheck (SimpleCheckers.CanManageRoles)
+                .AddCheck (SimpleCheckers.ManageChannels ())
+                .Do (async e =>
+                {
+                    var allTxtChannels = e.Server.TextChannels.Where (c => c.Name.EndsWith ("-voice"));
+                    var validTxtChannelNames = e.Server.VoiceChannels.Select (c => GetChannelName (c.Name));
+
+                    var invalidTxtChannels = allTxtChannels.Where (c => !validTxtChannelNames.Contains (c.Name));
+
+                    invalidTxtChannels.ForEach (async c => await c.Delete ());
+
+                    await e.Channel.SendMessage ("`Erledigt.`");
+                });
+
             cgb.CreateCommand (Module.Prefix + "v+t")
                 .Alias (Module.Prefix + "voice+text")
                 .Description ("Erstellt einen Text-Channel für jeden Voice-Channel, welchen nur User im dazugehörigen Voice-Channel sehen können." +

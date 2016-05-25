@@ -4,6 +4,7 @@ using NadekoBot.Modules.Permissions.Classes;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NadekoBot.Modules.Administration.Commands
 {
@@ -68,7 +69,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand (".lsar")
-                .Description ("Lits all self-assignable roles.")
+                .Description ("Lists all self-assignable roles.")
                 .Parameter ("roles",ParameterType.Multiple)
                 .Do (async e =>
                 {
@@ -123,7 +124,14 @@ namespace NadekoBot.Modules.Administration.Commands
                         return;
                     }
                     await e.User.AddRoles (role).ConfigureAwait (false);
-                    await e.Channel.SendMessage ($":ok:You now have {role.Name} role.").ConfigureAwait (false);
+                    var msg = await e.Channel.SendMessage ($":ok:You now have {role.Name} role.").ConfigureAwait (false);
+                    await Task.Delay (3000);
+                    await msg.Delete ();
+                    try
+                    {
+                        await e.Message.Delete ();
+                    }
+                    catch { }
                 });
 
             cgb.CreateCommand (".iamn")

@@ -53,7 +53,7 @@ namespace NadekoBot.Modules.Administration.Commands
                     $"`Nachricht:` {e.Message.Text}").ConfigureAwait (false);
                 }
                 catch { }
-                };
+            };
         }
 
         private async void ChannelUpdated ( object sender,ChannelUpdatedEventArgs e )
@@ -290,12 +290,12 @@ namespace NadekoBot.Modules.Administration.Commands
                     if (e.Before.Roles.Count () < e.After.Roles.Count ())
                     {
                         var diffRoles = e.After.Roles.Where (r => !e.Before.Roles.Contains (r)).Select (r => "`" + r.Name + "`");
-                        str += $"**Benutzer Rollen geändert ⚔➕**👤`{e.Before?.ToString ()}`\n\tHat nun die {string.Join (", ",diffRoles)} Rolle.";
+                        str += $"**Benutzer Rollen geändert ⚔➕**👤`{e.Before?.ToString ()}`\n\tHat nun die Rolle {string.Join (", ",diffRoles)}.";
                     }
                     else if (e.Before.Roles.Count () > e.After.Roles.Count ())
                     {
                         var diffRoles = e.Before.Roles.Where (r => !e.After.Roles.Contains (r)).Select (r => "`" + r.Name + "`");
-                        str += $"**Benutzer Rollen geändert ⚔➖**👤`{e.Before?.ToString ()}`\n\tHat nicht länger die {string.Join (", ",diffRoles)} Rolle.";
+                        str += $"**Benutzer Rollen geändert ⚔➖**👤`{e.Before?.ToString ()}`\n\tHat nicht länger die Rolle {string.Join (", ",diffRoles)}.";
                     }
                     else
                     {

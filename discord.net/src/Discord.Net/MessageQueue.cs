@@ -122,8 +122,6 @@ namespace Discord.Net
                             string text;
                             if (_pendingSendsByNonce.TryRemove(msg.Nonce, out text)) //If it was deleted from queue, this will fail
                             {
-                                var count = 0;
-                                SENDMESSAGE:
                                 try
                                 {
                                     msg.RawText = text;
@@ -141,17 +139,8 @@ namespace Discord.Net
                                 }
                                 catch (Exception ex)
                                 {
-                                    if (count <= 5)
-                                    {
-                                        Console.WriteLine ($"DEBUG: Error {count}");
-                                        count++;
-                                        goto SENDMESSAGE;
-                                    }
-                                    else
-                                    {
-                                        msg.State = MessageState.Failed;
-                                        _logger.Error ($"Failed to send message to {msg.Channel.Path}",ex);
-                                    }
+                                    msg.State = MessageState.Failed;
+                                    _logger.Error($"Failed to send message to {msg.Channel.Path}", ex);
                                 }
                             }
                         }

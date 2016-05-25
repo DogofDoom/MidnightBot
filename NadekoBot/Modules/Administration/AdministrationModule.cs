@@ -57,8 +57,14 @@ namespace NadekoBot.Modules.Administration
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
                     {
-                        await e.Channel.SendMessage ("`Neustart in 2 Sekunden...`");
-                        await Task.Delay (2000);
+                        var msg = await e.Channel.SendMessage ("`Neustart in 3 Sekunden...`");
+                        await Task.Delay (1000);
+                        await msg.Edit ("`Neustart in 2 Sekunden...`");
+                        await Task.Delay (1000);
+                        await msg.Edit ("`Neustart in 1 Sekunden...`");
+                        await Task.Delay (1000);
+                        await msg.Edit ("`Startet neu...`");
+                        await Task.Delay (1000);
                         System.Diagnostics.Process.Start (System.Reflection.Assembly.GetExecutingAssembly ().Location);
                         Environment.Exit (0);
                     });
@@ -620,6 +626,19 @@ namespace NadekoBot.Modules.Administration
                     .Parameter ("num",ParameterType.Optional)
                     .Do (async e =>
                      {
+                         if(e.Channel.IsPrivate)
+                         {
+                             var msgs = (await e.Channel.DownloadMessages (100).ConfigureAwait (false)).Where (m => m.User.Id == NadekoBot.Creds.BotId);
+                             foreach (var m in msgs)
+                             {
+                                 try
+                                 {
+                                     await m.Delete ().ConfigureAwait (false);
+                                 }
+                                 catch { }
+                                 await Task.Delay (100).ConfigureAwait (false);
+                             }
+                         }
                          if (string.IsNullOrWhiteSpace (e.GetArg ("user_or_num"))) // if nothing is set, clear nadeko's messages, no permissions required
                          {
                          await Task.Run (async () =>
@@ -1037,7 +1056,7 @@ namespace NadekoBot.Modules.Administration
                         if (string.IsNullOrWhiteSpace (game))
                             return;
                         var en = e.Server.Users
-                            .Where (u => u.CurrentGame?.ToUpperInvariant () == game)
+                            .Where (u => u.CurrentGame?.Name.ToUpperInvariant () == game)
                                 .Select (u => $"{u.Name}");
 
                         var arr = en as string[] ?? en.ToArray ();

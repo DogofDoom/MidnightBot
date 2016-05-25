@@ -17,7 +17,7 @@ namespace NadekoBot.Modules.Administration.Commands
         {
             NadekoBot.Client.MessageReceived += async ( s,e ) =>
             {
-                if (e.Channel.IsPrivate || e.User.Id == NadekoBot.Client.CurrentUser.Id)
+                if (e.Channel.IsPrivate || e.User.Id == NadekoBot.Client.CurrentUser.Id || NadekoBot.IsOwner(e.User.Id))
                     return;
                 ConcurrentDictionary<ulong,DateTime> userTimePair;
                 if (!RatelimitingChannels.TryGetValue (e.Channel.Id,out userTimePair))

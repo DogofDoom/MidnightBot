@@ -87,9 +87,9 @@ namespace NadekoBot.Modules.Administration.Commands
                         sb.AppendLine ($"`Nickname:` **{user.Nickname}**");
                     sb.AppendLine ($"`Id:` **{user.Id}**");
                     sb.AppendLine ($"`Status:` **{user.Status}**");
-                    sb.AppendLine ($"`Derzeitiges Spiel:` **{(string.IsNullOrWhiteSpace (user.CurrentGame) ? "-" : user.CurrentGame)}**");
+                    sb.AppendLine ($"`Derzeitiges Spiel:` **{(user.CurrentGame == null ? "-" : user.CurrentGame.Value.Name)}**");
                     if (user.LastOnlineAt != null)
-                        sb.AppendLine ($"`Last Online:` **{user.LastOnlineAt:HH:mm:ss}**");
+                        sb.AppendLine ($"`Zuletzt online:` **{user.LastOnlineAt:HH:mm:ss}**");
                     sb.AppendLine ($"`Gejoint am:` **{user.JoinedAt}**");
                     sb.AppendLine ($"`Rollen:` **({user.Roles.Count ()}) - {string.Join (", ",user.Roles.Select (r => r.Name))}**");
                     sb.AppendLine ($"`AvatarUrl:` **{await user.AvatarUrl.ShortenUrl ().ConfigureAwait (false)}**");
