@@ -245,6 +245,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Compile Include="Modules\Osu\Map.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

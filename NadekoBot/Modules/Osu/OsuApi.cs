@@ -35,6 +35,11 @@ namespace NadekoBot.Modules.Osu
             var userList = GetResults<User> (GetUserURL + "?k=" + _apiKey + "&u=" + username + "&m=" + mode + "&type=string");
             return userList.Count > 0 ? userList[0] : null;
         }
+        public Map GetMap (string beatmap,string mode)
+        {
+            var mapList = GetResults<Map> (GetBeatmapsURL + "?k=" + _apiKey + "&b=" + beatmap + "&m=" + mode + "&a=1");
+            return mapList.Count > 0 ? mapList[0] : null;
+        }
         private List<T> GetResults<T> ( string url )
         {
             var jsonResponse = _client.DownloadString (url);

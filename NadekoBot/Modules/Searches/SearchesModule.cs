@@ -404,6 +404,79 @@ namespace NadekoBot.Modules.Searches
                        await e.Channel.SendMessage ("`" + JObject.Parse (response)["value"]["joke"].ToString () + "` 😆").ConfigureAwait (false);
                    });
 
+                cgb.CreateCommand (Prefix + "osumap")
+                   .Alias (Prefix + "om")
+                   .Description ("Zeigt Informationen über eine bestimmte Beatmap\n**Benutzung: ~osumap 252002:std")
+                   .Parameter ("input",ParameterType.Unparsed)
+                   .Do (async e =>
+                   {
+                       if (string.IsNullOrWhiteSpace (e.GetArg ("input")))
+                       {
+                           await e.Send ("Bitte gib eine Beatmap-ID ein.").ConfigureAwait (false);
+                           return;
+                       }
+
+                       var beatmap = e.GetArg ("input");
+
+                       String[] uxm = beatmap.Split (':');
+                       var mode = uxm[1];
+                       try
+                       {
+                           if (uxm[1].Equals ("std",StringComparison.OrdinalIgnoreCase) || uxm[1].Equals ("0") || uxm[1].Equals ("standard",StringComparison.OrdinalIgnoreCase))
+                           {
+                               mode = "0";
+                           }
+                           else if (uxm[1].Equals ("taiko",StringComparison.OrdinalIgnoreCase) || uxm[1].Equals ("1"))
+                           {
+                               mode = "1";
+                           }
+                           else if (uxm[1].Equals ("ctb",StringComparison.OrdinalIgnoreCase) || uxm[1].Equals ("2") || uxm[1].Equals ("catch the beat",StringComparison.OrdinalIgnoreCase))/*|| choice == "ctb" || choice == "Ctb" || choice == "CTb" || choice == "CTB" || choice == "cTb" || choice == "ctB"*/
+                           {
+                               mode = "2";
+                           }
+                           else if (uxm[1].Equals ("mania",StringComparison.OrdinalIgnoreCase) || uxm[1].Equals ("3"))
+                           {
+                               mode = "3";
+                           }
+                           else if (uxm[1] == "")
+                           {
+                               uxm[1] = "std";
+                               mode = "0";
+                           }
+                           else
+                           {
+                               await e.Send ("Muss ein gültiger Modus sein.").ConfigureAwait (false);
+                               return;
+                           }
+                       }
+
+                       catch (Exception ex)
+                       {
+                           Console.WriteLine ($"Fehler beim Modus: " + ex);
+                           return;
+                       }
+
+                       var api = new Osu.OsuApi (NadekoBot.Creds.OsuAPIKey);
+                       var oBeatmap = api.GetMap (uxm[0],mode);
+                       var formatString =
+                                "```" + "Modus: " + uxm[1]
+                              + "\nBeatmapname: " + oBeatmap.title
+                              + "\nLänge: " + oBeatmap.total_length + " Sekunden"
+                              + "\nKünstler: " + oBeatmap.artist
+                              + "\nBeatmap-ID: " + oBeatmap.beatmap_id
+                              + "\nRanking Datum: " + oBeatmap.approved_date
+                              + "\nErsteller: " + oBeatmap.creator
+                              + "\nBPM: " + oBeatmap.bpm
+                              + "\nSchwierigkeit: " + oBeatmap.difficultyrating + " Sterne"
+                              + "\nCS: " + oBeatmap.diff_size
+                              + "\nOD: " + oBeatmap.diff_overall
+                              + "\nAR: " + oBeatmap.diff_approach
+                              + "\nHP: " + oBeatmap.diff_drain
+                              + "\nMaximale Combo: " + oBeatmap.max_combo + "```";
+
+                       await e.Send (formatString).ConfigureAwait (false);
+                   });
+
                 cgb.CreateCommand (Prefix + "osu")
                    .Alias (Prefix + "oq")
                    .Description ("Zeigt Osu Benutzer Statistiken\n**Benutzung**: ~osu Cookiezi:standard")
@@ -457,7 +530,7 @@ namespace NadekoBot.Modules.Searches
                            return;
                        }
 
-                       var api = new Osu.OsuApi ("5779f915b115e6984ad1ef513441eeeabbb81b36");
+                       var api = new Osu.OsuApi (NadekoBot.Creds.OsuAPIKey);
                        var oUser = api.GetUser (uxm[0],mode);
                        var formatString =
                                 "```" + "Modus: " + uxm[1]

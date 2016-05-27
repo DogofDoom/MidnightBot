@@ -15,6 +15,7 @@ namespace NadekoBot.Classes.JSONModels
         public string SoundCloudClientID = "";
         public string MashapeKey = "";
         public string LOLAPIKey = "";
+        public string OsuAPIKey = "";
         public string CarbonKey = "";
     }
 
