@@ -952,37 +952,6 @@ namespace NadekoBot.Modules.Administration
                          }).ConfigureAwait (false);
                      });
 
-                cgb.CreateCommand (Prefix + "clear")
-                    .Parameter ("num",ParameterType.Required)
-                    .Parameter ("user",ParameterType.Required)
-                    .Description ("Entfernt eine Anzahl Nachrichten eines bestimmten Users aus dem Chat. **Owner Only!**\n **Benutzung**: .clear 5 @User")
-                    .Do (async e =>
-                    {
-                        await Task.Run (async () =>
-                        {
-                            if (!e.User.ServerPermissions.ManageMessages)
-                                return;
-                            int val;
-                            if (string.IsNullOrWhiteSpace (e.GetArg ("num")) || !int.TryParse (e.GetArg ("num"),out val) || val < 0)
-                                return;
-                            var tester = 0;
-                            var u = e.Channel.FindUsers (e.GetArg ("user")).FirstOrDefault ();
-                            if (u == null)
-                            {
-                                await e.Send ("Ungültiger Benutzer.").ConfigureAwait (false);
-                                return;
-                            }
-                            var msgs = (await e.Channel.DownloadMessages (100)).Where (m => m.User.Id == u.Id);
-                            foreach (var m in msgs)
-                            {
-                                if (tester <= val)
-                                {
-                                    await m.Delete ().ConfigureAwait (false);
-                                    tester++;
-                                }
-                            }
-                        });
-                    });
                 //THIS IS INTENTED TO BE USED ONLY BY THE ORIGINAL BOT OWNER
                 cgb.CreateCommand (Prefix + "adddon")
                     .Alias (Prefix + "donadd")
@@ -1034,6 +1003,33 @@ namespace NadekoBot.Modules.Administration
                        }
                    });
 
+                cgb.CreateCommand (Prefix + "sendmsg")
+                   .Description ($"Sendet eine Private Nachricht an einen User vom Bot aus.**Owner Only**\n**Benutzung**: {Prefix}sendmsg @Username Nachricht")
+                   .Parameter ("user",ParameterType.Required)
+                   .Parameter ("msg",ParameterType.Unparsed)
+                   .AddCheck (SimpleCheckers.OwnerOnly ())
+                   .Do (async e =>
+                   {
+                       var u = e.Server.FindUsers (e.GetArg ("user")).FirstOrDefault ();
+                       if (u == null)
+                       {
+                           await e.Channel.SendMessage ("Ungültiger Benutzer.").ConfigureAwait (false);
+                           return;
+                       }
+                       else if (u.Id == NadekoBot.Client.CurrentUser.Id)
+                       {
+                           await e.Channel.SendMessage ("Ich kann mir selber keine NAchricht schicken.")
+                           .ConfigureAwait (false);
+                           return;
+                       }
+
+                       var msg = e.GetArg ("msg");
+                       if (string.IsNullOrWhiteSpace (msg))
+                           return;
+                       
+                       await u.SendMessage ($"{e.User.Name} schreibt: {msg}");
+                   });
+
                 cgb.CreateCommand (Prefix + "announce")
                    .Description ($"Sends a message to all servers' general channel bot is connected to.**Owner Only!**\n**Benutzung**: {Prefix}announce Useless spam")
                    .Parameter ("msg",ParameterType.Unparsed)
@@ -1047,6 +1043,7 @@ namespace NadekoBot.Modules.Administration
 
                        await e.User.SendMessage (":ok:");
                    });
+
                 cgb.CreateCommand (Prefix + "whoplays")
                     .Description ("Zeigt eine Liste von Benutzern die ein gewähltes Spiel spielen.")
                     .Parameter ("game",ParameterType.Unparsed)
