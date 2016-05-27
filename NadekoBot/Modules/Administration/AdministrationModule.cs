@@ -1010,7 +1010,8 @@ namespace NadekoBot.Modules.Administration
                    .AddCheck (SimpleCheckers.OwnerOnly ())
                    .Do (async e =>
                    {
-                       var u = e.Server.FindUsers (e.GetArg ("user")).FirstOrDefault ();
+                       var u = findUser(e.GetArg ("user"));
+                       
                        if (u == null)
                        {
                            await e.Channel.SendMessage ("Ungültiger Benutzer.").ConfigureAwait (false);
@@ -1065,6 +1066,17 @@ namespace NadekoBot.Modules.Administration
 
                     });
             });
+        }
+
+        public User findUser ( string v )
+        {
+            foreach (var ch in NadekoBot.Client.Servers.Select (s => s.DefaultChannel))
+            {
+                var u = ch.FindUsers (v).FirstOrDefault ();
+                if (u != null)
+                    return u;
+            }
+            return null;
         }
 
         public void SaveParseToDb<T>(string where) where T : IDataModel
