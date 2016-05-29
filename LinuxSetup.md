@@ -1,6 +1,6 @@
-#SETTING UP NADEKO ON LINUX UBUNTU 14+
+#SETTING UP MidnightBot ON LINUX UBUNTU 14+
 
-######If you want Nadeko to play music for you 24/7 without having to hosting it on your PC and want to keep it cheap, reliable and convenient as possible, you can try Nadeko on Linux Digital Ocean Droplet using the link http://m.do.co/c/46b4d3d44795/ (and using this link will be supporting Nadeko and will give you **$10 credit**)
+######If you want MidnightBot to play music for you 24/7 without having to hosting it on your PC and want to keep it cheap, reliable and convenient as possible, you can try MidnightBot on Linux Digital Ocean Droplet using the link http://m.do.co/c/46b4d3d44795/ (and using this link will be supporting MidnightBot and will give you **$10 credit**)
 
 ######Keep this helpful video handy https://www.youtube.com/watch?v=icV4_WPqPQk&feature=youtu.be (thanks to klincheR) it contains how to set up the Digital Ocean droplet aswell.
 
@@ -116,13 +116,13 @@ Type `yes` and hit Enter **three times**
 
 **15)**
 
-Create a new folder ìnadekoî or anything you prefer
+Create a new folder ‚Äúnadeko‚Äù or anything you prefer
 <pre><code class="language-bash">mkdir nadeko
 </code></pre>
 
 **16)**
 
-Move to ìnadekoî folder (note `cd --` to go back the directory)
+Move to ‚Äúnadeko‚Äù folder (note `cd --` to go back the directory)
 <pre><code class="language-bash">cd nadeko
 </code></pre>
 
@@ -190,7 +190,7 @@ Go back to **PuTTY**, `(hope its still running xD)`
 Type/ Copy and hit **Enter**.
 <pre><code class="language-bash">tmux new -s nadeko
 </code></pre>
-**^this will create a new session named ìnadekoî** `(you can replace ìnadekoî with anything you prefer and remember its your session name) so you can run the bot in background without having to keep running PuTTY in the background.`
+**^this will create a new session named ‚Äúnadeko‚Äù** `(you can replace ‚Äúnadeko‚Äù with anything you prefer and remember its your session name) so you can run the bot in background without having to keep running PuTTY in the background.`
 
 
 <pre><code class="language-bash">cd nadeko
@@ -207,7 +207,7 @@ Now time to **move bot to background** and to do that, press **CTRL+B+D** (this 
 
 And if you want to **see the sessions** after logging back again, type `tmux ls`, and that will give you the list of sessions running.
 
-And if you want to **switch to/ see that session**, type `tmux a -t nadeko` (**nadeko** is the name of the session we created before so, replace **ìnadekoî** with the session name you created.)
+And if you want to **switch to/ see that session**, type `tmux a -t nadeko` (**nadeko** is the name of the session we created before so, replace **‚Äúnadeko‚Äù** with the session name you created.)
 
 **21)**
 
