@@ -35,9 +35,27 @@ namespace NadekoBot.Modules.NSFW
                         if (dan != null)
                             await e.Channel.SendMessage (":heart: Danbooru: " + dan)
                                            .ConfigureAwait (false);
-                        if (dan == null && gel == null)
+                        var atf = await SearchHelper.GetAtfbooruImageLink("rating%3Aexplicit+" + tag).ConfigureAwait(false);
+                        if (atf != null)
+                            await e.Channel.SendMessage(":heart: ATFbooru: " + atf)
+                                           .ConfigureAwait(false);
+                        if (dan == null && gel == null && atf == null)
                             await e.Channel.SendMessage ("`Keine Ergebnisse.`");
                     });
+
+                cgb.CreateCommand(Prefix + "atfbooru")
+                    .Description("Shows a random hentai image from atfbooru with a given tag. Tag is optional but preffered. (multiple tags are appended with +)\n**Usage**: ~danbooru yuri+kissing")
+                    .Parameter("tag", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        var tag = e.GetArg("tag")?.Trim() ?? "";
+                        var link = await SearchHelper.GetAtfbooruImageLink(tag).ConfigureAwait(false);
+                        if (string.IsNullOrWhiteSpace(link))
+                            await e.Channel.SendMessage("Suche ergab keine Ergebnisse ;(");
+                        else
+                            await e.Channel.SendMessage(link).ConfigureAwait(false);
+                    });
+
                 cgb.CreateCommand (Prefix + "danbooru")
                     .Description ("Zeigt ein zufälliges Hentai Bild von danbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags)\n**Benutzung**: ~danbooru yuri+kissing")
                     .Parameter ("tag",ParameterType.Unparsed)

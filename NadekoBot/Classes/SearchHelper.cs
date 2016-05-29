@@ -285,7 +285,25 @@ namespace NadekoBot.Classes
             return $"https://{match.Value}";
         }
 
-        public static async Task<string> GetGelbooruImageLink ( string tag )
+        public static async Task<string> GetAtfbooruImageLink ( string tag )
+        {
+            var rng = new Random ();
+
+            var link = $"http://atfbooru.ninja/posts?" +
+                        $"page={rng.Next (0,15)}";
+            if (!string.IsNullOrWhiteSpace ( tag))
+                link += $"&tags={tag.Replace(" ", "_")}";
+
+            var webpage = await GetResponseStringAsync (link).ConfigureAwait (false);
+            var matches = Regex.Matches (webpage,"data-large-file-url=\"(?<id>.*?)\"");
+
+            if (matches.Count == 0)
+                return null;
+            return $"http://atfbooru.ninja" +
+                   $"{matches[rng.Next(0, matches.Count)].Groups["id"].Value}";
+        }
+
+    public static async Task<string> GetGelbooruImageLink ( string tag )
         {
             var headers = new Dictionary<string,string> () {
                 {"User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.202 Safari/535.1"},

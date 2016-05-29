@@ -87,6 +87,10 @@ namespace NadekoBot.Modules.Permissions.Classes
             ServerPermissions serverPerms = PermissionsDict.GetOrAdd (server.Id,id => new ServerPermissions (id,server.Name));
             bool val;
             Permissions perm;
+
+            //If User is Owner. He can run blocked commands and modules
+            if(NadekoBot.IsOwner(user.Id))
+                return PermissionBanType.None;
             //server
             if (serverPerms.Permissions.Modules.TryGetValue (command.Category,out val) && val == false)
                 return PermissionBanType.ServerBanModule;
