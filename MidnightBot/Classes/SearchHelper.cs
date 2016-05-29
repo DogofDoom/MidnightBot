@@ -249,17 +249,19 @@ namespace MidnightBot.Classes
                 tag = "flat_chest";
 
             var link = $"http://danbooru.donmai.us/posts?" +
-                        $"page={rng.Next (0,15)}";
+                        $"tags=order:random+";//$"page={rng.Next(0, 15)}";
             if (!string.IsNullOrWhiteSpace (tag))
-                link += $"&tags={tag.Replace (" ","_")}";
+                link += $"{tag.Replace (" ","_")}";
 
             var webpage = await GetResponseStringAsync (link).ConfigureAwait (false);
-            var matches = Regex.Matches (webpage,"data-large-file-url=\"(?<id>.*?)\"");
+            var matches = Regex.Matches (webpage,"data-file-url=\"(?<id>.*?)\"");
 
             if (matches.Count == 0)
                 return null;
-            return $"http://danbooru.donmai.us" +
-                   $"{matches[rng.Next (0,matches.Count)].Groups["id"].Value}";
+            string outlink = $"http://danbooru.donmai.us" +
+                 $"{matches[rng.Next(0, matches.Count)].Groups["id"].Value}";
+            //outlink = outlink.Replace("sample/sample-", "");
+            return outlink;
         }
 
         public static async Task<string> GetDerpibooruImageLink ( string tags )
@@ -285,22 +287,24 @@ namespace MidnightBot.Classes
             return $"https://{match.Value}";
         }
 
-        public static async Task<string> GetAtfbooruImageLink ( string tag )
+        public static async Task<string> GetATFBooruImageLink ( string tag )
         {
             var rng = new Random ();
 
             var link = $"http://atfbooru.ninja/posts?" +
-                        $"page={rng.Next (0,15)}";
+                        $"tags=order:random+";//"page={rng.Next(0, 15)}";
             if (!string.IsNullOrWhiteSpace ( tag))
-                link += $"&tags={tag.Replace(" ", "_")}";
+                link += $"{tag.Replace (" ","_")}";
 
             var webpage = await GetResponseStringAsync (link).ConfigureAwait (false);
-            var matches = Regex.Matches (webpage,"data-large-file-url=\"(?<id>.*?)\"");
+            var matches = Regex.Matches (webpage,"data-file-url=\"(?<id>.*?)\"");
 
             if (matches.Count == 0)
                 return null;
-            return $"http://atfbooru.ninja" +
+            string outlink = $"http://atfbooru.ninja" +
                    $"{matches[rng.Next(0, matches.Count)].Groups["id"].Value}";
+             //outlink = outlink.Replace("sample/sample-", "");
+            return outlink;
         }
 
     public static async Task<string> GetGelbooruImageLink ( string tag )
