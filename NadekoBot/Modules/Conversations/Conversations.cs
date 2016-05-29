@@ -25,6 +25,7 @@ namespace NadekoBot.Modules.Conversations
             commands.Add (new CopyCommand (this));
             commands.Add (new RequestsCommand (this));
         }
+        public string BotName { get; set; } = NadekoBot.BotName;
 
         public override string Prefix { get; } = String.Format (NadekoBot.Config.CommandPrefixes.Conversations,NadekoBot.Creds.BotId);
 
@@ -144,7 +145,7 @@ namespace NadekoBot.Modules.Conversations
                 commands.ForEach (cmd => cmd.Init (cgb));
 
                 cgb.CreateCommand ("uptime")
-                    .Description ("Zeigt wie lange Midnight-Bot schon läuft.")
+                    .Description ($"Zeigt wie lange {BotName} schon läuft.")
                     .Do (async e =>
                     {
                         var time = (DateTime.Now - Process.GetCurrentProcess ().StartTime);
@@ -203,7 +204,7 @@ namespace NadekoBot.Modules.Conversations
 
                 cgb.CreateCommand ("insult")
                     .Parameter ("mention",ParameterType.Required)
-                    .Description ("Beleidigt @X Person.\n**Benutzung**: @MidnightBot insult @X.")
+                    .Description ($"Beleidigt @X Person.\n**Benutzung**: @{BotName} insult @X.")
                     .Do (async e =>
                     {
                         var u = e.Channel.FindUsers (e.GetArg ("mention")).FirstOrDefault ();
@@ -250,7 +251,7 @@ namespace NadekoBot.Modules.Conversations
                     });
 
                 cgb.CreateCommand ("praise")
-                    .Description ("Lobt @X Person.\n**Benutzung**: @MidnightBot praise @X.")
+                    .Description ($"Lobt @X Person.\n**Benutzung**: @{BotName} praise @X.")
                     .Parameter ("mention",ParameterType.Required)
                     .Do (async e =>
                     {
@@ -280,7 +281,7 @@ namespace NadekoBot.Modules.Conversations
                     });
 
                 cgb.CreateCommand ("fire")
-                    .Description ("Zeigt eine unicode Feuer Nachricht. Optionaler Parameter [x] sagt ihm wie oft er das Feuer wiederholen soll.\n**Benutzung**: @MidnightBot fire [x]")
+                    .Description ($"Zeigt eine unicode Feuer Nachricht. Optionaler Parameter [x] sagt ihm wie oft er das Feuer wiederholen soll.\n**Benutzung**: @{BotName} fire [x]")
                     .Parameter ("times",ParameterType.Optional)
                     .Do (async e =>
                     {
@@ -303,7 +304,7 @@ namespace NadekoBot.Modules.Conversations
                     });
 
                 cgb.CreateCommand ("rip")
-                    .Description ("Zeigt ein Grab von jemanden mit einem Startjahr\n**Benutzung**: @MidnightBot rip @Someone 2000")
+                    .Description ($"Zeigt ein Grab von jemanden mit einem Startjahr\n**Benutzung**: @{BotName} rip @Someone 2000")
                     .Parameter ("user",ParameterType.Required)
                     .Parameter ("year",ParameterType.Optional)
                     .Do (async e =>
@@ -388,7 +389,7 @@ namespace NadekoBot.Modules.Conversations
                     });
                 
                 cgb.CreateCommand ("hide")
-                    .Description ("Versteckt MidnightBot!11!!")
+                    .Description ($"Versteckt {BotName}!11!!")
                     .Do (async e =>
                     {
                         using (var ms = Resources.hidden.ToStream (ImageFormat.Png))
@@ -399,7 +400,7 @@ namespace NadekoBot.Modules.Conversations
                     });
 
                 cgb.CreateCommand ("unhide")
-                    .Description ("MidnightBot kommt aus seinem Versteck!1!!1")
+                    .Description ($"{BotName} kommt aus seinem Versteck!1!!1")
                     .Do (async e =>
                     {
                         using (var fs = new FileStream ("data/avatar.png",FileMode.Open))

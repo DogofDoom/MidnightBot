@@ -18,7 +18,21 @@ namespace NadekoBot.Classes.JSONModels
 
         public string RemindMessageFormat { get; set; } = "❗⏰**Mir wurde von %user% aufgetragen, dich an '%message%' zu erinnern.**⏰❗";
 
-        public Dictionary<string,List<string>> CustomReactions { get; set; } = new Dictionary<string,List<string>> ()
+        public Dictionary<string,List<string>> CustomReactions { get; set; } = new Dictionary<string,List<string>> ();
+
+        public List<string> RotatingStatuses { get; set; } = new List<string> ();
+        public CommandPrefixesModel CommandPrefixes { get; set; } = new CommandPrefixesModel ();
+        public HashSet<ulong> ServerBlacklist { get; set; } = new HashSet<ulong> ();
+        public HashSet<ulong> ChannelBlacklist { get; set; } = new HashSet<ulong> ();
+
+        public HashSet<ulong> UserBlacklist { get; set; } = new HashSet<ulong> () {
+            105309315895693312,
+            119174277298782216,
+            143515953525817344
+        };
+
+        [JsonIgnore]
+        public Dictionary<string,List<string>> DefaultReactions { get; } = new Dictionary<string,List<string>> ()
         {
             {@"\o\", new List<string>()
             { "/o/" } },
@@ -77,18 +91,6 @@ namespace NadekoBot.Classes.JSONModels
                 "https://cdn.discordapp.com/attachments/140007341880901632/156721728763068417/mustache-best-girl.png"
 
             } }
-        };
-
-        public List<string> RotatingStatuses { get; set; } = new List<string>();
-        public CommandPrefixesModel CommandPrefixes { get; set; } = new CommandPrefixesModel();
-        public HashSet<ulong> ServerBlacklist { get; set; } = new HashSet<ulong>();
-        public HashSet<ulong> ChannelBlacklist { get; set; } = new HashSet<ulong>();
-
-        public HashSet<ulong> UserBlacklist { get; set; } = new HashSet<ulong>()
-        {
-            105309315895693312,
-            119174277298782216,
-            143515953525817344
         };
 
         public string[] _8BallResponses

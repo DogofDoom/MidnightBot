@@ -12,6 +12,7 @@ namespace NadekoBot.Modules.Games
     internal class GamesModule : DiscordModule
     {
         private readonly Random rng = new Random ();
+        public string BotName { get; set; } = NadekoBot.BotName;
 
         public GamesModule ()
         {
@@ -67,7 +68,7 @@ namespace NadekoBot.Modules.Games
                      });
 
                 cgb.CreateCommand (Prefix + "rps")
-                .Description ("Play a game of rocket paperclip scissors with nadkeo.\n**Benutzung**: >rps scissors")
+                .Description ($"Spiel eine Runde Stein, Schere, Papier mit {BotName}.\n**Benutzung**: >rps scissors")
                 .Parameter ("input",ParameterType.Required)
                 .Do (async e =>
                 {

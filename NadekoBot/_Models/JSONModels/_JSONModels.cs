@@ -9,7 +9,7 @@ namespace NadekoBot.Classes.JSONModels
         public string Password = "xxxxxxx";
         public string Token = "";
         public ulong BotId = 1231231231231;
-        public string GoogleAPIKey = "";
+        public string[] GoogleAPIKey = { "" };
         public ulong[] OwnerIds = {123123123123, 5675675679845};
         public string TrelloAppKey = "";
         public string SoundCloudClientID = "";

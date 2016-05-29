@@ -159,32 +159,6 @@ namespace NadekoBot.Modules.Extra
                              }
                          }
                      });
-
-               cgb.CreateCommand (Prefix + "random9gag")
-                 .Alias (Prefix + "r9")
-                 .Description ("Zeigt ein zufälliges Bild von 9Gag.")
-                     .Do (async e =>
-                     {
-                         RANDNINE:
-                         try
-                         {
-                             var reqString = $"https://www.googleapis.com/customsearch/v1?q=9gag&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={ rng.Next (1,150) }&fields=items%2Flink&key={NadekoBot.Creds.GoogleAPIKey}";
-                             var obj = JObject.Parse (await SearchHelper.GetResponseStringAsync (reqString));
-                             
-                                 await e.Channel.SendMessage (obj["items"][0]["link"].ToString ()).ConfigureAwait (false);
-                         }
-                         catch (HttpRequestException exception)
-                         {
-                             if (exception.Message.Contains ("403 (Forbidden)"))
-                             {
-                                 await e.Channel.SendMessage ("Limit erreicht!").ConfigureAwait (false);
-                             }
-                             else
-                             {
-                                 goto RANDNINE;
-                             }
-                         }
-                     });
            });
         }       
     }

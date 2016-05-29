@@ -25,7 +25,7 @@ namespace NadekoBot.Modules.Games.Commands
 
         //channelid/messageid pair
         ConcurrentDictionary<ulong,Message> plantedFlowerChannels = new ConcurrentDictionary<ulong,Message> ();
-
+        public string BotName { get; set; } = NadekoBot.BotName;
         private object locker = new object ();
 
         internal override void Init ( CommandGroupBuilder cgb )

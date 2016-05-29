@@ -9,6 +9,7 @@ namespace NadekoBot.Classes.Conversations.Commands
 {
     internal class RequestsCommand : DiscordCommand
     {
+        public string BotName { get; set; } = NadekoBot.BotName;
         public void SaveRequest ( CommandEventArgs e,string text )
         {
             DbHandler.Instance.InsertData (new DataModels.Request
@@ -26,13 +27,13 @@ namespace NadekoBot.Classes.Conversations.Commands
         {
             var task = DbHandler.Instance.GetAllRows<DataModels.Request> ();
 
-            var str = "Alle derzeiten Anfragen für MidnightBot:\n\n";
+            var str = $"Alle derzeiten Anfragen für {BotName}:\n\n";
             foreach (var reqObj in task)
             {
                 str += $"{reqObj.Id}. by **{reqObj.UserName}** from **{reqObj.ServerName}** at {reqObj.DateAdded.ToLocalTime ()}\n" +
                        $"**{reqObj.RequestText}**\n----------\n";
             }
-            return str + "\n__Gib [@MidnightBot clr] ein, um alle meine Nachrichten zu löschen.__";
+            return str + $"\n__Gib [@{BotName} clr] ein, um alle meine Nachrichten zu löschen.__";
         }
 
         public bool DeleteRequest ( int requestNumber ) =>
@@ -50,7 +51,7 @@ namespace NadekoBot.Classes.Conversations.Commands
 
             cgb.CreateCommand ("req")
                 .Alias ("request")
-                .Description ("Fordere ein Feature für Midnight-Bot.\n**Benutzung**: @MidnightBot req new_feature")
+                .Description ($"Fordere ein Feature für {BotName}.\n**Benutzung**: @{BotName} req new_feature")
                 .Parameter ("all",ParameterType.Unparsed)
                 .Do (async e =>
                 {

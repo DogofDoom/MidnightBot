@@ -44,9 +44,10 @@ namespace NadekoBot.Classes.Help.Commands
 
             };
 
-            #endregion OldHelp
-            #region NewHelp
-        /*
+        #endregion OldHelp
+        #region NewHelp
+        public Func<CommandEventArgs,Task> NewHelpFunc () => async e =>
+        {
             var comToFind = e.GetArg("command")?.ToLowerInvariant();
         if (string.IsNullOrWhiteSpace(comToFind))
         {
@@ -59,12 +60,12 @@ namespace NadekoBot.Classes.Help.Commands
                 .FirstOrDefault(c => c.Text.ToLowerInvariant().Equals(comToFind) ||
                                         c.Aliases.Select(a => a.ToLowerInvariant()).Contains(comToFind));
             if (com != null)
-                await e.Channel.SendMessage($"`Help for '{com.Text}':` **{com.Description}**").ConfigureAwait(false);
+                await e.Channel.SendMessage($"`Hilfe für '{com.Text}':` **{com.Description}**").ConfigureAwait(false);
         }).ConfigureAwait(false);
     };
-    */
+    
         public static string HelpString => NadekoBot.IsBot ? $"Um {NadekoBot.Client.CurrentUser.Name} zu deinem Server einzuladen, gehe hierhin: <>\n" : "" +
-                                       $"Du kannst `{NadekoBot.Config.CommandPrefixes.Help}modules` benutzencommand um eine Liste aller Module zu sehen.\n" +
+                                       $"Du kannst `{NadekoBot.Config.CommandPrefixes.Help}modules` benutzen um eine Liste aller Module zu sehen.\n" +
                                        $"Du kannst `{NadekoBot.Config.CommandPrefixes.Help}commands ModuleName`" +
                                        $" (zum Beispiel `{NadekoBot.Config.CommandPrefixes.Help}commands Administration`) benutzen um eine Liste aller Befehle des Modules zu sehen.\n" +
                                        $"Für die Hilfe bei einem bestimmten Befehl, benutze `{NadekoBot.Config.CommandPrefixes.Help}h \"Command name\"` (zum Beispiel `-h \"! q\"`)";
@@ -110,6 +111,10 @@ Version: `{NadekoStats.Instance.BotVersion}`";
                 .Description ("Hilfe-Befehl.\n**Usage**: '-h !m q' or just '-h' ")
                 .Parameter ("command",ParameterType.Unparsed)
                 .Do (HelpFunc ());
+            cgb.CreateCommand (Module.Prefix + "hh")
+                .Description ("Hilfe-Befehl.\n**Usage**: '-hh !m q' or just '-h' ")
+                .Parameter ("command",ParameterType.Unparsed)
+                .Do (NewHelpFunc ());
             cgb.CreateCommand (Module.Prefix + "hgit")
                 .Description ("OWNER ONLY commandlist.md Datei erstellung. **Owner Only!**")
                 .AddCheck (SimpleCheckers.OwnerOnly ())

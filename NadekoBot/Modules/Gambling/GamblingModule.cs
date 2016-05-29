@@ -20,7 +20,7 @@ namespace NadekoBot.Modules.Gambling
             commands.Add (new FlipCoinCommand (this));
             commands.Add (new DiceRollCommand (this));
         }
-
+        public string BotName { get; set; } = NadekoBot.BotName;
         public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.Gambling;
 
         public override void Install ( ModuleManager manager )

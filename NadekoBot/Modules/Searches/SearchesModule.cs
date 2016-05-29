@@ -170,7 +170,7 @@ namespace NadekoBot.Modules.Searches
                                 return;
                             try
                             {
-                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString (e.GetArg ("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&fields=items%2Flink&key={NadekoBot.Creds.GoogleAPIKey}";
+                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString (e.GetArg ("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&fields=items%2Flink&key={NadekoBot.GetRndGoogleAPIKey ()}";
                                 var obj = JObject.Parse (await SearchHelper.GetResponseStringAsync (reqString).ConfigureAwait (false));
 
                                 await e.Channel.SendMessage (obj["items"][0]["link"].ToString ()).ConfigureAwait (false);
@@ -199,7 +199,7 @@ namespace NadekoBot.Modules.Searches
                                 return;
                             try
                             {
-                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString (e.GetArg ("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={ rng.Next (1,150) }&fields=items%2Flink&key={NadekoBot.Creds.GoogleAPIKey}";
+                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString (e.GetArg ("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={ rng.Next (1,150) }&fields=items%2Flink&key={NadekoBot.GetRndGoogleAPIKey ()}";
                                 var obj = JObject.Parse (await SearchHelper.GetResponseStringAsync (reqString).ConfigureAwait (false));
 
                                 await e.Channel.SendMessage (obj["items"][0]["link"].ToString ()).ConfigureAwait (false);
@@ -217,6 +217,7 @@ namespace NadekoBot.Modules.Searches
                             }
 
                         });
+
                 cgb.CreateCommand (Prefix + "lmgtfy")
                     .Description ("Google etwas für einen Idioten.")
                     .Parameter ("ffs",ParameterType.Unparsed)
@@ -600,6 +601,19 @@ namespace NadekoBot.Modules.Searches
                             await e.Channel.SendMessage ("`Keine Ergebnisse.`");
                         else
                             await e.Channel.SendMessage (link).ConfigureAwait (false);
+                    });
+
+                cgb.CreateCommand(Prefix + "pony")
+                    .Alias(Prefix + "broni")
+                    .Description("Shows a random image from bronibooru with a given tag. Tag is optional but preferred. (multiple tags are appended with +)\n**Usage**: ~pony scootaloo")
+                    .Parameter("tag", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        var tag = e.GetArg("tag")?.Trim() ?? "";
+                        var broni = await SearchHelper.GetBronibooruImageLink(tag).ConfigureAwait(false);
+                        if (broni != null)
+                            await e.Channel.SendMessage("Bronibooru: " + broni).ConfigureAwait(false);
+                            await e.Channel.SendMessage("Search yielded no results.");
                     });
 
                 cgb.CreateCommand (Prefix + "wiki")

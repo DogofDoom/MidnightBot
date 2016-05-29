@@ -8,6 +8,7 @@ namespace NadekoBot.Modules.Games.Commands
 {
     class BetrayGame : DiscordCommand
     {
+        public string BotName { get; set; } = NadekoBot.BotName;
         public BetrayGame ( DiscordModule module ) : base (module) { }
 
         private enum Answers
@@ -18,18 +19,18 @@ namespace NadekoBot.Modules.Games.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "betray")
-                .Description ("BETRUGS-SPIEL. Betrüge MidnightBot in der nächsten Runde." +
-                             "Wenn MidnightBot mit dir zusammenarbeitet - Du bekommst Extra-Punkte, MidnightBot verliert eine Menge." +
-                             "Wenn MidnigtBot betrügt - Beide verlieren ein paar Punkte.")
+                .Description ($"BETRUGS-SPIEL. Betrüge {BotName} in der nächsten Runde." +
+                             $"Wenn {BotName} mit dir zusammenarbeitet - Du bekommst Extra-Punkte, {BotName} verliert eine Menge." +
+                             $"Wenn {BotName} betrügt - Beide verlieren ein paar Punkte.")
                 .Do (async e =>
                 {
                     await ReceiveAnswer (e,Answers.Betray).ConfigureAwait (false);
                 });
 
             cgb.CreateCommand (Module.Prefix + "cooperate")
-                .Description ("BETRUGS-SPIEL. Arbeite mit MidnightBot zusammen in der nächsten Runde." +
-                             "When MiddnightBot mit dir zusammenarbeitet - Ihr beide bekommt Bonus-Punkte." +
-                             "Wenn MidnightBot betrügt - Du verlierst eine Menge, MidnightBot bekommt Bonus-Punkte.")
+                .Description ($"BETRUGS-SPIEL. Arbeite mit {BotName} zusammen in der nächsten Runde." +
+                             $"When {BotName} mit dir zusammenarbeitet - Ihr beide bekommt Bonus-Punkte." +
+                             $"Wenn {BotName} betrügt - Du verlierst eine Menge, {BotName} bekommt Bonus-Punkte.")
                 .Do (async e =>
                 {
 
@@ -64,12 +65,12 @@ namespace NadekoBot.Modules.Games.Commands
         private async Task ReceiveAnswer ( CommandEventArgs e,Answers userAnswer )
         {
             var response = userAnswer == Answers.Betray
-                ? ":no_entry: `Du hast MidnightBot betrogen` - Du Monster."
-                : ":ok: `Du hast mit MidnightBot zusammengearbeitet.` ";
+                ? $":no_entry: `Du hast {BotName} betrogen` - Du Monster."
+                : $":ok: `Du hast mit {BotName} zusammengearbeitet.` ";
             var currentAnswer = NextAnswer;
             var nadekoResponse = currentAnswer == Answers.Betray
-                ? ":no_entry: `Aww MidnightBot hat dich betrogen` - Er ist so niedlich"
-                : ":ok: `MidnightBot hat mit dir zusammengearbeitet.`";
+                ? $":no_entry: `Aww {BotName} hat dich betrogen` - Er ist so niedlich"
+                : $":ok: `{BotName} hat mit dir zusammengearbeitet.`";
             NextAnswer = userAnswer;
             if (userAnswer == Answers.Betray && currentAnswer == Answers.Betray)
             {
@@ -96,7 +97,7 @@ namespace NadekoBot.Modules.Games.Commands
                                         $"{response}\n" +
                                         $"{nadekoResponse}\n" +
                                         $"--------------------------------\n" +
-                                        $"MidnightBot hat {NadekoPoints} Punkte." +
+                                        $"{BotName} hat {NadekoPoints} Punkte." +
                                         $"Du hast {UserPoints} Punkte." +
                                         $"--------------------------------\n")
                                         .ConfigureAwait (false);
@@ -105,7 +106,7 @@ namespace NadekoBot.Modules.Games.Commands
             if (nadekoPoints == userPoints)
                 await e.Channel.SendMessage ("Unentschieden").ConfigureAwait (false);
             else if (nadekoPoints > userPoints)
-                await e.Channel.SendMessage ("MidnightBot hat gewonnen.").ConfigureAwait (false);
+                await e.Channel.SendMessage ($"{BotName} hat gewonnen.").ConfigureAwait (false);
             else
                 await e.Channel.SendMessage ("Du hast gewonnen.").ConfigureAwait (false);
             nadekoPoints = 0;

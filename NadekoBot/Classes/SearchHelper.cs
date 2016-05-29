@@ -12,6 +12,7 @@ using System.Security.Authentication;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using RestSharp;
 
 namespace NadekoBot.Classes
 {
@@ -153,7 +154,7 @@ namespace NadekoBot.Classes
 
         public static async Task<string> FindYoutubeUrlByKeywords ( string keywords )
         {
-            if (string.IsNullOrWhiteSpace (NadekoBot.Creds.GoogleAPIKey))
+            if (string.IsNullOrWhiteSpace (NadekoBot.GetRndGoogleAPIKey ()))
                 throw new InvalidCredentialException ("Google API Key is missing.");
             if (string.IsNullOrWhiteSpace (keywords))
                 throw new ArgumentNullException (nameof (keywords),"Query not specified.");
@@ -170,7 +171,7 @@ namespace NadekoBot.Classes
                                            $"https://www.googleapis.com/youtube/v3/search?" +
                                            $"part=snippet&maxResults=1" +
                                            $"&q={Uri.EscapeDataString (keywords)}" +
-                                           $"&key={NadekoBot.Creds.GoogleAPIKey}").ConfigureAwait (false);
+                                           $"&key={NadekoBot.GetRndGoogleAPIKey ()}").ConfigureAwait (false);
             JObject obj = JObject.Parse (response);
 
             var data = JsonConvert.DeserializeObject<YoutubeVideoSearch> (response);
@@ -186,7 +187,7 @@ namespace NadekoBot.Classes
 
         public static async Task<string> GetPlaylistIdByKeyword ( string query )
         {
-            if (string.IsNullOrWhiteSpace (NadekoBot.Creds.GoogleAPIKey))
+            if (string.IsNullOrWhiteSpace (NadekoBot.GetRndGoogleAPIKey ()))
                 throw new ArgumentNullException (nameof (query));
 
             var match = new Regex ("(?:youtu\\.be\\/|list=)(?<id>[\\da-zA-Z\\-_]*)").Match (query);
@@ -198,7 +199,7 @@ namespace NadekoBot.Classes
             var link = "https://www.googleapis.com/youtube/v3/search?part=snippet" +
                         "&maxResults=1&type=playlist" +
                        $"&q={Uri.EscapeDataString (query)}" +
-                       $"&key={NadekoBot.Creds.GoogleAPIKey}";
+                       $"&key={NadekoBot.GetRndGoogleAPIKey ()}";
 
             var response = await GetResponseStringAsync (link).ConfigureAwait (false);
             var data = JsonConvert.DeserializeObject<YoutubePlaylistSearch> (response);
@@ -209,7 +210,7 @@ namespace NadekoBot.Classes
 
         public static async Task<IList<string>> GetVideoIDs ( string playlist,int number = 50 )
         {
-            if (string.IsNullOrWhiteSpace (NadekoBot.Creds.GoogleAPIKey))
+            if (string.IsNullOrWhiteSpace (NadekoBot.GetRndGoogleAPIKey ()))
             {
                 throw new ArgumentNullException (nameof (playlist));
             }
@@ -227,7 +228,7 @@ namespace NadekoBot.Classes
                     $"https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails" +
                     $"&maxResults={toGet}" +
                     $"&playlistId={playlist}" +
-                    $"&key={NadekoBot.Creds.GoogleAPIKey}";
+                    $"&key={NadekoBot.GetRndGoogleAPIKey ()}";
                 if (!string.IsNullOrWhiteSpace (nextPageToken))
                     link += $"&pageToken={nextPageToken}";
                 var response = await GetResponseStringAsync (link).ConfigureAwait (false);
@@ -345,15 +346,44 @@ namespace NadekoBot.Classes
             }
         }
 
+        public static async Task<string> GetBronibooruImageLink ( string tag )
+        {
+            var rng = new Random ();
+
+            var link = $"http://www.bronibooru.com/posts/random?";
+            if (!string.IsNullOrWhiteSpace (tag))
+                link += $"tags={tag.Replace (" ","_")}";
+
+            var webpage = await GetResponseStringAsync (link).ConfigureAwait (false);
+            var match = Regex.Match (webpage,"data-large-file-url=\"(?<id>.*?)\"");
+
+            if (!match.Success)
+                return null;
+            return $"http:{match.Groups["id"].Value}";
+        }
+
+        public static Task<string> GetRandomGagPost()
+        {
+            var ta = Task.Run(() =>
+            {
+                var client = new RestClient("http://9gag.com/random");
+                var request = new RestRequest(Method.GET);
+
+                IRestResponse response = client.Execute(request);
+                return response.ResponseUri.AbsoluteUri;
+            });
+            return ta;
+        }
+
         public static async Task<string> ShortenUrl ( string url )
         {
-            if (string.IsNullOrWhiteSpace (NadekoBot.Creds.GoogleAPIKey))
+            if (string.IsNullOrWhiteSpace (NadekoBot.GetRndGoogleAPIKey ()))
                 return url;
             try
             {
                 var httpWebRequest =
                     (HttpWebRequest)WebRequest.Create ("https://www.googleapis.com/urlshortener/v1/url?key=" +
-                                                       NadekoBot.Creds.GoogleAPIKey);
+                                                       NadekoBot.GetRndGoogleAPIKey ());
                 httpWebRequest.ContentType = "application/json";
                 httpWebRequest.Method = "POST";
 

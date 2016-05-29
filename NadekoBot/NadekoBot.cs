@@ -13,6 +13,7 @@ using NadekoBot.Modules.Gambling;
 using NadekoBot.Modules.Games;
 using NadekoBot.Modules.Games.Commands;
 using NadekoBot.Modules.Help;
+using NadekoBot.Modules.Meme;
 using NadekoBot.Modules.Music;
 using NadekoBot.Modules.NSFW;
 using NadekoBot.Modules.Permissions;
@@ -44,7 +45,14 @@ namespace NadekoBot
 
         private static Channel OwnerPrivateChannel { get; set; }
 
-        private static void Main ()
+        public static String GetRndGoogleAPIKey ()
+        {
+            Random rnd = new Random ();
+            int i = rnd.Next (0,Creds.GoogleAPIKey.Length);
+            return Creds.GoogleAPIKey[i];
+        }
+
+    private static void Main ()
         {
             Console.OutputEncoding = Encoding.Unicode;
 
@@ -66,7 +74,9 @@ namespace NadekoBot
             // generate credentials example so people can know about the changes i make
             try
             {
-                File.WriteAllText ("data/config_example.json",JsonConvert.SerializeObject (new Configuration (),Formatting.Indented));
+                var defaultConfig = new Configuration ();
+                defaultConfig.CustomReactions = defaultConfig.DefaultReactions;
+                File.WriteAllText ("data/config_example.json",JsonConvert.SerializeObject (defaultConfig,Formatting.Indented));
                 if (!File.Exists ("data/config.json"))
                     File.Copy ("data/config_example.json","data/config.json");
                 File.WriteAllText ("credentials_example.json",JsonConvert.SerializeObject (new Credentials (),Formatting.Indented));
@@ -109,7 +119,7 @@ namespace NadekoBot
                 Creds.Password = Console.ReadLine ();
             }
 
-            Console.WriteLine (string.IsNullOrWhiteSpace (Creds.GoogleAPIKey)
+            Console.WriteLine (string.IsNullOrWhiteSpace (GetRndGoogleAPIKey ())
                 ? "Kein Google Api Key gefunden. Du kannst keine Musik benutzen und Links werden nicht gekürzt."
                 : "Google API key vorhanden.");
             Console.WriteLine (string.IsNullOrWhiteSpace (Creds.TrelloAppKey)
@@ -185,6 +195,7 @@ namespace NadekoBot
             modules.Add (new ExtraModule (),"Extra",ModuleFilter.None);
             modules.Add (new PokemonModule (),"Pokegame",ModuleFilter.None);
             modules.Add (new TranslatorModule (),"Translator",ModuleFilter.None);
+            modules.Add (new MemeModule (),"Memes",ModuleFilter.None);
             modules.Add (new NSFWModule (),"NSFW",ModuleFilter.None);
             modules.Add (new SoundsModule (),"Sounds",ModuleFilter.None);
             modules.Add (new ClashOfClansModule (),"ClashOfClans",ModuleFilter.None);
@@ -204,6 +215,8 @@ namespace NadekoBot
                     {
                         await Client.Connect (Creds.Token).ConfigureAwait (false);
                         IsBot = true;
+                        BotName = Client.CurrentUser.Name;
+                        Console.WriteLine ("Derzeit eingeloggt als: " + BotName);
                     }
                     Console.WriteLine (NadekoBot.Client.CurrentUser.Id);
                 }
@@ -254,6 +267,8 @@ namespace NadekoBot
             Console.WriteLine ("Beende...");
             Console.ReadKey ();
         }
+
+        public static string BotName { get; set; }
 
         public static bool IsOwner ( ulong id ) => Creds.OwnerIds.Contains (id);
 

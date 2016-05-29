@@ -9,6 +9,7 @@ namespace NadekoBot.Classes.Conversations.Commands
     internal class CopyCommand : DiscordCommand
     {
         private readonly HashSet<ulong> CopiedUsers = new HashSet<ulong> ();
+        public string BotName { get; set; } = NadekoBot.BotName;
 
         public CopyCommand ( DiscordModule module ) : base (module)
         {
@@ -49,12 +50,12 @@ namespace NadekoBot.Classes.Conversations.Commands
         {
             cgb.CreateCommand ("copyme")
                 .Alias ("cm")
-                .Description ("MidnightBot macht alles nach, was du schreibst. Deaktivieren mit cs")
+                .Description ($"{BotName} macht alles nach, was du schreibst. Deaktivieren mit cs")
                 .Do (DoFunc ());
 
             cgb.CreateCommand ("cs")
                 .Alias ("copystop")
-                .Description ("MidnightBot kopiert dich nicht mehr.")
+                .Description ($"{BotName} kopiert dich nicht mehr.")
                 .Do (StopCopy ());
         }
 
