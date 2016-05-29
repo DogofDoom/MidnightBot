@@ -1,7 +1,7 @@
-######For more information and how to setup your own NadekoBot, go to: **http://github.com/Kwoth/NadekoBot/**
+######For more information and how to setup your own MidnightBot, go to: **http://github.com/Midnight-Myth/MidnightBot/**
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
-#NadekoBot List Of Commands  
+#MidnightBot List Of Commands  
 Version: `MidnightBot v0.9.5984.38537`
 ### Administration  
 Befehl und Alternativen | Beschreibung | Benutzung

@@ -2,20 +2,20 @@ ________________________________________________________________________________
 *Thanks to @Unlimited Saber Works for making this guide*
 ________________________________________________________________________________
 
-#### Setting Up NadekoBot 0.8 b10
+#### Setting Up MidnightBot 0.8 b10
 ###### Prerequisites: 
 1) Extra Discord account for your bot (log into it and join the server you want the bot to be on, then log out).  
 2) NET Framework 4.6 (google and download).  
 - Open up credentials.json.  
 - For "Username" and "Password", enter the email address and password of the extra Discord account, respectively. Close and save credentials.json.  
-- Start NadekoBot.exe. In a text channel **not a direct message**, type in [.uid @______] without the brackets, filling in the underlined portion with your bot's name and send the message.
-Your bot will reply with a number; this is your bot's ID. Then type in [.uid @_____] without the brackets, filling in the underlined portion with your own name and send the message. Your bot will reply with another number; this is your own ID. Close NadekoBot.exe.   
+- Start MidnightBot.exe. In a text channel **not a direct message**, type in [.uid @______] without the brackets, filling in the underlined portion with your bot's name and send the message.
+Your bot will reply with a number; this is your bot's ID. Then type in [.uid @_____] without the brackets, filling in the underlined portion with your own name and send the message. Your bot will reply with another number; this is your own ID. Close MidnightBot.exe.   
 - Reopen credentials.json. For "BotId", fill in your bot's ID followed by a comma ("BotId": 78663633663,). For "OwnerIds", fill in your own ID in the square brackets ("OwnerIds": [1231312313]). You can add multiple owners by separating Ids with a comma. 
 - Close and save credentials.json.  
 
 ________________________________________________________________________________
 
-#### Setting Up NadekoBot For Music
+#### Setting Up MidnightBot For Music
 ###### Prerequisites: 
 1) FFMPEG, Static Build Version (See below) Google Account  
 2) Soundcloud Account  
