@@ -35,7 +35,7 @@ namespace MidnightBot.Modules.NSFW
                         if (dan != null)
                             await e.Channel.SendMessage (":heart: Danbooru: " + dan)
                                            .ConfigureAwait (false);
-                        var atf = await SearchHelper.GetAtfbooruImageLink("rating%3Aexplicit+" + tag).ConfigureAwait(false);
+                        var atf = await SearchHelper.GetATFBooruImageLink ("rating%3Aexplicit+" + tag).ConfigureAwait (false);
                         if (atf != null)
                             await e.Channel.SendMessage(":heart: ATFbooru: " + atf)
                                            .ConfigureAwait(false);
@@ -44,12 +44,13 @@ namespace MidnightBot.Modules.NSFW
                     });
 
                 cgb.CreateCommand(Prefix + "atfbooru")
+                    .Alias (Prefix + "atf")
                     .Description("Shows a random hentai image from atfbooru with a given tag. Tag is optional but preffered. (multiple tags are appended with +)\n**Usage**: ~danbooru yuri+kissing")
                     .Parameter("tag", ParameterType.Unparsed)
                     .Do(async e =>
                     {
                         var tag = e.GetArg("tag")?.Trim() ?? "";
-                        var link = await SearchHelper.GetAtfbooruImageLink(tag).ConfigureAwait(false);
+                        var link = await SearchHelper.GetATFBooruImageLink (tag).ConfigureAwait (false);
                         if (string.IsNullOrWhiteSpace(link))
                             await e.Channel.SendMessage("Suche ergab keine Ergebnisse ;(");
                         else
