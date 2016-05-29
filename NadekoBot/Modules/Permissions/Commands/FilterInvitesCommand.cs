@@ -1,11 +1,11 @@
 ﻿using Discord;
 using Discord.Commands;
-using NadekoBot.Classes;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Classes;
+using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Text.RegularExpressions;
 
-namespace NadekoBot.Modules.Permissions.Commands
+namespace MidnightBot.Modules.Permissions.Commands
 {
     internal class FilterInvitesCommand : DiscordCommand
     {
@@ -14,9 +14,9 @@ namespace NadekoBot.Modules.Permissions.Commands
 
         public FilterInvitesCommand ( DiscordModule module ) : base (module)
         {
-            NadekoBot.Client.MessageReceived += async ( sender,args ) =>
+            MidnightBot.Client.MessageReceived += async ( sender,args ) =>
             {
-                if (args.Channel.IsPrivate || args.User.Id == NadekoBot.Client.CurrentUser.Id)
+                if (args.Channel.IsPrivate || args.User.Id == MidnightBot.Client.CurrentUser.Id)
                     return;
                 try
                 {

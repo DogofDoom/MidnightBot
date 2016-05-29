@@ -1,6 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
-using NadekoBot.Classes;
+using MidnightBot.Classes;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,7 +10,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Extensions
+namespace MidnightBot.Extensions
 {
     public static class Extensions
     {

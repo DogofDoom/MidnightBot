@@ -1,7 +1,7 @@
 ﻿// ReSharper disable InconsistentNaming
 using System.Diagnostics;
 
-namespace NadekoBot.Classes.JSONModels
+namespace MidnightBot.Classes.JSONModels
 {
     public class Credentials
     {

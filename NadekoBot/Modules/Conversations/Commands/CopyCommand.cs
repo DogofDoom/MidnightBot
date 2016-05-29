@@ -1,26 +1,26 @@
 ﻿using Discord.Commands;
-using NadekoBot.Modules;
+using MidnightBot.Modules;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Classes.Conversations.Commands
+namespace MidnightBot.Classes.Conversations.Commands
 {
     internal class CopyCommand : DiscordCommand
     {
         private readonly HashSet<ulong> CopiedUsers = new HashSet<ulong> ();
-        public string BotName { get; set; } = NadekoBot.BotName;
+        public string BotName { get; set; } = MidnightBot.BotName;
 
         public CopyCommand ( DiscordModule module ) : base (module)
         {
-            NadekoBot.Client.MessageReceived += Client_MessageReceived;
+            MidnightBot.Client.MessageReceived += Client_MessageReceived;
         }
 
         private async void Client_MessageReceived ( object sender,Discord.MessageEventArgs e )
         {
             try
             {
-                if (e.User.Id == NadekoBot.Client.CurrentUser.Id)
+                if (e.User.Id == MidnightBot.Client.CurrentUser.Id)
                     return;
                 if (string.IsNullOrWhiteSpace (e.Message.Text))
                     return;
@@ -36,7 +36,7 @@ namespace NadekoBot.Classes.Conversations.Commands
         {
             if (CopiedUsers.Contains (e.User.Id))
                 return;
-            if (NadekoBot.IsOwner (e.User.Id))
+            if (MidnightBot.IsOwner (e.User.Id))
             {
 
                 CopiedUsers.Add (e.User.Id);

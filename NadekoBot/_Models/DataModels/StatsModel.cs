@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NadekoBot.DataModels
+namespace MidnightBot.DataModels
 {
     internal class Stats : IDataModel
     {

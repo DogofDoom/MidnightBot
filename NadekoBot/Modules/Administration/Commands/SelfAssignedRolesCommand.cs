@@ -1,12 +1,12 @@
 ﻿using Discord.Commands;
-using NadekoBot.Classes;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Classes;
+using MidnightBot.Modules.Permissions.Classes;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Modules.Administration.Commands
+namespace MidnightBot.Modules.Administration.Commands
 {
     internal class SelfAssignedRolesCommand : DiscordCommand
     {

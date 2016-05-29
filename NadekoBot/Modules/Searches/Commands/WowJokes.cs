@@ -1,13 +1,13 @@
 ﻿using Discord.Commands;
-using NadekoBot.Classes;
-using NadekoBot.Classes.JSONModels;
+using MidnightBot.Classes;
+using MidnightBot.Classes.JSONModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace NadekoBot.Modules.Searches.Commands
+namespace MidnightBot.Modules.Searches.Commands
 {
     class WowJokeCommand : DiscordCommand
     {

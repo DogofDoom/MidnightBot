@@ -1,8 +1,8 @@
 ﻿using Discord.Modules;
-using NadekoBot.Extensions;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Extensions;
+using MidnightBot.Modules.Permissions.Classes;
 
-namespace NadekoBot.Modules.Translator
+namespace MidnightBot.Modules.Translator
 {
     internal class TranslatorModule : DiscordModule
     {
@@ -12,7 +12,7 @@ namespace NadekoBot.Modules.Translator
             commands.Add(new ValidLanguagesCommand ( this));
         }
 
-        public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.Searches;
+        public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Searches;
 
         public override void Install ( ModuleManager manager )
         {

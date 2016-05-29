@@ -1,18 +1,18 @@
 ﻿using Discord.Commands;
 using Discord.Modules;
-using NadekoBot.Classes;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Classes;
+using MidnightBot.Modules.Permissions.Classes;
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace NadekoBot.Modules.NSFW
+namespace MidnightBot.Modules.NSFW
 {
     internal class NSFWModule : DiscordModule
     {
 
         private readonly Random rng = new Random ();
 
-        public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.NSFW;
+        public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.NSFW;
 
         public override void Install ( ModuleManager manager )
         {

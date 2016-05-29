@@ -1,12 +1,12 @@
 ﻿using Discord;
 using Discord.Audio;
-using NadekoBot.Extensions;
+using MidnightBot.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Modules.Music.Classes
+namespace MidnightBot.Modules.Music.Classes
 {
 
     public enum MusicType

@@ -1,8 +1,8 @@
-﻿using NadekoBot.Extensions;
+﻿using MidnightBot.Extensions;
 using System.Collections.Generic;
 using System.Web;
 
-namespace NadekoBot.Modules.Searches.Commands.IMDB
+namespace MidnightBot.Modules.Searches.Commands.IMDB
 {
     public class ImdbMovie
     {

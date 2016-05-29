@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NadekoBot.Modules.Pokemon
+namespace MidnightBot.Modules.Pokemon
 {
     class PokeStats
     {

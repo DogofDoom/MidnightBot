@@ -1,4 +1,4 @@
-﻿namespace NadekoBot.Classes
+﻿namespace MidnightBot.Classes
 {
     class BombermanGame
     {

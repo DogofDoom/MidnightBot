@@ -7,7 +7,7 @@
     <ProjectGuid>{27A886F5-CDDA-4F4A-81EE-6DAFCCE9DE46}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NadekoBot</RootNamespace>
+    <RootNamespace>MidnightBot</RootNamespace>
     <AssemblyName>MidnightBot</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -15,7 +15,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>C:\Users\Master\Desktop\NadekoBot\</PublishUrl>
+    <PublishUrl>C:\Users\Master\Desktop\MidnightBot\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -158,6 +158,11 @@
     <Compile Include="Modules\Searches\Commands\IMDB\ImdbScraper.cs" />
     <Compile Include="Classes\IncidentsHandler.cs" />
     <Compile Include="Modules\Searches\Commands\WowJokes.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="_Models\JSONModels\AnimeResult.cs" />
     <Compile Include="_Models\JSONModels\Configuration.cs" />
     <Compile Include="_Models\JSONModels\LocalizedStrings.cs" />
@@ -246,14 +251,14 @@
     <Compile Include="Modules\Translator\TranslatorModule.cs" />
     <Compile Include="Modules\Translator\ValidLanguagesCommand.cs" />
     <Compile Include="Modules\Trello\TrelloModule.cs" />
-    <Compile Include="NadekoBot.cs" />
+    <Compile Include="MidnightBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Classes\NadekoStats.cs" />
+    <Compile Include="Classes\MidnightStats.cs" />
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
   </ItemGroup>
@@ -282,6 +287,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="resources\images\hidden.png" />
   </ItemGroup>
   <ItemGroup>

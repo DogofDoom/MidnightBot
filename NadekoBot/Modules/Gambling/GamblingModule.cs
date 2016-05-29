@@ -1,15 +1,15 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.Modules;
-using NadekoBot.Classes;
-using NadekoBot.DataModels;
-using NadekoBot.Extensions;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Classes;
+using MidnightBot.DataModels;
+using MidnightBot.Extensions;
+using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Linq;
 using System.Text;
 
-namespace NadekoBot.Modules.Gambling
+namespace MidnightBot.Modules.Gambling
 {
     internal class GamblingModule : DiscordModule
     {
@@ -20,8 +20,8 @@ namespace NadekoBot.Modules.Gambling
             commands.Add (new FlipCoinCommand (this));
             commands.Add (new DiceRollCommand (this));
         }
-        public string BotName { get; set; } = NadekoBot.BotName;
-        public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.Gambling;
+        public string BotName { get; set; } = MidnightBot.BotName;
+        public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Gambling;
 
         public override void Install ( ModuleManager manager )
         {
@@ -50,18 +50,18 @@ namespace NadekoBot.Modules.Gambling
                    });
 
                cgb.CreateCommand (Prefix + "$$")
-                   .Description (string.Format ("Überprüft, wieviele {0} du hast.",NadekoBot.Config.CurrencyName))
+                   .Description (string.Format ("Überprüft, wieviele {0} du hast.",MidnightBot.Config.CurrencyName))
                    .Parameter ("all",ParameterType.Unparsed)
                     .Do (async e =>
                     {
                         var usr = e.Message.MentionedUsers.FirstOrDefault () ?? e.User;
                         var pts = GetUserFlowers (usr.Id);
-                        var str = $"{usr.Name} hat {pts} {NadekoBot.Config.CurrencySign}";
+                        var str = $"{usr.Name} hat {pts} {MidnightBot.Config.CurrencySign}";
                         await e.Channel.SendMessage (str).ConfigureAwait (false);
                     });
 
                cgb.CreateCommand (Prefix + "award")
-                   .Description (string.Format ("Gibt jemanden eine bestimmte Anzahl an {0}. **Owner only!**\n**Benutzung**: $award 5 @Benutzer",NadekoBot.Config.CurrencyName))
+                   .Description (string.Format ("Gibt jemanden eine bestimmte Anzahl an {0}. **Owner only!**\n**Benutzung**: $award 5 @Benutzer",MidnightBot.Config.CurrencyName))
                    .AddCheck (SimpleCheckers.OwnerOnly ())
                    .Parameter ("amount",ParameterType.Required)
                    .Parameter ("receiver",ParameterType.Unparsed)
@@ -73,17 +73,17 @@ namespace NadekoBot.Modules.Gambling
                            return;
 
                        var mentionedUser = e.Message.MentionedUsers.FirstOrDefault (u =>
-                       u.Id != NadekoBot.Client.CurrentUser.Id);
+                       u.Id != MidnightBot.Client.CurrentUser.Id);
                        if (mentionedUser == null)
                            return;
 
                        await FlowersHandler.AddFlowersAsync (mentionedUser,$"Awarded by bot owner. ({e.User.Name}/{e.User.Id})",(int)amount).ConfigureAwait (false);
 
-                       await e.Channel.SendMessage ($"{e.User.Mention} erfolgreich {amount}  {NadekoBot.Config.CurrencyName} zu {mentionedUser.Mention} hinzugefügt!").ConfigureAwait (false);
+                       await e.Channel.SendMessage ($"{e.User.Mention} erfolgreich {amount}  {MidnightBot.Config.CurrencyName} zu {mentionedUser.Mention} hinzugefügt!").ConfigureAwait (false);
                    });
 
                cgb.CreateCommand (Prefix + "take")
-                   .Description (string.Format ("Entfernt eine bestimmte Anzahl an {0} von jemanden. **Owner only!**\n**Benutzung**: $take 5 @Benutzer",NadekoBot.Config.CurrencyName))
+                   .Description (string.Format ("Entfernt eine bestimmte Anzahl an {0} von jemanden. **Owner only!**\n**Benutzung**: $take 5 @Benutzer",MidnightBot.Config.CurrencyName))
                    .AddCheck (SimpleCheckers.OwnerOnly ())
                    .Parameter ("amount",ParameterType.Required)
                    .Parameter ("rektperson",ParameterType.Unparsed)
@@ -95,17 +95,17 @@ namespace NadekoBot.Modules.Gambling
                            return;
 
                        var mentionedUser = e.Message.MentionedUsers.FirstOrDefault (u =>
-                       u.Id != NadekoBot.Client.CurrentUser.Id);
+                       u.Id != MidnightBot.Client.CurrentUser.Id);
                        if (mentionedUser == null)
                            return;
 
                        FlowersHandler.RemoveFlowers (mentionedUser,$"Taken by bot owner.({e.User.Name}/{e.User.Id})",(int)amount);
 
-                       await e.Channel.SendMessage ($"{e.User.Mention} erfolgreich {amount} {NadekoBot.Config.CurrencyName} von {mentionedUser.Mention} entfernt!").ConfigureAwait (false);
+                       await e.Channel.SendMessage ($"{e.User.Mention} erfolgreich {amount} {MidnightBot.Config.CurrencyName} von {mentionedUser.Mention} entfernt!").ConfigureAwait (false);
                    });
 
                cgb.CreateCommand (Prefix + "give")
-                        .Description (string.Format ("Gibt jemanden eine Anzahl {0}.\n**Benutzung**: $give 5 @Benutzer",NadekoBot.Config.CurrencyName))
+                        .Description (string.Format ("Gibt jemanden eine Anzahl {0}.\n**Benutzung**: $give 5 @Benutzer",MidnightBot.Config.CurrencyName))
                         .Parameter ("amount",ParameterType.Required)
                         .Parameter ("receiver",ParameterType.Unparsed)
                         .Do (async e =>
@@ -116,7 +116,7 @@ namespace NadekoBot.Modules.Gambling
                                 return;
 
                             var mentionedUser = e.Message.MentionedUsers.FirstOrDefault (u =>
-                            u.Id != NadekoBot.Client.CurrentUser.Id &&
+                            u.Id != MidnightBot.Client.CurrentUser.Id &&
                             u.Id != e.User.Id);
                             if (mentionedUser == null)
                                 return;
@@ -125,14 +125,14 @@ namespace NadekoBot.Modules.Gambling
 
                             if (userFlowers < amount)
                             {
-                                await e.Channel.SendMessage ($"{e.User.Mention} Du hast nicht genug {NadekoBot.Config.CurrencyName}. Du hast nur {userFlowers} {NadekoBot.Config.CurrencySign}.").ConfigureAwait (false);
+                                await e.Channel.SendMessage ($"{e.User.Mention} Du hast nicht genug {MidnightBot.Config.CurrencyName}. Du hast nur {userFlowers} {MidnightBot.Config.CurrencySign}.").ConfigureAwait (false);
                                 return;
                             }
 
                             FlowersHandler.RemoveFlowers (e.User,"Gift",(int)amount);
                             await FlowersHandler.AddFlowersAsync (mentionedUser,"Gift",(int)amount).ConfigureAwait (false);
 
-                            await e.Channel.SendMessage ($"{e.User.Mention} erfolgreich {amount}{NadekoBot.Config.CurrencyName} gesendet an {mentionedUser.Mention}!").ConfigureAwait (false);
+                            await e.Channel.SendMessage ($"{e.User.Mention} erfolgreich {amount}{MidnightBot.Config.CurrencyName} gesendet an {mentionedUser.Mention}!").ConfigureAwait (false);
 
                         });
                cgb.CreateCommand (Prefix + "leaderboard")

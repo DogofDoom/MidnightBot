@@ -1,4 +1,4 @@
-﻿namespace NadekoBot.Modules.Osu
+﻿namespace MidnightBot.Modules.Osu
 {
     public class User
     {

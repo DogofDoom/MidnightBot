@@ -1,8 +1,8 @@
 ﻿using Discord;
 using Discord.Commands;
-using NadekoBot.Classes;
-using NadekoBot.DataModels;
-using NadekoBot.Extensions;
+using MidnightBot.Classes;
+using MidnightBot.DataModels;
+using MidnightBot.Extensions;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Modules.Games.Commands
+namespace MidnightBot.Modules.Games.Commands
 {
 
     public static class SentencesProvider
@@ -52,7 +52,7 @@ namespace NadekoBot.Modules.Games.Commands
         {
             if (!IsActive)
                 return false;
-            NadekoBot.Client.MessageReceived -= AnswerReceived;
+            MidnightBot.Client.MessageReceived -= AnswerReceived;
             finishedUserIds.Clear ();
             IsActive = false;
             sw.Stop ();
@@ -97,14 +97,14 @@ namespace NadekoBot.Modules.Games.Commands
 
         private void HandleAnswers ()
         {
-            NadekoBot.Client.MessageReceived += AnswerReceived;
+            MidnightBot.Client.MessageReceived += AnswerReceived;
         }
 
         private async void AnswerReceived ( object sender,MessageEventArgs e )
         {
             try
             {
-                if (e.Channel == null || e.Channel.Id != channel.Id || e.User.Id == NadekoBot.Client.CurrentUser.Id)
+                if (e.Channel == null || e.Channel.Id != channel.Id || e.User.Id == MidnightBot.Client.CurrentUser.Id)
                     return;
 
                 var guess = e.Message.RawText;
@@ -183,7 +183,7 @@ namespace NadekoBot.Modules.Games.Commands
                 .Parameter ("text",ParameterType.Unparsed)
                 .Do (async e =>
                 {
-                    if (!NadekoBot.IsOwner (e.User.Id) || string.IsNullOrWhiteSpace (e.GetArg ("text")))
+                    if (!MidnightBot.IsOwner (e.User.Id) || string.IsNullOrWhiteSpace (e.GetArg ("text")))
                         return;
 
                     DbHandler.Instance.InsertData (new TypingArticle

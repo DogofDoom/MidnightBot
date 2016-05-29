@@ -1,16 +1,16 @@
 ﻿using Discord.Commands;
 using Discord.Modules;
-using NadekoBot.Classes.ClashOfClans;
+using MidnightBot.Classes.ClashOfClans;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NadekoBot.Modules.ClashOfClans
+namespace MidnightBot.Modules.ClashOfClans
 {
     internal class ClashOfClansModule : DiscordModule
     {
-        public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.ClashOfClans;
+        public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.ClashOfClans;
 
         public static ConcurrentDictionary<ulong,List<ClashWar>> ClashWars { get; } = new ConcurrentDictionary<ulong,List<ClashWar>> ();
 

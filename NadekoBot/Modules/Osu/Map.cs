@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Modules.Osu
+namespace MidnightBot.Modules.Osu
 {
     public class Map
     {

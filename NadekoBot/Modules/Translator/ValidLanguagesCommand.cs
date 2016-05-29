@@ -1,10 +1,10 @@
 ﻿using Discord.Commands;
-using NadekoBot.Classes;
-using NadekoBot.Modules.Translator.Helpers;
+using MidnightBot.Classes;
+using MidnightBot.Modules.Translator.Helpers;
 using System;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Modules.Translator
+namespace MidnightBot.Modules.Translator
 {
     class ValidLanguagesCommand : DiscordCommand
     {

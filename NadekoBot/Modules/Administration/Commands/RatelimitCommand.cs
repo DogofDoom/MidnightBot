@@ -1,10 +1,10 @@
 using Discord.Commands;
-using NadekoBot.Classes;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Classes;
+using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Collections.Concurrent;
 
-namespace NadekoBot.Modules.Administration.Commands
+namespace MidnightBot.Modules.Administration.Commands
 {
     internal class RatelimitCommand : DiscordCommand
     {
@@ -15,9 +15,9 @@ namespace NadekoBot.Modules.Administration.Commands
 
         public RatelimitCommand ( DiscordModule module ) : base (module)
         {
-            NadekoBot.Client.MessageReceived += async ( s,e ) =>
+            MidnightBot.Client.MessageReceived += async ( s,e ) =>
             {
-                if (e.Channel.IsPrivate || e.User.Id == NadekoBot.Client.CurrentUser.Id || NadekoBot.IsOwner(e.User.Id))
+                if (e.Channel.IsPrivate || e.User.Id == MidnightBot.Client.CurrentUser.Id || MidnightBot.IsOwner(e.User.Id))
                     return;
                 ConcurrentDictionary<ulong,DateTime> userTimePair;
                 if (!RatelimitingChannels.TryGetValue (e.Channel.Id,out userTimePair))

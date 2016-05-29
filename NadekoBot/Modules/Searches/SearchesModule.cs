@@ -1,11 +1,11 @@
 ﻿using Discord.Commands;
 using Discord.Modules;
-using NadekoBot.Classes;
-using NadekoBot.Classes.JSONModels;
-using NadekoBot.Extensions;
-using NadekoBot.Modules.Permissions.Classes;
-using NadekoBot.Modules.Searches.Commands;
-using NadekoBot.Modules.Searches.Commands.IMDB;
+using MidnightBot.Classes;
+using MidnightBot.Classes.JSONModels;
+using MidnightBot.Extensions;
+using MidnightBot.Modules.Permissions.Classes;
+using MidnightBot.Modules.Searches.Commands;
+using MidnightBot.Modules.Searches.Commands.IMDB;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -16,7 +16,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 
-namespace NadekoBot.Modules.Searches
+namespace MidnightBot.Modules.Searches
 {
     internal class SearchesModule : DiscordModule
     {
@@ -31,7 +31,7 @@ namespace NadekoBot.Modules.Searches
             rng = new Random ();
         }
 
-        public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.Searches;
+        public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Searches;
 
         public override void Install ( ModuleManager manager )
         {
@@ -170,7 +170,7 @@ namespace NadekoBot.Modules.Searches
                                 return;
                             try
                             {
-                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString (e.GetArg ("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&fields=items%2Flink&key={NadekoBot.GetRndGoogleAPIKey ()}";
+                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString (e.GetArg ("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&fields=items%2Flink&key={MidnightBot.GetRndGoogleAPIKey ()}";
                                 var obj = JObject.Parse (await SearchHelper.GetResponseStringAsync (reqString).ConfigureAwait (false));
 
                                 await e.Channel.SendMessage (obj["items"][0]["link"].ToString ()).ConfigureAwait (false);
@@ -199,7 +199,7 @@ namespace NadekoBot.Modules.Searches
                                 return;
                             try
                             {
-                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString (e.GetArg ("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={ rng.Next (1,150) }&fields=items%2Flink&key={NadekoBot.GetRndGoogleAPIKey ()}";
+                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString (e.GetArg ("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={ rng.Next (1,150) }&fields=items%2Flink&key={MidnightBot.GetRndGoogleAPIKey ()}";
                                 var obj = JObject.Parse (await SearchHelper.GetResponseStringAsync (reqString).ConfigureAwait (false));
 
                                 await e.Channel.SendMessage (obj["items"][0]["link"].ToString ()).ConfigureAwait (false);
@@ -241,7 +241,7 @@ namespace NadekoBot.Modules.Searches
                            return;
                        }
                        await e.Channel.SendIsTyping ();
-                       var headers = new Dictionary<string,string> { { "X-Mashape-Key",NadekoBot.Creds.MashapeKey } };
+                       var headers = new Dictionary<string,string> { { "X-Mashape-Key",MidnightBot.Creds.MashapeKey } };
                        var res = await SearchHelper.GetResponseStringAsync ($"https://omgvamp-hearthstone-v1.p.mashape.com/cards/search/{Uri.EscapeUriString (arg)}",headers)
                        .ConfigureAwait (false);
                        try
@@ -314,7 +314,7 @@ namespace NadekoBot.Modules.Searches
                            return;
                        }
                        await e.Channel.SendIsTyping ().ConfigureAwait (false);
-                       var headers = new Dictionary<string,string> { { "X-Mashape-Key",NadekoBot.Creds.MashapeKey } };
+                       var headers = new Dictionary<string,string> { { "X-Mashape-Key",MidnightBot.Creds.MashapeKey } };
                        var res = await SearchHelper.GetResponseStringAsync ($"https://mashape-community-urban-dictionary.p.mashape.com/define?term={Uri.EscapeUriString (arg)}",headers).ConfigureAwait (false);
                        try
                        {
@@ -343,7 +343,7 @@ namespace NadekoBot.Modules.Searches
                            return;
                        }
                        await e.Channel.SendIsTyping ();
-                       var headers = new Dictionary<string,string> { { "X-Mashape-Key",NadekoBot.Creds.MashapeKey } };
+                       var headers = new Dictionary<string,string> { { "X-Mashape-Key",MidnightBot.Creds.MashapeKey } };
                        var res = await SearchHelper.GetResponseStringAsync ($"https://tagdef.p.mashape.com/one.{Uri.EscapeUriString (arg)}.json",headers).ConfigureAwait (false);
                        try
                        {
@@ -364,7 +364,7 @@ namespace NadekoBot.Modules.Searches
                 .Description ("Zeigt ein zufälliges Zitat.")
                 .Do (async e =>
                  {
-                     var quote = NadekoBot.Config.Quotes[rng.Next (0,NadekoBot.Config.Quotes.Count)].ToString ();
+                     var quote = MidnightBot.Config.Quotes[rng.Next (0,MidnightBot.Config.Quotes.Count)].ToString ();
                      await e.Channel.SendMessage (quote).ConfigureAwait (false);
                  });
 
@@ -457,7 +457,7 @@ namespace NadekoBot.Modules.Searches
                            return;
                        }
 
-                       var api = new Osu.OsuApi (NadekoBot.Creds.OsuAPIKey);
+                       var api = new Osu.OsuApi (MidnightBot.Creds.OsuAPIKey);
                        var oBeatmap = api.GetMap (uxm[0],mode);
                        var formatString =
                                 "```" + "Modus: " + uxm[1]
@@ -531,7 +531,7 @@ namespace NadekoBot.Modules.Searches
                            return;
                        }
 
-                       var api = new Osu.OsuApi (NadekoBot.Creds.OsuAPIKey);
+                       var api = new Osu.OsuApi (MidnightBot.Creds.OsuAPIKey);
                        var oUser = api.GetUser (uxm[0],mode);
                        var formatString =
                                 "```" + "Modus: " + uxm[1]

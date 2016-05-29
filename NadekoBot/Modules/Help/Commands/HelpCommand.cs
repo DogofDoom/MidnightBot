@@ -1,13 +1,13 @@
 ﻿using Discord.Commands;
-using NadekoBot.Extensions;
-using NadekoBot.Modules;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Extensions;
+using MidnightBot.Modules;
+using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Classes.Help.Commands
+namespace MidnightBot.Classes.Help.Commands
 {
     internal class HelpCommand : DiscordCommand
     {
@@ -18,7 +18,7 @@ namespace NadekoBot.Classes.Help.Commands
                 string helpstr = "";
 
                 string lastCategory = "";
-                foreach (var com in NadekoBot.Client.GetService<CommandService> ().AllCommands)
+                foreach (var com in MidnightBot.Client.GetService<CommandService> ().AllCommands)
                 {
                     if (com.Category != lastCategory)
                     {
@@ -28,7 +28,7 @@ namespace NadekoBot.Classes.Help.Commands
                     helpstr += PrintCommandHelp (com);
                 }
                 helpstr += "\nBot Creator's server: https://discord.gg/0ehQwTK2RBhxEi0X";
-                helpstr = helpstr.Replace (NadekoBot.BotMention,"@BotName");
+                helpstr = helpstr.Replace (MidnightBot.BotMention,"@BotName");
                 var curstr = "";
                 while (helpstr.Length > 1000)
                 {
@@ -56,7 +56,7 @@ namespace NadekoBot.Classes.Help.Commands
         }
         await Task.Run(async () => {
 
-            var com = NadekoBot.Client.GetService<CommandService>().AllCommands
+            var com = MidnightBot.Client.GetService<CommandService>().AllCommands
                 .FirstOrDefault(c => c.Text.ToLowerInvariant().Equals(comToFind) ||
                                         c.Aliases.Select(a => a.ToLowerInvariant()).Contains(comToFind));
             if (com != null)
@@ -64,26 +64,26 @@ namespace NadekoBot.Classes.Help.Commands
         }).ConfigureAwait(false);
     };
     
-        public static string HelpString => NadekoBot.IsBot ? $"Um {NadekoBot.Client.CurrentUser.Name} zu deinem Server einzuladen, gehe hierhin: <>\n" : "" +
-                                       $"Du kannst `{NadekoBot.Config.CommandPrefixes.Help}modules` benutzen um eine Liste aller Module zu sehen.\n" +
-                                       $"Du kannst `{NadekoBot.Config.CommandPrefixes.Help}commands ModuleName`" +
-                                       $" (zum Beispiel `{NadekoBot.Config.CommandPrefixes.Help}commands Administration`) benutzen um eine Liste aller Befehle des Modules zu sehen.\n" +
-                                       $"Für die Hilfe bei einem bestimmten Befehl, benutze `{NadekoBot.Config.CommandPrefixes.Help}h \"Command name\"` (zum Beispiel `-h \"! q\"`)";
+        public static string HelpString => MidnightBot.IsBot ? $"Um {MidnightBot.Client.CurrentUser.Name} zu deinem Server einzuladen, gehe hierhin: <>\n" : "" +
+                                       $"Du kannst `{MidnightBot.Config.CommandPrefixes.Help}modules` benutzen um eine Liste aller Module zu sehen.\n" +
+                                       $"Du kannst `{MidnightBot.Config.CommandPrefixes.Help}commands ModuleName`" +
+                                       $" (zum Beispiel `{MidnightBot.Config.CommandPrefixes.Help}commands Administration`) benutzen um eine Liste aller Befehle des Modules zu sehen.\n" +
+                                       $"Für die Hilfe bei einem bestimmten Befehl, benutze `{MidnightBot.Config.CommandPrefixes.Help}h \"Command name\"` (zum Beispiel `-h \"! q\"`)";
 
-        public static string DMHelpString => NadekoBot.Config.DMHelpString;
+        public static string DMHelpString => MidnightBot.Config.DMHelpString;
 
         public Action<CommandEventArgs> DoGitFunc () => e =>
         {
             string helpstr =
-    $@"######For more information and how to setup your own NadekoBot, go to: **http://github.com/Kwoth/NadekoBot/**
+    $@"######For more information and how to setup your own MidnightBot, go to: **http://github.com/Midnight-Myth/MidnightBot/**
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
-#NadekoBot List Of Commands  
-Version: `{NadekoStats.Instance.BotVersion}`";
+#MidnightBot List Of Commands  
+Version: `{MidnightStats.Instance.BotVersion}`";
 
 
             string lastCategory = "";
-            foreach (var com in NadekoBot.Client.GetService<CommandService> ().AllCommands)
+            foreach (var com in MidnightBot.Client.GetService<CommandService> ().AllCommands)
             {
                 if (com.Category != lastCategory)
                 {
@@ -94,7 +94,7 @@ Version: `{NadekoStats.Instance.BotVersion}`";
                 }
                 helpstr += PrintCommandHelp (com);
             }
-            helpstr = helpstr.Replace (NadekoBot.BotMention,"@BotName");
+            helpstr = helpstr.Replace (MidnightBot.BotMention,"@BotName");
             helpstr = helpstr.Replace ("\n**Benutzung**:"," | ").Replace ("**Benutzung**:"," | ").Replace ("**Beschreibung:**"," | ").Replace ("\n|"," |  \n");
 #if DEBUG
             File.WriteAllText ("../../../commandlist.md",helpstr);
@@ -107,7 +107,7 @@ Version: `{NadekoStats.Instance.BotVersion}`";
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "h")
-                .Alias (Module.Prefix + "help",NadekoBot.BotMention + " help",NadekoBot.BotMention + " h","~h")
+                .Alias (Module.Prefix + "help",MidnightBot.BotMention + " help",MidnightBot.BotMention + " h","~h")
                 .Description ("Hilfe-Befehl.\n**Usage**: '-h !m q' or just '-h' ")
                 .Parameter ("command",ParameterType.Unparsed)
                 .Do (HelpFunc ());
@@ -125,11 +125,11 @@ Version: `{NadekoStats.Instance.BotVersion}`";
                 .AddCheck (SimpleCheckers.OwnerOnly ())
                 .Do (async e =>
                      await e.Channel.SendMessage (
- @"**FULL README**: <https://github.com/Kwoth/NadekoBot/blob/master/README.md>
+ @"**FULL README**: <https://github.com/Midnight-Myth/MidnightBot/blob/master/README.md>
 
-**GUIDE ONLY**: <https://github.com/Kwoth/NadekoBot/blob/master/ComprehensiveGuide.md>
+**GUIDE ONLY**: <https://github.com/Midnight-Myth/MidnightBot/blob/master/ComprehensiveGuide.md>
 
-**LIST OF COMMANDS**: <https://github.com/Kwoth/NadekoBot/blob/master/commandlist.md>").ConfigureAwait (false));
+**LIST OF COMMANDS**: <https://github.com/Midnight-Myth/MidnightBot/blob/master/commandlist.md>").ConfigureAwait (false));
 
             cgb.CreateCommand (Module.Prefix + "donate")
                 .Alias ("~donate")

@@ -1,17 +1,17 @@
-﻿using NadekoBot.DataModels;
+﻿using MidnightBot.DataModels;
 using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace NadekoBot.Classes
+namespace MidnightBot.Classes
 {
     internal class DbHandler
     {
         public static DbHandler Instance { get; } = new DbHandler ();
 
-        private string FilePath { get; } = "data/nadekobot.sqlite";
+        private string FilePath { get; } = "data/MidnightBot.sqlite";
 
         static DbHandler () { }
         public DbHandler ()

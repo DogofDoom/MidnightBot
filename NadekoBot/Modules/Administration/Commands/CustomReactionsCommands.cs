@@ -1,12 +1,12 @@
 ﻿using Discord;
 using Discord.Commands;
-using NadekoBot.Classes;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Classes;
+using MidnightBot.Modules.Permissions.Classes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Modules.Administration.Commands
+namespace MidnightBot.Modules.Administration.Commands
 {
     class CustomReactionsCommands : DiscordCommand
     {
@@ -34,10 +34,10 @@ namespace NadekoBot.Modules.Administration.Commands
                         await e.Channel.SendMessage ($"Falsche Command-Benutzung. Gib -h {Prefix}acr ein für die richtige Formatierung.").ConfigureAwait (false);
                         return;
                     }
-                    if (NadekoBot.Config.CustomReactions.ContainsKey (name))
-                        NadekoBot.Config.CustomReactions[name].Add (message);
+                    if (MidnightBot.Config.CustomReactions.ContainsKey (name))
+                        MidnightBot.Config.CustomReactions[name].Add (message);
                     else
-                        NadekoBot.Config.CustomReactions.Add (name,new System.Collections.Generic.List<string> () { message });
+                        MidnightBot.Config.CustomReactions.Add (name,new System.Collections.Generic.List<string> () { message });
                     await Task.Run (() => Classes.JSONModels.ConfigHandler.SaveConfig ());
                     await e.Channel.SendMessage ($"Hinzugefügt {name} : {message}").ConfigureAwait (false);
 
@@ -68,7 +68,7 @@ namespace NadekoBot.Modules.Administration.Commands
                     var name = e.GetArg ("name")?.Trim ();
                     if (string.IsNullOrWhiteSpace (name))
                         return;
-                    if (!NadekoBot.Config.CustomReactions.ContainsKey (name))
+                    if (!MidnightBot.Config.CustomReactions.ContainsKey (name))
                     {
                         await e.Channel.SendMessage ("Gegebener Command-Name nicht gefunden.");
                         return;
@@ -78,22 +78,22 @@ namespace NadekoBot.Modules.Administration.Commands
                     if (int.TryParse (e.GetArg ("index")?.Trim () ?? "",out index))
                     {
                         index = index - 1;
-                        if (index < 0 || index > NadekoBot.Config.CustomReactions[name].Count)
+                        if (index < 0 || index > MidnightBot.Config.CustomReactions[name].Count)
                         {
                             await e.Channel.SendMessage ("Gegebener Index nicht vorhanden.").ConfigureAwait (false);
                             return;
 
                         }
-                        NadekoBot.Config.CustomReactions[name].RemoveAt (index);
-                        if (!NadekoBot.Config.CustomReactions[name].Any ())
+                        MidnightBot.Config.CustomReactions[name].RemoveAt (index);
+                        if (!MidnightBot.Config.CustomReactions[name].Any ())
                         {
-                            NadekoBot.Config.CustomReactions.Remove (name);
+                            MidnightBot.Config.CustomReactions.Remove (name);
                         }
                         message = $"Antwort #{index + 1} von `{name}` gelöscht.";
                     }
                     else
                     {
-                        NadekoBot.Config.CustomReactions.Remove (name);
+                        MidnightBot.Config.CustomReactions.Remove (name);
                         message = $"Custom Reaction: `{name}` gelöscht";
                     }
                     await Task.Run (() => Classes.JSONModels.ConfigHandler.SaveConfig ());
@@ -105,7 +105,7 @@ namespace NadekoBot.Modules.Administration.Commands
 
         private string GetCustomsOnPage ( int page )
         {
-            var items = NadekoBot.Config.CustomReactions.Skip (page * ItemsPerPage).Take (ItemsPerPage);
+            var items = MidnightBot.Config.CustomReactions.Skip (page * ItemsPerPage).Take (ItemsPerPage);
             if (!items.Any ())
             {
                 return $"Keine Reactions auf Seite {page + 1}.";

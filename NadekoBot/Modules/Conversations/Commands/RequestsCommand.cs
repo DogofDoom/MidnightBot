@@ -1,15 +1,15 @@
 ﻿using Discord.Commands;
-using NadekoBot.Extensions;
-using NadekoBot.Modules;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Extensions;
+using MidnightBot.Modules;
+using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Classes.Conversations.Commands
+namespace MidnightBot.Classes.Conversations.Commands
 {
     internal class RequestsCommand : DiscordCommand
     {
-        public string BotName { get; set; } = NadekoBot.BotName;
+        public string BotName { get; set; } = MidnightBot.BotName;
         public void SaveRequest ( CommandEventArgs e,string text )
         {
             DbHandler.Instance.InsertData (new DataModels.Request
@@ -116,7 +116,7 @@ namespace NadekoBot.Classes.Conversations.Commands
                         {
 
                             await e.Channel.SendMessage (e.User.Mention + " Forderung erledigt, Benachrichtigung gesendet.").ConfigureAwait (false);
-                            await NadekoBot.Client.GetServer ((ulong)sc.ServerId).GetUser ((ulong)sc.UserId).Send ("**Diese Forderung von dir wurde erledigt:**\n" + sc.RequestText).ConfigureAwait (false);
+                            await MidnightBot.Client.GetServer ((ulong)sc.ServerId).GetUser ((ulong)sc.UserId).Send ("**Diese Forderung von dir wurde erledigt:**\n" + sc.RequestText).ConfigureAwait (false);
                         }
                         else
                         {

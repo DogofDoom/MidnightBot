@@ -1,14 +1,14 @@
 ﻿using Discord.Commands;
-using NadekoBot.Classes;
+using MidnightBot.Classes;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Modules.Games.Commands
+namespace MidnightBot.Modules.Games.Commands
 {
     class BetrayGame : DiscordCommand
     {
-        public string BotName { get; set; } = NadekoBot.BotName;
+        public string BotName { get; set; } = MidnightBot.BotName;
         public BetrayGame ( DiscordModule module ) : base (module) { }
 
         private enum Answers

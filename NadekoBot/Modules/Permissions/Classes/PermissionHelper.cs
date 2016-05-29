@@ -4,7 +4,7 @@ using Discord.Modules;
 using System;
 using System.Linq;
 
-namespace NadekoBot.Modules.Permissions.Classes
+namespace MidnightBot.Modules.Permissions.Classes
 {
     internal static class PermissionHelper
     {
@@ -42,7 +42,7 @@ namespace NadekoBot.Modules.Permissions.Classes
             if (string.IsNullOrWhiteSpace (mod))
                 throw new ArgumentNullException (nameof (mod));
 
-            foreach (var m in NadekoBot.Client.GetService<ModuleService> ().Modules)
+            foreach (var m in MidnightBot.Client.GetService<ModuleService> ().Modules)
             {
                 if (m.Name.ToLower ().Equals (mod.Trim ().ToLower ()))
                     return m.Name;
@@ -55,7 +55,7 @@ namespace NadekoBot.Modules.Permissions.Classes
             if (string.IsNullOrWhiteSpace (commandText))
                 throw new ArgumentNullException (nameof (commandText));
 
-            foreach (var com in NadekoBot.Client.GetService<CommandService> ().AllCommands)
+            foreach (var com in MidnightBot.Client.GetService<CommandService> ().AllCommands)
             {
                 if (com.Text.ToLower ().Equals (commandText.Trim ().ToLower ()))
                     return com.Text;

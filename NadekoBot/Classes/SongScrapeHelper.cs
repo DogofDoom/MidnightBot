@@ -6,7 +6,7 @@ using OpenQA.Selenium.PhantomJS;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium;
 
-namespace NadekoBot.Classes
+namespace MidnightBot.Classes
 {
     public static class SongScrapeHelper
     {

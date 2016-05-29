@@ -1,12 +1,12 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.Commands.Permissions;
-using NadekoBot.Classes.JSONModels;
+using MidnightBot.Classes.JSONModels;
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Modules.Permissions.Classes
+namespace MidnightBot.Modules.Permissions.Classes
 {
 
     internal class PermissionChecker : IPermissionChecker
@@ -33,7 +33,7 @@ namespace NadekoBot.Modules.Permissions.Classes
         {
             error = String.Empty;
 
-            if (!NadekoBot.Ready)
+            if (!MidnightBot.Ready)
                 return false;
 
             if (channel.IsPrivate)

@@ -1,14 +1,14 @@
 ﻿using Discord;
 using Discord.Commands;
-using NadekoBot.Classes;
-using NadekoBot.Extensions;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Classes;
+using MidnightBot.Extensions;
+using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Modules.Administration.Commands
+namespace MidnightBot.Modules.Administration.Commands
 {
     internal class LogCommand : DiscordCommand
     {
@@ -21,21 +21,21 @@ namespace NadekoBot.Modules.Administration.Commands
 
         public LogCommand(DiscordModule module) : base(module)
         {
-            NadekoBot.Client.MessageReceived += MsgRecivd;
-            NadekoBot.Client.MessageDeleted += MsgDltd;
-            NadekoBot.Client.MessageUpdated += MsgUpdtd;
-            NadekoBot.Client.UserUpdated += UsrUpdtd;
-            NadekoBot.Client.UserBanned += UsrBanned;
-            NadekoBot.Client.UserLeft += UsrLeft;
-            NadekoBot.Client.UserJoined += UsrJoined;
-            NadekoBot.Client.UserUnbanned += UsrUnbanned;
-            NadekoBot.Client.ChannelCreated += ChannelCreated;
-            NadekoBot.Client.ChannelDestroyed += ChannelDestroyed;
-            NadekoBot.Client.ChannelUpdated += ChannelUpdated;
+            MidnightBot.Client.MessageReceived += MsgRecivd;
+            MidnightBot.Client.MessageDeleted += MsgDltd;
+            MidnightBot.Client.MessageUpdated += MsgUpdtd;
+            MidnightBot.Client.UserUpdated += UsrUpdtd;
+            MidnightBot.Client.UserBanned += UsrBanned;
+            MidnightBot.Client.UserLeft += UsrLeft;
+            MidnightBot.Client.UserJoined += UsrJoined;
+            MidnightBot.Client.UserUnbanned += UsrUnbanned;
+            MidnightBot.Client.ChannelCreated += ChannelCreated;
+            MidnightBot.Client.ChannelDestroyed += ChannelDestroyed;
+            MidnightBot.Client.ChannelUpdated += ChannelUpdated;
 
-            NadekoBot.Client.MessageReceived += async (s, e) => 
+            MidnightBot.Client.MessageReceived += async (s, e) => 
             {
-                if (e.Channel.IsPrivate || e.User.Id == NadekoBot.Client.CurrentUser.Id)
+                if (e.Channel.IsPrivate || e.User.Id == MidnightBot.Client.CurrentUser.Id)
                     return;
                     if (!SpecificConfigurations.Default.Of (e.Server.Id).SendPrivateMessageOnMention)
                     return;
@@ -61,7 +61,7 @@ namespace NadekoBot.Modules.Administration.Commands
             try
             {
                 Channel ch;
-                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
                 if (e.Before.Name != e.After.Name)
@@ -82,7 +82,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
-                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
                 await OwnerPrivateChannel.SendMessage ($"❗`{prettyCurrentTime}`❗`Channel Gelöscht:` #{e.Channel.Name} (*{e.Channel.Id}*)").ConfigureAwait (false);
             }
             catch { }
@@ -95,7 +95,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
-                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
                 await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}`🆕`Channel Erstellt:` #{e.Channel.Mention} (*{e.Channel.Id}*)").ConfigureAwait (false);
             }
             catch { }
@@ -108,7 +108,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
-                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
                 await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}`♻`Benutzer wurde entbannt:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
             }
             catch { }
@@ -122,7 +122,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
-                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
                 await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}`✅`User joined:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
             }
             catch { }
@@ -135,7 +135,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
-                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
                 await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}`❗`Benutzer verließ den Server:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
             }
             catch { }
@@ -148,7 +148,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue (e.Server, out ch))
                     return;
-                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
                 await OwnerPrivateChannel.SendMessage ($"❗`{prettyCurrentTime}`❌`User gebannt:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
             }
             catch { }
@@ -160,7 +160,7 @@ namespace NadekoBot.Modules.Administration.Commands
             if (!logs.TryRemove(e.Server, out ch))
             {
                 logs.TryAdd(e.Server, e.Channel);
-                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
                 await OwnerPrivateChannel.SendMessage($"❗**Logging gestartet**❗").ConfigureAwait (false);
                 return;
             }
@@ -172,12 +172,12 @@ namespace NadekoBot.Modules.Administration.Commands
         {
             try
             {
-                if (e.Server == null || e.Channel.IsPrivate || e.User.Id == NadekoBot.Client.CurrentUser.Id)
+                if (e.Server == null || e.Channel.IsPrivate || e.User.Id == MidnightBot.Client.CurrentUser.Id)
                     return;
                 Channel ch;
                 if (!logs.TryGetValue(e.Server, out ch) || e.Channel == ch)
                     return;
-                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
                 //await OwnerPrivateChannel.SendMessage
                 //    (
                 //        $@"🕔`{prettyCurrentTime}` **Neue Nachricht** `#{e.Channel.Name}`
@@ -190,12 +190,12 @@ namespace NadekoBot.Modules.Administration.Commands
         {
             try
             {
-                if (e.Server == null || e.Channel.IsPrivate || e.User?.Id == NadekoBot.Client.CurrentUser.Id)
+                if (e.Server == null || e.Channel.IsPrivate || e.User?.Id == MidnightBot.Client.CurrentUser.Id)
                     return;
                 Channel ch;
                 if (!logs.TryGetValue(e.Server, out ch) || e.Channel == ch)
                     return;
-                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
                 await OwnerPrivateChannel.SendMessage 
                     (
                         $@"🕔`{prettyCurrentTime}` **Nachricht** 🚮 `#{e.Channel.Name}`
@@ -208,12 +208,12 @@ namespace NadekoBot.Modules.Administration.Commands
         {
             try
             {
-                if (e.Server == null || e.Channel.IsPrivate || e.User?.Id == NadekoBot.Client.CurrentUser.Id)
+                if (e.Server == null || e.Channel.IsPrivate || e.User?.Id == MidnightBot.Client.CurrentUser.Id)
                     return;
                 Channel ch;
                 if (!logs.TryGetValue(e.Server, out ch) || e.Channel == ch)
                     return;
-                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
                 await OwnerPrivateChannel.SendMessage 
                     (
                         $@"🕔`{prettyCurrentTime}` **Nachricht** 📝 `#{e.Channel.Name}`
@@ -232,7 +232,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 if (loggingPresences.TryGetValue(e.Server, out ch))
                     if (e.Before.Status != e.After.Status)
                     {
-                        Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                        Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
                         await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}`**{e.Before.Name}** is now **{e.After.Status}**.").ConfigureAwait (false);
                     }
             }
@@ -275,7 +275,7 @@ namespace NadekoBot.Modules.Administration.Commands
             try
             {
                 Channel ch;
-                Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
                 if (!logs.TryGetValue(e.Server, out ch))
                     return;
                 string str = $"🕔`{prettyCurrentTime}`";

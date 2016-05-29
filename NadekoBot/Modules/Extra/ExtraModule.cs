@@ -1,15 +1,15 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.Modules;
-using NadekoBot.Extensions;
-using NadekoBot.Classes;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Extensions;
+using MidnightBot.Classes;
+using MidnightBot.Modules.Permissions.Classes;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Net.Http;
 
-namespace NadekoBot.Modules.Extra
+namespace MidnightBot.Modules.Extra
 {
     class ExtraModule : DiscordModule
     {
@@ -20,11 +20,11 @@ namespace NadekoBot.Modules.Extra
             rng = new Random ();
         }
 
-        public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.Searches;
+        public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Searches;
 
         public override void Install ( ModuleManager manager )
         {
-            var client = NadekoBot.Client;
+            var client = MidnightBot.Client;
 
             manager.CreateCommands ("",cgb =>
            {
@@ -90,7 +90,7 @@ namespace NadekoBot.Modules.Extra
                          SCHINKEN:
                          try
                          {
-                             var reqString = $"https://www.googleapis.com/customsearch/v1?q=ham&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={ rng.Next (1,150) }&fields=items%2Flink&key={NadekoBot.Creds.GoogleAPIKey}";
+                             var reqString = $"https://www.googleapis.com/customsearch/v1?q=ham&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={ rng.Next (1,150) }&fields=items%2Flink&key={MidnightBot.Creds.GoogleAPIKey}";
                              var obj = JObject.Parse (await SearchHelper.GetResponseStringAsync (reqString));
                              
                              await e.Channel.SendMessage (obj["items"][0]["link"].ToString ()).ConfigureAwait (false);
@@ -116,7 +116,7 @@ namespace NadekoBot.Modules.Extra
                          LOCATION:
                          try
                          {
-                             var reqString = $"https://www.googleapis.com/customsearch/v1?q=city&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={ rng.Next (1,150) }&fields=items%2Flink&key={NadekoBot.Creds.GoogleAPIKey}";
+                             var reqString = $"https://www.googleapis.com/customsearch/v1?q=city&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={ rng.Next (1,150) }&fields=items%2Flink&key={MidnightBot.Creds.GoogleAPIKey}";
                              var obj = JObject.Parse (await SearchHelper.GetResponseStringAsync (reqString));
                              
                                  await e.Channel.SendMessage (obj["items"][0]["link"].ToString ()).ConfigureAwait (false);
@@ -142,7 +142,7 @@ namespace NadekoBot.Modules.Extra
                          RANDIMG:
                          try
                          {
-                             var reqString = $"https://www.googleapis.com/customsearch/v1?q=image&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={ rng.Next (1,150) }&fields=items%2Flink&key={NadekoBot.Creds.GoogleAPIKey}";
+                             var reqString = $"https://www.googleapis.com/customsearch/v1?q=image&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={ rng.Next (1,150) }&fields=items%2Flink&key={MidnightBot.Creds.GoogleAPIKey}";
                              var obj = JObject.Parse (await SearchHelper.GetResponseStringAsync (reqString));
                              
                                  await e.Channel.SendMessage (obj["items"][0]["link"].ToString ()).ConfigureAwait (false);

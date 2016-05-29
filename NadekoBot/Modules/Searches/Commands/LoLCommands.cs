@@ -1,6 +1,6 @@
 ﻿using Discord.Commands;
-using NadekoBot.Classes;
-using NadekoBot.Extensions;
+using MidnightBot.Classes;
+using MidnightBot.Extensions;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Modules.Searches.Commands
+namespace MidnightBot.Modules.Searches.Commands
 {
     internal class LoLCommands : DiscordCommand
     {
@@ -97,7 +97,7 @@ namespace NadekoBot.Modules.Searches.Commands
                               await e.Channel.SendFile("champ.png", champ.ImageStream).ConfigureAwait (false);
                               return;
                           }
-                          var allData = JArray.Parse(await Classes.SearchHelper.GetResponseStringAsync($"http://api.champion.gg/champion/{name}?api_key={NadekoBot.Creds.LOLAPIKey}").ConfigureAwait (false));
+                          var allData = JArray.Parse(await Classes.SearchHelper.GetResponseStringAsync($"http://api.champion.gg/champion/{name}?api_key={MidnightBot.Creds.LOLAPIKey}").ConfigureAwait (false));
                           JToken data = null;
                           if (role != null)
                           {
@@ -142,7 +142,7 @@ namespace NadekoBot.Modules.Searches.Commands
                                   roles[i] = ">" + roles[i] + "<";
                           }
                           var general = JArray.Parse(await SearchHelper.GetResponseStringAsync($"http://api.champion.gg/stats/" +
-                                                                                               $"champs/{name}?api_key={NadekoBot.Creds.LOLAPIKey}")
+                                                                                               $"champs/{name}?api_key={MidnightBot.Creds.LOLAPIKey}")
                                                                                                .ConfigureAwait (false))
                                               .FirstOrDefault(jt => jt["role"].ToString() == role)?["general"];
                           if (general == null)
@@ -299,7 +299,7 @@ namespace NadekoBot.Modules.Searches.Commands
                               await Classes
                                   .SearchHelper
                                   .GetResponseStringAsync($"http://api.champion.gg/stats/champs/mostBanned?" +
-                                                          $"api_key={NadekoBot.Creds.LOLAPIKey}&page=1&" +
+                                                          $"api_key={MidnightBot.Creds.LOLAPIKey}&page=1&" +
                                                           $"limit={showCount}")
                                                           .ConfigureAwait (false))["data"] as JArray;
 

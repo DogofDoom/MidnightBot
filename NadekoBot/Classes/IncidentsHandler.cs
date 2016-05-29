@@ -2,7 +2,7 @@
 using System.IO;
 using Discord;
 
-namespace NadekoBot.Classes {
+namespace MidnightBot.Classes {
     internal static class IncidentsHandler {
         public static async void Add(ulong serverId, string text)
         {
@@ -12,7 +12,7 @@ namespace NadekoBot.Classes {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine ($"VORFALL: {text}");
             Console.ForegroundColor = def;
-            Channel OwnerPrivateChannel = await NadekoBot.Client.CreatePrivateChannel (NadekoBot.Creds.OwnerIds[0]);
+            Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
             await OwnerPrivateChannel.SendMessage ($"VORFALL: {text}");
         }
     }

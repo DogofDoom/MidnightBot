@@ -1,20 +1,20 @@
 ﻿using Discord.Modules;
 using Manatee.Trello;
 using Manatee.Trello.ManateeJson;
-using NadekoBot.Extensions;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Extensions;
+using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using Action = Manatee.Trello.Action;
 
-namespace NadekoBot.Modules.Trello
+namespace MidnightBot.Modules.Trello
 {
     internal class TrelloModule : DiscordModule
     {
         private readonly Timer t = new Timer { Interval = 2000 };
-        public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.Trello;
+        public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Trello;
 
         public override void Install ( ModuleManager manager )
         {
@@ -26,7 +26,7 @@ namespace NadekoBot.Modules.Trello
             TrelloConfiguration.Deserializer = serializer;
             TrelloConfiguration.JsonFactory = new ManateeFactory ();
             TrelloConfiguration.RestClientProvider = new Manatee.Trello.WebApi.WebApiClientProvider ();
-            TrelloAuthorization.Default.AppKey = NadekoBot.Creds.TrelloAppKey;
+            TrelloAuthorization.Default.AppKey = MidnightBot.Creds.TrelloAppKey;
             //TrelloAuthorization.Default.UserToken = "[your user token]";
 
             Discord.Channel bound = null;
@@ -74,7 +74,7 @@ namespace NadekoBot.Modules.Trello
                     .Parameter ("code",Discord.Commands.ParameterType.Required)
                     .Do (async e =>
                     {
-                        if (!NadekoBot.IsOwner(e.User.Id) || NadekoBot.IsBot) return;
+                        if (!MidnightBot.IsOwner(e.User.Id) || MidnightBot.IsBot) return;
                         try
                         {
                             await (await client.GetInvite (e.GetArg ("code")).ConfigureAwait (false)).Accept ()
@@ -93,7 +93,7 @@ namespace NadekoBot.Modules.Trello
                     .Parameter ("board_id",Discord.Commands.ParameterType.Required)
                     .Do (async e =>
                     {
-                        if (!NadekoBot.IsOwner (e.User.Id))
+                        if (!MidnightBot.IsOwner (e.User.Id))
                             return;
                         if (bound != null)
                             return;
@@ -115,7 +115,7 @@ namespace NadekoBot.Modules.Trello
                     .Description ("Entknüpft einen Bot vom Channel und Board.")
                     .Do (async e =>
                     {
-                        if (!NadekoBot.IsOwner (e.User.Id))
+                        if (!MidnightBot.IsOwner (e.User.Id))
                             return;
                         if (bound == null || bound != e.Channel)
                             return;
@@ -131,7 +131,7 @@ namespace NadekoBot.Modules.Trello
                     .Description ("Listet alle Listen")
                     .Do (async e =>
                     {
-                        if (!NadekoBot.IsOwner (e.User.Id))
+                        if (!MidnightBot.IsOwner (e.User.Id))
                             return;
                         if (bound == null || board == null || bound != e.Channel)
                             return;
@@ -144,7 +144,7 @@ namespace NadekoBot.Modules.Trello
                     .Parameter ("list_name",Discord.Commands.ParameterType.Unparsed)
                     .Do (async e =>
                     {
-                        if (!NadekoBot.IsOwner (e.User.Id))
+                        if (!MidnightBot.IsOwner (e.User.Id))
                             return;
                         if (bound == null || board == null || bound != e.Channel || e.GetArg ("list_name") == null)
                             return;

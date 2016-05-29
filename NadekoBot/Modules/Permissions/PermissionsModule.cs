@@ -1,19 +1,19 @@
 ﻿using Discord.Commands;
 using Discord.Modules;
-using NadekoBot.Classes.JSONModels;
-using NadekoBot.Extensions;
-using NadekoBot.Modules.Games.Commands;
-using NadekoBot.Modules.Permissions.Classes;
-using NadekoBot.Modules.Permissions.Commands;
+using MidnightBot.Classes.JSONModels;
+using MidnightBot.Extensions;
+using MidnightBot.Modules.Games.Commands;
+using MidnightBot.Modules.Permissions.Classes;
+using MidnightBot.Modules.Permissions.Commands;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Modules.Permissions
+namespace MidnightBot.Modules.Permissions
 {
     internal class PermissionModule : DiscordModule
     {
-        public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.Permissions;
+        public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Permissions;
 
         public PermissionModule ()
         {
@@ -508,7 +508,7 @@ namespace NadekoBot.Modules.Permissions
                         {
                             var state = PermissionHelper.ValidateBool (e.GetArg ("bool"));
 
-                            foreach (var module in NadekoBot.Client.GetService<ModuleService> ().Modules)
+                            foreach (var module in MidnightBot.Client.GetService<ModuleService> ().Modules)
                             {
                                 PermissionsHandler.SetServerModulePermission (e.Server,module.Name,state);
                             }
@@ -535,7 +535,7 @@ namespace NadekoBot.Modules.Permissions
                             var state = PermissionHelper.ValidateBool (e.GetArg ("bool"));
                             var module = PermissionHelper.ValidateModule (e.GetArg ("module"));
 
-                            foreach (var command in NadekoBot.Client.GetService<CommandService> ().AllCommands.Where (c => c.Category == module))
+                            foreach (var command in MidnightBot.Client.GetService<CommandService> ().AllCommands.Where (c => c.Category == module))
                             {
                                 PermissionsHandler.SetServerCommandPermission (e.Server,command.Text,state);
                             }
@@ -562,7 +562,7 @@ namespace NadekoBot.Modules.Permissions
                             var state = PermissionHelper.ValidateBool (e.GetArg ("bool"));
                             var chArg = e.GetArg ("channel");
                             var channel = string.IsNullOrWhiteSpace (chArg) ? e.Channel : PermissionHelper.ValidateChannel (e.Server,chArg);
-                            foreach (var module in NadekoBot.Client.GetService<ModuleService> ().Modules)
+                            foreach (var module in MidnightBot.Client.GetService<ModuleService> ().Modules)
                             {
                                 PermissionsHandler.SetChannelModulePermission (channel,module.Name,state);
                             }
@@ -591,7 +591,7 @@ namespace NadekoBot.Modules.Permissions
                             var state = PermissionHelper.ValidateBool (e.GetArg ("bool"));
                             var module = PermissionHelper.ValidateModule (e.GetArg ("module"));
                             var channel = PermissionHelper.ValidateChannel (e.Server,e.GetArg ("channel"));
-                            foreach (var command in NadekoBot.Client.GetService<CommandService> ().AllCommands.Where (c => c.Category == module))
+                            foreach (var command in MidnightBot.Client.GetService<CommandService> ().AllCommands.Where (c => c.Category == module))
                             {
                                 PermissionsHandler.SetChannelCommandPermission (channel,command.Text,state);
                             }
@@ -617,7 +617,7 @@ namespace NadekoBot.Modules.Permissions
                         {
                             var state = PermissionHelper.ValidateBool (e.GetArg ("bool"));
                             var role = PermissionHelper.ValidateRole (e.Server,e.GetArg ("role"));
-                            foreach (var module in NadekoBot.Client.GetService<ModuleService> ().Modules)
+                            foreach (var module in MidnightBot.Client.GetService<ModuleService> ().Modules)
                             {
                                 PermissionsHandler.SetRoleModulePermission (role,module.Name,state);
                             }
@@ -646,7 +646,7 @@ namespace NadekoBot.Modules.Permissions
                             var state = PermissionHelper.ValidateBool (e.GetArg ("bool"));
                             var module = PermissionHelper.ValidateModule (e.GetArg ("module"));
                             var role = PermissionHelper.ValidateRole (e.Server,e.GetArg ("channel"));
-                            foreach (var command in NadekoBot.Client.GetService<CommandService> ().AllCommands.Where (c => c.Category == module))
+                            foreach (var command in MidnightBot.Client.GetService<CommandService> ().AllCommands.Where (c => c.Category == module))
                             {
                                 PermissionsHandler.SetRoleCommandPermission (role,command.Text,state);
                             }
@@ -673,7 +673,7 @@ namespace NadekoBot.Modules.Permissions
                             if (!e.Message.MentionedUsers.Any ())
                                 return;
                             var usr = e.Message.MentionedUsers.First ();
-                            NadekoBot.Config.UserBlacklist.Add (usr.Id);
+                            MidnightBot.Config.UserBlacklist.Add (usr.Id);
                             ConfigHandler.SaveConfig ();
                             await e.Channel.SendMessage ($"`Benutzer {usr.Name}` erfolgreich geblacklisted.").ConfigureAwait (false);
                         }).ConfigureAwait (false);
@@ -690,9 +690,9 @@ namespace NadekoBot.Modules.Permissions
                            if (!e.Message.MentionedUsers.Any ())
                                return;
                            var usr = e.Message.MentionedUsers.First ();
-                           if (NadekoBot.Config.UserBlacklist.Contains (usr.Id))
+                           if (MidnightBot.Config.UserBlacklist.Contains (usr.Id))
                            {
-                               NadekoBot.Config.UserBlacklist.Remove (usr.Id);
+                               MidnightBot.Config.UserBlacklist.Remove (usr.Id);
                                ConfigHandler.SaveConfig ();
                                await e.Channel.SendMessage ($"`Benutzer {usr.Name} erfolgreich aus der Blacklist entfernt`").ConfigureAwait (false);
                            }
@@ -716,7 +716,7 @@ namespace NadekoBot.Modules.Permissions
                             if (!e.Message.MentionedChannels.Any ())
                                 return;
                             var ch = e.Message.MentionedChannels.First ();
-                            NadekoBot.Config.UserBlacklist.Add (ch.Id);
+                            MidnightBot.Config.UserBlacklist.Add (ch.Id);
                             ConfigHandler.SaveConfig ();
                             await e.Channel.SendMessage ($"`Channel {ch.Name}` erfolgreich geblacklisted.").ConfigureAwait (false);
                         }).ConfigureAwait (false);
@@ -732,7 +732,7 @@ namespace NadekoBot.Modules.Permissions
                             if (!e.Message.MentionedChannels.Any ())
                                 return;
                             var ch = e.Message.MentionedChannels.First ();
-                            NadekoBot.Config.UserBlacklist.Remove (ch.Id);
+                            MidnightBot.Config.UserBlacklist.Remove (ch.Id);
                             ConfigHandler.SaveConfig ();
                             await e.Channel.SendMessage ($"`Channel {ch.Name} erfolgreich von der Blacklist entfernt.`").ConfigureAwait (false);
                         }).ConfigureAwait (false);
@@ -749,15 +749,15 @@ namespace NadekoBot.Modules.Permissions
                             var arg = e.GetArg ("server")?.Trim ();
                             if (string.IsNullOrWhiteSpace (arg))
                                 return;
-                            var server = NadekoBot.Client.Servers.FirstOrDefault (s => s.Id.ToString () == arg) ??
-                            NadekoBot.Client.FindServers (arg.Trim ()).FirstOrDefault ();
+                            var server = MidnightBot.Client.Servers.FirstOrDefault (s => s.Id.ToString () == arg) ??
+                            MidnightBot.Client.FindServers (arg.Trim ()).FirstOrDefault ();
                             if (server == null)
                             {
                                 await e.Channel.SendMessage ("Kann den Server nicht finden.").ConfigureAwait (false);
                                 return;
                             }
                             var serverId = server.Id;
-                            NadekoBot.Config.ServerBlacklist.Add (serverId);
+                            MidnightBot.Config.ServerBlacklist.Add (serverId);
                             ConfigHandler.SaveConfig ();
                             //cleanup trivias and typeracing
                             Modules.Games.Commands.Trivia.TriviaGame trivia;
@@ -786,9 +786,9 @@ namespace NadekoBot.Modules.Permissions
                                 await e.Channel.SendMessage ("Id ungültig.").ConfigureAwait (false);
                                 return;
                             }
-                            var server = NadekoBot.Client.Servers.FirstOrDefault (s => s.Id.ToString () == arg) ??
-                            NadekoBot.Client.FindServers (arg.Trim ()).FirstOrDefault ();
-                            NadekoBot.Config.ServerBlacklist.Remove (serverId);
+                            var server = MidnightBot.Client.Servers.FirstOrDefault (s => s.Id.ToString () == arg) ??
+                            MidnightBot.Client.FindServers (arg.Trim ()).FirstOrDefault ();
+                            MidnightBot.Config.ServerBlacklist.Remove (serverId);
                             ConfigHandler.SaveConfig ();
                             if (server == null)
                             {

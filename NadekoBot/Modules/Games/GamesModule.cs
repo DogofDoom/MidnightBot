@@ -1,18 +1,18 @@
 ﻿using Discord.Commands;
 using Discord.Modules;
-using NadekoBot.Extensions;
-using NadekoBot.Modules.Games.Commands;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Extensions;
+using MidnightBot.Modules.Games.Commands;
+using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Linq;
 
 
-namespace NadekoBot.Modules.Games
+namespace MidnightBot.Modules.Games
 {
     internal class GamesModule : DiscordModule
     {
         private readonly Random rng = new Random ();
-        public string BotName { get; set; } = NadekoBot.BotName;
+        public string BotName { get; set; } = MidnightBot.BotName;
 
         public GamesModule ()
         {
@@ -25,7 +25,7 @@ namespace NadekoBot.Modules.Games
             //commands.Add(new BetrayGame(this));
         }
 
-        public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.Games;
+        public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Games;
 
         public override void Install ( ModuleManager manager )
         {
@@ -61,7 +61,7 @@ namespace NadekoBot.Modules.Games
                          try
                          {
                              await e.Channel.SendMessage (
-                                   $":question: **Frage**: `{question}` \n🎱 **Helix Fossil sagt**: `{NadekoBot.Config._8BallResponses[rng.Next (0,NadekoBot.Config._8BallResponses.Length)]}`")
+                                   $":question: **Frage**: `{question}` \n🎱 **Helix Fossil sagt**: `{MidnightBot.Config._8BallResponses[rng.Next (0,MidnightBot.Config._8BallResponses.Length)]}`")
                                    .ConfigureAwait (false);
                          }
                          catch { }
@@ -103,7 +103,7 @@ namespace NadekoBot.Modules.Games
                     else if ((pick == 0 && nadekoPick == 1) ||
                      (pick == 1 && nadekoPick == 2) ||
                      (pick == 2 && nadekoPick == 0))
-                        msg = $"{NadekoBot.BotMention} won! :{GetRPSPick (nadekoPick)}: beats :{GetRPSPick (pick)}:";
+                        msg = $"{MidnightBot.BotMention} won! :{GetRPSPick (nadekoPick)}: beats :{GetRPSPick (pick)}:";
                     else
                         msg = $"{e.User.Mention} won! :{GetRPSPick (pick)}: beats :{GetRPSPick (nadekoPick)}:";
 

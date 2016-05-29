@@ -1,8 +1,8 @@
 ﻿using Discord.Modules;
 using System.Collections.Generic;
-using NadekoBot.Classes;
+using MidnightBot.Classes;
 
-namespace NadekoBot.Modules {
+namespace MidnightBot.Modules {
     internal abstract class DiscordModule : IModule {
         protected readonly HashSet<DiscordCommand> commands = new HashSet<DiscordCommand>();
 

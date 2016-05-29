@@ -1,11 +1,11 @@
 ﻿using Discord;
 using Discord.Commands;
-using NadekoBot.Classes;
+using MidnightBot.Classes;
 using System.Text;
 using System.Timers;
-using static NadekoBot.Modules.Games.Commands.Bomberman;
+using static MidnightBot.Modules.Games.Commands.Bomberman;
 
-namespace NadekoBot.Modules.Games.Commands
+namespace MidnightBot.Modules.Games.Commands
 {
     class Bomberman : DiscordCommand
     {
@@ -31,10 +31,10 @@ namespace NadekoBot.Modules.Games.Commands
                     board[i,j] = new Field ();
                 }
             }
-            NadekoBot.Client.MessageReceived += ( s,e ) =>
+            MidnightBot.Client.MessageReceived += ( s,e ) =>
             {
                 if (e.Channel != gameChannel ||
-                    e.User.Id == NadekoBot.Client.CurrentUser.Id)
+                    e.User.Id == MidnightBot.Client.CurrentUser.Id)
                     return;
 
                 if (e.Message.Text == "w")

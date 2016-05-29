@@ -1,16 +1,16 @@
 ﻿using Discord.Commands;
-using NadekoBot.Classes;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Classes;
+using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Linq;
 
-namespace NadekoBot.Modules.Administration.Commands
+namespace MidnightBot.Modules.Administration.Commands
 {
     class AutoAssignRole : DiscordCommand
     {
         public AutoAssignRole ( DiscordModule module ) : base (module)
         {
-            NadekoBot.Client.UserJoined += ( s,e ) =>
+            MidnightBot.Client.UserJoined += ( s,e ) =>
             {
                 try
                 {

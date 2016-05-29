@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Modules.Permissions.Classes
+namespace MidnightBot.Modules.Permissions.Classes
 {
     public static class PermissionsHandler
     {
@@ -89,7 +89,7 @@ namespace NadekoBot.Modules.Permissions.Classes
             Permissions perm;
 
             //If User is Owner. He can run blocked commands and modules
-            if(NadekoBot.IsOwner(user.Id))
+            if(MidnightBot.IsOwner(user.Id))
                 return PermissionBanType.None;
             //server
             if (serverPerms.Permissions.Modules.TryGetValue (command.Category,out val) && val == false)

@@ -1,25 +1,25 @@
 ﻿using Discord;
 using Discord.Modules;
-using NadekoBot.Extensions;
-using NadekoBot.Modules.Music.Classes;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Extensions;
+using MidnightBot.Modules.Music.Classes;
+using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Modules.Sound
+namespace MidnightBot.Modules.Sound
 {
     class SoundsModule : DiscordModule
     {
         public static ConcurrentDictionary<Server,MusicPlayer> MusicPlayers = new ConcurrentDictionary<Server,MusicPlayer> ();
         public static ConcurrentDictionary<ulong,float> DefaultMusicVolumes = new ConcurrentDictionary<ulong,float> ();
 
-        public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.Searches;
+        public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Searches;
 
         public override void Install ( ModuleManager manager )
         {
-            var client = NadekoBot.Client;
+            var client = MidnightBot.Client;
             string path = Directory.GetCurrentDirectory ();
 
             manager.CreateCommands ("",cgb =>

@@ -5,16 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.Modules;
-using NadekoBot.Classes;
-using NadekoBot.Extensions;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Classes;
+using MidnightBot.Extensions;
+using MidnightBot.Modules.Permissions.Classes;
 
-namespace NadekoBot.Modules.Meme
+namespace MidnightBot.Modules.Meme
 {
     internal class MemeModule : DiscordModule
     {
-        public string BotName { get; set; } = NadekoBot.BotName;
-        public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.Searches;
+        public string BotName { get; set; } = MidnightBot.BotName;
+        public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Searches;
         private static readonly Random rng = new Random ();
 
         public override void Install ( ModuleManager manager )

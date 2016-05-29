@@ -1,8 +1,8 @@
 ﻿using Discord;
 using Discord.Commands;
-using NadekoBot.Extensions;
-using NadekoBot.Modules.Administration.Commands;
-using NadekoBot.Modules.Music;
+using MidnightBot.Extensions;
+using MidnightBot.Modules.Administration.Commands;
+using MidnightBot.Modules.Music;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,11 +12,11 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace NadekoBot
+namespace MidnightBot
 {
-    public class NadekoStats
+    public class MidnightStats
     {
-        public static NadekoStats Instance { get; } = new NadekoStats ();
+        public static MidnightStats Instance { get; } = new MidnightStats ();
 
         public string BotVersion => $"{Assembly.GetExecutingAssembly ().GetName ().Name} v{Assembly.GetExecutingAssembly ().GetName ().Version}";
 
@@ -34,11 +34,11 @@ namespace NadekoBot
         private static ulong messageCounter = 0;
         public static ulong MessageCounter => messageCounter;
 
-        static NadekoStats () { }
+        static MidnightStats () { }
 
-        private NadekoStats ()
+        private MidnightStats ()
         {
-            var commandService = NadekoBot.Client.GetService<CommandService> ();
+            var commandService = MidnightBot.Client.GetService<CommandService> ();
 
             statsStopwatch.Start ();
             commandService.CommandExecuted += StatsCollector_RanCommand;
@@ -47,15 +47,15 @@ namespace NadekoBot
 
             commandLogTimer.Start ();
 
-            ServerCount = NadekoBot.Client.Servers.Count ();
-            var channels = NadekoBot.Client.Servers.SelectMany (s => s.AllChannels);
+            ServerCount = MidnightBot.Client.Servers.Count ();
+            var channels = MidnightBot.Client.Servers.SelectMany (s => s.AllChannels);
             var channelsArray = channels as Channel[] ?? channels.ToArray ();
             TextChannelsCount = channelsArray.Count (c => c.Type == ChannelType.Text);
             VoiceChannelsCount = channelsArray.Count () - TextChannelsCount;
 
-            NadekoBot.Client.MessageReceived += ( s,e ) => messageCounter++;
+            MidnightBot.Client.MessageReceived += ( s,e ) => messageCounter++;
 
-            NadekoBot.Client.JoinedServer += ( s,e ) =>
+            MidnightBot.Client.JoinedServer += ( s,e ) =>
             {
                 try
                 {
@@ -66,7 +66,7 @@ namespace NadekoBot
                 }
                 catch { }
             };
-            NadekoBot.Client.LeftServer += ( s,e ) =>
+            MidnightBot.Client.LeftServer += ( s,e ) =>
             {
                 try
                 {
@@ -77,7 +77,7 @@ namespace NadekoBot
                 }
                 catch { }
             };
-            NadekoBot.Client.ChannelCreated += ( s,e ) =>
+            MidnightBot.Client.ChannelCreated += ( s,e ) =>
             {
                 try
                 {
@@ -90,7 +90,7 @@ namespace NadekoBot
                 }
                 catch { }
             };
-            NadekoBot.Client.ChannelDestroyed += ( s,e ) =>
+            MidnightBot.Client.ChannelDestroyed += ( s,e ) =>
             {
                 try
                 {
@@ -110,14 +110,14 @@ namespace NadekoBot
         HttpClient carbonClient = new HttpClient ();
         private async Task SendUpdateToCarbon ()
         {
-            if (string.IsNullOrWhiteSpace (NadekoBot.Creds.CarbonKey))
+            if (string.IsNullOrWhiteSpace (MidnightBot.Creds.CarbonKey))
                 return;
             try
             {
                 using (var content = new FormUrlEncodedContent (new Dictionary<string,string>
                 {
-                                { "servercount", NadekoBot.Client.Servers.Count().ToString() },
-                                { "key", NadekoBot.Creds.CarbonKey }
+                                { "servercount", MidnightBot.Client.Servers.Count().ToString() },
+                                { "key", MidnightBot.Creds.CarbonKey }
                             }))
                 {
                     content.Headers.Clear ();
@@ -149,15 +149,15 @@ namespace NadekoBot
                  var sb = new System.Text.StringBuilder ();
                  sb.AppendLine ("`Autor: Kwoth` `Library: Discord.Net`");
                  sb.AppendLine ($"`Bot Version: {BotVersion}`");
-                 sb.AppendLine ($"`Bot Id: {NadekoBot.Client.CurrentUser.Id}`");
+                 sb.AppendLine ($"`Bot Id: {MidnightBot.Client.CurrentUser.Id}`");
                  sb.Append ("`Owners' Ids:` ");
-                 sb.AppendLine ("`" + String.Join (", ",NadekoBot.Creds.OwnerIds) + "`");
+                 sb.AppendLine ("`" + String.Join (", ",MidnightBot.Creds.OwnerIds) + "`");
                  sb.AppendLine ($"`Uptime: {GetUptimeString ()}`");
                  sb.Append ($"`Server: {ServerCount}");
                  sb.Append ($" | TextChannel: {TextChannelsCount}");
                  sb.AppendLine ($" | VoiceChannel: {VoiceChannelsCount}`");
                  sb.AppendLine ($"`Commands Ran this session: {commandsRan}`");
-                 sb.AppendLine ($"`Message queue size: {NadekoBot.Client.MessageQueue.Count}`");
+                 sb.AppendLine ($"`Message queue size: {MidnightBot.Client.MessageQueue.Count}`");
                  sb.Append ($"`Gegrüßt: {ServerGreetCommand.Greeted} mal.`");
                  sb.AppendLine ($" `| Spielt {songs} Lieder, ".SnPl (songs) +
                                $"{MusicModule.MusicPlayers.Sum (kvp => kvp.Value.Playlist.Count)} queued.`");
@@ -184,11 +184,11 @@ namespace NadekoBot
                 await Task.Delay (new TimeSpan (0,30,0)).ConfigureAwait (false);
                 try
                 {
-                    var onlineUsers = await Task.Run (() => NadekoBot.Client.Servers.Sum (x => x.Users.Count ())).ConfigureAwait (false);
-                    var realOnlineUsers = await Task.Run (() => NadekoBot.Client.Servers
+                    var onlineUsers = await Task.Run (() => MidnightBot.Client.Servers.Sum (x => x.Users.Count ())).ConfigureAwait (false);
+                    var realOnlineUsers = await Task.Run (() => MidnightBot.Client.Servers
                                                                          .Sum (x => x.Users.Count (u => u.Status == UserStatus.Online)))
                                                                          .ConfigureAwait (false);
-                    var connectedServers = NadekoBot.Client.Servers.Count ();
+                    var connectedServers = MidnightBot.Client.Servers.Count ();
 
                     Classes.DbHandler.Instance.InsertData (new DataModels.Stats
                     {

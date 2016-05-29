@@ -2,27 +2,27 @@
 using Discord.Audio;
 using Discord.Commands;
 using Discord.Modules;
-using NadekoBot.Classes.Help.Commands;
-using NadekoBot.Classes.JSONModels;
-using NadekoBot.Modules.Administration;
-using NadekoBot.Modules.ClashOfClans;
-using NadekoBot.Modules.Conversations;
-using NadekoBot.Modules.CustomReactions;
-using NadekoBot.Modules.Extra;
-using NadekoBot.Modules.Gambling;
-using NadekoBot.Modules.Games;
-using NadekoBot.Modules.Games.Commands;
-using NadekoBot.Modules.Help;
-using NadekoBot.Modules.Meme;
-using NadekoBot.Modules.Music;
-using NadekoBot.Modules.NSFW;
-using NadekoBot.Modules.Permissions;
-using NadekoBot.Modules.Permissions.Classes;
-using NadekoBot.Modules.Pokemon;
-using NadekoBot.Modules.Searches;
-using NadekoBot.Modules.Sound;
-using NadekoBot.Modules.Translator;
-using NadekoBot.Modules.Trello;
+using MidnightBot.Classes.Help.Commands;
+using MidnightBot.Classes.JSONModels;
+using MidnightBot.Modules.Administration;
+using MidnightBot.Modules.ClashOfClans;
+using MidnightBot.Modules.Conversations;
+using MidnightBot.Modules.CustomReactions;
+using MidnightBot.Modules.Extra;
+using MidnightBot.Modules.Gambling;
+using MidnightBot.Modules.Games;
+using MidnightBot.Modules.Games.Commands;
+using MidnightBot.Modules.Help;
+using MidnightBot.Modules.Meme;
+using MidnightBot.Modules.Music;
+using MidnightBot.Modules.NSFW;
+using MidnightBot.Modules.Permissions;
+using MidnightBot.Modules.Permissions.Classes;
+using MidnightBot.Modules.Pokemon;
+using MidnightBot.Modules.Searches;
+using MidnightBot.Modules.Sound;
+using MidnightBot.Modules.Translator;
+using MidnightBot.Modules.Trello;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -31,9 +31,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NadekoBot
+namespace MidnightBot
 {
-    public class NadekoBot
+    public class MidnightBot
     {
         public static DiscordClient Client { get; private set; }
         public static Credentials Creds { get; set; }
@@ -218,7 +218,7 @@ namespace NadekoBot
                         BotName = Client.CurrentUser.Name;
                         Console.WriteLine ("Derzeit eingeloggt als: " + BotName);
                     }
-                    Console.WriteLine (NadekoBot.Client.CurrentUser.Id);
+                    Console.WriteLine (MidnightBot.Client.CurrentUser.Id);
                 }
                 catch (Exception ex)
                 {
@@ -232,7 +232,7 @@ namespace NadekoBot
                 }
                 await Task.Delay (1000).ConfigureAwait (false);
                 Console.WriteLine ("-----------------");
-                Console.WriteLine (await NadekoStats.Instance.GetStats ().ConfigureAwait (false));
+                Console.WriteLine (await MidnightStats.Instance.GetStats ().ConfigureAwait (false));
                 Console.WriteLine ("-----------------");
 
                 try
@@ -244,7 +244,7 @@ namespace NadekoBot
                     Console.WriteLine ("Privater Channel mit 1. Owner in credentials.json konnte nicht erstellt werden.");
                 }
 
-                //foreach (var ch in NadekoBot.Client.Servers.Select (s => s.DefaultChannel))
+                //foreach (var ch in MidnightBot.Client.Servers.Select (s => s.DefaultChannel))
                 //{
                 //    await ch.SendMessage ("`Hallo. Ich bin wieder da!`");
                 //}
@@ -262,7 +262,7 @@ namespace NadekoBot
 
                 //await Task.Delay(90000);
                 PermissionsHandler.Initialize ();
-                NadekoBot.Ready = true;
+                MidnightBot.Ready = true;
             });
             Console.WriteLine ("Beende...");
             Console.ReadKey ();
@@ -290,7 +290,7 @@ namespace NadekoBot
                 if (ConfigHandler.IsBlackListed (e))
                     return;
 
-                if (!NadekoBot.Config.DontJoinServers && !IsBot)
+                if (!MidnightBot.Config.DontJoinServers && !IsBot)
                 {
                     try
                     {
@@ -308,7 +308,7 @@ namespace NadekoBot
                     }
                 }
 
-                if (Config.ForwardMessages && !NadekoBot.Creds.OwnerIds.Contains (e.User.Id) && OwnerPrivateChannel != null)
+                if (Config.ForwardMessages && !MidnightBot.Creds.OwnerIds.Contains (e.User.Id) && OwnerPrivateChannel != null)
                     await OwnerPrivateChannel.SendMessage (e.User + ": ```\n" + e.Message.Text + "\n```").ConfigureAwait (false);
 
                 if (repliedRecently)

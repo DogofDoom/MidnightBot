@@ -1,7 +1,7 @@
 ﻿using Discord.Commands;
-using NadekoBot.Classes;
-using NadekoBot.Classes.JSONModels;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Classes;
+using MidnightBot.Classes.JSONModels;
+using MidnightBot.Modules.Permissions.Classes;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Timers;
 
 
-namespace NadekoBot.Modules.Searches.Commands
+namespace MidnightBot.Modules.Searches.Commands
 {
     internal class StreamNotifications : DiscordCommand
     {
@@ -49,7 +49,7 @@ namespace NadekoBot.Modules.Searches.Commands
                         if (data.Item1 != stream.LastStatus)
                         {
                             stream.LastStatus = data.Item1;
-                            var server = NadekoBot.Client.GetServer (stream.ServerId);
+                            var server = MidnightBot.Client.GetServer (stream.ServerId);
                             var channel = server?.GetChannel (stream.ChannelId);
                             if (channel == null)
                                 continue;

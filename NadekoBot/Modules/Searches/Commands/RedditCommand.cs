@@ -1,7 +1,7 @@
 ﻿using Discord.Commands;
-using NadekoBot.Classes;
+using MidnightBot.Classes;
 
-namespace NadekoBot.Modules.Searches.Commands
+namespace MidnightBot.Modules.Searches.Commands
 {
     class RedditCommand : DiscordCommand
     {

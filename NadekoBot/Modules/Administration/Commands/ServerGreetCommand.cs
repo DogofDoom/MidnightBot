@@ -1,6 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
-using NadekoBot.Classes;
+using MidnightBot.Classes;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +18,7 @@ public class AsyncLazy<T> : Lazy<Task<T>>
 }
 */
 
-namespace NadekoBot.Modules.Administration.Commands
+namespace MidnightBot.Modules.Administration.Commands
 {
     internal class ServerGreetCommand : DiscordCommand
     {
@@ -31,8 +31,8 @@ namespace NadekoBot.Modules.Administration.Commands
         {
             AnnouncementsDictionary = new ConcurrentDictionary<ulong,AnnounceControls> ();
 
-            NadekoBot.Client.UserJoined += UserJoined;
-            NadekoBot.Client.UserLeft += UserLeft;
+            MidnightBot.Client.UserJoined += UserJoined;
+            MidnightBot.Client.UserLeft += UserLeft;
 
             var data = Classes.DbHandler.Instance.GetAllRows<DataModels.Announcement> ();
 
@@ -51,7 +51,7 @@ namespace NadekoBot.Modules.Administration.Commands
                     return;
 
                 var controls = AnnouncementsDictionary[e.Server.Id];
-                var channel = NadekoBot.Client.GetChannel (controls.ByeChannel);
+                var channel = MidnightBot.Client.GetChannel (controls.ByeChannel);
                 var msg = controls.ByeText.Replace ("%user%","**" + e.User.Name + "**").Trim ();
                 if (string.IsNullOrEmpty (msg))
                     return;
@@ -90,7 +90,7 @@ namespace NadekoBot.Modules.Administration.Commands
                     return;
 
                 var controls = AnnouncementsDictionary[e.Server.Id];
-                var channel = NadekoBot.Client.GetChannel (controls.GreetChannel);
+                var channel = MidnightBot.Client.GetChannel (controls.GreetChannel);
 
                 var msg = controls.GreetText.Replace ("%user%",e.User.Mention).Trim ();
                 if (string.IsNullOrEmpty (msg))

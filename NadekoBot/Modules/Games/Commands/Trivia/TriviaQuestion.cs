@@ -1,10 +1,10 @@
-﻿using NadekoBot.Extensions;
+﻿using MidnightBot.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 // THANKS @ShoMinamimoto for suggestions and coding help
-namespace NadekoBot.Modules.Games.Commands.Trivia
+namespace MidnightBot.Modules.Games.Commands.Trivia
 {
     public class TriviaQuestion
     {

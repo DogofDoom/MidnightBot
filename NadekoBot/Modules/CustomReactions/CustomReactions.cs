@@ -1,12 +1,12 @@
 ﻿using Discord.Commands;
 using Discord.Modules;
-using NadekoBot.Extensions;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Extensions;
+using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NadekoBot.Modules.CustomReactions
+namespace MidnightBot.Modules.CustomReactions
 {
     class CustomReactionsModule : DiscordModule
     {
@@ -21,7 +21,7 @@ namespace NadekoBot.Modules.CustomReactions
             commandFuncs = new Dictionary<string,Func<CommandEventArgs,string>>
                  {
                     {"%rng%", (e) =>  rng.Next().ToString()},
-                    {"%mention%", (e) => NadekoBot.BotMention },
+                    {"%mention%", (e) => MidnightBot.BotMention },
                     {"%user%", e => e.User.Mention },
                     {"%target%", e => e.GetArg("args")?.Trim() ?? "" },
                  };
@@ -34,12 +34,12 @@ namespace NadekoBot.Modules.CustomReactions
             {
 
                 cgb.AddCheck (PermissionChecker.Instance);
-                foreach (var command in NadekoBot.Config.CustomReactions)
+                foreach (var command in MidnightBot.Config.CustomReactions)
                 {
-                    var commandName = command.Key.Replace ("%mention%",NadekoBot.BotMention);
+                    var commandName = command.Key.Replace ("%mention%",MidnightBot.BotMention);
 
                     var c = cgb.CreateCommand (commandName);
-                    if (commandName.Contains (NadekoBot.BotMention))
+                    if (commandName.Contains (MidnightBot.BotMention))
                        c.Alias (commandName.Replace ("<@","<@!"));
                        c.Description ($"Custom Reaction.\n**Benutzung**:{command.Key}")
                         .Parameter ("args",ParameterType.Unparsed)

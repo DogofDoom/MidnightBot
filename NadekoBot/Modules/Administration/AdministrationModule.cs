@@ -1,18 +1,18 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.Modules;
-using NadekoBot.DataModels;
-using NadekoBot.Classes;
-using NadekoBot.Extensions;
-using NadekoBot.Modules.Administration.Commands;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.DataModels;
+using MidnightBot.Classes;
+using MidnightBot.Extensions;
+using MidnightBot.Modules.Administration.Commands;
+using MidnightBot.Modules.Permissions.Classes;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Modules.Administration
+namespace MidnightBot.Modules.Administration
 { 
     internal class AdministrationModule : DiscordModule
     {
@@ -32,7 +32,7 @@ namespace NadekoBot.Modules.Administration
             commands.Add (new AutoAssignRole (this));
         }
 
-        public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.Administration;
+        public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Administration;
 
         public override void Install ( ModuleManager manager )
         {
@@ -600,14 +600,14 @@ namespace NadekoBot.Modules.Administration
                     .Description ("Zeigt ein paar Statisitken über MidnightBot.")
                     .Do (async e =>
                      {
-                         await e.Channel.SendMessage (await NadekoStats.Instance.GetStats ());
+                         await e.Channel.SendMessage (await MidnightStats.Instance.GetStats ());
                      });
 
                 cgb.CreateCommand (Prefix + "dysyd")
                     .Description ("Zeigt ein paar Statisitken über MidnightBot.")
                     .Do (async e =>
                      {
-                         await e.Channel.SendMessage ((await NadekoStats.Instance.GetStats ()).Matrix ().TrimTo (1990)).ConfigureAwait (false);
+                         await e.Channel.SendMessage ((await MidnightStats.Instance.GetStats ()).Matrix ().TrimTo (1990)).ConfigureAwait (false);
                      });
 
                 cgb.CreateCommand (Prefix + "heap")
@@ -615,7 +615,7 @@ namespace NadekoBot.Modules.Administration
                   .AddCheck (SimpleCheckers.OwnerOnly ())
                   .Do (async e =>
                    {
-                       var heap = await Task.Run (() => NadekoStats.Instance.Heap ()).ConfigureAwait (false);
+                       var heap = await Task.Run (() => MidnightStats.Instance.Heap ()).ConfigureAwait (false);
                        await e.Channel.SendMessage ($"`Heap Size:` {heap}").ConfigureAwait (false);
                    });
 
@@ -628,7 +628,7 @@ namespace NadekoBot.Modules.Administration
                      {
                          if(e.Channel.IsPrivate)
                          {
-                             var msgs = (await e.Channel.DownloadMessages (100).ConfigureAwait (false)).Where (m => m.User.Id == NadekoBot.Creds.BotId);
+                             var msgs = (await e.Channel.DownloadMessages (100).ConfigureAwait (false)).Where (m => m.User.Id == MidnightBot.Creds.BotId);
                              foreach (var m in msgs)
                              {
                                  try
@@ -708,7 +708,7 @@ namespace NadekoBot.Modules.Administration
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
                     {
-                        foreach (var ch in NadekoBot.Client.Servers.Select (s => s.DefaultChannel))
+                        foreach (var ch in MidnightBot.Client.Servers.Select (s => s.DefaultChannel))
                         {
                             await ch.SendMessage ("`Fährt herunter.`");
                         }
@@ -726,7 +726,7 @@ namespace NadekoBot.Modules.Administration
                 //    {
                 //        if (e.GetArg("new_nick") == null) return;
 
-                //        await client.CurrentUser.Edit(NadekoBot.Creds.Password, e.GetArg("new_nick")).ConfigureAwait(false);
+                //        await client.CurrentUser.Edit(MidnightBot.Creds.Password, e.GetArg("new_nick")).ConfigureAwait(false);
                 //    });
 
                 cgb.CreateCommand (Prefix + "newname")
@@ -738,7 +738,7 @@ namespace NadekoBot.Modules.Administration
                      {
                          if (e.GetArg("new_name") == null) return;
 
-                         await client.CurrentUser.Edit (NadekoBot.Creds.Password,e.GetArg ("new_name")).ConfigureAwait (false);
+                         await client.CurrentUser.Edit (MidnightBot.Creds.Password,e.GetArg ("new_name")).ConfigureAwait (false);
                      });
 
                 cgb.CreateCommand (Prefix + "newavatar")
@@ -756,7 +756,7 @@ namespace NadekoBot.Modules.Administration
                          var image = System.Drawing.Image.FromStream (imageStream);
                          // Save the image to disk.
                          image.Save ("data/avatar.png",System.Drawing.Imaging.ImageFormat.Png);
-                         await client.CurrentUser.Edit (NadekoBot.Creds.Password,avatar: image.ToStream ()).ConfigureAwait (false);
+                         await client.CurrentUser.Edit (MidnightBot.Creds.Password,avatar: image.ToStream ()).ConfigureAwait (false);
                          // Send confirm.
                          await e.Channel.SendMessage ("Neuer Avatar gesetzt.").ConfigureAwait (false);
                      });
@@ -766,7 +766,7 @@ namespace NadekoBot.Modules.Administration
                   .Parameter ("set_game",ParameterType.Unparsed)
                   .Do (e =>
                    {
-                       if (!NadekoBot.IsOwner (e.User.Id) || e.GetArg ("set_game") == null)
+                       if (!MidnightBot.IsOwner (e.User.Id) || e.GetArg ("set_game") == null)
                            return;
 
                        client.SetGame (e.GetArg ("set_game"));
@@ -935,7 +935,7 @@ namespace NadekoBot.Modules.Administration
                   .AddCheck (SimpleCheckers.OwnerOnly ())
                   .Do (e =>
                    {
-                       NadekoBot.Client.MessageQueue.Clear ();
+                       MidnightBot.Client.MessageQueue.Clear ();
                    });
 
                 cgb.CreateCommand (Prefix + "donators")
@@ -1017,7 +1017,7 @@ namespace NadekoBot.Modules.Administration
                            await e.Channel.SendMessage ("Ungültiger Benutzer.").ConfigureAwait (false);
                            return;
                        }
-                       else if (u.Id == NadekoBot.Client.CurrentUser.Id)
+                       else if (u.Id == MidnightBot.Client.CurrentUser.Id)
                        {
                            await e.Channel.SendMessage ("Ich kann mir selber keine NAchricht schicken.")
                            .ConfigureAwait (false);
@@ -1037,7 +1037,7 @@ namespace NadekoBot.Modules.Administration
                    .AddCheck (SimpleCheckers.OwnerOnly ())
                    .Do (async e =>
                    {
-                       foreach (var ch in NadekoBot.Client.Servers.Select (s => s.DefaultChannel))
+                       foreach (var ch in MidnightBot.Client.Servers.Select (s => s.DefaultChannel))
                        {
                            await ch.SendMessage (e.GetArg ("msg"));
                        }
@@ -1070,7 +1070,7 @@ namespace NadekoBot.Modules.Administration
 
         public User findUser ( string v )
         {
-            foreach (var ch in NadekoBot.Client.Servers.Select (s => s.DefaultChannel))
+            foreach (var ch in MidnightBot.Client.Servers.Select (s => s.DefaultChannel))
             {
                 var u = ch.FindUsers (v).FirstOrDefault ();
                 if (u != null)

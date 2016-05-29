@@ -1,15 +1,15 @@
 ﻿using Discord;
 using Discord.Commands;
-using NadekoBot.Classes;
-using NadekoBot.DataModels;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Classes;
+using MidnightBot.DataModels;
+using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Timers;
 
-namespace NadekoBot.Modules.Administration.Commands
+namespace MidnightBot.Modules.Administration.Commands
 {
     class Remind : DiscordCommand
     {
@@ -51,18 +51,18 @@ namespace NadekoBot.Modules.Administration.Commands
                     Channel ch;
                     if (r.IsPrivate)
                     {
-                        ch = NadekoBot.Client.PrivateChannels.FirstOrDefault (c => (long)c.Id == r.ChannelId);
+                        ch = MidnightBot.Client.PrivateChannels.FirstOrDefault (c => (long)c.Id == r.ChannelId);
                         if (ch == null)
-                            ch = await NadekoBot.Client.CreatePrivateChannel ((ulong)r.ChannelId).ConfigureAwait (false);
+                            ch = await MidnightBot.Client.CreatePrivateChannel ((ulong)r.ChannelId).ConfigureAwait (false);
                     }
                     else
-                        ch = NadekoBot.Client.GetServer ((ulong)r.ServerId)?.GetChannel ((ulong)r.ChannelId);
+                        ch = MidnightBot.Client.GetServer ((ulong)r.ServerId)?.GetChannel ((ulong)r.ChannelId);
 
                     if (ch == null)
                         return;
 
                     await ch.SendMessage (
-                                            replacements.Aggregate (NadekoBot.Config.RemindMessageFormat,
+                                            replacements.Aggregate (MidnightBot.Config.RemindMessageFormat,
                                             ( cur,replace ) => cur.Replace (replace.Key,replace.Value (r)))
                                                 ).ConfigureAwait (false); //it works trust me          
                 }
@@ -189,7 +189,7 @@ namespace NadekoBot.Modules.Administration.Commands
                     if (string.IsNullOrWhiteSpace (arg))
                         return;
 
-                    NadekoBot.Config.RemindMessageFormat = arg;
+                    MidnightBot.Config.RemindMessageFormat = arg;
                     await e.Channel.SendMessage ("`New remind message set.`");
                 });
         }

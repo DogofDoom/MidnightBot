@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 
-namespace NadekoBot.Classes.JSONModels
+namespace MidnightBot.Classes.JSONModels
 {
     public class Configuration
     {
@@ -151,7 +151,7 @@ namespace NadekoBot.Classes.JSONModels
         {
             lock (configLock)
             {
-                File.WriteAllText("data/config.json", JsonConvert.SerializeObject(NadekoBot.Config, Formatting.Indented));
+                File.WriteAllText("data/config.json", JsonConvert.SerializeObject(MidnightBot.Config, Formatting.Indented));
             }
         }
 
@@ -159,11 +159,11 @@ namespace NadekoBot.Classes.JSONModels
                                                                       (!evArgs.Channel.IsPrivate &&
                                                                        (IsChannelBlacklisted(evArgs.Channel.Id) || IsServerBlacklisted(evArgs.Server.Id)));
 
-        public static bool IsServerBlacklisted(ulong id) => NadekoBot.Config.ServerBlacklist.Contains(id);
+        public static bool IsServerBlacklisted(ulong id) => MidnightBot.Config.ServerBlacklist.Contains(id);
 
-        public static bool IsChannelBlacklisted(ulong id) => NadekoBot.Config.ChannelBlacklist.Contains(id);
+        public static bool IsChannelBlacklisted(ulong id) => MidnightBot.Config.ChannelBlacklist.Contains(id);
 
-        public static bool IsUserBlacklisted(ulong id) => NadekoBot.Config.UserBlacklist.Contains(id);
+        public static bool IsUserBlacklisted(ulong id) => MidnightBot.Config.UserBlacklist.Contains(id);
     }
 
     public class Quote

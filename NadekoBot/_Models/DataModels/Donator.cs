@@ -1,4 +1,4 @@
-﻿namespace NadekoBot.DataModels
+﻿namespace MidnightBot.DataModels
 {
     internal class Donator : IDataModel
     {

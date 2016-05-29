@@ -1,23 +1,23 @@
 ﻿using Discord;
 using Discord.Commands;
-using NadekoBot.Classes;
-using NadekoBot.Modules.Permissions.Classes;
+using MidnightBot.Classes;
+using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NadekoBot.Modules.Administration.Commands
+namespace MidnightBot.Modules.Administration.Commands
 {
     class CrossServerTextChannel : DiscordCommand
     {
         public CrossServerTextChannel(DiscordModule module) : base(module)
         {
-            NadekoBot.Client.MessageReceived += async (s, e) =>
+            MidnightBot.Client.MessageReceived += async (s, e) =>
             {
                 try
                 {
-                    if (e.User.Id == NadekoBot.Client.CurrentUser.Id) return;
+                    if (e.User.Id == MidnightBot.Client.CurrentUser.Id) return;
                     foreach (var subscriber in Subscribers)
                     {
                         var set = subscriber.Value;
@@ -31,11 +31,11 @@ namespace NadekoBot.Modules.Administration.Commands
                 }
                 catch { }
             };
-            NadekoBot.Client.MessageUpdated += async (s, e) => 
+            MidnightBot.Client.MessageUpdated += async (s, e) => 
             {
                 try
                 {
-                    if (e.After?.User?.Id == null || e.After.User.Id == NadekoBot.Client.CurrentUser.Id) return;
+                    if (e.After?.User?.Id == null || e.After.User.Id == MidnightBot.Client.CurrentUser.Id) return;
                     foreach (var subscriber in Subscribers)
                     {
                         var set = subscriber.Value;

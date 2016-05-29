@@ -1,11 +1,11 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.Modules;
-using NadekoBot.Classes.Conversations.Commands;
-using NadekoBot.Extensions;
-using NadekoBot.DataModels;
-using NadekoBot.Modules.Permissions.Classes;
-using NadekoBot.Properties;
+using MidnightBot.Classes.Conversations.Commands;
+using MidnightBot.Extensions;
+using MidnightBot.DataModels;
+using MidnightBot.Modules.Permissions.Classes;
+using MidnightBot.Properties;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -14,7 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NadekoBot.Modules.Conversations
+namespace MidnightBot.Modules.Conversations
 {
     internal class Conversations : DiscordModule
     {
@@ -25,9 +25,9 @@ namespace NadekoBot.Modules.Conversations
             commands.Add (new CopyCommand (this));
             commands.Add (new RequestsCommand (this));
         }
-        public string BotName { get; set; } = NadekoBot.BotName;
+        public string BotName { get; set; } = MidnightBot.BotName;
 
-        public override string Prefix { get; } = String.Format (NadekoBot.Config.CommandPrefixes.Conversations,NadekoBot.Creds.BotId);
+        public override string Prefix { get; } = String.Format (MidnightBot.Config.CommandPrefixes.Conversations,MidnightBot.Creds.BotId);
 
         public override void Install ( ModuleManager manager )
         {
@@ -89,7 +89,7 @@ namespace NadekoBot.Modules.Conversations
                             return;
                         await Task.Run (() =>
                         {
-                            if (NadekoBot.IsOwner (e.User.Id))
+                            if (MidnightBot.IsOwner (e.User.Id))
                                 Classes.DbHandler.Instance.DeleteWhere<UserQuote> (uq => uq.Keyword == text);
                             else
                                 Classes.DbHandler.Instance.DeleteWhere<UserQuote> (uq => uq.Keyword == text && uq.UserName == e.User.Name || uq.Keyword == e.User.Name.ToLowerInvariant());
@@ -136,7 +136,7 @@ namespace NadekoBot.Modules.Conversations
                     });
             });
 
-            manager.CreateCommands (NadekoBot.BotMention,cgb =>
+            manager.CreateCommands (MidnightBot.BotMention,cgb =>
             {
                 var client = manager.Client;
 
@@ -157,7 +157,7 @@ namespace NadekoBot.Modules.Conversations
                     .Description ("Funktioniert nur für den Owner. Fährt den Bot herunter.")
                     .Do (async e =>
                     {
-                        if (NadekoBot.IsOwner (e.User.Id))
+                        if (MidnightBot.IsOwner (e.User.Id))
                         {
                             await e.Channel.SendMessage (e.User.Mention + ", Alles klar Chef.").ConfigureAwait (false);
                             await Task.Delay (5000).ConfigureAwait (false);
@@ -175,7 +175,7 @@ namespace NadekoBot.Modules.Conversations
                     .Description ("Antwortet nur dem Owner positiv.")
                     .Do (async e =>
                     {
-                        if (NadekoBot.IsOwner (e.User.Id))
+                        if (MidnightBot.IsOwner (e.User.Id))
                             await e.Channel.SendMessage (e.User.Mention + ", Aber natürlich tue ich das. <3").ConfigureAwait (false);
                         else
                             await e.Channel.SendMessage (e.User.Mention + ", Sei doch nicht dumm. :P").ConfigureAwait (false);
@@ -186,12 +186,12 @@ namespace NadekoBot.Modules.Conversations
                     .Description ("Antwortet nur positiv, wenn der Owner online ist.")
                     .Do (async e =>
                     {
-                        if (NadekoBot.IsOwner (e.User.Id))
+                        if (MidnightBot.IsOwner (e.User.Id))
                         {
                             await e.Channel.SendMessage (e.User.Mention + " Mir geht es gut, solange du da bist.").ConfigureAwait (false);
                             return;
                         }
-                        var kw = e.Server.GetUser (NadekoBot.Creds.OwnerIds[0]);
+                        var kw = e.Server.GetUser (MidnightBot.Creds.OwnerIds[0]);
                         if (kw != null && kw.Status == UserStatus.Online)
                         {
                             await e.Channel.SendMessage (e.User.Mention + " Mir geht es gut, solange " + kw.Mention + " hier mit mir ist.").ConfigureAwait (false);
@@ -214,7 +214,7 @@ namespace NadekoBot.Modules.Conversations
                             return;
                         }
 
-                        if (NadekoBot.IsOwner (u.Id))
+                        if (MidnightBot.IsOwner (u.Id))
                         {
                             await e.Channel.SendMessage ("Ich würde nie meinen Meister beleidigen. <3").ConfigureAwait (false);
                             return;
@@ -225,7 +225,7 @@ namespace NadekoBot.Modules.Conversations
                             .ConfigureAwait (false);
                             return;
                         }
-                        else if (u.Id == NadekoBot.Client.CurrentUser.Id)
+                        else if (u.Id == MidnightBot.Client.CurrentUser.Id)
                         {
                             await e.Channel.SendMessage (e.User.Mention + " Denkst du wirklich ich beleidige mich selbst, du Schwachkopf. :P")
                             .ConfigureAwait (false);
@@ -235,7 +235,7 @@ namespace NadekoBot.Modules.Conversations
                         {
 
                             tester = 0;
-                            //var msgs = (await e.Channel.DownloadMessages (100)).Where (m => m.User.Id == NadekoBot.client.CurrentUser.Id);
+                            //var msgs = (await e.Channel.DownloadMessages (100)).Where (m => m.User.Id == MidnightBot.client.CurrentUser.Id);
                             foreach (var m in (await e.Channel.DownloadMessages (10)).Where (m => m.User.Id == e.User.Id))
                             {
                                 if (tester == 0)
@@ -244,7 +244,7 @@ namespace NadekoBot.Modules.Conversations
                                     tester++;
                                 }
                             }
-                            await e.Channel.SendMessage (u.Mention + NadekoBot.Locale.Insults[rng.Next (0,NadekoBot.Locale.Insults.Length)])
+                            await e.Channel.SendMessage (u.Mention + MidnightBot.Locale.Insults[rng.Next (0,MidnightBot.Locale.Insults.Length)])
                             .ConfigureAwait (false);
                         }
 
@@ -263,7 +263,7 @@ namespace NadekoBot.Modules.Conversations
                             return;
                         }
 
-                        if (NadekoBot.IsOwner (u.Id))
+                        if (MidnightBot.IsOwner (u.Id))
                         {
                             await e.Channel.SendMessage (e.User.Mention + " Ich brauche deine Erlaubnis nicht, um meinen Meister zu loben <3")
                             .ConfigureAwait (false);
@@ -276,7 +276,7 @@ namespace NadekoBot.Modules.Conversations
                             return;
                         }
                         else
-                            await e.Channel.SendMessage (u.Mention + NadekoBot.Locale.Praises[rng.Next (0,NadekoBot.Locale.Praises.Length)])
+                            await e.Channel.SendMessage (u.Mention + MidnightBot.Locale.Praises[rng.Next (0,MidnightBot.Locale.Praises.Length)])
                             .ConfigureAwait (false);
                     });
 
@@ -321,7 +321,7 @@ namespace NadekoBot.Modules.Conversations
                                 .ConfigureAwait (false);
                     });
 
-                if (!NadekoBot.Config.DontJoinServers)
+                if (!MidnightBot.Config.DontJoinServers)
                 {
                     cgb.CreateCommand ("j")
                         .Description ("Joint einem Server mit einem Code.")
@@ -372,7 +372,7 @@ namespace NadekoBot.Modules.Conversations
                             }
                         }
                         tester = 0;
-                        //var msgs = (await e.Channel.DownloadMessages (100)).Where (m => m.User.Id == NadekoBot.client.CurrentUser.Id);
+                        //var msgs = (await e.Channel.DownloadMessages (100)).Where (m => m.User.Id == MidnightBot.client.CurrentUser.Id);
                         foreach (var m in (await e.Channel.DownloadMessages (10)).Where (m => m.User.Id == e.User.Id))
                         {
                             if (tester == 0)
@@ -394,7 +394,7 @@ namespace NadekoBot.Modules.Conversations
                     {
                         using (var ms = Resources.hidden.ToStream (ImageFormat.Png))
                         {
-                            await client.CurrentUser.Edit (NadekoBot.Creds.Password,avatar: ms);
+                            await client.CurrentUser.Edit (MidnightBot.Creds.Password,avatar: ms);
                         }
                         await e.Channel.SendMessage ("*versteckt sich*").ConfigureAwait (false);
                     });
@@ -405,7 +405,7 @@ namespace NadekoBot.Modules.Conversations
                     {
                         using (var fs = new FileStream ("data/avatar.png",FileMode.Open))
                         {
-                            await client.CurrentUser.Edit (NadekoBot.Creds.Password,avatar: fs);
+                            await client.CurrentUser.Edit (MidnightBot.Creds.Password,avatar: fs);
                         }
                         await e.Channel.SendMessage ("*kommt aus seinem Versteck*").ConfigureAwait (false);
                     });
@@ -414,7 +414,7 @@ namespace NadekoBot.Modules.Conversations
                     .Description ("Dumped alle Einladungen die er findet in dump.txt.** Owner Only.**")
                     .Do (async e =>
                     {
-                        if (!NadekoBot.IsOwner (e.User.Id))
+                        if (!MidnightBot.IsOwner (e.User.Id))
                             return;
                         var i = 0;
                         var j = 0;
