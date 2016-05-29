@@ -147,7 +147,8 @@ namespace MidnightBot
              {
                  var songs = MusicModule.MusicPlayers.Count (mp => mp.Value.CurrentSong != null);
                  var sb = new System.Text.StringBuilder ();
-                 sb.AppendLine ("`Autor: Kwoth` `Library: Discord.Net`");
+                 sb.AppendLine ("`Autor: Midnight Myth` `Library: Discord.Net`");
+                 sb.AppendLine ("`Basierend auf NadekoBot von Kwoth`");
                  sb.AppendLine ($"`Bot Version: {BotVersion}`");
                  sb.AppendLine ($"`Bot Id: {MidnightBot.Client.CurrentUser.Id}`");
                  sb.Append ("`Owners' Ids:` ");

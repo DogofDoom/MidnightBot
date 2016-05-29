@@ -152,6 +152,9 @@
     <Compile Include="Modules\Meme\MemeModule.cs" />
     <Compile Include="Modules\Osu\OsuApi.cs" />
     <Compile Include="Modules\Osu\User.cs" />
+    <Compile Include="Modules\Pokemon\PokemonAttack.cs" />
+    <Compile Include="Modules\Pokemon\PokemonMain.cs" />
+    <Compile Include="Modules\Pokemon\TrainerStats.cs" />
     <Compile Include="Modules\Programming\Commands\HaskellRepl.cs" />
     <Compile Include="Modules\Programming\ProgrammingModule.cs" />
     <Compile Include="Modules\Searches\Commands\IMDB\ImdbMovie.cs" />
@@ -163,11 +166,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="_Models\DataModels\PokemonSprite.cs" />
     <Compile Include="_Models\JSONModels\AnimeResult.cs" />
     <Compile Include="_Models\JSONModels\Configuration.cs" />
     <Compile Include="_Models\JSONModels\LocalizedStrings.cs" />
     <Compile Include="_Models\JSONModels\MagicItem.cs" />
     <Compile Include="_Models\JSONModels\MangaResult.cs" />
+    <Compile Include="_Models\JSONModels\PokemonSpecies.cs" />
     <Compile Include="_Models\JSONModels\PokemonType.cs" />
     <Compile Include="_Models\JSONModels\_JSONModels.cs" />
     <Compile Include="Modules\Games\Commands\Leet.cs" />

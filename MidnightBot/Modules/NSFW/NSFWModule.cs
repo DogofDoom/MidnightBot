@@ -22,7 +22,7 @@ namespace MidnightBot.Modules.NSFW
                 cgb.AddCheck (PermissionChecker.Instance);
 
                 cgb.CreateCommand (Prefix + "hentai")
-                    .Description ("Zeigt ein zufälliges NSFW Hentai Bild von gelbooru und danbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags)\n**Benutzung**: ~hentai yuri+kissing")
+                    .Description ($"Zeigt ein zufälliges NSFW Hentai Bild von gelbooru und danbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags)\n**Benutzung**: {Prefix}hentai yuri+kissing")
                     .Parameter ("tag",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -45,7 +45,7 @@ namespace MidnightBot.Modules.NSFW
 
                 cgb.CreateCommand(Prefix + "atfbooru")
                     .Alias (Prefix + "atf")
-                    .Description("Shows a random hentai image from atfbooru with a given tag. Tag is optional but preffered. (multiple tags are appended with +)\n**Usage**: ~danbooru yuri+kissing")
+                    .Description($"Shows a random hentai image from atfbooru with a given tag. Tag is optional but preffered. (multiple tags are appended with +)\n**Usage**: {Prefix}atf yuri+kissing")
                     .Parameter("tag", ParameterType.Unparsed)
                     .Do(async e =>
                     {
@@ -58,7 +58,7 @@ namespace MidnightBot.Modules.NSFW
                     });
 
                 cgb.CreateCommand (Prefix + "danbooru")
-                    .Description ("Zeigt ein zufälliges Hentai Bild von danbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags)\n**Benutzung**: ~danbooru yuri+kissing")
+                    .Description ($"Zeigt ein zufälliges Hentai Bild von danbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags)\n**Benutzung**: {Prefix}danbooru yuri+kissing")
                     .Parameter ("tag",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -70,7 +70,7 @@ namespace MidnightBot.Modules.NSFW
                             await e.Channel.SendMessage (link).ConfigureAwait (false);
                     });
                 cgb.CreateCommand (Prefix + "gelbooru")
-                    .Description ("Zeigt ein zufälliges Hentai Bild von gelbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags)\n**Benutzung**: ~gelbooru yuri+kissing")
+                    .Description ($"Zeigt ein zufälliges Hentai Bild von gelbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags)\n**Benutzung**: {Prefix}gelbooru yuri+kissing")
                     .Parameter ("tag",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -82,7 +82,7 @@ namespace MidnightBot.Modules.NSFW
                             await e.Channel.SendMessage (link).ConfigureAwait (false);
                     });
                 cgb.CreateCommand (Prefix + "rule34")
-                    .Description ("Zeigt ein zufälliges Hentai Bild von rule34.xx  mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze + für mehrere Tags.\n**Benutzung**: ~rule34 yuri+kissing")
+                    .Description ($"Zeigt ein zufälliges Hentai Bild von rule34.xx  mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze + für mehrere Tags.\n**Benutzung**: {Prefix}rule34 yuri+kissing")
                     .Parameter ("tag",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -94,7 +94,7 @@ namespace MidnightBot.Modules.NSFW
                             await e.Channel.SendMessage (link).ConfigureAwait (false);
                     });
                 cgb.CreateCommand (Prefix + "e621")
-                    .Description ("Zeigt ein zufälliges Hentai Bild von e621.net mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze Leerzeichen für mehrere Tags.\n**Benutzung**: ~e621 yuri+kissing")
+                    .Description ($"Zeigt ein zufälliges Hentai Bild von e621.net mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze Leerzeichen für mehrere Tags.\n**Benutzung**: {Prefix}e621 yuri+kissing")
                     .Parameter ("tag",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -102,7 +102,7 @@ namespace MidnightBot.Modules.NSFW
                         await e.Channel.SendMessage (await SearchHelper.GetE621ImageLink (tag).ConfigureAwait (false)).ConfigureAwait (false);
                     });
                 cgb.CreateCommand (Prefix + "derpi")
-                    .Description ("Zeigt ein zufälliges Hentai Bild von derpiboo.ru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze + für mehrere Tags.\n**Benutzung**: ~derpi yuri+kissing")
+                    .Description ($"Zeigt ein zufälliges Hentai Bild von derpiboo.ru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze + für mehrere Tags.\n**Benutzung**: {Prefix}derpi yuri+kissing")
                     .Parameter ("tag",ParameterType.Unparsed)
                     .Do (async e =>
                     {

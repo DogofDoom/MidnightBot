@@ -73,7 +73,7 @@ namespace MidnightBot.Modules.Administration
                     .Description ("Setzt die Rolle für einen gegebenen Benutzer.\n**Benutzung**: .sr @User Gast")
                     .Parameter ("user_name",ParameterType.Required)
                     .Parameter ("role_name",ParameterType.Unparsed)
-                    .AddCheck (SimpleCheckers.CanManageRoles)
+                    //.AddCheck (SimpleCheckers.CanManageRoles)
                     .Do (async e =>
                      {
                          var userName = e.GetArg ("user_name");
@@ -82,9 +82,10 @@ namespace MidnightBot.Modules.Administration
                          if (string.IsNullOrWhiteSpace (roleName))
                              return;
 
-                         if (!e.User.ServerPermissions.ManageRoles)
+                         if (!e.User.ServerPermissions.ManageRoles && !MidnightBot.IsOwner (e.User.Id))
                          {
                              await e.Channel.SendMessage ("Du hast zu wenig Rechte.").ConfigureAwait (false);
+                             return;
                          }
 
                          var usr = e.Server.FindUsers (userName).FirstOrDefault ();

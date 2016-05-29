@@ -65,22 +65,22 @@ namespace MidnightBot.Modules.Searches
 
 
                 cgb.CreateCommand (Prefix + "yt")
-     .Parameter ("query",ParameterType.Unparsed)
-     .Description ("Durchsucht Youtube und zeigt das erste Ergebnis.")
-     .Do (async e =>
-      {
-          if (!(await SearchHelper.ValidateQuery (e.Channel,e.GetArg ("query"))))
-              return;
+                   .Parameter ("query",ParameterType.Unparsed)
+                   .Description ("Durchsucht Youtube und zeigt das erste Ergebnis.")
+                   .Do (async e =>
+                   {
+                       if (!(await SearchHelper.ValidateQuery (e.Channel,e.GetArg ("query"))))
+                           return;
 
-          var link = await SearchHelper.FindYoutubeUrlByKeywords (e.GetArg ("query")).ConfigureAwait (false);
-          if (string.IsNullOrWhiteSpace (link))
-          {
-              await e.Channel.SendMessage ("Kein Ergebnis mit diesem Begriff gefunden.");
-              return;
-          }
-          var shortUrl = await SearchHelper.ShortenUrl (link).ConfigureAwait (false);
-          await e.Channel.SendMessage (shortUrl).ConfigureAwait (false);
-      });
+                       var link = await SearchHelper.FindYoutubeUrlByKeywords (e.GetArg ("query")).ConfigureAwait (false);
+                       if (string.IsNullOrWhiteSpace (link))
+                       {
+                           await e.Channel.SendMessage ("Kein Ergebnis mit diesem Begriff gefunden.");
+                           return;
+                       }
+                       var shortUrl = await SearchHelper.ShortenUrl (link).ConfigureAwait (false);
+                       await e.Channel.SendMessage (shortUrl).ConfigureAwait (false);
+                   });
 
                 cgb.CreateCommand (Prefix + "ani")
                     .Alias (Prefix + "anime",Prefix + "aq")
@@ -199,10 +199,11 @@ namespace MidnightBot.Modules.Searches
                                 return;
                             try
                             {
-                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString (e.GetArg ("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={ rng.Next (1,150) }&fields=items%2Flink&key={MidnightBot.GetRndGoogleAPIKey ()}";
+                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString (e.GetArg ("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=50&searchType=image&start={ rng.Next (1,50) }&fields=items%2Flink&key={MidnightBot.GetRndGoogleAPIKey ()}";
                                 var obj = JObject.Parse (await SearchHelper.GetResponseStringAsync (reqString).ConfigureAwait (false));
 
-                                await e.Channel.SendMessage (obj["items"][0]["link"].ToString ()).ConfigureAwait (false);
+                                var items = obj["items"] as JArray;
+                                await e.Channel.SendMessage (items[rng.Next (0,items.Count)]["link"].ToString ()).ConfigureAwait (false);
                             }
                             catch (HttpRequestException exception)
                             {

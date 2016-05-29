@@ -56,7 +56,7 @@ namespace MidnightBot.Modules.Gambling
                     {
                         var usr = e.Message.MentionedUsers.FirstOrDefault () ?? e.User;
                         var pts = GetUserFlowers (usr.Id);
-                        var str = $"{usr.Name} hat {pts} {MidnightBot.Config.CurrencySign}";
+                        var str = $"{usr.Name} hat {pts} {MidnightBot.Config.CurrencyName} {MidnightBot.Config.CurrencySign}";
                         await e.Channel.SendMessage (str).ConfigureAwait (false);
                     });
 
