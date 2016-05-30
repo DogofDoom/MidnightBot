@@ -40,9 +40,8 @@ namespace MidnightBot.Classes.Help.Commands
                     helpstr = curstr.Substring (curstr.LastIndexOf ("\n") + 1) + helpstr.Substring (2000);
                     await Task.Delay (200).ConfigureAwait (false);
                 }
-                curstr = helpstr.Substring (0,2000);
+                curstr = helpstr;
                 await e.User.SendMessage (curstr.Substring (0,curstr.LastIndexOf ("\n") + 1)).ConfigureAwait (false);
-                helpstr = curstr.Substring (curstr.LastIndexOf ("\n") + 1) + helpstr.Substring (2000);
                 return;
             }
             else
@@ -75,9 +74,8 @@ namespace MidnightBot.Classes.Help.Commands
                     helpstr = curstr.Substring (curstr.LastIndexOf ("\n") + 1) + helpstr.Substring (2000);
                     await Task.Delay (200).ConfigureAwait (false);
                 }
-                curstr = helpstr.Substring (0,2000);
+                curstr = helpstr;
                 await e.User.SendMessage (curstr.Substring (0,curstr.LastIndexOf ("\n") + 1)).ConfigureAwait (false);
-                helpstr = curstr.Substring (curstr.LastIndexOf ("\n") + 1) + helpstr.Substring (2000);
             }
             };
 
