@@ -2,7 +2,7 @@
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
 #MidnightBot List Of Commands  
-Version: `MidnightBot v0.9.5984.38537`
+Version: `MidnightBot v0.9.5994.28833`
 ### Administration  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
@@ -17,12 +17,14 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.logserver`  |  Toggles logging in this channel. Logs every message sent/deleted/edited on the server. **Owner Only!**
 `.userpresence`  |  Starts logging to this channel when someone from the server goes online/offline/idle. **Owner Only!**
 `.voicepresence`  |  Toggles logging to this channel whenever someone joins or leaves a voice channel you are in right now. **Owner Only!**
+`.repeatinvoke`, `.repinv`  |  Zeigt die Repeat Nachricht sofort an und startet den Timer neu.
 `.repeat`  |  Wiederholt eine Nachricht alle X Minuten. Falls nicht spezifiziert, Wiederholung ist deaktiviert. Benötigt 'manage messages'. | `.repeat 5 Hello there`
 `.rotateplaying`, `.ropl`  |  Toggles rotation of playing status of the dynamic strings you specified earlier.
 `.addplaying`, `.adpl`  |  Adds a specified string to the list of playing strings to rotate. Supported placeholders: %servers%, %users%, %playing%, %queued%, %trivia%
 `.listplaying`, `.lipl`  |  Lists all playing statuses with their corresponding number.
 `.removeplaying`, `.repl`, `.rmpl`  |  Removes a playing string on a given number.
 `.slowmode`  |  Schaltet Slow Mode um. Wenn AN, Benutzer können nur alle 5 Sekunden eine Nachricht schicken.
+`.cleanv+t`  |  Löscht alle Text-Channel die auf `-voice` enden für die keine Voicechannels gefunden werden. **Benutzung auf eigene Gefahr.**
 `.v+t`, `.voice+text`  |  Erstellt einen Text-Channel für jeden Voice-Channel, welchen nur User im dazugehörigen Voice-Channel sehen können.Als Server-Owner sieht du alle Channel, zu jeder Zeit.
 `.scsc`  |  Startet eine Instanz eines Cross Server Channels. Du bekommst einen Tokenden andere Benutzer benutzen müssen, um auf die selbe Instanz zu kommen.
 `.jcsc`  |  Joint derzeitigen Channel einer Instanz des Cross Server Channel durch Benutzung des Tokens.
@@ -30,7 +32,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.asar`  |  Adds a role, or list of roles separated by whitespace(use quotations for multiword roles) to the list of self-assignable roles.
 **Usage**: .asar Gamer
 `.rsar`  |  Removes a specified role from the list of self-assignable roles.
-`.lsar`  |  Lits all self-assignable roles.
+`.lsar`  |  Lists all self-assignable roles.
 `.iam`  |  Adds a role to you that you choose. Role must be on a list of self-assignable roles.
 **Usage**: .iam Gamer
 `.iamn`, `.iamnot`  |  Removes a role to you that you choose. Role must be on a list of self-assignable roles.
@@ -83,13 +85,13 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.send`  |  Sende eine Nachricht an einen User auf einem anderen Server über den Bot..**Owner Only!****
   |  .send Message text multi word!
 `.menrole`, `.mentionrole`  |  Erwähnt jeden User mit einer bestimmten Rolle oder bestimmten Rollen (Getrennt mit einem ',') auf diesem Server. 'Mention everyone' Berechtigung erforderlich.
+`.inrole`  |  Listet alle Benutzer von einer angegebenen Rolle, oder Rollen (getrennt mit einem ',') auf diesem Server.
 `.parsetosql`  |  Lädt exportierte Parsedata von /data/parsedata/ in Sqlite Datenbank.
 `.unstuck`  |  Löscht die Nachrichten-Liste. **Owner Only!**
 `.donators`  |  Liste von Leuten die dieses Projekt unterstützen.
-`.clear`  |  Entfernt eine Anzahl Nachrichten eines bestimmten Users aus dem Chat. **Owner Only!**
-  |  .clear 5 @User
 `.adddon`, `.donadd`  |  Fügt einen Donator zur Datenbank hinzu.
 `.videocall`  |  Erstellt privaten appear.in Video Anruf Link für dich und eine erwähnte Person und sendet sie per privater Nachricht.
+`.sendmsg`  |  Sendet eine Private Nachricht an einen User vom Bot aus.**Owner Only** |  .sendmsg @Username Nachricht
 `.announce`  |  Sends a message to all servers' general channel bot is connected to.**Owner Only!** |  .announce Useless spam
 `.whoplays`  |  Zeigt eine Liste von Benutzern die ein gewähltes Spiel spielen.
 
@@ -98,6 +100,8 @@ Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
 `-h`, `-help`, `@BotName help`, `@BotName h`, `~h`  |  Hilfe-Befehl.
 **Usage**: '-h !m q' or just '-h' 
+`-hh`  |  Hilfe-Befehl.
+**Usage**: '-hh !m q' or just '-h' 
 `-hgit`  |  OWNER ONLY commandlist.md Datei erstellung. **Owner Only!**
 `-readme`, `-guide`  |  Sendet eine readme und ein Guide verlinkt zum Channel.
 `-donate`, `~donate`  |  Informationen um das Projekt zu unterstützen!
@@ -148,26 +152,28 @@ Befehl und Alternativen | Beschreibung | Benutzung
 ### Conversations  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
-`..`  |  Fügt ein neues Zitat für sich selber hinzu. |  .. My message
-`..a`  |  Fügt ein neues Zitat mit Namen(ein Wort) und Nachricht (kein Limit).**Owner Only** |  ..a abc My message
+`..`  |  Fügt ein neues Zitat mit Keyword (einzelnes Wort) und Nachricht (kein Limit). |  .. abc My message
 `...`  |  Zeigt ein zufälliges Zitat eines Benutzers. |  .. abc
-`@BotName copyme`, `@BotName cm`  |  MidnightBot macht alles nach, was du schreibst. Deaktivieren mit cs
-`@BotName cs`, `@BotName copystop`  |  MidnightBot kopiert dich nicht mehr.
-`@BotName req`, `@BotName request`  |  Fordere ein Feature für Midnight-Bot. |  @MidnightBot req new_feature
+`..qdel`, `..quotedelete`  |  Löscht alle Zitate mit angegebenen Keyword. Du musst entweder der Bot-Besitzer oder der Ersteller des Quotes sein um es zu löschen. |  `..qdel abc`
+`..qdelothers`, `..quotedeleteothers`  |  Löscht alle Zitate mit eigenem Namen als Keyword, welche von anderen geaddet wurden.  |  `..qdelothers`
+`..qshow`  |  Zeigt alle Zitate mit angegebenen Keyword. |  `..qshow abc`
+`@BotName copyme`, `@BotName cm`  |   macht alles nach, was du schreibst. Deaktivieren mit cs
+`@BotName cs`, `@BotName copystop`  |   kopiert dich nicht mehr.
+`@BotName req`, `@BotName request`  |  Fordere ein Feature für . |  @ req new_feature
 `@BotName lr`  |  Alle Anfragen werden dem User per PN geschickt.
 `@BotName dr`  |  Löscht eine Forderung. **Owner Only!**
 `@BotName rr`  |  Erledigt eine Forderung. **Owner Only!**
-`@BotName uptime`  |  Zeigt wie lange Midnight-Bot schon läuft.
+`@BotName uptime`  |  Zeigt wie lange  schon läuft.
 `@BotName die`  |  Funktioniert nur für den Owner. Fährt den Bot herunter.
 `@BotName do you love me`, `@BotName do you love me?`  |  Antwortet nur dem Owner positiv.
 `@BotName how are you`, `@BotName how are you?`  |  Antwortet nur positiv, wenn der Owner online ist.
-`@BotName insult`  |  Beleidigt @X Person. |  @MidnightBot insult @X.
-`@BotName praise`  |  Lobt @X Person. |  @MidnightBot praise @X.
-`@BotName fire`  |  Zeigt eine unicode Feuer Nachricht. Optionaler Parameter [x] sagt ihm wie oft er das Feuer wiederholen soll. |  @MidnightBot fire [x]
-`@BotName rip`  |  Zeigt ein Grab von jemanden mit einem Startjahr |  @MidnightBot rip @Someone 2000
+`@BotName insult`  |  Beleidigt @X Person. |  @ insult @X.
+`@BotName praise`  |  Lobt @X Person. |  @ praise @X.
+`@BotName fire`  |  Zeigt eine unicode Feuer Nachricht. Optionaler Parameter [x] sagt ihm wie oft er das Feuer wiederholen soll. |  @ fire [x]
+`@BotName rip`  |  Zeigt ein Grab von jemanden mit einem Startjahr |  @ rip @Someone 2000
 `@BotName slm`  |  Zeigt die Nachricht in der du in diesem Channel zuletzt erwähnt wurdest (checked die letzten 10k Nachrichten)
-`@BotName hide`  |  Versteckt MidnightBot!11!!
-`@BotName unhide`  |  MidnightBot kommt aus seinem Versteck!1!!1
+`@BotName hide`  |  Versteckt !11!!
+`@BotName unhide`  |   kommt aus seinem Versteck!1!!1
 `@BotName dump`  |  Dumped alle Einladungen die er findet in dump.txt.** Owner Only.**
 `@BotName ab`  |  Versuche 'abalabahaha' zu bekommen
 `@BotName av`, `@BotName avatar`  |  Zeigt den Avatar einer erwähnten Person.
@@ -205,8 +211,8 @@ Befehl und Alternativen | Beschreibung | Benutzung
 **Benutzung:** >leet 3 Hallo
 `>choose`  |  Sucht eine Sache aus einer Liste von Sachen aus. |  >choose Get up;Sleep;Sleep more
 `>helix`  |  Stell dem allmächtigen Helix Fossil eine Ja/Nein Frage.
-`>rps`  |  Play a game of rocket paperclip scissors with nadkeo. |  >rps scissors
-`>linux`  |  Prints a customizable Linux interjection
+`>rps`  |  Spiel eine Runde Stein, Schere, Papier mit . |  >rps scissors
+`>linux`  |  Prints a customizable Linux interjection. |  `{Prefix}linux Spyware Windows`
 
 ### Music  
 Befehl und Alternativen | Beschreibung | Benutzung
@@ -254,6 +260,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `~convert`  |  Konvertiert Einheiten von>zu. Beispiel: `~convert m>km 1000`
 `~convertlist`  |  Liste der kovertierbaren Dimensionen und Währungen.
 `~wowjoke`  |  Get one of Kwoth's penultimate WoW jokes.
+`~evaluate`, `~eval`  |  Berechnet eine mathematische Angabe
 `~we`  |  Zeigt Wetter-Daten für eine genannte Stadt und ein Land. BEIDES IST BENÖTIGT. Wetter Api ist sehr zufällig, wenn du einen Fehler machst. |  ~we Moskau RF
 `~yt`  |  Durchsucht Youtube und zeigt das erste Ergebnis.
 `~ani`, `~anime`, `~aq`  |  Durchsucht anilist nach einem Anime und zeigt das erste Ergebnis.
@@ -272,11 +279,15 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `~yomama`, `~ym`  |  Zeigt einen zufälligen Witz von <http://api.yomomma.info/>
 `~randjoke`, `~rj`  |  Zeigt einen zufälligen Witz von <http://tambal.azurewebsites.net/joke/random>
 `~chucknorris`, `~cn`  |  Zeigt einen zufälligen Chuck Norris Witz von <http://tambal.azurewebsites.net/joke/random>
+`~osumap`, `~om`  |  Zeigt Informationen über eine bestimmte Beatmap
+**Benutzung: ~osumap 252002:std
 `~osu`, `~oq`  |  Zeigt Osu Benutzer Statistiken |  ~osu Cookiezi:standard
 `~mi`, `~magicitem`  |  Zeigt ein zufälliges Magic-Item von <https://1d4chan.org/wiki/List_of_/tg/%27s_magic_items>
 `~revav`  |  Gibt ein Google Reverse Image Search für das Profilbild einer Person zurück.
 `~revimg`  |  Gibt eine 'Google Reverse Image Search' für ein Bild von einem Link zurück.
 `~safebooru`  |  Zeigt ein zufälliges Hentai Bild von safebooru  mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze + für mehrere Tags. |  ~safebooru yuri +kissing
+`~pony`, `~broni`  |  Shows a random image from bronibooru with a given tag. Tag is optional but preferred. (multiple tags are appended with +)
+**Usage**: ~pony scootaloo
 `~wiki`  |  Gibt einen Wikipedia-Link zurück.
 `~clr`  |  Zeigt dir die zum Hex zugehörige Farbe.
 **Benutztung**: `~clr 00ff00`
@@ -291,20 +302,23 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `~randomschinken`, `~rs`  |  Zeigt ein zufälliges Schinkenbild.
 `~randomlocation`, `~rl`  |  Zeigt eine zufällige Stadt.
 `~randomimage`, `~ri`  |  Zeigt ein zufälliges Bild.
-`~random9gag`, `~r9`  |  Zeigt ein zufälliges Bild von 9Gag.
 
 ### Pokegame  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
-`>attack`  |  Greift jemanden mit der angegebenen Attacke an.
-`>ml`, `>movelist`, `>listmoves`  |  Listet alle Attacken auf, die du benutzen kannst.
-`>heal`  |  Heilt jemanden. Belebt jene, die besiegt wurden. Kostet einen Euro.  | >heal @someone
-`>type`  |  Gibt den Typ des angegebenen Benutzers aus. |  >type @someone
-`>typelist`, `>listtypes`  |  Liste der möglichen Typen
-`>settype`  |  Setzt deinen Typen. Kostet einen Euro.
-**Benutzer**: >settype fire
-`>adminsettype`  |  Setzt den Typen eines Benutzers. **Owner only**.
-**Benutzer**: >adminsettype feuer @Benutzer
+`>active`  |  Zeigt das aktive Pokemon von jemandem oder einem selbst | {Prefix}active oder {Prefix}active @Someone
+`>pokehelp`, `>ph`  |  Zeigt die Basis Hilfe für Pokemon Kämpfe
+`>movelist`, `>ml`  |  Zeigt eine Liste der verfügbaren Angriffe. | {Prefix}movelist, {Prefix}ml, {Prefix}ml charmander
+`>switch`  |  Setzt dein aktives Pokemon per Nickname | >switch mudkip
+`>allmoves`, `>am`  |  Sendet dir eine private Nachticht mit allen Attacken deiner Pokemon. | {Prefix}allmoves, {Prefix}am
+`>list`  |  Gibt eine Liste deiner Pokemon (6) zurück (aktives Pokemon ist unterstrichen)
+`>elite4`, `>e4`  |  Zeigt die 5 stärksten Pokemon. | >elite4
+`>heal`  |  Heilt dein angegebenes Pokemon (per Nicknamen) oder das aktive Pokemon der gegebenen Person. | >heal bulbasaur, >heal @user, >heal all
+`>rename`, `>rn`  |  Benennt dein aktives Pokemon um. |  >rename dickbutt, >rn Mittens
+`>reset`  |  Setzt deine Pokemon zurück. KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN | >reset true
+`>catch`  |  Versucht das derzeitige wilde Pokemon zu fangen. Du musst das Pokemon angeben, welches du ersetzen willst. Kostet einen Euro
+  | >catch MyMudkip
+`>attack`, `>`  |  Greift gegebenes Ziel mit gegebener Attacke an. |  >attack hyperbeam @user, >attack @user flame-charge, > sunny-day @user
 
 ### Translator  
 Befehl und Alternativen | Beschreibung | Benutzung
@@ -312,10 +326,19 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `~trans`, `~translate`  |  Übersetzt Text von>zu. Von der gegebenen Sprache in die Zielsprache. |   'Prefix'trans en>de This is some text.
 `~translangs`  |  Listet die verfügbaren Sprachen zur Übersetzung.
 
+### Memes  
+Befehl und Alternativen | Beschreibung | Benutzung
+----------------|--------------|-------
+`~9gag`, `~9r`  |  Gets a random 9gag post
+`feelsbadman`, `FeelsBadMan`  |  FeelsBadMan
+`feelsgoodman`, `FeelsGoodMan`  |  FeelsGoodMan
+
 ### NSFW  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
 `~hentai`  |  Zeigt ein zufälliges NSFW Hentai Bild von gelbooru und danbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags) |  ~hentai yuri+kissing
+`~atfbooru`, `~atf`  |  Shows a random hentai image from atfbooru with a given tag. Tag is optional but preffered. (multiple tags are appended with +)
+**Usage**: ~atf yuri+kissing
 `~danbooru`  |  Zeigt ein zufälliges Hentai Bild von danbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags) |  ~danbooru yuri+kissing
 `~gelbooru`  |  Zeigt ein zufälliges Hentai Bild von gelbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags) |  ~gelbooru yuri+kissing
 `~rule34`  |  Zeigt ein zufälliges Hentai Bild von rule34.xx  mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze + für mehrere Tags. |  ~rule34 yuri+kissing
