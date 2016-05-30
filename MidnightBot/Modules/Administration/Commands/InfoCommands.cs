@@ -87,7 +87,7 @@ namespace MidnightBot.Modules.Administration.Commands
                         sb.AppendLine ($"`Nickname:` **{user.Nickname}**");
                     sb.AppendLine ($"`Id:` **{user.Id}**");
                     sb.AppendLine ($"`Status:` **{user.Status}**");
-                    sb.AppendLine ($"`Derzeitiges Spiel:` **{(user.CurrentGame == null ? "-" : user.CurrentGame.Value.Name)}**");
+                    sb.AppendLine ($"`Derzeitiges Spiel:` **{(user.CurrentGame?.Name == null ? "-" : user.CurrentGame.Value.Name)}**");
                     if (user.LastOnlineAt != null)
                         sb.AppendLine ($"`Zuletzt online:` **{user.LastOnlineAt:HH:mm:ss}**");
                     sb.AppendLine ($"`Gejoint am:` **{user.JoinedAt}**");

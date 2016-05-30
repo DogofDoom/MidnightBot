@@ -137,15 +137,15 @@ namespace MidnightBot.Modules.Pokemon
                     {
                         if (pkm.HP <= 0)
                         {
-                            str += $"~~**{pkm.NickName}** : *{pkm.GetSpecies().name}*  HP: {pkm.HP}/{pkm.MaxHP}~~💀\n";
+                            str += $"~~**{pkm.NickName}** : *{pkm.GetSpecies().name}*  HP: {pkm.HP}/{pkm.MaxHP}~~💀\nBildlink: {pkm.GetSpecies().imageLink}\n";
                         }
                         else if (pkm.IsActive)
                         {
-                            str += $"__**{pkm.NickName}** : *{pkm.GetSpecies().name}*  HP: {pkm.HP}/{pkm.MaxHP}__\n";
+                            str += $"__**{pkm.NickName}** : *{pkm.GetSpecies().name}*  HP: {pkm.HP}/{pkm.MaxHP}__\nBildlink: {pkm.GetSpecies ().imageLink}\n";
                         }
                         else
                         {
-                            str += $"**{pkm.NickName}** : *{pkm.GetSpecies ().name}*  HP: {pkm.HP}/{pkm.MaxHP}\n";
+                            str += $"**{pkm.NickName}** : *{pkm.GetSpecies ().name}*  HP: {pkm.HP}/{pkm.MaxHP}\nBildlink: {pkm.GetSpecies ().imageLink}\n";
                         }
                     }
                     await e.User.SendMessage (str);

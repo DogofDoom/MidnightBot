@@ -28,6 +28,7 @@ namespace MidnightBot.Modules.Searches
             commands.Add (new ConverterCommand (this));
             commands.Add (new RedditCommand (this));
             commands.Add (new WowJokeCommand (this));
+            commands.Add (new EvalCommand (this));
             rng = new Random ();
         }
 
@@ -193,13 +194,14 @@ namespace MidnightBot.Modules.Searches
                    .Parameter ("query",ParameterType.Unparsed)
                        .Do (async e =>
                         {
+                            var apikey = MidnightBot.GetRndGoogleAPIKey ();
                             RANDOMIMG:
                             await e.Channel.SendIsTyping ();
                             if (string.IsNullOrWhiteSpace (e.GetArg ("query")))
                                 return;
                             try
                             {
-                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString (e.GetArg ("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=50&searchType=image&start={ rng.Next (1,50) }&fields=items%2Flink&key={MidnightBot.GetRndGoogleAPIKey ()}";
+                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString(e.GetArg("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={rng.Next(1,150)}&fields=items%2Flink&key={apikey}";
                                 var obj = JObject.Parse (await SearchHelper.GetResponseStringAsync (reqString).ConfigureAwait (false));
 
                                 var items = obj["items"] as JArray;
