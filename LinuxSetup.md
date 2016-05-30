@@ -129,7 +129,7 @@ Move to “midnightbot” folder (note `cd --` to go back the directory)
 **NOW WE NEED TO GET MidnightBot FROM RELEASES**
 
 
-Go to this link: https://github.com/Midnight-Myth/MidnightBotBot/releases and **copy the zip file address** of the lalest version available,
+Go to this link: https://github.com/Midnight-Myth/MidnightBot/releases and **copy the zip file address** of the lalest version available,
 
 it should look like `https://github.com/Midnight-Myth/MidnightBot/releases/download/vx.x/MidnightBot.zip`
 
