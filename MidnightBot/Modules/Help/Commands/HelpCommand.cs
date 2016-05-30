@@ -13,9 +13,12 @@ namespace MidnightBot.Classes.Help.Commands
     {
         public Func<CommandEventArgs,Task> HelpFunc () => async e =>
         {
-                #region OldHelp
-
-                string helpstr = "";
+            #region OldHelp
+            
+            string helpstr = "";
+            var comToFind = e.GetArg ("module")?.ToLowerInvariant ();
+            if (string.IsNullOrWhiteSpace (comToFind))
+            {
 
                 string lastCategory = "";
                 foreach (var com in MidnightBot.Client.GetService<CommandService> ().AllCommands)
@@ -30,18 +33,52 @@ namespace MidnightBot.Classes.Help.Commands
                 helpstr += "\nBot Creator's server: https://discord.gg/0ehQwTK2RBhxEi0X";
                 helpstr = helpstr.Replace (MidnightBot.BotMention,"@BotName");
                 var curstr = "";
-                while (helpstr.Length > 1000)
+                while (helpstr.Length > 2000)
                 {
-                    curstr = helpstr.Substring (0,1000);
-                    await e.User.Send (curstr.Substring (0,curstr.LastIndexOf ("\n") + 1)).ConfigureAwait (false);
-                    helpstr = curstr.Substring (curstr.LastIndexOf ("\n") + 1) + helpstr.Substring (1000);
+                    curstr = helpstr.Substring (0,2000);
+                    await e.User.SendMessage (curstr.Substring (0,curstr.LastIndexOf ("\n") + 1)).ConfigureAwait (false);
+                    helpstr = curstr.Substring (curstr.LastIndexOf ("\n") + 1) + helpstr.Substring (2000);
                     await Task.Delay (200).ConfigureAwait (false);
                 }
-                curstr = helpstr.Substring (0,1000);
-                await e.User.Send (curstr.Substring (0,curstr.LastIndexOf ("\n") + 1)).ConfigureAwait (false);
-                helpstr = curstr.Substring (curstr.LastIndexOf ("\n") + 1) + helpstr.Substring (1000);
-                await Task.Delay (200).ConfigureAwait (false);
-
+                curstr = helpstr.Substring (0,2000);
+                await e.User.SendMessage (curstr.Substring (0,curstr.LastIndexOf ("\n") + 1)).ConfigureAwait (false);
+                helpstr = curstr.Substring (curstr.LastIndexOf ("\n") + 1) + helpstr.Substring (2000);
+                return;
+            }
+            else
+            {
+                var cmds = MidnightBot.Client.GetService<CommandService> ().AllCommands
+                                                    .Where (c => c.Category.ToLower () == e.GetArg ("module").Trim ().ToLower ());
+                var cmdsArray = cmds as Command[] ?? cmds.ToArray ();
+                if (!cmdsArray.Any ())
+                {
+                    await e.Channel.SendMessage ("Dieses Modul existiert nicht.").ConfigureAwait (false);
+                    return;
+                }
+                string lastCategory = "";
+                foreach (var com in MidnightBot.Client.GetService<CommandService> ().AllCommands.Where (c => c.Category.ToLower () == e.GetArg ("module").Trim ().ToLower ()))
+                {
+                    if (com.Category != lastCategory)
+                    {
+                        helpstr += "\n`----`**`" + com.Category + "`**`----`\n";
+                        lastCategory = com.Category;
+                    }
+                    helpstr += PrintCommandHelp (com);
+                }
+                helpstr += "\nBot Creator's server: https://discord.gg/0ehQwTK2RBhxEi0X";
+                helpstr = helpstr.Replace (MidnightBot.BotMention,"@BotName");
+                var curstr = "";
+                while (helpstr.Length > 2000)
+                {
+                    curstr = helpstr.Substring (0,2000);
+                    await e.User.SendMessage (curstr.Substring (0,curstr.LastIndexOf ("\n") + 1)).ConfigureAwait (false);
+                    helpstr = curstr.Substring (curstr.LastIndexOf ("\n") + 1) + helpstr.Substring (2000);
+                    await Task.Delay (200).ConfigureAwait (false);
+                }
+                curstr = helpstr.Substring (0,2000);
+                await e.User.SendMessage (curstr.Substring (0,curstr.LastIndexOf ("\n") + 1)).ConfigureAwait (false);
+                helpstr = curstr.Substring (curstr.LastIndexOf ("\n") + 1) + helpstr.Substring (2000);
+            }
             };
 
         #endregion OldHelp
@@ -109,7 +146,7 @@ Version: `{MidnightStats.Instance.BotVersion}`";
             cgb.CreateCommand (Module.Prefix + "h")
                 .Alias (Module.Prefix + "help",MidnightBot.BotMention + " help",MidnightBot.BotMention + " h","~h")
                 .Description ("Hilfe-Befehl.\n**Usage**: '-h !m q' or just '-h' ")
-                .Parameter ("command",ParameterType.Unparsed)
+                .Parameter ("module",ParameterType.Unparsed)
                 .Do (HelpFunc ());
             cgb.CreateCommand (Module.Prefix + "hh")
                 .Description ("Hilfe-Befehl.\n**Usage**: '-hh !m q' or just '-h' ")
