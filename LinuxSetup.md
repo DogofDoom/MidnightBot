@@ -122,8 +122,8 @@ Create a new folder “midnightbot” or anything you prefer
 
 **16)**
 
-Move to “nadeko” folder (note `cd --` to go back the directory)
-<pre><code class="language-bash">cd nadeko
+Move to “midnightbot” folder (note `cd --` to go back the directory)
+<pre><code class="language-bash">cd midnightbot
 </code></pre>
 
 **NOW WE NEED TO GET MidnightBot FROM RELEASES**
