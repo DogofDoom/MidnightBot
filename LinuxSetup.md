@@ -116,34 +116,34 @@ Type `yes` and hit Enter **three times**
 
 **15)**
 
-Create a new folder “nadeko” or anything you prefer
-<pre><code class="language-bash">mkdir nadeko
+Create a new folder “midnightbot” or anything you prefer
+<pre><code class="language-bash">mkdir midnightbot
 </code></pre>
 
 **16)**
 
-Move to “nadeko” folder (note `cd --` to go back the directory)
-<pre><code class="language-bash">cd nadeko
+Move to “midnightbot” folder (note `cd --` to go back the directory)
+<pre><code class="language-bash">cd midnightbot
 </code></pre>
 
-**NOW WE NEED TO GET NADEKO FROM RELEASES**
+**NOW WE NEED TO GET MidnightBot FROM RELEASES**
 
 
-Go to this link: https://github.com/Kwoth/NadekoBot/releases and **copy the zip file address** of the lalest version available,
+Go to this link: https://github.com/Midnight-Myth/MidnightBot/releases and **copy the zip file address** of the lalest version available,
 
-it should look like `https://github.com/Kwoth/NadekoBot/releases/download/vx.xx/NadekoBot.vx.x.zip`
+it should look like `https://github.com/Midnight-Myth/MidnightBot/releases/download/vx.x/MidnightBot.zip`
 
 **17)**
 
 Get the correct link, type `wget`, then *paste the link*, then hit **Enter**.
-<pre><code class="language-bash">wget https://github.com/Kwoth/NadekoBot/releases/download/vx.xx/NadekoBot.vx.x.zip
+<pre><code class="language-bash">wget https://github.com/Midnight-Myth/MidnightBot/releases/download/vx.x/MidnightBot.zip
 </code></pre>
 **^Do not copy-paste it**
 
 **18)**
 
-Now we need to `unzip` the downloaded zip file and to do that, type the file name as it showed in your screen or just copy from the screen, should be like ` NadekoBot.vx.x.zip`
-<pre><code class="language-bash">unzip NadekoBot.vx.x.zip
+Now we need to `unzip` the downloaded zip file and to do that, type the file name as it showed in your screen or just copy from the screen, should be like ` MidnightBot.zip`
+<pre><code class="language-bash">unzip MidnightBot.zip
 </code></pre>
 **^Do not copy-paste it**
 
@@ -173,13 +173,13 @@ Open it.
 
 Copy the `credentials_example.json` to desktop
 
-EDIT it as it is guided here: https://github.com/Kwoth/NadekoBot/blob/master/README.md
+EDIT it as it is guided here: https://github.com/Midnight-Myth/MidnightBot/blob/master/README.md
 
 Rename it to `credentials.json` and paste/put it back in the folder. `(Yes, using CyberDuck)`
 
 You should see two files `credentials_example.json` and `credentials.json`
 
-Also if you already have nadeko setup and have `credentials.json`, `config.json`, `nadekobot.sqlite`, and `"permissions" folder`, you can just copy and paste it to the Droplets folder using CyberDuck.
+Also if you already have midnightbot setup and have `credentials.json`, `config.json`, `nadekobot.sqlite`, and `"permissions" folder`, you can just copy and paste it to the Droplets folder using CyberDuck.
 
 ######TIME TO RUN
 
@@ -188,30 +188,30 @@ Go back to **PuTTY**, `(hope its still running xD)`
 **19)**
 
 Type/ Copy and hit **Enter**.
-<pre><code class="language-bash">tmux new -s nadeko
+<pre><code class="language-bash">tmux new -s midnightbot
 </code></pre>
-**^this will create a new session named “nadeko”** `(you can replace “nadeko” with anything you prefer and remember its your session name) so you can run the bot in background without having to keep running PuTTY in the background.`
+**^this will create a new session named “midnightbot”** `(you can replace “midnightbot” with anything you prefer and remember its your session name) so you can run the bot in background without having to keep running PuTTY in the background.`
 
 
-<pre><code class="language-bash">cd nadeko
+<pre><code class="language-bash">cd midnightbot
 </code></pre>
 
 **20)**
 
-<pre><code class="language-bash">mono NadekoBot.exe
+<pre><code class="language-bash">mono MidnightBot.exe
 </code></pre>
 
 **CHECK THE BOT IN DISCORD, IF EVERYTHING IS WORKING**
 
-Now time to **move bot to background** and to do that, press **CTRL+B+D** (this will ditach the nadeko session using TMUX), and you can finally close PuTTY now.
+Now time to **move bot to background** and to do that, press **CTRL+B+D** (this will ditach the midnightbot session using TMUX), and you can finally close PuTTY now.
 
 And if you want to **see the sessions** after logging back again, type `tmux ls`, and that will give you the list of sessions running.
 
-And if you want to **switch to/ see that session**, type `tmux a -t nadeko` (**nadeko** is the name of the session we created before so, replace **“nadeko”** with the session name you created.)
+And if you want to **switch to/ see that session**, type `tmux a -t midnightbot` (**midnightbot** is the name of the session we created before so, replace **“midnightbot”** with the session name you created.)
 
 **21)**
 
-And if you want to **kill** NadekoBot **session**, type `tmux kill-session -t nadeko`
+And if you want to **kill** MidnightBot **session**, type `tmux kill-session -t midnightbot`
 
 ######TO RESTART YOUR BOT ALONG WITH THE WHOLE SERVER (for science)
 **22)**
@@ -237,4 +237,4 @@ Open **PuTTY** and login as you have before, type `reboot` and hit Enter.
 HIT **CTRL+B+D** and close **PuTTY**
 
 
-`IF YOU FACE ANY TROUBLE ANYWHERE IN THE GUIDE JUST FIND US IN NADEKO'S DISCORD SERVER`
+`IF YOU FACE ANY TROUBLE ANYWHERE IN THE GUIDE JUST FIND US IN MidnightBot'S DISCORD SERVER`
