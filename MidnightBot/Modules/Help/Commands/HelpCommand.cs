@@ -143,11 +143,11 @@ Version: `{MidnightStats.Instance.BotVersion}`";
         {
             cgb.CreateCommand (Module.Prefix + "h")
                 .Alias (Module.Prefix + "help",MidnightBot.BotMention + " help",MidnightBot.BotMention + " h","~h")
-                .Description ("Hilfe-Befehl.\n**Usage**: '-h !m q' or just '-h' ")
+                .Description ("Hilfe-Befehl.\n**Benutzung**: '-h !m q' or just '-h' ")
                 .Parameter ("module",ParameterType.Unparsed)
                 .Do (HelpFunc ());
             cgb.CreateCommand (Module.Prefix + "hh")
-                .Description ("Hilfe-Befehl.\n**Usage**: '-hh !m q' or just '-h' ")
+                .Description ("Hilfe-Befehl.\n**Benutzung**: '-hh !m q' or just '-h' ")
                 .Parameter ("command",ParameterType.Unparsed)
                 .Do (NewHelpFunc ());
             cgb.CreateCommand (Module.Prefix + "hgit")

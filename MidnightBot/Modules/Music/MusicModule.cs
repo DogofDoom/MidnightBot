@@ -465,7 +465,7 @@ namespace MidnightBot.Modules.Music
                     });
 
                 cgb.CreateCommand (Prefix + "save")
-                    .Description ("Speichert eine Playlist unter einem bestimmten Namen. Name darf nicht länger als 20 Zeichen sein und darf keine Kommas beinhalten.\n**Bentzung**: `!save classical1`")
+                    .Description ("Speichert eine Playlist unter einem bestimmten Namen. Name darf nicht länger als 20 Zeichen sein und darf keine Kommas beinhalten.\n**Benutzung**: `!save classical1`")
                     .Parameter ("name",ParameterType.Unparsed)
                     .Do (async e =>
                     {

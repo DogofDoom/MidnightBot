@@ -1,0 +1,33 @@
+[
+  {
+    "Names": [
+      "randomcat",
+      "meow"
+    ],
+    "URL": "http://www.random.cat/meow",
+    "AllowEmpty": true,
+    "URLSuffix": "",
+    "Headers": {},
+    "ResponseHandling": {
+      "Item1": "JSON",
+      "Item2": "file"
+    },
+    "QueryReplacements": {
+      ".*": ""
+    },
+    "RegexOnResponse": {}
+  },
+  {
+    "Names": [
+      "i",
+      "image"
+    ],
+    "URL": null,
+    "AllowEmpty": false,
+    "URLSuffix": "",
+    "Headers": {},
+    "ResponseHandling": null,
+    "QueryReplacements": {},
+    "RegexOnResponse": {}
+  }
+]

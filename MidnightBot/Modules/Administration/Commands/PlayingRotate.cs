@@ -14,7 +14,7 @@ namespace MidnightBot.Modules.Administration.Commands
 {
     internal class PlayingRotate : DiscordCommand
     {
-        private static readonly Timer timer = new Timer (12000);
+        private static readonly Timer timer = new Timer (20000);
 
         public static Dictionary<string,Func<string>> PlayingPlaceholders { get; } =
             new Dictionary<string,Func<string>> {
@@ -41,7 +41,7 @@ namespace MidnightBot.Modules.Administration.Commands
         public PlayingRotate ( DiscordModule module ) : base (module)
         {
             var i = -1;
-            timer.Elapsed += ( s,e ) =>
+            timer.Elapsed += async ( s,e ) =>
             {
                 try
                 {
@@ -63,7 +63,7 @@ namespace MidnightBot.Modules.Administration.Commands
                     }
                     if (string.IsNullOrWhiteSpace (status))
                         return;
-                    Task.Run (() => { MidnightBot.Client.SetGame (status); });
+                    await Task.Run (() => { MidnightBot.Client.SetGame (status); });
                 }
                 catch { }
             };

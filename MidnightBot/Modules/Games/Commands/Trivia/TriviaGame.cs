@@ -2,7 +2,6 @@
 using Discord.Commands;
 using MidnightBot.Classes;
 using MidnightBot.Extensions;
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,10 +94,7 @@ namespace MidnightBot.Modules.Games.Commands.Trivia
                     await Task.Delay(QuestionDurationMiliseconds - HintTimeoutMiliseconds, token).ConfigureAwait (false);
 
                 }
-                catch (TaskCanceledException)
-                {
-                    Console.WriteLine("Quiz beendet");
-                }
+                catch (TaskCanceledException) { } //means someone guessed the answer
                 GameActive = false;
                 if (!triviaCancelSource.IsCancellationRequested)
                     await channel.Send($":clock2: :question: **Zeit vorbei!** Die richtige Antwort war **{CurrentQuestion.Answer}**").ConfigureAwait (false);

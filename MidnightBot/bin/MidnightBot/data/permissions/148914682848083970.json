@@ -1,0 +1,19 @@
+{
+  "PermissionsControllerRole": "Admin",
+  "Verbose": true,
+  "Id": 148914682848083970,
+  "Permissions": {
+    "Name": "roxas300 Discordserver",
+    "Modules": {
+      "NSFW": false,
+      "Music": false
+    },
+    "Commands": {},
+    "FilterInvites": true,
+    "FilterWords": false
+  },
+  "Words": [],
+  "UserPermissions": {},
+  "ChannelPermissions": {},
+  "RolePermissions": {}
+}

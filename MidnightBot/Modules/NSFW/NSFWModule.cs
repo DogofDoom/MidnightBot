@@ -45,7 +45,7 @@ namespace MidnightBot.Modules.NSFW
 
                 cgb.CreateCommand(Prefix + "atfbooru")
                     .Alias (Prefix + "atf")
-                    .Description($"Shows a random hentai image from atfbooru with a given tag. Tag is optional but preffered. (multiple tags are appended with +)\n**Usage**: {Prefix}atf yuri+kissing")
+                    .Description($"Shows a random hentai image from atfbooru with a given tag. Tag is optional but preffered. (multiple tags are appended with +)\n**Benutzung**: {Prefix}atf yuri+kissing")
                     .Parameter("tag", ParameterType.Unparsed)
                     .Do(async e =>
                     {
@@ -69,6 +69,20 @@ namespace MidnightBot.Modules.NSFW
                         else
                             await e.Channel.SendMessage (link).ConfigureAwait (false);
                     });
+
+                cgb.CreateCommand(Prefix + "r34")
+                .Description($"Zeigt ein zufälliges Hentai Bild von rule34.paheal.net mit einem gegebenen Tag.\n**Benutzung**: {Prefix}r34 bacon")
+                .Parameter("tag", ParameterType.Unparsed)
+                .Do(async e =>
+                {
+                    var tag = e.GetArg("tag")?.Trim() ?? "";
+                    var link = await SearchHelper.GetR34ImageLink(tag).ConfigureAwait(false);
+                    if (string.IsNullOrWhiteSpace(link))
+                        await e.Channel.SendMessage("Search yielded no results ;(");
+                    else
+                        await e.Channel.SendMessage(link).ConfigureAwait(false);
+                });
+
                 cgb.CreateCommand (Prefix + "gelbooru")
                     .Description ($"Zeigt ein zufälliges Hentai Bild von gelbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags)\n**Benutzung**: {Prefix}gelbooru yuri+kissing")
                     .Parameter ("tag",ParameterType.Unparsed)

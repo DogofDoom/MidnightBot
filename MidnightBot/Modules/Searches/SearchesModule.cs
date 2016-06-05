@@ -28,7 +28,8 @@ namespace MidnightBot.Modules.Searches
             commands.Add (new ConverterCommand (this));
             commands.Add (new RedditCommand (this));
             commands.Add (new WowJokeCommand (this));
-            commands.Add (new EvalCommand (this));
+            commands.Add (new CalcCommand (this));
+            commands.Add (new APICommands (this));
             rng = new Random ();
         }
 
@@ -410,7 +411,7 @@ namespace MidnightBot.Modules.Searches
 
                 cgb.CreateCommand (Prefix + "osumap")
                    .Alias (Prefix + "om")
-                   .Description ("Zeigt Informationen über eine bestimmte Beatmap\n**Benutzung: ~osumap 252002:std")
+                   .Description ("Zeigt Informationen über eine bestimmte Beatmap\n**Benutzung**: ~osumap 252002:std")
                    .Parameter ("input",ParameterType.Unparsed)
                    .Do (async e =>
                    {
@@ -608,7 +609,7 @@ namespace MidnightBot.Modules.Searches
 
                 cgb.CreateCommand(Prefix + "pony")
                     .Alias(Prefix + "broni")
-                    .Description("Shows a random image from bronibooru with a given tag. Tag is optional but preferred. (multiple tags are appended with +)\n**Usage**: ~pony scootaloo")
+                    .Description("Shows a random image from bronibooru with a given tag. Tag is optional but preferred. (multiple tags are appended with +)\n**Benutzung**: ~pony scootaloo")
                     .Parameter("tag", ParameterType.Unparsed)
                     .Do(async e =>
                     {
@@ -634,7 +635,7 @@ namespace MidnightBot.Modules.Searches
                     });
 
                 cgb.CreateCommand (Prefix + "clr")
-                    .Description ("Zeigt dir die zum Hex zugehörige Farbe.\n**Benutztung**: `~clr 00ff00`")
+                    .Description ("Zeigt dir die zum Hex zugehörige Farbe.\n**Benutzung**: `~clr 00ff00`")
                     .Parameter ("color",ParameterType.Unparsed)
                     .Do (async e =>
                     {

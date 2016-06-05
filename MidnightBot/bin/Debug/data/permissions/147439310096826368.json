@@ -5,10 +5,22 @@
   "Permissions": {
     "Name": "GommeHD.net-Plauderkonfi",
     "Modules": {
+      "Conversations": false,
+      "Customreactions": false,
+      "Games": false,
+      "Sounds": false,
+      "Extra": false,
+      "Help": false,
+      "Pokegame": false,
       "NSFW": false,
-      "Pokegame": true,
-      "Sounds": true,
-      "Music": false
+      "ClashOfClans": false,
+      "Permissions": false,
+      "Music": false,
+      "Searches": false,
+      "Translator": false,
+      "Memes": false,
+      "Gambling": false,
+      "Administration": false
     },
     "Commands": {},
     "FilterInvites": false,
@@ -58,7 +70,7 @@
         "Administration": true
       },
       "Commands": {},
-      "FilterInvites": true,
+      "FilterInvites": false,
       "FilterWords": false
     },
     "159981466892107776": {
@@ -68,7 +80,7 @@
         "Sounds": false
       },
       "Commands": {},
-      "FilterInvites": true,
+      "FilterInvites": false,
       "FilterWords": false
     },
     "164452617542434816": {
@@ -191,7 +203,7 @@
         "Sounds": false
       },
       "Commands": {},
-      "FilterInvites": true,
+      "FilterInvites": false,
       "FilterWords": false
     },
     "150546643106660352": {
@@ -229,6 +241,30 @@
         "Music": true,
         "Searches": true,
         "Translator": true,
+        "Gambling": true,
+        "Administration": true
+      },
+      "Commands": {},
+      "FilterInvites": true,
+      "FilterWords": false
+    },
+    "187232126138056704": {
+      "Name": "bot-test",
+      "Modules": {
+        "Conversations": true,
+        "Customreactions": true,
+        "Games": true,
+        "Sounds": true,
+        "Extra": true,
+        "Help": true,
+        "Pokegame": true,
+        "NSFW": true,
+        "ClashOfClans": true,
+        "Permissions": true,
+        "Music": true,
+        "Searches": true,
+        "Translator": true,
+        "Memes": true,
         "Gambling": true,
         "Administration": true
       },

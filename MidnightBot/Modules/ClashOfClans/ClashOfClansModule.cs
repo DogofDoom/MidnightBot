@@ -24,7 +24,7 @@ namespace MidnightBot.Modules.ClashOfClans
                 cgb.CreateCommand (Prefix + "createwar")
                     .Alias (Prefix + "cw")
                     .Description (
-                        $"Creates a new war by specifying a size (>10 and multiple of 5) and enemy clan name.\n**Usage**:{Prefix}cw 15 The Enemy Clan")
+                        $"Creates a new war by specifying a size (>10 and multiple of 5) and enemy clan name.\n**Benutzung**:{Prefix}cw 15 The Enemy Clan")
                     .Parameter ("size")
                     .Parameter ("enemy_clan",ParameterType.Unparsed)
                     .Do (async e =>
@@ -102,7 +102,7 @@ namespace MidnightBot.Modules.ClashOfClans
 
                 cgb.CreateCommand (Prefix + "listwar")
                     .Alias (Prefix + "lw")
-                    .Description ($"Shows the active war claims by a number. Shows all wars in a short way if no number is specified.\n**Usage**: {Prefix}lw [war_number] or {Prefix}lw")
+                    .Description ($"Shows the active war claims by a number. Shows all wars in a short way if no number is specified.\n**Benutzung**: {Prefix}lw [war_number] or {Prefix}lw")
                     .Parameter ("number",ParameterType.Optional)
                     .Do (async e =>
                     {
@@ -143,7 +143,7 @@ namespace MidnightBot.Modules.ClashOfClans
                 cgb.CreateCommand (Prefix + "claim")
                     .Alias (Prefix + "call")
                     .Alias (Prefix + "c")
-                    .Description ($"Claims a certain base from a certain war. You can supply a name in the third optional argument to claim in someone else's place. \n**Usage**: {Prefix}call [war_number] [base_number] [optional_otheruser]")
+                    .Description ($"Claims a certain base from a certain war. You can supply a name in the third optional argument to claim in someone else's place. \n**Benutzung**: {Prefix}call [war_number] [base_number] [optional_otheruser]")
                     .Parameter ("number")
                     .Parameter ("baseNumber")
                     .Parameter ("other_name",ParameterType.Unparsed)
@@ -179,7 +179,7 @@ namespace MidnightBot.Modules.ClashOfClans
 
                 cgb.CreateCommand (Prefix + "cf")
                     .Alias (Prefix + "claimfinish")
-                    .Description ($"Finish your claim if you destroyed a base. Optional second argument finishes for someone else.\n**Usage**: {Prefix}cf [war_number] [optional_other_name]")
+                    .Description ($"Finish your claim if you destroyed a base. Optional second argument finishes for someone else.\n**Benutzung**: {Prefix}cf [war_number] [optional_other_name]")
                     .Parameter ("number",ParameterType.Required)
                     .Parameter ("other_name",ParameterType.Unparsed)
                     .Do (async e =>
@@ -210,7 +210,7 @@ namespace MidnightBot.Modules.ClashOfClans
                 cgb.CreateCommand (Prefix + "unclaim")
                     .Alias (Prefix + "uncall")
                     .Alias (Prefix + "uc")
-                    .Description ($"Removes your claim from a certain war. Optional second argument denotes a person in whos place to unclaim\n**Usage**: {Prefix}uc [war_number] [optional_other_name]")
+                    .Description ($"Removes your claim from a certain war. Optional second argument denotes a person in whos place to unclaim\n**Benutzung**: {Prefix}uc [war_number] [optional_other_name]")
                     .Parameter ("number",ParameterType.Required)
                     .Parameter ("other_name",ParameterType.Unparsed)
                     .Do (async e =>
@@ -239,7 +239,7 @@ namespace MidnightBot.Modules.ClashOfClans
 
                 cgb.CreateCommand (Prefix + "endwar")
                     .Alias (Prefix + "ew")
-                    .Description ($"Ends the war with a given index.\n**Usage**:{Prefix}ew [war_number]")
+                    .Description ($"Ends the war with a given index.\n**Benutzung**:{Prefix}ew [war_number]")
                     .Parameter ("number")
                     .Do (async e =>
                     {

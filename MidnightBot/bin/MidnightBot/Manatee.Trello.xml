@@ -2049,6 +2049,11 @@
             Gets or sets how many results to return;
             </summary>
         </member>
+        <member name="P:Manatee.Trello.Json.IJsonSearch.Partial">
+            <summary>
+            Gets or sets whether the search should match on partial words.
+            </summary>
+        </member>
         <member name="T:Manatee.Trello.Json.IJsonToken">
             <summary>
             Defines the JSON structure for the Token object.
@@ -2135,7 +2140,7 @@
             <summary>
             Creates a new <see cref="T:Manatee.Trello.SearchFor"/> specifying a text search parameter.
             </summary>
-            <param name="text"></param>
+            <param name="text">The text to search for.</param>
             <returns></returns>
         </member>
         <member name="M:Manatee.Trello.SearchFor.TextInName(System.String)">
@@ -5877,27 +5882,29 @@
             Gets the query.
             </summary>
         </member>
-        <member name="M:Manatee.Trello.Search.#ctor(Manatee.Trello.SearchFor,System.Nullable{System.Int32},Manatee.Trello.SearchModelType,System.Collections.Generic.IEnumerable{Manatee.Trello.Contracts.IQueryable},Manatee.Trello.TrelloAuthorization)">
+        <member name="M:Manatee.Trello.Search.#ctor(Manatee.Trello.SearchFor,System.Nullable{System.Int32},Manatee.Trello.SearchModelType,System.Collections.Generic.IEnumerable{Manatee.Trello.Contracts.IQueryable},Manatee.Trello.TrelloAuthorization,System.Boolean)">
             <summary>
             Creates a new instance of the <see cref="T:Manatee.Trello.Search"/> object and performs the search.
             </summary>
             <param name="query">The query.</param>
             <param name="limit">The maximum number of results to return.</param>
-            <param name="modelTypes">Optional - The desired model types to return.  Can be joined using the | operator.  Default is All.</param>
-            <param name="context">Optional - A collection of queryable items to serve as a context in which to search.</param>
+            <param name="modelTypes">(Optional) The desired model types to return.  Can be joined using the | operator.  Default is All.</param>
+            <param name="context">(Optional) A collection of queryable items to serve as a context in which to search.</param>
             <param name="auth">(Optional) Custom authorization parameters. When not provided,
             <see cref="P:Manatee.Trello.TrelloAuthorization.Default"/> will be used.</param>
+            <param name="isPartial">(Optional) Indicates whether to include matches that <em>start with</em> the query text.  Default is false.</param>
         </member>
-        <member name="M:Manatee.Trello.Search.#ctor(System.String,System.Nullable{System.Int32},Manatee.Trello.SearchModelType,System.Collections.Generic.IEnumerable{Manatee.Trello.Contracts.IQueryable},Manatee.Trello.TrelloAuthorization)">
+        <member name="M:Manatee.Trello.Search.#ctor(System.String,System.Nullable{System.Int32},Manatee.Trello.SearchModelType,System.Collections.Generic.IEnumerable{Manatee.Trello.Contracts.IQueryable},Manatee.Trello.TrelloAuthorization,System.Boolean)">
             <summary>
             Creates a new instance of the <see cref="T:Manatee.Trello.Search"/> object and performs the search.
             </summary>
             <param name="query">The query.</param>
             <param name="limit">The maximum number of results to return.</param>
-            <param name="modelTypes">Optional - The desired model types to return.  Can be joined using the | operator.  Default is All.</param>
-            <param name="context">Optional - A collection of queryable items to serve as a context in which to search.</param>
+            <param name="modelTypes">(Optional) The desired model types to return.  Can be joined using the | operator.  Default is All.</param>
+            <param name="context">(Optional) A collection of queryable items to serve as a context in which to search.</param>
             <param name="auth">(Optional) Custom authorization parameters. When not provided,
             <see cref="P:Manatee.Trello.TrelloAuthorization.Default"/> will be used.</param>
+            <param name="isPartial">(Optional) Indicates whether to include matches that <em>start with</em> the query text.  Default is false.</param>
         </member>
         <member name="M:Manatee.Trello.Search.Refresh">
             <summary>

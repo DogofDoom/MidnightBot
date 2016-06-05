@@ -2,7 +2,7 @@
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
 #MidnightBot List Of Commands  
-Version: `MidnightBot v0.9.5994.28833`
+Version: `MidnightBot v0.9.6000.33538`
 ### Administration  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
@@ -29,14 +29,11 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.scsc`  |  Startet eine Instanz eines Cross Server Channels. Du bekommst einen Tokenden andere Benutzer benutzen müssen, um auf die selbe Instanz zu kommen.
 `.jcsc`  |  Joint derzeitigen Channel einer Instanz des Cross Server Channel durch Benutzung des Tokens.
 `.lcsc`  |  Verlässt Cross server Channel Instance von diesem Channel
-`.asar`  |  Adds a role, or list of roles separated by whitespace(use quotations for multiword roles) to the list of self-assignable roles.
-**Usage**: .asar Gamer
+`.asar`  |  Adds a role, or list of roles separated by whitespace(use quotations for multiword roles) to the list of self-assignable roles. |  .asar Gamer
 `.rsar`  |  Removes a specified role from the list of self-assignable roles.
 `.lsar`  |  Lists all self-assignable roles.
-`.iam`  |  Adds a role to you that you choose. Role must be on a list of self-assignable roles.
-**Usage**: .iam Gamer
-`.iamn`, `.iamnot`  |  Removes a role to you that you choose. Role must be on a list of self-assignable roles.
-**Usage**: .iamn Gamer
+`.iam`  |  Adds a role to you that you choose. Role must be on a list of self-assignable roles. |  .iam Gamer
+`.iamn`, `.iamnot`  |  Removes a role to you that you choose. Role must be on a list of self-assignable roles. |  .iamn Gamer
 `.remind`  |  Sendet nach einer bestimmten Zeit eine Nachricht in den Channel. Erstes Argument ist me/here/'channelname'. Zweites Argument ist die Zeit in absteigender Reihenfolge (mo>w>d>h>m) Beispiel: 1w5d3h10m. Drittes Argument ist eine (Multiwort)Nachricht.  |  `.remind me 1d5h Do something` or `.remind #general Start now!`
 `.remindmsg`  |  Setzt Nachricht, wenn die Erinnerung ausgelöst wird.  Verfügbare Platzhalter sind %user% - Benutzer der den Command ausgeführt hat, %message% - Nachricht spezifiziert in Erinnerung, %target% - Ziel Channel der Erinnerung. **Owner only!**
 `.sinfo`, `.serverinfo`  |  Zeigt Infos über den Server, auf dem der Bot läuft. Falls kein Server ausgewählt, derzeitiger wird ausgewählt. | .sinfo Some Server
@@ -94,14 +91,13 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.sendmsg`  |  Sendet eine Private Nachricht an einen User vom Bot aus.**Owner Only** |  .sendmsg @Username Nachricht
 `.announce`  |  Sends a message to all servers' general channel bot is connected to.**Owner Only!** |  .announce Useless spam
 `.whoplays`  |  Zeigt eine Liste von Benutzern die ein gewähltes Spiel spielen.
+`.leave`  |  Verlässt einen Server mit gegebener ID. |  `.leave 493243292839`
 
 ### Help  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
-`-h`, `-help`, `@BotName help`, `@BotName h`, `~h`  |  Hilfe-Befehl.
-**Usage**: '-h !m q' or just '-h' 
-`-hh`  |  Hilfe-Befehl.
-**Usage**: '-hh !m q' or just '-h' 
+`-h`, `-help`, `@BotName help`, `@BotName h`, `~h`  |  Hilfe-Befehl. |  '-h !m q' or just '-h' 
+`-hh`  |  Hilfe-Befehl. |  '-hh !m q' or just '-h' 
 `-hgit`  |  OWNER ONLY commandlist.md Datei erstellung. **Owner Only!**
 `-readme`, `-guide`  |  Sendet eine readme und ein Guide verlinkt zum Channel.
 `-donate`, `~donate`  |  Informationen um das Projekt zu unterstützen!
@@ -113,8 +109,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
 `;cfi`, `;channelfilterinvites`  |  Aktiviert, oder deaktiviert automatische Löschung von Einladungen in diesem Channel.Falls kein Channel gewählt, derzeitige Channel. Benutze ALL um alle derzeitig existierenden Channel zu wählen. |  ;cfi enable #general-chat
 `;sfi`, `;serverfilterinvites`  |  Aktiviert, oder deaktiviert automatische Löschung von Einladungenauf diesem Server. |  ;sfi disable
-`;cfw`, `;channelfilterwords`  |  Aktiviert, oder deaktiviert automatische Löschung von Nachrichten auf diesem Channel, die gebannte Wörter beinhalten.Wenn kein Channel ausgewählt, dieser hier. Benutze ALL um auf alle derzeit existierenden Channel zu aktivieren.
-**Usage**: ;cfw enable #general-chat
+`;cfw`, `;channelfilterwords`  |  Aktiviert, oder deaktiviert automatische Löschung von Nachrichten auf diesem Channel, die gebannte Wörter beinhalten.Wenn kein Channel ausgewählt, dieser hier. Benutze ALL um auf alle derzeit existierenden Channel zu aktivieren. |  ;cfw enable #general-chat
 `;afw`, `;addfilteredword`  |  Fügt ein neues Wort zur Liste der gefilterten Wörter hinzu. |  ;afw poop
 `;rfw`, `;removefilteredword`  |  Entfernt ein Wort von der Liste der gefilterten Wörter. |  ;rw poop
 `;lfw`, `;listfilteredwords`  |  Zeigt Liste der gefilterten Wörter. |  ;lfw
@@ -172,8 +167,6 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `@BotName fire`  |  Zeigt eine unicode Feuer Nachricht. Optionaler Parameter [x] sagt ihm wie oft er das Feuer wiederholen soll. |  @ fire [x]
 `@BotName rip`  |  Zeigt ein Grab von jemanden mit einem Startjahr |  @ rip @Someone 2000
 `@BotName slm`  |  Zeigt die Nachricht in der du in diesem Channel zuletzt erwähnt wurdest (checked die letzten 10k Nachrichten)
-`@BotName hide`  |  Versteckt !11!!
-`@BotName unhide`  |   kommt aus seinem Versteck!1!!1
 `@BotName dump`  |  Dumped alle Einladungen die er findet in dump.txt.** Owner Only.**
 `@BotName ab`  |  Versuche 'abalabahaha' zu bekommen
 `@BotName av`, `@BotName avatar`  |  Zeigt den Avatar einer erwähnten Person.
@@ -207,8 +200,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `>pollend`  |  Stoppt derzeitige Umfrage und gibt das Ergebnis aus.
 `>pick`  |  Nimmt einen in diesem Channel hinterlegten Euro.
 `>plant`  |  Gib einen Euro aus, um in in diesen Channel zu legen. (Wenn der Bot neustartet, oder crashed, ist der Euro verloren)
-`>leet`  |  Konvertiert einen Text zu Leetspeak mit 6 (1-6) Stärke-Graden.
-**Benutzung:** >leet 3 Hallo
+`>leet`  |  Konvertiert einen Text zu Leetspeak mit 6 (1-6) Stärke-Graden. |  >leet 3 Hallo
 `>choose`  |  Sucht eine Sache aus einer Liste von Sachen aus. |  >choose Get up;Sleep;Sleep more
 `>helix`  |  Stell dem allmächtigen Helix Fossil eine Ja/Nein Frage.
 `>rps`  |  Spiel eine Runde Stein, Schere, Papier mit . |  >rps scissors
@@ -240,8 +232,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `!cleanup`  |  Bereinigt hängende Voice-Verbindung. **Owner Only!**
 `!rcs`, `!repeatcurrentsong`  |  Schaltet das Wiederholen des derzeitigen Liedes um.
 `!rpl`, `!repeatplaylist`  |  Schaltet das Wiederholen aller Songs in der Liste um. (Jedes beendete Lied wird an das Ende der Liste hinzugefügt).
-`!save`  |  Speichert eine Playlist unter einem bestimmten Namen. Name darf nicht länger als 20 Zeichen sein und darf keine Kommas beinhalten.
-**Bentzung**: `!save classical1`
+`!save`  |  Speichert eine Playlist unter einem bestimmten Namen. Name darf nicht länger als 20 Zeichen sein und darf keine Kommas beinhalten. |  `!save classical1`
 `!load`  |  Lädt eine Playlist mit bestimmten Namen. |  `!load classical1`
 `!playlists`, `!pls`  |  Listet alle Playlisten. Seitenweiße. 20 je Seote. Standard-Seite ist 0. | `!pls 1`
 `!goto`  |  Skipped zu einer bestimmten Zeit in Sekunden im aktuellen Lied.
@@ -260,7 +251,10 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `~convert`  |  Konvertiert Einheiten von>zu. Beispiel: `~convert m>km 1000`
 `~convertlist`  |  Liste der kovertierbaren Dimensionen und Währungen.
 `~wowjoke`  |  Get one of Kwoth's penultimate WoW jokes.
-`~evaluate`, `~eval`  |  Berechnet eine mathematische Angabe
+`~calculate`, `~calc`  |  Berechnet eine mathematische Angabe
+`~calclist`  |  List operations of parser
+`~randomcat`, `~meow`  |  Queries http://www.random.cat/meow.
+`~i`, `~image`  |  Queries .
 `~we`  |  Zeigt Wetter-Daten für eine genannte Stadt und ein Land. BEIDES IST BENÖTIGT. Wetter Api ist sehr zufällig, wenn du einen Fehler machst. |  ~we Moskau RF
 `~yt`  |  Durchsucht Youtube und zeigt das erste Ergebnis.
 `~ani`, `~anime`, `~aq`  |  Durchsucht anilist nach einem Anime und zeigt das erste Ergebnis.
@@ -279,18 +273,15 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `~yomama`, `~ym`  |  Zeigt einen zufälligen Witz von <http://api.yomomma.info/>
 `~randjoke`, `~rj`  |  Zeigt einen zufälligen Witz von <http://tambal.azurewebsites.net/joke/random>
 `~chucknorris`, `~cn`  |  Zeigt einen zufälligen Chuck Norris Witz von <http://tambal.azurewebsites.net/joke/random>
-`~osumap`, `~om`  |  Zeigt Informationen über eine bestimmte Beatmap
-**Benutzung: ~osumap 252002:std
+`~osumap`, `~om`  |  Zeigt Informationen über eine bestimmte Beatmap |  ~osumap 252002:std
 `~osu`, `~oq`  |  Zeigt Osu Benutzer Statistiken |  ~osu Cookiezi:standard
 `~mi`, `~magicitem`  |  Zeigt ein zufälliges Magic-Item von <https://1d4chan.org/wiki/List_of_/tg/%27s_magic_items>
 `~revav`  |  Gibt ein Google Reverse Image Search für das Profilbild einer Person zurück.
 `~revimg`  |  Gibt eine 'Google Reverse Image Search' für ein Bild von einem Link zurück.
 `~safebooru`  |  Zeigt ein zufälliges Hentai Bild von safebooru  mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze + für mehrere Tags. |  ~safebooru yuri +kissing
-`~pony`, `~broni`  |  Shows a random image from bronibooru with a given tag. Tag is optional but preferred. (multiple tags are appended with +)
-**Usage**: ~pony scootaloo
+`~pony`, `~broni`  |  Shows a random image from bronibooru with a given tag. Tag is optional but preferred. (multiple tags are appended with +) |  ~pony scootaloo
 `~wiki`  |  Gibt einen Wikipedia-Link zurück.
-`~clr`  |  Zeigt dir die zum Hex zugehörige Farbe.
-**Benutztung**: `~clr 00ff00`
+`~clr`  |  Zeigt dir die zum Hex zugehörige Farbe. |  `~clr 00ff00`
 
 ### Extra  
 Befehl und Alternativen | Beschreibung | Benutzung
@@ -337,9 +328,9 @@ Befehl und Alternativen | Beschreibung | Benutzung
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
 `~hentai`  |  Zeigt ein zufälliges NSFW Hentai Bild von gelbooru und danbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags) |  ~hentai yuri+kissing
-`~atfbooru`, `~atf`  |  Shows a random hentai image from atfbooru with a given tag. Tag is optional but preffered. (multiple tags are appended with +)
-**Usage**: ~atf yuri+kissing
+`~atfbooru`, `~atf`  |  Shows a random hentai image from atfbooru with a given tag. Tag is optional but preffered. (multiple tags are appended with +) |  ~atf yuri+kissing
 `~danbooru`  |  Zeigt ein zufälliges Hentai Bild von danbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags) |  ~danbooru yuri+kissing
+`~r34`  |  Zeigt ein zufälliges Hentai Bild von rule34.paheal.net mit einem gegebenen Tag. |  ~r34 bacon
 `~gelbooru`  |  Zeigt ein zufälliges Hentai Bild von gelbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags) |  ~gelbooru yuri+kissing
 `~rule34`  |  Zeigt ein zufälliges Hentai Bild von rule34.xx  mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze + für mehrere Tags. |  ~rule34 yuri+kissing
 `~e621`  |  Zeigt ein zufälliges Hentai Bild von e621.net mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze Leerzeichen für mehrere Tags. |  ~e621 yuri+kissing
@@ -360,19 +351,13 @@ Befehl und Alternativen | Beschreibung | Benutzung
 ### ClashOfClans  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
-`,createwar`, `,cw`  |  Creates a new war by specifying a size (>10 and multiple of 5) and enemy clan name.
-**Usage**:,cw 15 The Enemy Clan
+`,createwar`, `,cw`  |  Creates a new war by specifying a size (>10 and multiple of 5) and enemy clan name. | ,cw 15 The Enemy Clan
 `,sw`, `,startwar`  |  Starts a war with a given number.
-`,listwar`, `,lw`  |  Shows the active war claims by a number. Shows all wars in a short way if no number is specified.
-**Usage**: ,lw [war_number] or ,lw
-`,claim`, `,call`, `,c`  |  Claims a certain base from a certain war. You can supply a name in the third optional argument to claim in someone else's place. 
-**Usage**: ,call [war_number] [base_number] [optional_otheruser]
-`,cf`, `,claimfinish`  |  Finish your claim if you destroyed a base. Optional second argument finishes for someone else.
-**Usage**: ,cf [war_number] [optional_other_name]
-`,unclaim`, `,uncall`, `,uc`  |  Removes your claim from a certain war. Optional second argument denotes a person in whos place to unclaim
-**Usage**: ,uc [war_number] [optional_other_name]
-`,endwar`, `,ew`  |  Ends the war with a given index.
-**Usage**:,ew [war_number]
+`,listwar`, `,lw`  |  Shows the active war claims by a number. Shows all wars in a short way if no number is specified. |  ,lw [war_number] or ,lw
+`,claim`, `,call`, `,c`  |  Claims a certain base from a certain war. You can supply a name in the third optional argument to claim in someone else's place.  |  ,call [war_number] [base_number] [optional_otheruser]
+`,cf`, `,claimfinish`  |  Finish your claim if you destroyed a base. Optional second argument finishes for someone else. |  ,cf [war_number] [optional_other_name]
+`,unclaim`, `,uncall`, `,uc`  |  Removes your claim from a certain war. Optional second argument denotes a person in whos place to unclaim |  ,uc [war_number] [optional_other_name]
+`,endwar`, `,ew`  |  Ends the war with a given index. | ,ew [war_number]
 
 ### Customreactions  
 Befehl und Alternativen | Beschreibung | Benutzung
@@ -381,13 +366,13 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `/o/`  |  Custom Reaction. | /o/
 `moveto`  |  Custom Reaction. | moveto
 `comeatmebro`  |  Custom Reaction. | comeatmebro
-`@BotName pat`, `<@!170857522419204096> pat`  |  Custom Reaction. | %mention% pat
-`@BotName cry`, `<@!170857522419204096> cry`  |  Custom Reaction. | %mention% cry
-`@BotName are you real?`, `<@!170857522419204096> are you real?`  |  Custom Reaction. | %mention% are you real?
-`@BotName are you there?`, `<@!170857522419204096> are you there?`  |  Custom Reaction. | %mention% are you there?
-`@BotName draw`, `<@!170857522419204096> draw`  |  Custom Reaction. | %mention% draw
-`@BotName bb`, `<@!170857522419204096> bb`  |  Custom Reaction. | %mention% bb
-`@BotName call`, `<@!170857522419204096> call`  |  Custom Reaction. | %mention% call
-`@BotName disguise`, `<@!170857522419204096> disguise`  |  Custom Reaction. | %mention% disguise
+`@BotName pat`, `<@!186940132010622978> pat`  |  Custom Reaction. | %mention% pat
+`@BotName cry`, `<@!186940132010622978> cry`  |  Custom Reaction. | %mention% cry
+`@BotName are you real?`, `<@!186940132010622978> are you real?`  |  Custom Reaction. | %mention% are you real?
+`@BotName are you there?`, `<@!186940132010622978> are you there?`  |  Custom Reaction. | %mention% are you there?
+`@BotName draw`, `<@!186940132010622978> draw`  |  Custom Reaction. | %mention% draw
+`@BotName bb`, `<@!186940132010622978> bb`  |  Custom Reaction. | %mention% bb
+`@BotName call`, `<@!186940132010622978> call`  |  Custom Reaction. | %mention% call
+`@BotName disguise`, `<@!186940132010622978> disguise`  |  Custom Reaction. | %mention% disguise
 `Da ist die Tür`  |  Custom Reaction. | Da ist die Tür
 `please stop`  |  Custom Reaction. | please stop

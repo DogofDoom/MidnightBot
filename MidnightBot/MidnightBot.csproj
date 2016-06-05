@@ -162,7 +162,8 @@
     <Compile Include="Modules\Pokemon\TrainerStats.cs" />
     <Compile Include="Modules\Programming\Commands\HaskellRepl.cs" />
     <Compile Include="Modules\Programming\ProgrammingModule.cs" />
-    <Compile Include="Modules\Searches\Commands\EvalCommand.cs" />
+    <Compile Include="Modules\Searches\Commands\APICommands.cs" />
+    <Compile Include="Modules\Searches\Commands\CalcCommand.cs" />
     <Compile Include="Modules\Searches\Commands\IMDB\ImdbMovie.cs" />
     <Compile Include="Modules\Searches\Commands\IMDB\ImdbScraper.cs" />
     <Compile Include="Classes\IncidentsHandler.cs" />
@@ -174,6 +175,7 @@
     </Compile>
     <Compile Include="_Models\DataModels\PokemonSprite.cs" />
     <Compile Include="_Models\JSONModels\AnimeResult.cs" />
+    <Compile Include="_Models\JSONModels\APIConfig.cs" />
     <Compile Include="_Models\JSONModels\Configuration.cs" />
     <Compile Include="_Models\JSONModels\LocalizedStrings.cs" />
     <Compile Include="_Models\JSONModels\MagicItem.cs" />

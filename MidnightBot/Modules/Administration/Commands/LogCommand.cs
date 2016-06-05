@@ -61,14 +61,13 @@ namespace MidnightBot.Modules.Administration.Commands
             try
             {
                 Channel ch;
-                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
                 if (e.Before.Name != e.After.Name)
-                    await OwnerPrivateChannel.SendMessage ($@"`{prettyCurrentTime}` **Channel Name geändert** `#{e.Before.Name}` (*{e.After.Id}*)
+                    await ch.SendMessage ($@"`{prettyCurrentTime}` **Channel Name geändert** `#{e.Before.Name}` (*{e.After.Id}*)
                                           `Neu:` {e.After.Name}").ConfigureAwait (false);
                 else if (e.Before.Topic != e.After.Topic)
-                    await OwnerPrivateChannel.SendMessage ($@"`{prettyCurrentTime}` **Channel Topic geändert** `#{e.After.Name}` (*{e.After.Id}*)
+                    await ch.SendMessage ($@"`{prettyCurrentTime}` **Channel Topic geändert** `#{e.After.Name}` (*{e.After.Id}*)
                                           `Alt:` {e.Before.Topic}
                                           `Neu:` {e.After.Topic}").ConfigureAwait (false);
             }
@@ -82,8 +81,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
-                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage ($"❗`{prettyCurrentTime}`❗`Channel Gelöscht:` #{e.Channel.Name} (*{e.Channel.Id}*)").ConfigureAwait (false);
+                await ch.SendMessage ($"❗`{prettyCurrentTime}`❗`Channel Gelöscht:` #{e.Channel.Name} (*{e.Channel.Id}*)").ConfigureAwait (false);
             }
             catch { }
         }
@@ -95,8 +93,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
-                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}`🆕`Channel Erstellt:` #{e.Channel.Mention} (*{e.Channel.Id}*)").ConfigureAwait (false);
+                await ch.SendMessage ($"`{prettyCurrentTime}`🆕`Channel Erstellt:` #{e.Channel.Mention} (*{e.Channel.Id}*)").ConfigureAwait (false);
             }
             catch { }
         }
@@ -108,8 +105,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
-                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}`♻`Benutzer wurde entbannt:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
+                await ch.SendMessage ($"`{prettyCurrentTime}`♻`Benutzer wurde entbannt:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
             }
             catch { }
         }
@@ -122,8 +118,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
-                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}`✅`User joined:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
+                await ch.SendMessage ($"`{prettyCurrentTime}`✅`User joined:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
             }
             catch { }
         }
@@ -135,8 +130,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue (e.Server,out ch))
                     return;
-                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}`❗`Benutzer verließ den Server:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
+                await ch.SendMessage ($"`{prettyCurrentTime}`❗`Benutzer verließ den Server:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
             }
             catch { }
         }
@@ -148,8 +142,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue (e.Server, out ch))
                     return;
-                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage ($"❗`{prettyCurrentTime}`❌`User gebannt:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
+                await ch.SendMessage ($"❗`{prettyCurrentTime}`❌`User gebannt:` **{e.User.Name}** ({e.User.Id})").ConfigureAwait (false);
             }
             catch { }
         }
@@ -160,8 +153,7 @@ namespace MidnightBot.Modules.Administration.Commands
             if (!logs.TryRemove(e.Server, out ch))
             {
                 logs.TryAdd(e.Server, e.Channel);
-                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage($"❗**Logging gestartet**❗").ConfigureAwait (false);
+                await e.Channel.SendMessage($"❗**Logging gestartet**❗").ConfigureAwait (false);
                 return;
             }
 
@@ -177,12 +169,18 @@ namespace MidnightBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue(e.Server, out ch) || e.Channel == ch)
                     return;
-                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
-                //await OwnerPrivateChannel.SendMessage
-                //    (
-                //        $@"🕔`{prettyCurrentTime}` **Neue Nachricht** `#{e.Channel.Name}`
-                //        👤`{e.User?.ToString () ?? ("NULL")}` {e.Message.Text.Unmention()}"
-                //    ).ConfigureAwait (false);
+                if (!string.IsNullOrWhiteSpace(e.Message.Text))
+                {
+                    await ch.SendMessage(
+                    $@"🕔`{prettyCurrentTime}` **Neue Nachricht** `#{e.Channel.Name}`
+                    👤`{e.User?.ToString() ?? ("NULL")}` {e.Message.Text.Unmention()}").ConfigureAwait(false);
+                }
+                else
+                {
+                    await ch.SendMessage(
+                    $@"🕔`{prettyCurrentTime}` **Datei hochgeladen** `#{e.Channel.Name}`
+                    👤`{e.User?.ToString() ?? ("NULL")}` {e.Message.Attachments.FirstOrDefault()?.ProxyUrl}").ConfigureAwait(false);
+                }
             }
             catch { }
         }
@@ -195,12 +193,18 @@ namespace MidnightBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue(e.Server, out ch) || e.Channel == ch)
                     return;
-                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage 
-                    (
-                        $@"🕔`{prettyCurrentTime}` **Nachricht** 🚮 `#{e.Channel.Name}`
-                        👤`{e.User?.ToString () ?? ("NULL")}` {e.Message.Text.Unmention ()}"
-                    ).ConfigureAwait (false);
+                if (!string.IsNullOrWhiteSpace(e.Message.Text))
+                {
+                    await ch.SendMessage(
+                    $@"🕔`{prettyCurrentTime}` **Nachricht gelöscht** 🚮 `#{e.Channel.Name}`
+                    👤`{e.User?.ToString() ?? ("NULL")}` {e.Message.Text.Unmention()}").ConfigureAwait(false);
+                }
+                else
+                {
+                    await ch.SendMessage(
+                    $@"🕔`{prettyCurrentTime}` **Datei gelöscht** `#{e.Channel.Name}`
+                    👤`{e.User?.ToString() ?? ("NULL")}` {e.Message.Attachments.FirstOrDefault()?.ProxyUrl}").ConfigureAwait(false);
+                }
             }
             catch { }
         }
@@ -213,8 +217,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 Channel ch;
                 if (!logs.TryGetValue(e.Server, out ch) || e.Channel == ch)
                     return;
-                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
-                await OwnerPrivateChannel.SendMessage 
+                await ch.SendMessage 
                     (
                         $@"🕔`{prettyCurrentTime}` **Nachricht** 📝 `#{e.Channel.Name}`
                         👤`{e.User?.ToString () ?? ("NULL")}`
@@ -232,8 +235,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 if (loggingPresences.TryGetValue(e.Server, out ch))
                     if (e.Before.Status != e.After.Status)
                     {
-                        Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
-                        await OwnerPrivateChannel.SendMessage ($"`{prettyCurrentTime}`**{e.Before.Name}** is now **{e.After.Status}**.").ConfigureAwait (false);
+                        await ch.SendMessage ($"`{prettyCurrentTime}`**{e.Before.Name}** is now **{e.After.Status}**.").ConfigureAwait (false);
                     }
             }
             catch { }
@@ -275,7 +277,6 @@ namespace MidnightBot.Modules.Administration.Commands
             try
             {
                 Channel ch;
-                Channel OwnerPrivateChannel = await MidnightBot.Client.CreatePrivateChannel (MidnightBot.Creds.OwnerIds[0]);
                 if (!logs.TryGetValue(e.Server, out ch))
                     return;
                 string str = $"🕔`{prettyCurrentTime}`";
@@ -302,11 +303,10 @@ namespace MidnightBot.Modules.Administration.Commands
                         Console.WriteLine ("SEQUENCE NOT EQUAL BUT NO DIFF ROLES - REPORT TO KWOTH on #NADEKOLOG server");
                         return;
                     }
-
                 }
                 else
                     return;
-                await OwnerPrivateChannel.SendMessage (str).ConfigureAwait (false);
+                await ch.SendMessage (str).ConfigureAwait (false);
             }
             catch { }
         }

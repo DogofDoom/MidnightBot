@@ -75,7 +75,7 @@ namespace MidnightBot.Modules.Permissions.Classes
                         PermissionsHandler.GetServerPermissionsRoleName (user.Server));
                     }
                     catch { }
-                    if (user.Server.Owner.Id == user.Id || (role != null && user.HasRole (role)))
+                    if (user.Server.Owner.Id == user.Id || (role != null && user.HasRole (role)) || MidnightBot.IsOwner (user.Id))
                         return true;
                     ServerPermissions perms;
                     PermissionsHandler.PermissionsDict.TryGetValue (user.Server.Id,out perms);

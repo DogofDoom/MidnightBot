@@ -387,28 +387,6 @@ namespace MidnightBot.Modules.Conversations
                         else
                             await e.User.SendMessage ("Ich kann keine Nachricht finden, in der du erwähnt wirst.").ConfigureAwait (false);
                     });
-                
-                cgb.CreateCommand ("hide")
-                    .Description ($"Versteckt {BotName}!11!!")
-                    .Do (async e =>
-                    {
-                        using (var ms = Resources.hidden.ToStream (ImageFormat.Png))
-                        {
-                            await client.CurrentUser.Edit (MidnightBot.Creds.Password,avatar: ms);
-                        }
-                        await e.Channel.SendMessage ("*versteckt sich*").ConfigureAwait (false);
-                    });
-
-                cgb.CreateCommand ("unhide")
-                    .Description ($"{BotName} kommt aus seinem Versteck!1!!1")
-                    .Do (async e =>
-                    {
-                        using (var fs = new FileStream ("data/avatar.png",FileMode.Open))
-                        {
-                            await client.CurrentUser.Edit (MidnightBot.Creds.Password,avatar: fs);
-                        }
-                        await e.Channel.SendMessage ("*kommt aus seinem Versteck*").ConfigureAwait (false);
-                    });
 
                 cgb.CreateCommand ("dump")
                     .Description ("Dumped alle Einladungen die er findet in dump.txt.** Owner Only.**")

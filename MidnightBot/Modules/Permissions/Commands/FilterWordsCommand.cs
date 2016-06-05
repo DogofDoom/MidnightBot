@@ -53,7 +53,7 @@ namespace MidnightBot.Modules.Permissions.Commands
                 .Alias(Module.Prefix + "channelfilterwords")
                 .Description("Aktiviert, oder deaktiviert automatische Löschung von Nachrichten auf diesem Channel, die gebannte Wörter beinhalten." +
                              "Wenn kein Channel ausgewählt, dieser hier. Benutze ALL um auf alle derzeit existierenden Channel zu aktivieren." +
-                             "\n**Usage**: ;cfw enable #general-chat")
+                             "\n**Benutzung**: ;cfw enable #general-chat")
                 .Parameter("bool")
                 .Parameter("channel", ParameterType.Optional)
                 .Do(async e =>

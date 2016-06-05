@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using RestSharp;
+using System.Xml;
 
 namespace MidnightBot.Classes
 {
@@ -305,6 +306,27 @@ namespace MidnightBot.Classes
                    $"{matches[rng.Next(0, matches.Count)].Groups["id"].Value}";
              //outlink = outlink.Replace("sample/sample-", "");
             return outlink;
+        }
+
+        public static async Task<string> GetR34ImageLink(string tag)
+        {
+            tag = tag.Replace(" ", "_");
+            Random rng = new Random();
+            var link = $"http://rule34.paheal.net/api/danbooru/find_posts?{(tag.Trim() == "" ? "" : $"tags={tag}")}";
+            XmlDocument results = new XmlDocument();
+            string result = await GetResponseStringAsync(link+"&limit=1").ConfigureAwait(false);
+            results.LoadXml(result);
+            XmlNode post = results.DocumentElement;
+            double count = int.Parse(post.Attributes["count"].Value);
+            int pages = (int)Math.Ceiling(count / 100);
+            string page = rng.Next(1, pages).ToString();
+            string link2 = link + $"&page={page}";
+            string result2 = await GetResponseStringAsync(link2);
+            results = new XmlDocument();
+            results.LoadXml(result2);
+            int rescount = rng.Next(0,results.FirstChild.ChildNodes.Count-1);
+            XmlNode last = results.FirstChild.ChildNodes[rescount];
+            return last.Attributes["file_url"].Value;
         }
 
     public static async Task<string> GetGelbooruImageLink ( string tag )

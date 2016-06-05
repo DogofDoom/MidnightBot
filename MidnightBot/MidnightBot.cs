@@ -76,6 +76,24 @@ namespace MidnightBot
             {
                 var defaultConfig = new Configuration ();
                 defaultConfig.CustomReactions = defaultConfig.DefaultReactions;
+                List<_Models.JSONModels.APIConfig> apis = new List<_Models.JSONModels.APIConfig>() {
+                    {new _Models.JSONModels.APIConfig
+                    {
+                        Names = new List<string>() {"randomcat", "meow" },
+                        QueryReplacements = new Dictionary<string, string>() { { @".*", "" } },
+                        URL = "http://www.random.cat/meow",
+                        ResponseHandling = Tuple.Create("JSON", "file"),
+                        URLSuffix = "",
+                        AllowEmpty = true
+
+                    } },
+                    {new _Models.JSONModels.APIConfig
+                    {
+                        Names = new List<string>() {"i", "image" },
+
+                    } }
+                };
+                File.WriteAllText("data/apis.json", JsonConvert.SerializeObject(apis, Formatting.Indented));
                 File.WriteAllText ("data/config_example.json",JsonConvert.SerializeObject (defaultConfig,Formatting.Indented));
                 if (!File.Exists ("data/config.json"))
                     File.Copy ("data/config_example.json","data/config.json");

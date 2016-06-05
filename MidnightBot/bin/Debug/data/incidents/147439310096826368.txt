@@ -16,3 +16,10 @@ Benutzer [Midnight Myth/119521688768610304] hat einen EINLADUNGS LINK im [spam/1
 --------------------------
 Benutzer [FurtherV/172241356293537792] schreib ein gebanntes Wort im Channel [spam/172017960502820864]. Ganze Nachricht: [[Hitler]]
 --------------------------
+Benutzer [PianoRailways/172990926719942656] hat einen EINLADUNGS LINK im [spam/172017960502820864] Channel gepostet. Ganze Nachricht: [[https://discord.gg/0xuQPz44DlSe0fzS]]
+--------------------------
+Benutzer [PianoRailways/172990926719942656] hat einen EINLADUNGS LINK im [plaudern/147439310096826368] Channel gepostet. Ganze Nachricht: [[https://discord.gg/0xuQPz44DlSe0fzS]]
+--------------------------
+Benutzer [Midnight Myth/119521688768610304] hat einen EINLADUNGS LINK im [team/159764760877858816] Channel gepostet. Ganze Nachricht: [[MidnightBotBOT - Heute um 18:14 Uhr
+VORFALL: Benutzer [PianoRailways/172990926719942656] hat einen EINLADUNGS LINK im [spam/172017960502820864] Channel gepostet. Ganze Nachricht: [[https://discord.gg/0xuQPz44DlSe0fzS]]]]
+--------------------------

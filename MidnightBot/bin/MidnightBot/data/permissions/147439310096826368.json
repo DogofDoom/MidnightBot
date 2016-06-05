@@ -1,0 +1,288 @@
+{
+  "PermissionsControllerRole": "Admin",
+  "Verbose": true,
+  "Id": 147439310096826368,
+  "Permissions": {
+    "Name": "GommeHD.net-Plauderkonfi",
+    "Modules": {
+      "NSFW": false,
+      "Pokegame": true,
+      "Sounds": true,
+      "Music": false
+    },
+    "Commands": {},
+    "FilterInvites": false,
+    "FilterWords": true
+  },
+  "Words": [
+    "hitler"
+  ],
+  "UserPermissions": {
+    "147390060742967296": {
+      "Name": "GimliBoy",
+      "Modules": {},
+      "Commands": {
+        ".restart": false
+      },
+      "FilterInvites": true,
+      "FilterWords": false
+    },
+    "184967084063588352": {
+      "Name": "TrexYT",
+      "Modules": {},
+      "Commands": {
+        "~ir": true
+      },
+      "FilterInvites": true,
+      "FilterWords": false
+    }
+  },
+  "ChannelPermissions": {
+    "150546367972900864": {
+      "Name": "admin",
+      "Modules": {
+        "Conversations": true,
+        "Customreactions": true,
+        "Games": true,
+        "Sounds": true,
+        "Extra": true,
+        "Help": true,
+        "Pokegame": true,
+        "NSFW": true,
+        "ClashOfClans": true,
+        "Permissions": true,
+        "Music": true,
+        "Searches": true,
+        "Translator": true,
+        "Gambling": true,
+        "Administration": true
+      },
+      "Commands": {},
+      "FilterInvites": false,
+      "FilterWords": false
+    },
+    "159981466892107776": {
+      "Name": "info",
+      "Modules": {
+        "Pokegame": false,
+        "Sounds": false
+      },
+      "Commands": {},
+      "FilterInvites": false,
+      "FilterWords": false
+    },
+    "164452617542434816": {
+      "Name": "pokemonkampf",
+      "Modules": {
+        "Games": false,
+        "Gambling": false,
+        "ClashOfClans": false,
+        "Pokegame": true,
+        "Sounds": false,
+        "Extra": false,
+        "Searches": false,
+        "Translator": false,
+        "Conversations": false,
+        "Music": false
+      },
+      "Commands": {},
+      "FilterInvites": true,
+      "FilterWords": false
+    },
+    "157947924087701504": {
+      "Name": "1punkt9-disskussion",
+      "Modules": {
+        "Pokegame": false,
+        "Sounds": false
+      },
+      "Commands": {},
+      "FilterInvites": true,
+      "FilterWords": false
+    },
+    "147439310096826368": {
+      "Name": "plaudern",
+      "Modules": {
+        "Conversations": true,
+        "Customreactions": true,
+        "Games": true,
+        "Sounds": false,
+        "Extra": false,
+        "Help": true,
+        "Pokegame": false,
+        "NSFW": false,
+        "ClashOfClans": false,
+        "Permissions": false,
+        "Music": false,
+        "Searches": true,
+        "Translator": false,
+        "Gambling": true,
+        "Administration": true
+      },
+      "Commands": {
+        "~twitch": false,
+        "~wiki": false,
+        "~removestream": false,
+        "~mi": false,
+        "~convert": false,
+        "~lolban": false,
+        "$draw": false,
+        "~revimg": false,
+        "~ir": false,
+        "~ud": false,
+        "$flip": false,
+        "~wowjoke": false,
+        "~randomcat": true,
+        "~i": false,
+        ">typestop": false,
+        "$leaderboard": true,
+        "~revav": false,
+        ">choose": false,
+        ">plant": true,
+        "~safebooru": false,
+        "~imdb": false,
+        ">tl": false,
+        "$raffle": false,
+        ">linux": false,
+        "~#": false,
+        ">typestart": false,
+        "~osustats": false,
+        "~convertlist": false,
+        "~yomama": false,
+        ">poll": false,
+        ">rps": false,
+        "$roll": false,
+        "$give": false,
+        ">typeadd": false,
+        "$award": false,
+        "~lolchamp": false,
+        "~hs": false,
+        "~quote": false,
+        ">pollend": false,
+        "~osu": false,
+        "~beam": false,
+        ">leet": false,
+        "~ani": false,
+        "~randjoke": false,
+        "$nroll": false,
+        ">helix": false,
+        "$take": false,
+        "~liststreams": false,
+        "~we": false,
+        "~yt": false,
+        "$shuffle": false,
+        "~hitbox": false,
+        "~mang": false,
+        "~chucknorris": false,
+        "~catfact": false,
+        ">pick": true,
+        "$$$": true,
+        ">t": false,
+        ">tq": false,
+        "~lmgtfy": false,
+        "~clr": false
+      },
+      "FilterInvites": true,
+      "FilterWords": false
+    },
+    "159764760877858816": {
+      "Name": "team",
+      "Modules": {
+        "Pokegame": false,
+        "Sounds": false
+      },
+      "Commands": {},
+      "FilterInvites": false,
+      "FilterWords": false
+    },
+    "150546643106660352": {
+      "Name": "vip",
+      "Modules": {
+        "Pokegame": false,
+        "Sounds": false
+      },
+      "Commands": {},
+      "FilterInvites": true,
+      "FilterWords": false
+    },
+    "165520954624049153": {
+      "Name": "airhorn",
+      "Modules": {
+        "Sounds": true
+      },
+      "Commands": {},
+      "FilterInvites": true,
+      "FilterWords": false
+    },
+    "172017960502820864": {
+      "Name": "spam",
+      "Modules": {
+        "Conversations": true,
+        "Customreactions": true,
+        "Games": true,
+        "Sounds": true,
+        "Extra": true,
+        "Help": true,
+        "Pokegame": false,
+        "NSFW": false,
+        "ClashOfClans": true,
+        "Permissions": true,
+        "Music": true,
+        "Searches": true,
+        "Translator": true,
+        "Gambling": true,
+        "Administration": true
+      },
+      "Commands": {},
+      "FilterInvites": true,
+      "FilterWords": false
+    }
+  },
+  "RolePermissions": {
+    "147686511964323840": {
+      "Name": "Admin",
+      "Modules": {
+        "Conversations": true,
+        "Customreactions": true,
+        "Games": true,
+        "Sounds": true,
+        "Extra": true,
+        "Help": true,
+        "Pokegame": true,
+        "NSFW": true,
+        "ClashOfClans": true,
+        "Permissions": true,
+        "Music": true,
+        "Searches": true,
+        "Translator": true,
+        "Gambling": true,
+        "Administration": true
+      },
+      "Commands": {},
+      "FilterInvites": true,
+      "FilterWords": false
+    },
+    "147439310096826368": {
+      "Name": "@everyone",
+      "Modules": {
+        "Conversations": false,
+        "Customreactions": false,
+        "Games": false,
+        "Sounds": false,
+        "Extra": false,
+        "Help": false,
+        "Pokegame": false,
+        "NSFW": false,
+        "ClashOfClans": false,
+        "Permissions": false,
+        "Music": false,
+        "Searches": false,
+        "Translator": false,
+        "Gambling": false,
+        "Administration": false
+      },
+      "Commands": {},
+      "FilterInvites": true,
+      "FilterWords": false
+    }
+  }
+}

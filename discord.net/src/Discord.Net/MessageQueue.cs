@@ -115,6 +115,7 @@ namespace Discord.Net
                 {
                     while (!cancelToken.IsCancellationRequested)
                     {
+                        
                         Message msg;
                         while (_pendingSends.TryDequeue(out msg))
                         {
