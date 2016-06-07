@@ -290,7 +290,7 @@ namespace MidnightBot
 
         public static bool IsOwner ( ulong id ) => Creds.OwnerIds.Contains (id);
 
-        public async Task SendMessageToOwner ( string message )
+        public static async Task SendMessageToOwner ( string message )
         {
             if (Config.ForwardMessages && OwnerPrivateChannel != null)
                 await OwnerPrivateChannel.SendMessage (message).ConfigureAwait (false);

@@ -207,7 +207,7 @@ namespace Discord
 			{
 				Status = UserStatus.FromString(model.Status);
 				if (Status == UserStatus.Offline)
-					_lastOnline = DateTime.UtcNow;
+					_lastOnline = DateTime.Now;
 			}
 
             if (model.Game != null)
@@ -249,7 +249,7 @@ namespace Discord
 		internal void UpdateActivity(DateTime? activity = null)
 		{
 			if (LastActivityAt == null || activity > LastActivityAt.Value)
-				LastActivityAt = activity ?? DateTime.UtcNow;
+				LastActivityAt = activity ?? DateTime.Now;
 		}
 
         public async Task Edit(bool? isMuted = null, bool? isDeafened = null, Channel voiceChannel = null, IEnumerable<Role> roles = null, string nickname = "")

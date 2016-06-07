@@ -32,8 +32,8 @@ namespace MidnightBot.Modules.Administration.Commands
 
         internal override void Init ( CommandGroupBuilder cgb )
         {
-            cgb.CreateCommand (Module.Prefix + "aar")
-                .Alias (Module.Prefix + "autoassignrole")
+            cgb.CreateCommand (Module.Prefix + "autoassignrole")
+                .Alias (Module.Prefix + "aar")
                 .Description ($"Fügt automatisch jedem Benutzer der dem Server joint eine Rolle zu. Gib `.aar` ein um zu deaktivieren, `.aar Rollen Name` um zu aktivieren.")
                 .Parameter ("role",ParameterType.Unparsed)
                 .AddCheck (new SimpleCheckers.ManageRoles ())
@@ -42,6 +42,7 @@ namespace MidnightBot.Modules.Administration.Commands
                     if (!e.Server.CurrentUser.ServerPermissions.ManageRoles)
                     {
                         await e.Channel.SendMessage ("Ich habe keine Berechtigungen um Rollen zu bearbeiten.");
+                        return;
                     }
                     var r = e.GetArg ("role")?.Trim ();
 

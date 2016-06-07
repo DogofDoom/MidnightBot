@@ -299,7 +299,7 @@ namespace MidnightBot.Modules.Pokemon
 
                 Random rand = new Random ();
                 cgb.CreateCommand(Prefix + "catch")
-                .Description($"Versucht das derzeitige wilde Pokemon zu fangen. Du musst das Pokemon angeben, welches du ersetzen willst. Kostet einen {MidnightBot.Config.CurrencyName}\n **Benutzung**:{Prefix}catch MyMudkip")
+                .Description($"Versucht das derzeitige wilde Pokemon zu fangen. Du musst das Pokemon angeben, welches du ersetzen willst. Kostet einen {MidnightBot.Config.CurrencyName}\n**Benutzung**:{Prefix}catch MyMudkip")
                 .Parameter("replace", ParameterType.Unparsed)
                 .Do(async e =>
                 {

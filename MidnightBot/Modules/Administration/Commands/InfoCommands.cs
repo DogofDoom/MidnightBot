@@ -75,6 +75,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 .Parameter ("user",ParameterType.Optional)
                 .Do (async e =>
                 {
+                    TimeSpan twohours = new TimeSpan (2,0,0);
                     var userText = e.GetArg ("user")?.Trim ();
                     var user = string.IsNullOrWhiteSpace (userText)
                              ? e.User
@@ -89,7 +90,7 @@ namespace MidnightBot.Modules.Administration.Commands
                     sb.AppendLine ($"`Status:` **{user.Status}**");
                     sb.AppendLine ($"`Derzeitiges Spiel:` **{(user.CurrentGame?.Name == null ? "-" : user.CurrentGame.Value.Name)}**");
                     if (user.LastOnlineAt != null)
-                        sb.AppendLine ($"`Zuletzt online:` **{user.LastOnlineAt:HH:mm:ss}**");
+                        sb.AppendLine ($"`Zuletzt online:` **{user.LastOnlineAt+twohours:HH:mm:ss}**");
                     sb.AppendLine ($"`Gejoint am:` **{user.JoinedAt}**");
                     sb.AppendLine ($"`Rollen:` **({user.Roles.Count ()}) - {string.Join (", ",user.Roles.Select (r => r.Name))}**");
                     sb.AppendLine ($"`AvatarUrl:` **{await user.AvatarUrl.ShortenUrl ().ConfigureAwait (false)}**");

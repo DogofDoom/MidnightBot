@@ -11,6 +11,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace MidnightBot.Modules.Administration
 { 
@@ -30,6 +31,7 @@ namespace MidnightBot.Modules.Administration
             commands.Add (new InfoCommands (this));
             commands.Add (new CustomReactionsCommands (this));
             commands.Add (new AutoAssignRole (this));
+            commands.Add (new SelfCommands (this));
         }
 
         public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Administration;
@@ -612,13 +614,78 @@ namespace MidnightBot.Modules.Administration
                      });
 
                 cgb.CreateCommand (Prefix + "heap")
-                  .Description ("Zeigt benutzten Speicher - **Owner Only!**")
-                  .AddCheck (SimpleCheckers.OwnerOnly ())
-                  .Do (async e =>
-                   {
-                       var heap = await Task.Run (() => MidnightStats.Instance.Heap ()).ConfigureAwait (false);
-                       await e.Channel.SendMessage ($"`Heap Size:` {heap}").ConfigureAwait (false);
-                   });
+                    .Description ("Zeigt benutzten Speicher - **Owner Only!**")
+                    .AddCheck (SimpleCheckers.OwnerOnly ())
+                    .Do (async e =>
+                     {
+                         var heap = await Task.Run (() => MidnightStats.Instance.Heap ()).ConfigureAwait (false);
+                         await e.Channel.SendMessage ($"`Heap Size:` {heap}").ConfigureAwait (false);
+                     });
+
+                cgb.CreateCommand (Prefix + "getinactive")
+                    .Description ("Zeigt anzahl inaktiver Benutzer - **Owner Only!**")
+                    .AddCheck (SimpleCheckers.OwnerOnly ())
+                    .Parameter ("days",ParameterType.Required)
+                    .Parameter ("prune",ParameterType.Optional)
+                    .Do (async e =>
+                    {
+                        if (string.IsNullOrWhiteSpace (e.GetArg ("prune"))|| e.GetArg ("prune") != "true")
+                        {
+                            var users = await e.Server.PruneUsers (Convert.ToInt32 (e.GetArg ("days")),true);
+                            await e.Channel.SendMessage ($"Inaktive Benutzer:` {users}").ConfigureAwait (false);
+                            return;
+                        }
+                        else
+                        {
+                            var users = await e.Server.PruneUsers (Convert.ToInt32 (e.GetArg ("days")),false);
+                            await e.Channel.SendMessage ($"Inaktive Benutzer gelöscht:` {users}").ConfigureAwait (false);
+                        }
+                    });
+
+                cgb.CreateCommand (Prefix + "permissions")
+                    .Alias (Prefix + "perms")
+                    .Parameter ("user",ParameterType.Unparsed)
+                    .Description ("Zeigt Berechtigungen eines Users")
+                    .Do (async e =>
+                    {
+                        var usr = e.User;
+                        if (!string.IsNullOrWhiteSpace (e.GetArg ("user")))
+                            usr = e.Channel.FindUsers (e.GetArg ("user")).FirstOrDefault ();
+                        if (usr == null)
+                            return;
+
+                        var permString = new StringBuilder ();
+
+                        permString.AppendLine ($"__**{usr.Name}**__");
+                        permString.AppendLine ("**Informationen**");
+                        permString.AppendLine ($"Besitzer: {usr.Server.IsOwner}");
+                        permString.AppendLine ($"Bot: {usr.IsBot}");
+                        permString.AppendLine ($"Selbst taub gestellt: {usr.IsSelfDeafened}");
+                        permString.AppendLine ($"Selbst stumm gestellt: {usr.IsSelfMuted}");
+                        permString.AppendLine ($"Vom Server taub gestellt: {usr.IsServerDeafened}");
+                        permString.AppendLine ($"Vom Server stumm gestellt: {usr.IsServerMuted}");
+                        permString.AppendLine ("**Rechte**");
+                        permString.AppendLine ($"Administrator: {usr.ServerPermissions.Administrator}");
+                        permString.AppendLine ($"Server bearbeiten: {usr.ServerPermissions.ManageServer}");
+                        permString.AppendLine ($"Rollen bearbeiten: {usr.ServerPermissions.ManageRoles}");
+                        permString.AppendLine ($"Dateien anhängen: {usr.ServerPermissions.AttachFiles}");
+                        permString.AppendLine ($"Benutzer bannen: {usr.ServerPermissions.BanMembers}");
+                        permString.AppendLine ($"Benutzer kicken: {usr.ServerPermissions.KickMembers}");
+                        permString.AppendLine ($"Benutzer taub stellen: {usr.ServerPermissions.DeafenMembers}");
+                        permString.AppendLine ($"Benutzer stumm stellen: {usr.ServerPermissions.MuteMembers}");
+                        permString.AppendLine ($"Benutzer in anderen Voice-Channel ziehen: {usr.ServerPermissions.MoveMembers}");
+                        permString.AppendLine ($"Nicknamen anderer bearbeiten: {usr.ServerPermissions.ManageNicknames}");
+                        permString.AppendLine ($"Eigenen Nicknamen ändern: {usr.ServerPermissions.ChangeNickname}");
+                        permString.AppendLine ($"Channel bearbeiten: {usr.ServerPermissions.ManageChannels}");
+                        permString.AppendLine ($"Alle Nachrichten löschen: {usr.ServerPermissions.ManageMessages}");
+                        permString.AppendLine ($"Jeden erwähnen: {usr.ServerPermissions.MentionEveryone}");
+                        permString.AppendLine ($"Zu Voice-Channel verbinden: {usr.ServerPermissions.Connect}");
+                        permString.AppendLine ($"Einladungslink erstellen: {usr.ServerPermissions.CreateInstantInvite}");
+                        permString.AppendLine ($"Links einbinden: {usr.ServerPermissions.EmbedLinks}");
+                        permString.AppendLine ($"TTS Nachrichten schicken: {usr.ServerPermissions.SendTTSMessages}");
+
+                        await e.Channel.SendMessage (permString.ToString()).ConfigureAwait (false);
+                    });
 
                 cgb.CreateCommand (Prefix + "prune")
                     .Alias (Prefix + "clr")
@@ -1067,21 +1134,6 @@ namespace MidnightBot.Modules.Administration
                             await e.Channel.SendMessage ("Niemand. (nicht 100% sicher)");
                         else
                             await e.Channel.SendMessage ("```xl\n" + string.Join ("\n",arr.GroupBy (item => (i++) / 3).Select (ig => string.Join ("",ig.Select (el => $"• {el,-35}")))) + "\n```");
-                    });
-
-                cgb.CreateCommand(Prefix + "leave")
-                    .Description("Verlässt einen Server mit gegebener ID.\n**Benutzung**: `.leave 493243292839`")
-                    .Parameter("num", ParameterType.Required)
-                    .AddCheck(SimpleCheckers.OwnerOnly())
-                    .Do(async e =>
-                    {
-                        var srvr = MidnightBot.Client.Servers.Where(s => s.Id.ToString() == e.GetArg("num").Trim()).FirstOrDefault();
-                        if (srvr == null)
-                        {
-                            return;
-                        }
-                        await srvr.Leave();
-                        await e.Channel.SendMessage("`Erledigt.`");
                     });
             });
         }
