@@ -2,7 +2,7 @@
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
 #MidnightBot List Of Commands  
-Version: `MidnightBot v0.9.6000.33538`
+Version: `MidnightBot v0.9.6002.22345`
 ### Administration  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
@@ -42,7 +42,8 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.addcustomreaction`, `.acr`  |  Fügt eine "Custom Reaction" hinzu. **Owner Only!** |  .acr "hello" I love saying hello to %user%
 `.listcustomreactions`, `.lcr`  |  Listet alle derzeitigen "Custom Reactions" (Seitenweise mit 5 Commands je Seite). | .lcr 1
 `.deletecustomreaction`, `.dcr`  |  Löscht eine "Custome Reaction" mit gegebenen Namen (und Index)
-`.aar`, `.autoassignrole`  |  Fügt automatisch jedem Benutzer der dem Server joint eine Rolle zu. Gib `.aar` ein um zu deaktivieren, `.aar Rollen Name` um zu aktivieren.
+`.autoassignrole`, `.aar`  |  Fügt automatisch jedem Benutzer der dem Server joint eine Rolle zu. Gib `.aar` ein um zu deaktivieren, `.aar Rollen Name` um zu aktivieren.
+`.leave`  |  Lässt  den Server verlassen. Entweder Name, oder ID benötigt. | .leave NSFW
 `.rules`  |  Regeln
 `.restart`  |  Startet den Bot neu. Könnte nicht funktionieren.
 `.sr`, `.setrole`  |  Setzt die Rolle für einen gegebenen Benutzer. |  .sr @User Gast
@@ -70,6 +71,8 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.stats`  |  Zeigt ein paar Statisitken über MidnightBot.
 `.dysyd`  |  Zeigt ein paar Statisitken über MidnightBot.
 `.heap`  |  Zeigt benutzten Speicher - **Owner Only!**
+`.getinactive`  |  Zeigt anzahl inaktiver Benutzer - **Owner Only!**
+`.permissions`, `.perms`  |  Zeigt Berechtigungen eines Users
 `.prune`, `.clr`  |  `.prune` alle von MidnightBots Nachrichten, in den letzten 100 Nachrichten.`.prune X` entfernt die letzten X Nachrichten von diesem Channel (bis zu 100)`.prune @Someone` Entfernt alle Nachrichten einer Person. in den letzten 100 Nachrichten.`.prune @Someone X` Entfernt die letzen X Nachrichten einer Person in diesem Channel.\n |  `.prune` oder `.prune 5` oder `.prune @Someone` oder `.prune @Someone X`
 `.die`, `.graceful`  |  Fährt den Bot herunter und benachrichtigt Benutzer über den Neustart. **Owner Only!**
 `.newname`, `.setname`  |  Gibt dem Bot einen neuen Namen. **Owner Only!**
@@ -91,7 +94,6 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.sendmsg`  |  Sendet eine Private Nachricht an einen User vom Bot aus.**Owner Only** |  .sendmsg @Username Nachricht
 `.announce`  |  Sends a message to all servers' general channel bot is connected to.**Owner Only!** |  .announce Useless spam
 `.whoplays`  |  Zeigt eine Liste von Benutzern die ein gewähltes Spiel spielen.
-`.leave`  |  Verlässt einen Server mit gegebener ID. |  `.leave 493243292839`
 
 ### Help  
 Befehl und Alternativen | Beschreibung | Benutzung
@@ -307,8 +309,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `>heal`  |  Heilt dein angegebenes Pokemon (per Nicknamen) oder das aktive Pokemon der gegebenen Person. | >heal bulbasaur, >heal @user, >heal all
 `>rename`, `>rn`  |  Benennt dein aktives Pokemon um. |  >rename dickbutt, >rn Mittens
 `>reset`  |  Setzt deine Pokemon zurück. KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN | >reset true
-`>catch`  |  Versucht das derzeitige wilde Pokemon zu fangen. Du musst das Pokemon angeben, welches du ersetzen willst. Kostet einen Euro
-  | >catch MyMudkip
+`>catch`  |  Versucht das derzeitige wilde Pokemon zu fangen. Du musst das Pokemon angeben, welches du ersetzen willst. Kostet einen Euro | >catch MyMudkip
 `>attack`, `>`  |  Greift gegebenes Ziel mit gegebener Attacke an. |  >attack hyperbeam @user, >attack @user flame-charge, > sunny-day @user
 
 ### Translator  
