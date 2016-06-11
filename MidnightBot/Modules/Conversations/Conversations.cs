@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.Modules;
+using MidnightBot.Classes;
 using MidnightBot.Classes.Conversations.Commands;
 using MidnightBot.Extensions;
 using MidnightBot.DataModels;
@@ -9,6 +10,7 @@ using MidnightBot.Properties;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -313,9 +315,10 @@ namespace MidnightBot.Modules.Conversations
                             return;
                         var usr = e.Channel.FindUsers (e.GetArg ("user")).FirstOrDefault ();
                         var text = "";
+                        var avatar = await GetAvatar (usr.AvatarUrl);
                         text = usr?.Name ?? e.GetArg ("user");
                         await e.Channel.SendFile ("ripzor_m8.png",
-                                RipName (text,string.IsNullOrWhiteSpace (e.GetArg ("year"))
+                                RipUser (text,avatar,string.IsNullOrWhiteSpace (e.GetArg ("year"))
                                 ? null 
                                 : e.GetArg ("year")))
                                 .ConfigureAwait (false);
@@ -470,6 +473,48 @@ namespace MidnightBot.Modules.Conversations
             g.Dispose ();
 
             return bm.ToStream (ImageFormat.Png);
+        }
+
+        public Stream RipUser(string name, Image avatar, string year = null)
+        {
+            var bm = Resources.rip;
+            var offset = name.Length * 2;
+            
+            var fontSize = 20;
+
+            if (name.Length > 10)
+            {
+                fontSize -= (name.Length - 10) / 2;
+            }
+            //var avatar = Image.FromStream(await SearchHelper.GetResponseStreamAsync(aviLink));
+            
+            //TODO use measure string
+            var g = Graphics.FromImage(bm);
+            g.DrawString(name, new Font("Comic Sans MS", fontSize, FontStyle.Bold), Brushes.Black, 100 - offset, 220);
+            g.DrawString((year ?? "?") + " - " + DateTime.Now.Year, new Font("Consolas", 12, FontStyle.Bold), Brushes.Black, 80, 240);
+            
+            g.DrawImage(avatar, 80,135);
+            g.DrawImage((Image)Resources.rose_overlay, 0, 0);
+            g.Flush(); 
+            g.Dispose();
+
+            return bm.ToStream(ImageFormat.Png);
+        }
+        
+        public static async Task<Image> GetAvatar(string url)
+        {
+            var stream = await SearchHelper.GetResponseStreamAsync(url);
+            Bitmap bmp = new Bitmap(100, 100);
+            using (GraphicsPath gp = new GraphicsPath())
+            {
+                gp.AddEllipse(0,0, bmp.Width, bmp.Height);
+                using (Graphics gr = Graphics.FromImage(bmp))
+                {
+                    gr.SetClip(gp);
+                    gr.DrawImage(Image.FromStream(stream), Point.Empty);
+                }
+            }
+            return bmp;
         }
 
         private static Func<CommandEventArgs,Task> SayYes ()

@@ -121,6 +121,20 @@ namespace MidnightBot.Classes.JSONModels
                 "NEIN - Es würde eine Krankheit auslösen"
             };
 
+        public string[] Regeln
+        {
+            get; set;
+        } =
+            {
+                "Keine Fremdwerbung jeglicher art! (Ob für Konfi,Server oder Forum)",
+                "Obwohl es hoffentlich verständlich ist, keinerlei Rassistische, Sexistische Äußerungen!",
+                "Kein Spam!Weder TTS, Command noch normal!",
+                "Bei Benutzung des Voicechats hat der richtige Channel gewählt zu werden, sodass in den Spiel - Channeln gespielt wird und im Plauderchannel geredet wird!",
+                "Bitte versucht wenigstens einigermaßen auf eure Rechtschreibung zu achten!",
+                "Beleidigungen boshafter Art sind zu unterlassen!",
+                "Vergehen werden ja nach Stärke mit Bann oder Kick bestraft!"
+            };
+
         public string CurrencySign { get; set; } = ":euro:";
         public string CurrencyName { get; set; } = "Euro";
 

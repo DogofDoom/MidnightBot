@@ -51,7 +51,14 @@ namespace MidnightBot.Modules.Administration
                     .Description ("Regeln")
                     .Do (async e =>
                     {
-                        await e.Channel.SendMessage ($"1. Keine Fremdwerbung jeglicher art! (Ob für Konfi,Server oder Forum)\n2.Obwohl es hoffentlich verständlich ist, keinerlei Rassistische, Sexistische Äußerungen!\n3.Kein Spam!Weder TTS, Command noch normal!\n4.Bei Benutzung des Voicechats hat der richtige Channel gewählt zu werden, sodass in den Spiel - Channeln gespielt wird und im Plauderchannel geredet wird!\n5.Bitte versucht wenigstens einigermaßen auf eure Rechtschreibung zu achten!\n6.Beleidigungen boshafter Art sind zu unterlassen!\nVergehen werden ja nach Stärke mit Bann oder Kick bestraft!");
+                        var rules = new StringBuilder ();
+                        var count = 1;
+                        foreach(string s in MidnightBot.Config.Regeln)
+                        {
+                            rules.AppendLine ($"{count}. {s}");
+                            count++;
+                        }
+                        await e.Channel.SendMessage (rules.ToString ()).ConfigureAwait (false);
                     });
 
                 cgb.CreateCommand (Prefix + "restart")
@@ -776,11 +783,7 @@ namespace MidnightBot.Modules.Administration
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
                     {
-                        foreach (var ch in MidnightBot.Client.Servers.Select (s => s.DefaultChannel))
-                        {
-                            await ch.SendMessage ("`Fährt herunter.`");
-                        }
-                        //await e.Channel.SendMessage ("`Fährt herunter.`").ConfigureAwait (false);
+                        await e.Channel.SendMessage ("`Fährt herunter.`").ConfigureAwait (false);
                         await Task.Delay (2000).ConfigureAwait (false);
                         Environment.Exit (0);
                     });

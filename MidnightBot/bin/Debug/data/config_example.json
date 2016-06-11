@@ -101,6 +101,15 @@
     "Definitiv nein",
     "NEIN - Es würde eine Krankheit auslösen"
   ],
+  "Regeln": [
+    "Keine Fremdwerbung jeglicher art! (Ob für Konfi,Server oder Forum)",
+    "Obwohl es hoffentlich verständlich ist, keinerlei Rassistische, Sexistische Äußerungen!",
+    "Kein Spam!Weder TTS, Command noch normal!",
+    "Bei Benutzung des Voicechats hat der richtige Channel gewählt zu werden, sodass in den Spiel - Channeln gespielt wird und im Plauderchannel geredet wird!",
+    "Bitte versucht wenigstens einigermaßen auf eure Rechtschreibung zu achten!",
+    "Beleidigungen boshafter Art sind zu unterlassen!",
+    "Vergehen werden ja nach Stärke mit Bann oder Kick bestraft!"
+  ],
   "CurrencySign": ":euro:",
   "CurrencyName": "Euro",
   "DMHelpString": "Gib `-h` ein für Hilfe."

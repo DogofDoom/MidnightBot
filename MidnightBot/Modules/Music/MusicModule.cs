@@ -23,8 +23,7 @@ namespace MidnightBot.Modules.Music
 
         public MusicModule ()
         {
-
-            // ready for 1.0
+            //ready for 1.0
             //MidnightBot.Client.UserUpdated += (s, e) =>
             //{
             //    try
@@ -39,7 +38,6 @@ namespace MidnightBot.Modules.Music
             //    }
             //    catch { }
             //};
-
         }
 
         public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Music;
@@ -247,7 +245,7 @@ namespace MidnightBot.Modules.Music
                      });
 
                 cgb.CreateCommand (Prefix + "sh")
-                    .Description ("Mischt die derzeitiege Abspielliste.")
+                    .Description ("Mischt die derzeitige Abspielliste.")
                     .Do (async e =>
                      {
                          MusicPlayer musicPlayer;
@@ -691,7 +689,6 @@ namespace MidnightBot.Modules.Music
 
                         try
                         {
-
                             var msgTxt = $"🎵`Playing`{song.PrettyName} `Vol: {(int)(sender.Volume * 100)}%`";
                             playingMessage = await textCh.SendMessage (msgTxt).ConfigureAwait (false);
                         }
