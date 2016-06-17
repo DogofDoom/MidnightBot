@@ -41,7 +41,6 @@ namespace MidnightBot
         public static LocalizedStrings Locale { get; set; } = new LocalizedStrings ();
         public static string BotMention { get; set; } = "";
         public static bool Ready { get; set; } = false;
-        public static bool IsBot { get; set; } = false;
 
         private static Channel OwnerPrivateChannel { get; set; }
 
@@ -55,23 +54,7 @@ namespace MidnightBot
     private static void Main ()
         {
             Console.OutputEncoding = Encoding.Unicode;
-
-            //var lines = File.ReadAllLines("data/input.txt");
-            //HashSet<dynamic> list = new HashSet<dynamic>();
-            //for (int i = 0; i < lines.Length; i += 3) {
-            //    dynamic obj = new JArray();
-            //    obj.Text = lines[i];
-            //    obj.Author = lines[i + 1];
-            //    if (obj.Author.StartsWith("-"))
-            //        obj.Author = obj.Author.Substring(1, obj.Author.Length - 1).Trim();
-            //    list.Add(obj);
-            //}
-
-            //File.WriteAllText("data/quotes.json", Newtonsoft.Json.JsonConvert.SerializeObject(list, Formatting.Indented));
-
-            //Console.ReadKey();
-
-            // generate credentials example so people can know about the changes i make
+            
             try
             {
                 var defaultConfig = new Configuration ();
@@ -131,10 +114,10 @@ namespace MidnightBot
             }
 
             //if password is not entered, prompt for password
-            if (string.IsNullOrWhiteSpace (Creds.Password) && string.IsNullOrWhiteSpace (Creds.Token))
+            if (string.IsNullOrWhiteSpace (Creds.Token))
             {
-                Console.WriteLine ("Passwort leer. Bitte Passwort eingeben:\n");
-                Creds.Password = Console.ReadLine ();
+                Console.WriteLine ("Kein Token gesetzt. Bitte gib deinen Bot-Token ein:\n");
+                Creds.Token = Console.ReadLine ();
             }
 
             Console.WriteLine (string.IsNullOrWhiteSpace (GetRndGoogleAPIKey ())
@@ -202,8 +185,8 @@ namespace MidnightBot
             }));
 
             //install modules
-            modules.Add (new AdministrationModule (),"Administration",ModuleFilter.None);
             modules.Add (new HelpModule (),"Help",ModuleFilter.None);
+            modules.Add (new AdministrationModule (),"Administration",ModuleFilter.None);
             modules.Add (new PermissionModule (),"Permissions",ModuleFilter.None);
             modules.Add (new Conversations (),"Conversations",ModuleFilter.None);
             modules.Add (new GamblingModule (),"Gambling",ModuleFilter.None);
@@ -227,23 +210,11 @@ namespace MidnightBot
             {
                 try
                 {
-                    if (string.IsNullOrWhiteSpace (Creds.Token))
-                        await Client.Connect (Creds.Username,Creds.Password).ConfigureAwait (false);
-                    else
-                    {
-                        await Client.Connect (Creds.Token).ConfigureAwait (false);
-                        IsBot = true;
-                        BotName = Client.CurrentUser.Name;
-                        Console.WriteLine ("Derzeit eingeloggt als: " + BotName);
-                    }
-                    Console.WriteLine (MidnightBot.Client.CurrentUser.Id);
+                    await Client.Connect (Creds.Token).ConfigureAwait (false);
                 }
                 catch (Exception ex)
                 {
-                    if (string.IsNullOrWhiteSpace (Creds.Token))
-                        Console.WriteLine ($"Falsche EMAIL oder PASSWORT.");
-                    else
-                        Console.WriteLine ($"Token ist fehlerhaft. Setze keinen Token wenn du keinen offiziellen BOT Account bestitzt.");
+                    Console.WriteLine ($"Token ist fehlerhaft. Setze keinen Token wenn du keinen offiziellen BOT Account bestitzt.");
                     Console.WriteLine (ex);
                     Console.ReadKey ();
                     return;
@@ -308,24 +279,6 @@ namespace MidnightBot
                 if (ConfigHandler.IsBlackListed (e))
                     return;
 
-                if (!MidnightBot.Config.DontJoinServers && !IsBot)
-                {
-                    try
-                    {
-                        await (await Client.GetInvite (e.Message.Text).ConfigureAwait (false)).Accept ().ConfigureAwait (false);
-                        await e.Channel.SendMessage ("Ich bin gejoint!").ConfigureAwait (false);
-                        return;
-                    }
-                    catch
-                    {
-                        if (e.User.Id == 109338686889476096)
-                        { //carbonitex invite
-                            await e.Channel.SendMessage ("Failed to join the server.").ConfigureAwait (false);
-                            return;
-                        }
-                    }
-                }
-
                 if (Config.ForwardMessages && !MidnightBot.Creds.OwnerIds.Contains (e.User.Id) && OwnerPrivateChannel != null)
                     await OwnerPrivateChannel.SendMessage (e.User + ": ```\n" + e.Message.Text + "\n```").ConfigureAwait (false);
 
@@ -333,7 +286,7 @@ namespace MidnightBot
                     return;
 
                 repliedRecently = true;
-                if (e.Message.RawText != "-h")
+                if (e.Message.RawText != MidnightBot.Config.CommandPrefixes.Help + "h")
                     await e.Channel.SendMessage (HelpCommand.DMHelpString).ConfigureAwait (false);
                 await Task.Delay (2000).ConfigureAwait (false);
                 repliedRecently = false;

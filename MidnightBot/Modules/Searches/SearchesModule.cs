@@ -552,6 +552,21 @@ namespace MidnightBot.Modules.Searches
 
                        await e.Send (formatString).ConfigureAwait (false);
                    });
+                
+                cgb.CreateCommand (Prefix + "stardew")
+                    .Description ($"Gibt einen Link zum Stardew Valley Wiki mit gegebenem Topic zurück.\n**Benutzung**: {Prefix}stardew Cow")
+                    .Parameter ("topic",ParameterType.Unparsed)
+                    .Do (async e =>
+                    {
+                        var topic = e.GetArg ("topic")?.Trim ().ToLowerInvariant ();
+                        if (string.IsNullOrWhiteSpace (topic))
+                            return;
+                        
+                        var upperTopic = topic[0].ToString ().ToUpper () + topic.Substring (1);
+                        topic.Replace (" ","_");
+
+                        await e.Channel.SendMessage ($"Ich habe nach: {upperTopic} gesucht und folgendes gefunden: http://stardewvalleywiki.com/{topic}").ConfigureAwait (false);
+                    });
 
                 cgb.CreateCommand (Prefix + "mi")
                    .Alias (Prefix + "magicitem")

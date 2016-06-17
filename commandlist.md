@@ -2,7 +2,18 @@
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
 #MidnightBot List Of Commands  
-Version: `MidnightBot v0.9.6002.22345`
+Version: `MidnightBot v0.9.6012.40972`
+### Help  
+Befehl und Alternativen | Beschreibung | Benutzung
+----------------|--------------|-------
+`-h`, `-help`, `@BotName help`, `@BotName h`, `~h`  |  Hilfe-Befehl. |  '-h !m q' or just '-h' 
+`-hh`  |  Hilfe-Befehl. |  '-hh !m q' or just '-h' 
+`-hgit`  |  commandlist.md Datei erstellung. **Bot Owner Only!**
+`-readme`, `-guide`  |  Sendet eine readme und ein Guide verlinkt zum Channel.
+`-donate`, `~donate`  |  Informationen um das Projekt zu unterstützen!
+`-modules`, `.modules`  |  Listet alle Module des Bots.
+`-commands`, `.commands`  |  Listet alle Befehle eines bestimmten Moduls.
+
 ### Administration  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
@@ -14,9 +25,9 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.byepm`  |  Stellt ein ob die Verabschiedung im Channel, oder per PN geschickt wird.
 `.greetpm`  |  Stellt ein ob der Gruß im Channel, oder per PN geschickt wird.
 `.spmom`  |  Toggles whether mentions of other offline users on your server will send a pm to them.
-`.logserver`  |  Toggles logging in this channel. Logs every message sent/deleted/edited on the server. **Owner Only!**
-`.userpresence`  |  Starts logging to this channel when someone from the server goes online/offline/idle. **Owner Only!**
-`.voicepresence`  |  Toggles logging to this channel whenever someone joins or leaves a voice channel you are in right now. **Owner Only!**
+`.logserver`  |  Toggles logging in this channel. Logs every message sent/deleted/edited on the server. **Bot Owner Only!**
+`.userpresence`  |  Starts logging to this channel when someone from the server goes online/offline/idle. **Bot Owner Only!**
+`.voicepresence`  |  Toggles logging to this channel whenever someone joins or leaves a voice channel you are in right now. **Bot Owner Only!**
 `.repeatinvoke`, `.repinv`  |  Zeigt die Repeat Nachricht sofort an und startet den Timer neu.
 `.repeat`  |  Wiederholt eine Nachricht alle X Minuten. Falls nicht spezifiziert, Wiederholung ist deaktiviert. Benötigt 'manage messages'. | `.repeat 5 Hello there`
 `.rotateplaying`, `.ropl`  |  Toggles rotation of playing status of the dynamic strings you specified earlier.
@@ -35,15 +46,15 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.iam`  |  Adds a role to you that you choose. Role must be on a list of self-assignable roles. |  .iam Gamer
 `.iamn`, `.iamnot`  |  Removes a role to you that you choose. Role must be on a list of self-assignable roles. |  .iamn Gamer
 `.remind`  |  Sendet nach einer bestimmten Zeit eine Nachricht in den Channel. Erstes Argument ist me/here/'channelname'. Zweites Argument ist die Zeit in absteigender Reihenfolge (mo>w>d>h>m) Beispiel: 1w5d3h10m. Drittes Argument ist eine (Multiwort)Nachricht.  |  `.remind me 1d5h Do something` or `.remind #general Start now!`
-`.remindmsg`  |  Setzt Nachricht, wenn die Erinnerung ausgelöst wird.  Verfügbare Platzhalter sind %user% - Benutzer der den Command ausgeführt hat, %message% - Nachricht spezifiziert in Erinnerung, %target% - Ziel Channel der Erinnerung. **Owner only!**
+`.remindmsg`  |  Setzt Nachricht, wenn die Erinnerung ausgelöst wird.  Verfügbare Platzhalter sind %user% - Benutzer der den Command ausgeführt hat, %message% - Nachricht spezifiziert in Erinnerung, %target% - Ziel Channel der Erinnerung. **Bot Owner Only!**
 `.sinfo`, `.serverinfo`  |  Zeigt Infos über den Server, auf dem der Bot läuft. Falls kein Server ausgewählt, derzeitiger wird ausgewählt. | .sinfo Some Server
 `.cinfo`, `.channelinfo`  |  Zeigt Infos über einen Channel. Wenn kein Channel ausgewählt, derzeitiger wird angegeben. | .cinfo #some-channel
 `.uinfo`, `.userinfo`  |  Zeigt eine Info über den User. Wenn kein User angegeben, User der den Befehl eingibt. | .uinfo @SomeUser
-`.addcustomreaction`, `.acr`  |  Fügt eine "Custom Reaction" hinzu. **Owner Only!** |  .acr "hello" I love saying hello to %user%
+`.addcustomreaction`, `.acr`  |  Fügt eine "Custom Reaction" hinzu. **Bot Owner Only!** |  .acr "hello" I love saying hello to %user%
 `.listcustomreactions`, `.lcr`  |  Listet alle derzeitigen "Custom Reactions" (Seitenweise mit 5 Commands je Seite). | .lcr 1
 `.deletecustomreaction`, `.dcr`  |  Löscht eine "Custome Reaction" mit gegebenen Namen (und Index)
 `.autoassignrole`, `.aar`  |  Fügt automatisch jedem Benutzer der dem Server joint eine Rolle zu. Gib `.aar` ein um zu deaktivieren, `.aar Rollen Name` um zu aktivieren.
-`.leave`  |  Lässt  den Server verlassen. Entweder Name, oder ID benötigt. | .leave NSFW
+`.leave`  |  Lässt  den Server verlassen. Entweder Name, oder ID benötigt. | `.leave 123123123331`
 `.rules`  |  Regeln
 `.restart`  |  Startet den Bot neu. Könnte nicht funktionieren.
 `.sr`, `.setrole`  |  Setzt die Rolle für einen gegebenen Benutzer. |  .sr @User Gast
@@ -54,6 +65,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.rolecolor`, `.rc`  |  Setzt die Farbe einer Rolle zur Hex, oder RGB Farb-Value die gegeben wird. |  `.color Admin 255 200 100 oderr .color Admin ffba55`
 `.roles`  |  Listet alle Rollen auf diesem Server, oder die eines Benutzers wenn spezifiziert.
 `.b`, `.ban`  |  Bannt einen erwähnten Benutzer. |  .b "@some Guy" Your behaviour is toxic.
+`.sb`, `.softban`  |  Bannt und entbannt einen Benutzer per ID, oder Name mit optionaler Nachricht. |  .sb "@some Guy" Your behaviour is toxic.
 `.k`, `.kick`  |  Kickt einen erwähnten User.
 `.mute`  |  Mutet erwähnte Benutzer.
 `.unmute`  |  Entmutet erwähnte Benutzer.
@@ -70,41 +82,31 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.sid`, `.serverid`  |  Zeigt ID des derzeitigen Servers.
 `.stats`  |  Zeigt ein paar Statisitken über MidnightBot.
 `.dysyd`  |  Zeigt ein paar Statisitken über MidnightBot.
-`.heap`  |  Zeigt benutzten Speicher - **Owner Only!**
-`.getinactive`  |  Zeigt anzahl inaktiver Benutzer - **Owner Only!**
+`.heap`  |  Zeigt benutzten Speicher - **Bot Owner Only!**
+`.getinactive`  |  Zeigt anzahl inaktiver Benutzer - **Bot Owner Only!**
 `.permissions`, `.perms`  |  Zeigt Berechtigungen eines Users
 `.prune`, `.clr`  |  `.prune` alle von MidnightBots Nachrichten, in den letzten 100 Nachrichten.`.prune X` entfernt die letzten X Nachrichten von diesem Channel (bis zu 100)`.prune @Someone` Entfernt alle Nachrichten einer Person. in den letzten 100 Nachrichten.`.prune @Someone X` Entfernt die letzen X Nachrichten einer Person in diesem Channel.\n |  `.prune` oder `.prune 5` oder `.prune @Someone` oder `.prune @Someone X`
-`.die`, `.graceful`  |  Fährt den Bot herunter und benachrichtigt Benutzer über den Neustart. **Owner Only!**
-`.newname`, `.setname`  |  Gibt dem Bot einen neuen Namen. **Owner Only!**
-`.newavatar`, `.setavatar`  |  Setzt ein neues Profilbild für MidnightBot. **Owner Only!**
-`.setgame`  |  Setzt das Spiel des Bots. **Owner Only!**
+`.die`, `.graceful`  |  Fährt den Bot herunter und benachrichtigt Benutzer über den Neustart. **Bot Owner Only!**
+`.newname`, `.setname`  |  Gibt dem Bot einen neuen Namen. **Bot Owner Only!**
+`.newavatar`, `.setavatar`  |  Setzt ein neues Profilbild für MidnightBot. **Bot Owner Only!**
+`.setgame`  |  Setzt das Spiel des Bots. **Bot Owner Only!**
 `.checkmyperms`  |  Kontrolliere deine Berechtigungen auf diesem Server.
-`.commsuser`  |  Setzt einen Benutzer für die Throug-Bot Kommunikation. Funktioniert nur, wenn Server gesetzt ist. Resettet commschannel. **Owner Only!**
-`.commsserver`  |  Setzt einen Server für Through-Bot Kommunikation. **Owner Only!**
-`.commschannel`  |  Setzt einen Channel für Through-Bot Kommunikation. Funktioniert nur, wenn Server gesetzt ist. Resettet commsuser. **Owner Only!**
-`.send`  |  Sende eine Nachricht an einen User auf einem anderen Server über den Bot..**Owner Only!****
+`.commsuser`  |  Setzt einen Benutzer für die Throug-Bot Kommunikation. Funktioniert nur, wenn Server gesetzt ist. Resettet commschannel. **Bot Owner Only!**
+`.commsserver`  |  Setzt einen Server für Through-Bot Kommunikation. **Bot Owner Only!**
+`.commschannel`  |  Setzt einen Channel für Through-Bot Kommunikation. Funktioniert nur, wenn Server gesetzt ist. Resettet commsuser. **Bot Owner Only!**
+`.send`  |  Sende eine Nachricht an einen User auf einem anderen Server über den Bot..**Bot Owner Only!****
   |  .send Message text multi word!
 `.menrole`, `.mentionrole`  |  Erwähnt jeden User mit einer bestimmten Rolle oder bestimmten Rollen (Getrennt mit einem ',') auf diesem Server. 'Mention everyone' Berechtigung erforderlich.
 `.inrole`  |  Listet alle Benutzer von einer angegebenen Rolle, oder Rollen (getrennt mit einem ',') auf diesem Server.
-`.parsetosql`  |  Lädt exportierte Parsedata von /data/parsedata/ in Sqlite Datenbank.
-`.unstuck`  |  Löscht die Nachrichten-Liste. **Owner Only!**
+`.unstuck`  |  Löscht die Nachrichten-Liste. **Bot Owner Only!**
 `.donators`  |  Liste von Leuten die dieses Projekt unterstützen.
 `.adddon`, `.donadd`  |  Fügt einen Donator zur Datenbank hinzu.
 `.videocall`  |  Erstellt privaten appear.in Video Anruf Link für dich und eine erwähnte Person und sendet sie per privater Nachricht.
-`.sendmsg`  |  Sendet eine Private Nachricht an einen User vom Bot aus.**Owner Only** |  .sendmsg @Username Nachricht
-`.announce`  |  Sends a message to all servers' general channel bot is connected to.**Owner Only!** |  .announce Useless spam
+`.sendmsg`  |  Sendet eine Private Nachricht an einen User vom Bot aus.**Bot Owner Only** |  .sendmsg @Username Nachricht
+`.announce`  |  Sends a message to all servers' general channel bot is connected to.**Bot Owner Only!** |  .announce Useless spam
 `.whoplays`  |  Zeigt eine Liste von Benutzern die ein gewähltes Spiel spielen.
-
-### Help  
-Befehl und Alternativen | Beschreibung | Benutzung
-----------------|--------------|-------
-`-h`, `-help`, `@BotName help`, `@BotName h`, `~h`  |  Hilfe-Befehl. |  '-h !m q' or just '-h' 
-`-hh`  |  Hilfe-Befehl. |  '-hh !m q' or just '-h' 
-`-hgit`  |  OWNER ONLY commandlist.md Datei erstellung. **Owner Only!**
-`-readme`, `-guide`  |  Sendet eine readme und ein Guide verlinkt zum Channel.
-`-donate`, `~donate`  |  Informationen um das Projekt zu unterstützen!
-`-modules`, `.modules`  |  Listet alle Module des Bots.
-`-commands`, `.commands`  |  Listet alle Befehle eines bestimmten Moduls.
+`.servers`  |  Zeigt alle Server an, auf denen der Bot ist.
+`.leave`  |  Leaves a server with a supplied ID. |  `.leave 493243292839`
 
 ### Permissions  
 Befehl und Alternativen | Beschreibung | Benutzung
@@ -156,10 +158,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `..qshow`  |  Zeigt alle Zitate mit angegebenen Keyword. |  `..qshow abc`
 `@BotName copyme`, `@BotName cm`  |   macht alles nach, was du schreibst. Deaktivieren mit cs
 `@BotName cs`, `@BotName copystop`  |   kopiert dich nicht mehr.
-`@BotName req`, `@BotName request`  |  Fordere ein Feature für . |  @ req new_feature
-`@BotName lr`  |  Alle Anfragen werden dem User per PN geschickt.
-`@BotName dr`  |  Löscht eine Forderung. **Owner Only!**
-`@BotName rr`  |  Erledigt eine Forderung. **Owner Only!**
+`@BotName rip`  |  Zeigt ein Grab von jemanden mit einem Startjahr |  @ rip @Someone 2000
 `@BotName uptime`  |  Zeigt wie lange  schon läuft.
 `@BotName die`  |  Funktioniert nur für den Owner. Fährt den Bot herunter.
 `@BotName do you love me`, `@BotName do you love me?`  |  Antwortet nur dem Owner positiv.
@@ -167,7 +166,6 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `@BotName insult`  |  Beleidigt @X Person. |  @ insult @X.
 `@BotName praise`  |  Lobt @X Person. |  @ praise @X.
 `@BotName fire`  |  Zeigt eine unicode Feuer Nachricht. Optionaler Parameter [x] sagt ihm wie oft er das Feuer wiederholen soll. |  @ fire [x]
-`@BotName rip`  |  Zeigt ein Grab von jemanden mit einem Startjahr |  @ rip @Someone 2000
 `@BotName slm`  |  Zeigt die Nachricht in der du in diesem Channel zuletzt erwähnt wurdest (checked die letzten 10k Nachrichten)
 `@BotName dump`  |  Dumped alle Einladungen die er findet in dump.txt.** Owner Only.**
 `@BotName ab`  |  Versuche 'abalabahaha' zu bekommen
@@ -184,8 +182,8 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `$nroll`  |  Würfelt in einer gegebenen Zahlenreichweite. |  `$nroll 5` (rolls 0-5) or `$nroll 5-15`
 `$raffle`  |  Schreibt den Namen und die ID eines zufälligen Benutzers aus der Online Liste einer (optionalen) Rolle.
 `$$$`  |  Überprüft, wieviele Euro du hast.
-`$award`  |  Gibt jemanden eine bestimmte Anzahl an Euro. **Owner only!** |  $award 5 @Benutzer
-`$take`  |  Entfernt eine bestimmte Anzahl an Euro von jemanden. **Owner only!** |  $take 5 @Benutzer
+`$award`  |  Gibt jemanden eine bestimmte Anzahl an Euro. **Bot Owner Only!** |  $award 5 @Benutzer
+`$take`  |  Entfernt eine bestimmte Anzahl an Euro von jemanden. **Bot Owner Only!** |  $take 5 @Benutzer
 `$give`  |  Gibt jemanden eine Anzahl Euro. |  $give 5 @Benutzer
 `$leaderboard`, `$lb`  |  
 
@@ -223,15 +221,15 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `!min`, `!mute`  |  Setzt die Lautstärke auf 0%
 `!max`  |  Setzt de Lautstärke auf 100% (Echte Höchstgrenze ist bei 150%).
 `!half`  |  Setzt die Lautstärke auf 50%.
-`!sh`  |  Mischt die derzeitiege Abspielliste.
-`!setgame`  |  Setzt das Spiel auf die Nummer der Lieder die gespielt werden. **Owner Only!**
+`!sh`  |  Mischt die derzeitige Abspielliste.
+`!setgame`  |  Setzt das Spiel auf die Nummer der Lieder die gespielt werden. **Bot Owner Only!**
 `!pl`, `!playlistrequest`  |  Listet bis zu 50 Lieder aus einer Youtubeplaylist, oder aus einem Suchbegriff.
-`!lopl`  |  Listet alle Lieder von einem Verzeichnis. **Owner Only!**
+`!lopl`  |  Listet alle Lieder von einem Verzeichnis. **Bot Owner Only!**
 `!radio`, `!ra`  |  Listet einen direkten Radio Stream von einem Link.
-`!lo`  |  Listet einen lokalen Song mit vollen Pfad. **Owner Only!** |  `!lo C:/music/mysong.mp3`
+`!lo`  |  Listet einen lokalen Song mit vollen Pfad. **Bot Owner Only!** |  `!lo C:/music/mysong.mp3`
 `!mv`  |  Verschiebt den Bot in den eigenen Voice-Channel. (Funktioniert nur, wenn schon Musik läuft)
 `!rm`  |  Entfernt einen Song mit seiner Id, oder 'all' um die komplette Liste zu löschen.
-`!cleanup`  |  Bereinigt hängende Voice-Verbindung. **Owner Only!**
+`!cleanup`  |  Bereinigt hängende Voice-Verbindung. **Bot Owner Only!**
 `!rcs`, `!repeatcurrentsong`  |  Schaltet das Wiederholen des derzeitigen Liedes um.
 `!rpl`, `!repeatplaylist`  |  Schaltet das Wiederholen aller Songs in der Liste um. (Jedes beendete Lied wird an das Ende der Liste hinzugefügt).
 `!save`  |  Speichert eine Playlist unter einem bestimmten Namen. Name darf nicht länger als 20 Zeichen sein und darf keine Kommas beinhalten. |  `!save classical1`
@@ -277,6 +275,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `~chucknorris`, `~cn`  |  Zeigt einen zufälligen Chuck Norris Witz von <http://tambal.azurewebsites.net/joke/random>
 `~osumap`, `~om`  |  Zeigt Informationen über eine bestimmte Beatmap |  ~osumap 252002:std
 `~osu`, `~oq`  |  Zeigt Osu Benutzer Statistiken |  ~osu Cookiezi:standard
+`~stardew`  |  Gibt einen Link zum Stardew Valley Wiki mit gegebenem Topic zurück. |  ~stardew Cow
 `~mi`, `~magicitem`  |  Zeigt ein zufälliges Magic-Item von <https://1d4chan.org/wiki/List_of_/tg/%27s_magic_items>
 `~revav`  |  Gibt ein Google Reverse Image Search für das Profilbild einer Person zurück.
 `~revimg`  |  Gibt eine 'Google Reverse Image Search' für ein Bild von einem Link zurück.
@@ -292,6 +291,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `#Wambo`  |  Wambo
 `AND HIS NAME IS`  |  John Cena
 `.kekse`  |  Verteilt Kekse an eine bestimmte Person
+`~rip`  |  Verteilt Kekse an eine bestimmte Person
 `~randomschinken`, `~rs`  |  Zeigt ein zufälliges Schinkenbild.
 `~randomlocation`, `~rl`  |  Zeigt eine zufällige Stadt.
 `~randomimage`, `~ri`  |  Zeigt ein zufälliges Bild.
@@ -367,13 +367,13 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `/o/`  |  Custom Reaction. | /o/
 `moveto`  |  Custom Reaction. | moveto
 `comeatmebro`  |  Custom Reaction. | comeatmebro
-`@BotName pat`, `<@!186940132010622978> pat`  |  Custom Reaction. | %mention% pat
-`@BotName cry`, `<@!186940132010622978> cry`  |  Custom Reaction. | %mention% cry
-`@BotName are you real?`, `<@!186940132010622978> are you real?`  |  Custom Reaction. | %mention% are you real?
-`@BotName are you there?`, `<@!186940132010622978> are you there?`  |  Custom Reaction. | %mention% are you there?
-`@BotName draw`, `<@!186940132010622978> draw`  |  Custom Reaction. | %mention% draw
-`@BotName bb`, `<@!186940132010622978> bb`  |  Custom Reaction. | %mention% bb
-`@BotName call`, `<@!186940132010622978> call`  |  Custom Reaction. | %mention% call
-`@BotName disguise`, `<@!186940132010622978> disguise`  |  Custom Reaction. | %mention% disguise
+`@BotName pat`, `<@!186940149148418048> pat`  |  Custom Reaction. | %mention% pat
+`@BotName cry`, `<@!186940149148418048> cry`  |  Custom Reaction. | %mention% cry
+`@BotName are you real?`, `<@!186940149148418048> are you real?`  |  Custom Reaction. | %mention% are you real?
+`@BotName are you there?`, `<@!186940149148418048> are you there?`  |  Custom Reaction. | %mention% are you there?
+`@BotName draw`, `<@!186940149148418048> draw`  |  Custom Reaction. | %mention% draw
+`@BotName bb`, `<@!186940149148418048> bb`  |  Custom Reaction. | %mention% bb
+`@BotName call`, `<@!186940149148418048> call`  |  Custom Reaction. | %mention% call
+`@BotName disguise`, `<@!186940149148418048> disguise`  |  Custom Reaction. | %mention% disguise
 `Da ist die Tür`  |  Custom Reaction. | Da ist die Tür
 `please stop`  |  Custom Reaction. | please stop

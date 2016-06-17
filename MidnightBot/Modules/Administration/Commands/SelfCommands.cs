@@ -1,11 +1,7 @@
-﻿using MidnightBot.Classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Discord.Commands;
+﻿using Discord.Commands;
+using MidnightBot.Classes;
 using MidnightBot.Modules.Permissions.Classes;
+using System.Linq;
 
 namespace MidnightBot.Modules.Administration.Commands
 {
@@ -20,14 +16,14 @@ namespace MidnightBot.Modules.Administration.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "leave")
-                .Description ($"Lässt {BotName} den Server verlassen. Entweder Name, oder ID benötigt.\n**Benutzung**:.leave NSFW")
+                .Description ($"Lässt {BotName} den Server verlassen. Entweder Name, oder ID benötigt.\n**Benutzung**:`.leave 123123123331`")
                 .Parameter ("arg",ParameterType.Required)
                 .AddCheck (SimpleCheckers.OwnerOnly ())
                 .Do (async e =>
                 {
-                    var arg = e.GetArg ("arg")?.Trim ();
+                    var arg = e.GetArg ("arg").Trim ();
                     var server = MidnightBot.Client.Servers.FirstOrDefault (s => s.Id.ToString () == arg) ??
-                                 MidnightBot.Client.FindServers (arg.Trim ()).FirstOrDefault ();
+                                 MidnightBot.Client.FindServers (arg).FirstOrDefault ();
                     if (server == null)
                     {
                         await e.Channel.SendMessage ("Kann Server nicht finden.").ConfigureAwait (false);
@@ -35,13 +31,13 @@ namespace MidnightBot.Modules.Administration.Commands
                     }
                     if (!server.IsOwner)
                     {
-                        await server.Leave ();
+                        await server.Leave ().ConfigureAwait (false);
                     }
                     else
                     {
-                        await server.Delete ();
+                        await server.Delete ().ConfigureAwait (false);
                     }
-                    await MidnightBot.SendMessageToOwner ($"Server {server.Name} verlassen.");
+                    await MidnightBot.SendMessageToOwner ($"Server {server.Name} verlassen.").ConfigureAwait (false);
                 });
         }
     }

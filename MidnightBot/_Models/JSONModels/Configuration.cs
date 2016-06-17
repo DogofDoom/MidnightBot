@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using MidnightBot.Extensions;
 
 namespace MidnightBot.Classes.JSONModels
 {
@@ -10,6 +11,7 @@ namespace MidnightBot.Classes.JSONModels
         public bool DontJoinServers { get; set; } = false;
         public bool ForwardMessages { get; set; } = true;
         public bool IsRotatingStatus { get; set; } = false;
+        public int BufferSize { get; set; } = 4.MiB ();
         [JsonIgnore]
         public List<Quote> Quotes { get; set; } = new List<Quote> ();
 
@@ -139,6 +141,17 @@ namespace MidnightBot.Classes.JSONModels
         public string CurrencyName { get; set; } = "Euro";
 
         public string DMHelpString { get; set; } = "Gib `-h` ein für Hilfe.";
+        public string HelpString { get; set; } = @"Du kannst den Befehl `{0}modules` benutzen, um eine Liste aller Module zu sehen.
+                 Du kannst den Befehl `{0}commands ModuleName`
+                 (zum Beispiel `{0}commands Administration`) benutzen, um eine Liste aller Befehle in diesem Modul zu sehen.
+                 Für einen speziellen Befehl kannst du `{0}h ""Command name""` (zum Beispiel `-h ""!m q""`) benutzen.
+ 
+ 
+                 **LISTE DER BEFEHLE KANN BEI DIESEM LINK GEFUNDEN WERDEN**
+                 <https://github.com/Midnight-Myth/MidnightBot/blob/master/commandlist.md>
+ 
+ 
+                 MidnightBot Support Server: <https://discord.gg/0p3mZ7JeMSzGdT7L>";
     }
 
     public class CommandPrefixesModel

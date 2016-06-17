@@ -180,7 +180,7 @@ namespace MidnightBot.Modules.Administration.Commands
             cgb.CreateCommand (Module.Prefix + "remindmsg")
                 .Description ("Setzt Nachricht, wenn die Erinnerung ausgelöst wird. " +
                     " Verfügbare Platzhalter sind %user% - Benutzer der den Command ausgeführt hat, %message% -" +
-                    " Nachricht spezifiziert in Erinnerung, %target% - Ziel Channel der Erinnerung. **Owner only!**")
+                    " Nachricht spezifiziert in Erinnerung, %target% - Ziel Channel der Erinnerung. **Bot Owner Only!**")
                 .Parameter ("msg",ParameterType.Unparsed)
                 .AddCheck (SimpleCheckers.OwnerOnly ())
                 .Do (async e =>

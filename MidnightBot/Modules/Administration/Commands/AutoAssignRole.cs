@@ -41,7 +41,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 {
                     if (!e.Server.CurrentUser.ServerPermissions.ManageRoles)
                     {
-                        await e.Channel.SendMessage ("Ich habe keine Berechtigungen um Rollen zu bearbeiten.");
+                        await e.Channel.SendMessage ("Ich habe keine Berechtigungen um Rollen zu bearbeiten.").ConfigureAwait (false);
                         return;
                     }
                     var r = e.GetArg ("role")?.Trim ();
@@ -52,19 +52,19 @@ namespace MidnightBot.Modules.Administration.Commands
                     {
                         config.AutoAssignedRole = 0;
 
-                        await e.Channel.SendMessage ("`Auto Assign Role beim betreten des Servers ist jetzt deaktiviert.`");
+                        await e.Channel.SendMessage ("`Auto Assign Role beim betreten des Servers ist jetzt deaktiviert.`").ConfigureAwait (false);
                         return;
                     }
                     var role = e.Server.FindRoles (r).FirstOrDefault ();
 
                     if (role == null)
                     {
-                        await e.Channel.SendMessage ("💢 `Rolle nicht gefunden.`");
+                        await e.Channel.SendMessage ("💢 `Rolle nicht gefunden.`").ConfigureAwait (false);
                         return;
                     }
 
                     config.AutoAssignedRole = role.Id;
-                    await e.Channel.SendMessage ("`Auto Assigned Role ist gesetzt.`");
+                    await e.Channel.SendMessage ("`Auto Assigned Role ist gesetzt.`").ConfigureAwait (false);
 
                 });
         }

@@ -85,10 +85,11 @@ namespace MidnightBot.Modules.Administration.Commands
                     // if both null, disable
                     if (string.IsNullOrWhiteSpace (msg) && string.IsNullOrWhiteSpace (minutesStr))
                     {
-                        await e.Channel.SendMessage ("Wiederholung deaktiviert").ConfigureAwait (false);
                         Repeater rep;
-                        if (repeaters.TryRemove (e.Server,out rep))
-                            rep.MessageTimer.Stop ();
+                        if (!repeaters.TryRemove(e.Server, out rep))
+                            return;
+                        rep.MessageTimer.Stop();
+                        await e.Channel.SendMessage("Wiederholung deaktiviert").ConfigureAwait(false);
                         return;
                     }
                     int minutes;

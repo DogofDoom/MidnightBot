@@ -21,7 +21,7 @@ namespace MidnightBot.Modules.Administration.Commands
 
             cgb.CreateCommand (Prefix + "addcustomreaction")
                 .Alias (Prefix + "acr")
-                .Description ($"Fügt eine \"Custom Reaction\" hinzu. **Owner Only!**\n**Benutzung**: {Prefix}acr \"hello\" I love saying hello to %user%")
+                .Description ($"Fügt eine \"Custom Reaction\" hinzu. **Bot Owner Only!**\n**Benutzung**: {Prefix}acr \"hello\" I love saying hello to %user%")
                 .AddCheck (SimpleCheckers.OwnerOnly ())
                 .Parameter ("name",ParameterType.Required)
                 .Parameter ("message",ParameterType.Unparsed)
@@ -38,7 +38,7 @@ namespace MidnightBot.Modules.Administration.Commands
                         MidnightBot.Config.CustomReactions[name].Add (message);
                     else
                         MidnightBot.Config.CustomReactions.Add (name,new System.Collections.Generic.List<string> () { message });
-                    await Task.Run (() => Classes.JSONModels.ConfigHandler.SaveConfig ());
+                    await Task.Run (() => Classes.JSONModels.ConfigHandler.SaveConfig ()).ConfigureAwait (false);
                     await e.Channel.SendMessage ($"Hinzugefügt {name} : {message}").ConfigureAwait (false);
 
                 });
@@ -97,7 +97,7 @@ namespace MidnightBot.Modules.Administration.Commands
                         message = $"Custom Reaction: `{name}` gelöscht";
                     }
                     await Task.Run (() => Classes.JSONModels.ConfigHandler.SaveConfig ());
-                    await e.Channel.SendMessage (message);
+                    await e.Channel.SendMessage (message).ConfigureAwait (false);
                 });
         }
 

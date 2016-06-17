@@ -99,11 +99,14 @@ namespace MidnightBot.Classes.Help.Commands
         }).ConfigureAwait(false);
     };
     
-        public static string HelpString => MidnightBot.IsBot ? $"Um {MidnightBot.Client.CurrentUser.Name} zu deinem Server einzuladen, gehe hierhin: <>\n" : "" +
-                                       $"Du kannst `{MidnightBot.Config.CommandPrefixes.Help}modules` benutzen um eine Liste aller Module zu sehen.\n" +
-                                       $"Du kannst `{MidnightBot.Config.CommandPrefixes.Help}commands ModuleName`" +
-                                       $" (zum Beispiel `{MidnightBot.Config.CommandPrefixes.Help}commands Administration`) benutzen um eine Liste aller Befehle des Modules zu sehen.\n" +
-                                       $"Für die Hilfe bei einem bestimmten Befehl, benutze `{MidnightBot.Config.CommandPrefixes.Help}h \"Command name\"` (zum Beispiel `-h \"! q\"`)";
+        public static string HelpString {
+            get {
+                var str = string.IsNullOrWhiteSpace(MidnightBot.Creds.ClientId) && !MidnightBot.Config.DontJoinServers
+                    ? String.Format("To add me to your server, use this link -> <https://discordapp.com/oauth2/authorize?client_id={0}&scope=bot&permissions=66186303>\n", MidnightBot.Creds.ClientId)
+                    : "";
+                return str + String.Format(MidnightBot.Config.HelpString, MidnightBot.Config.CommandPrefixes.Help);
+            }
+        }
 
         public static string DMHelpString => MidnightBot.Config.DMHelpString;
 
@@ -151,7 +154,7 @@ Version: `{MidnightStats.Instance.BotVersion}`";
                 .Parameter ("command",ParameterType.Unparsed)
                 .Do (NewHelpFunc ());
             cgb.CreateCommand (Module.Prefix + "hgit")
-                .Description ("OWNER ONLY commandlist.md Datei erstellung. **Owner Only!**")
+                .Description ("commandlist.md Datei erstellung. **Bot Owner Only!**")
                 .AddCheck (SimpleCheckers.OwnerOnly ())
                 .Do (DoGitFunc ());
             cgb.CreateCommand (Module.Prefix + "readme")

@@ -331,13 +331,13 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand(Module.Prefix + "logserver")
-                  .Description("Toggles logging in this channel. Logs every message sent/deleted/edited on the server. **Owner Only!**")
+                  .Description("Toggles logging in this channel. Logs every message sent/deleted/edited on the server. **Bot Owner Only!**")
                   .AddCheck (SimpleCheckers.OwnerOnly ())
                   .AddCheck (SimpleCheckers.ManageServer ())
                   .Do(DoFunc());
 
             cgb.CreateCommand(Module.Prefix + "userpresence")
-                  .Description("Starts logging to this channel when someone from the server goes online/offline/idle. **Owner Only!**")
+                  .Description("Starts logging to this channel when someone from the server goes online/offline/idle. **Bot Owner Only!**")
                   .AddCheck (SimpleCheckers.OwnerOnly ())
                   .AddCheck (SimpleCheckers.ManageServer ())
                   .Do(async e =>
@@ -354,7 +354,7 @@ namespace MidnightBot.Modules.Administration.Commands
                   });
 
             cgb.CreateCommand(Module.Prefix + "voicepresence")
-                  .Description("Toggles logging to this channel whenever someone joins or leaves a voice channel you are in right now. **Owner Only!**")
+                  .Description("Toggles logging to this channel whenever someone joins or leaves a voice channel you are in right now. **Bot Owner Only!**")
                   .Parameter("all", ParameterType.Optional)
                   .AddCheck (SimpleCheckers.OwnerOnly ())
                   .AddCheck (SimpleCheckers.ManageServer ())

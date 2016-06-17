@@ -63,30 +63,12 @@ namespace MidnightBot.Modules.Trello
                 }
             };
 
-            manager.CreateCommands ("trello ",cgb =>
+            manager.CreateCommands ("",cgb =>
             {
 
                 cgb.AddCheck (PermissionChecker.Instance);
 
-                cgb.CreateCommand ("join")
-                    .Alias ("j")
-                    .Description ("Joint einem Server")
-                    .Parameter ("code",Discord.Commands.ParameterType.Required)
-                    .Do (async e =>
-                    {
-                        if (!MidnightBot.IsOwner(e.User.Id) || MidnightBot.IsBot) return;
-                        try
-                        {
-                            await (await client.GetInvite (e.GetArg ("code")).ConfigureAwait (false)).Accept ()
-                                               .ConfigureAwait (false);
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine (ex.ToString ());
-                        }
-                    });
-
-                cgb.CreateCommand ("bind")
+                cgb.CreateCommand (Prefix + "bind")
                     .Description ("Bindet einen trello Bot an einen einzigen Server. " +
                                  "Du erhälst Benachrichtigungen, wenn etwas entfernt, oder hinzugefügt wird." +
                                  "\n**Benutzung**: bind [board_id]")
@@ -111,7 +93,7 @@ namespace MidnightBot.Modules.Trello
                         }
                     });
 
-                cgb.CreateCommand ("unbind")
+                cgb.CreateCommand (Prefix + "unbind")
                     .Description ("Entknüpft einen Bot vom Channel und Board.")
                     .Do (async e =>
                     {
@@ -126,8 +108,8 @@ namespace MidnightBot.Modules.Trello
 
                     });
 
-                cgb.CreateCommand ("lists")
-                    .Alias ("list")
+                cgb.CreateCommand (Prefix + "lists")
+                    .Alias (Prefix + "list")
                     .Description ("Listet alle Listen")
                     .Do (async e =>
                     {
@@ -139,7 +121,7 @@ namespace MidnightBot.Modules.Trello
                         .ConfigureAwait (false);
                     });
 
-                cgb.CreateCommand ("cards")
+                cgb.CreateCommand (Prefix + "cards")
                     .Description ("Lists all cards from the supplied list. You can supply either a name or an index.")
                     .Parameter ("list_name",Discord.Commands.ParameterType.Unparsed)
                     .Do (async e =>

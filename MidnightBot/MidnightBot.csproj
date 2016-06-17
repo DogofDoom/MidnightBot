@@ -154,6 +154,7 @@
     <Compile Include="Modules\ClashOfClans\ClashOfClans.cs" />
     <Compile Include="Classes\DBHandler.cs" />
     <Compile Include="Classes\FlowersHandler.cs" />
+    <Compile Include="Modules\Conversations\Commands\RipCommand.cs" />
     <Compile Include="Modules\CustomReactions\CustomReactions.cs" />
     <Compile Include="Modules\Meme\MemeModule.cs" />
     <Compile Include="Modules\Osu\OsuApi.cs" />
@@ -229,7 +230,6 @@
     <Compile Include="Modules\Games\Commands\Trivia\TriviaGame.cs" />
     <Compile Include="Modules\Games\Commands\Trivia\TriviaQuestion.cs" />
     <Compile Include="Modules\Games\Commands\Trivia\TriviaQuestionPool.cs" />
-    <Compile Include="Modules\Conversations\Commands\RequestsCommand.cs" />
     <Compile Include="Modules\Administration\Commands\ServerGreetCommand.cs" />
     <Compile Include="Modules\Games\Commands\SpeedTyping.cs" />
     <Compile Include="Modules\Gambling\Helpers\Cards.cs" />

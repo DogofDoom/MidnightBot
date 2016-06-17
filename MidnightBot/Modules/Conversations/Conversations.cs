@@ -1,17 +1,13 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.Modules;
-using MidnightBot.Classes;
 using MidnightBot.Classes.Conversations.Commands;
 using MidnightBot.Extensions;
+using MidnightBot.Modules.Conversations.Commands;
 using MidnightBot.DataModels;
 using MidnightBot.Modules.Permissions.Classes;
-using MidnightBot.Properties;
 using System;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,7 +21,7 @@ namespace MidnightBot.Modules.Conversations
         public Conversations ()
         {
             commands.Add (new CopyCommand (this));
-            commands.Add (new RequestsCommand (this));
+            commands.Add (new RipCommand (this));
         }
         public string BotName { get; set; } = MidnightBot.BotName;
 
@@ -305,50 +301,6 @@ namespace MidnightBot.Modules.Conversations
                         await e.Channel.SendMessage (str).ConfigureAwait (false);
                     });
 
-                cgb.CreateCommand ("rip")
-                    .Description ($"Zeigt ein Grab von jemanden mit einem Startjahr\n**Benutzung**: @{BotName} rip @Someone 2000")
-                    .Parameter ("user",ParameterType.Required)
-                    .Parameter ("year",ParameterType.Optional)
-                    .Do (async e =>
-                    {
-                        if (string.IsNullOrWhiteSpace (e.GetArg ("user")))
-                            return;
-                        var usr = e.Channel.FindUsers (e.GetArg ("user")).FirstOrDefault ();
-                        var text = "";
-                        var avatar = await GetAvatar (usr.AvatarUrl);
-                        text = usr?.Name ?? e.GetArg ("user");
-                        await e.Channel.SendFile ("ripzor_m8.png",
-                                RipUser (text,avatar,string.IsNullOrWhiteSpace (e.GetArg ("year"))
-                                ? null 
-                                : e.GetArg ("year")))
-                                .ConfigureAwait (false);
-                    });
-
-                if (!MidnightBot.Config.DontJoinServers)
-                {
-                    cgb.CreateCommand ("j")
-                        .Description ("Joint einem Server mit einem Code.")
-                        .Parameter ("id",ParameterType.Required)
-                        .Do (async e =>
-                        {
-                            var invite = await client.GetInvite (e.Args[0]).ConfigureAwait (false);
-                            if (invite != null)
-                            {
-                                try
-                                {
-                                    await invite.Accept ();
-                                }
-                                catch
-                                {
-                                    await e.Channel.SendMessage ("Einladung nicht akzeptiert.").ConfigureAwait (false);
-                                }
-                                await e.Channel.SendMessage ("Ich bin drinnen!").ConfigureAwait (false);
-                                return;
-                            }
-                            await e.Channel.SendMessage ("Ungültiger Code.").ConfigureAwait (false);
-                        });
-                }
-
                 cgb.CreateCommand ("slm")
                     .Description ("Zeigt die Nachricht in der du in diesem Channel zuletzt erwähnt wurdest (checked die letzten 10k Nachrichten)")
                     .Do (async e =>
@@ -451,72 +403,7 @@ namespace MidnightBot.Modules.Conversations
 
             });
         }
-
-        public Stream RipName ( string name,string year = null )
-        {
-            var bm = Resources.rip;
-
-            var offset = name.Length * 5;
-
-            var fontSize = 20;
-
-            if (name.Length > 10)
-            {
-                fontSize -= (name.Length - 10) / 2;
-            }
-
-            //TODO use measure string
-            var g = Graphics.FromImage (bm);
-            g.DrawString (name,new Font ("Comic Sans MS",fontSize,FontStyle.Bold),Brushes.Black,100 - offset,200);
-            g.DrawString ((year ?? "?") + " - " + DateTime.Now.Year,new Font ("Consolas",12,FontStyle.Bold),Brushes.Black,80,235);
-            g.Flush ();
-            g.Dispose ();
-
-            return bm.ToStream (ImageFormat.Png);
-        }
-
-        public Stream RipUser(string name, Image avatar, string year = null)
-        {
-            var bm = Resources.rip;
-            var offset = name.Length * 2;
-            
-            var fontSize = 20;
-
-            if (name.Length > 10)
-            {
-                fontSize -= (name.Length - 10) / 2;
-            }
-            //var avatar = Image.FromStream(await SearchHelper.GetResponseStreamAsync(aviLink));
-            
-            //TODO use measure string
-            var g = Graphics.FromImage(bm);
-            g.DrawString(name, new Font("Comic Sans MS", fontSize, FontStyle.Bold), Brushes.Black, 100 - offset, 220);
-            g.DrawString((year ?? "?") + " - " + DateTime.Now.Year, new Font("Consolas", 12, FontStyle.Bold), Brushes.Black, 80, 240);
-            
-            g.DrawImage(avatar, 80,135);
-            g.DrawImage((Image)Resources.rose_overlay, 0, 0);
-            g.Flush(); 
-            g.Dispose();
-
-            return bm.ToStream(ImageFormat.Png);
-        }
         
-        public static async Task<Image> GetAvatar(string url)
-        {
-            var stream = await SearchHelper.GetResponseStreamAsync(url);
-            Bitmap bmp = new Bitmap(100, 100);
-            using (GraphicsPath gp = new GraphicsPath())
-            {
-                gp.AddEllipse(0,0, bmp.Width, bmp.Height);
-                using (Graphics gr = Graphics.FromImage(bmp))
-                {
-                    gr.SetClip(gp);
-                    gr.DrawImage(Image.FromStream(stream), Point.Empty);
-                }
-            }
-            return bmp;
-        }
-
         private static Func<CommandEventArgs,Task> SayYes ()
             => async e => await e.Channel.SendMessage ("Ja. :)").ConfigureAwait (false);
     }

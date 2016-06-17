@@ -23,21 +23,6 @@ namespace MidnightBot.Modules.Music
 
         public MusicModule ()
         {
-            //ready for 1.0
-            //MidnightBot.Client.UserUpdated += (s, e) =>
-            //{
-            //    try
-            //    {
-            //        if (e.Before.VoiceChannel != e.After.VoiceChannel &&
-            //           e.Before.VoiceChannel.Members.Count() == 0)
-            //        {
-            //            MusicPlayer musicPlayer;
-            //            if (!MusicPlayers.TryRemove(e.Server, out musicPlayer)) return;
-            //            musicPlayer.Destroy();
-            //        }
-            //    }
-            //    catch { }
-            //};
         }
 
         public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Music;
@@ -130,6 +115,7 @@ namespace MidnightBot.Modules.Music
                 cgb.CreateCommand (Prefix + "lq")
                     .Alias (Prefix + "ls").Alias (Prefix + "lp")
                     .Description ("Zeigt bis zu 15 Songs die zurzeit in der Liste sind.")
+                    .Parameter ("page",ParameterType.Optional)
                     .Do (async e =>
                      {
                          MusicPlayer musicPlayer;
@@ -137,6 +123,12 @@ namespace MidnightBot.Modules.Music
                          {
                              await e.Channel.SendMessage ("🎵 Kein aktiver Musik-Player.").ConfigureAwait (false);
                              return;
+                         }
+
+                         int page;
+                         if (!int.TryParse(e.GetArg("page"), out page) || page <= 0)
+                         {
+                             page = 1;
                          }
                          var currentSong = musicPlayer.CurrentSong;
                          if (currentSong == null)
@@ -146,13 +138,15 @@ namespace MidnightBot.Modules.Music
                              toSend += "🔂";
                          else if (musicPlayer.RepeatPlaylist)
                              toSend += "🔁";
-                         toSend += $" **{musicPlayer.Playlist.Count}** `Lieder, derzeit gelistet.` ";
+                         toSend += $" **{musicPlayer.Playlist.Count}** `Lieder, derzeit gelistet. Zeige Seite {page}` ";
                          if (musicPlayer.Playlist.Count >= MusicPlayer.MaximumPlaylistSize)
                              toSend += "**Song Liste ist voll!**\n";
                          else
                              toSend += "\n";
-                         var number = 1;
-                         await e.Channel.SendMessage (toSend + string.Join ("\n",musicPlayer.Playlist.Take (15).Select (v => $"`{number++}.` {v.PrettyName}"))).ConfigureAwait (false);
+                         const int itemsPerPage = 15;
+                        int startAt = itemsPerPage * (page - 1);
+                        var number = 1 + startAt;
+                        await e.Channel.SendMessage(toSend + string.Join("\n", musicPlayer.Playlist.Skip(startAt).Take(15).Select(v => $"`{number++}.` {v.PrettyName}"))).ConfigureAwait(false);
                      });
 
                 cgb.CreateCommand (Prefix + "np")
@@ -264,7 +258,7 @@ namespace MidnightBot.Modules.Music
                      });
 
                 cgb.CreateCommand (Prefix + "setgame")
-                    .Description ("Setzt das Spiel auf die Nummer der Lieder die gespielt werden. **Owner Only!**")
+                    .Description ("Setzt das Spiel auf die Nummer der Lieder die gespielt werden. **Bot Owner Only!**")
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
                      {
@@ -315,7 +309,7 @@ namespace MidnightBot.Modules.Music
                      });
 
                 cgb.CreateCommand (Prefix + "lopl")
-                    .Description ("Listet alle Lieder von einem Verzeichnis. **Owner Only!**")
+                    .Description ("Listet alle Lieder von einem Verzeichnis. **Bot Owner Only!**")
                     .Parameter ("directory",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
@@ -355,7 +349,7 @@ namespace MidnightBot.Modules.Music
                      });
 
                 cgb.CreateCommand (Prefix + "lo")
-                    .Description ("Listet einen lokalen Song mit vollen Pfad. **Owner Only!**\n**Benutzung**: `!lo C:/music/mysong.mp3`")
+                    .Description ("Listet einen lokalen Song mit vollen Pfad. **Bot Owner Only!**\n**Benutzung**: `!lo C:/music/mysong.mp3`")
                     .Parameter ("path",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
@@ -410,7 +404,7 @@ namespace MidnightBot.Modules.Music
                      });
 
                 cgb.CreateCommand (Prefix + "cleanup")
-                    .Description ("Bereinigt hängende Voice-Verbindung. **Owner Only!**")
+                    .Description ("Bereinigt hängende Voice-Verbindung. **Bot Owner Only!**")
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (e =>
                      {

@@ -61,7 +61,7 @@ namespace MidnightBot.Modules.Gambling
                     });
 
                cgb.CreateCommand (Prefix + "award")
-                   .Description (string.Format ($"Gibt jemanden eine bestimmte Anzahl an {MidnightBot.Config.CurrencyName}. **Owner only!**\n**Benutzung**: $award 5 @Benutzer"))
+                   .Description (string.Format ($"Gibt jemanden eine bestimmte Anzahl an {MidnightBot.Config.CurrencyName}. **Bot Owner Only!**\n**Benutzung**: $award 5 @Benutzer"))
                    .AddCheck (SimpleCheckers.OwnerOnly ())
                    .Parameter ("amount",ParameterType.Required)
                    .Parameter ("receiver",ParameterType.Unparsed)
@@ -83,7 +83,7 @@ namespace MidnightBot.Modules.Gambling
                    });
 
                cgb.CreateCommand (Prefix + "take")
-                   .Description (string.Format ($"Entfernt eine bestimmte Anzahl an {MidnightBot.Config.CurrencyName} von jemanden. **Owner only!**\n**Benutzung**: $take 5 @Benutzer"))
+                   .Description (string.Format ($"Entfernt eine bestimmte Anzahl an {MidnightBot.Config.CurrencyName} von jemanden. **Bot Owner Only!**\n**Benutzung**: $take 5 @Benutzer"))
                    .AddCheck (SimpleCheckers.OwnerOnly ())
                    .Parameter ("amount",ParameterType.Required)
                    .Parameter ("rektperson",ParameterType.Unparsed)

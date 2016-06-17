@@ -81,6 +81,18 @@ namespace MidnightBot.Modules.Extra
                        catch
                        { }
                    });
+               
+               cgb.CreateCommand (Prefix + "rip")
+                   .Description ("Verteilt Kekse an eine bestimmte Person")
+                   .Parameter ("text",ParameterType.Required)
+                   .AddCheck (SimpleCheckers.OwnerOnly ())
+                   .Do (async e =>
+                   {
+                       var targetStr = e.GetArg ("text")?.Trim ();
+                       if (string.IsNullOrWhiteSpace (targetStr))
+                           return;
+                       await e.Channel.SendMessage ($"http://ripme.xyz/{targetStr}").ConfigureAwait (false);
+                   });
 
                cgb.CreateCommand (Prefix + "randomschinken")
                  .Alias (Prefix + "rs")

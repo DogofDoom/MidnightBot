@@ -170,8 +170,12 @@ public static int XPRequired ( this PokemonSprite pkm )
                 {
                     //*GASP* IT'S GONNA EVOLVE
                     //Play an animation?
+                    bool unnamed = (pkm.NickName == pkm.GetSpecies ().name);
+
                     int newSpecies = int.Parse (species.evolveTo);
                     pkm.SpeciesId = newSpecies;
+                    if (unnamed)
+                        pkm.NickName = pkm.GetSpecies().name;
                 }
             }
         }

@@ -467,7 +467,7 @@ namespace MidnightBot.Modules.Pokemon
             PokemonSprite sprite = new PokemonSprite
             {
                 SpeciesId = species.number,
-                HP = species.baseStats["hp"] + rng.Next (-2,+2),
+                HP = species.baseStats["hp"],
                 Level = 1,
                 NickName = species.name,
                 OwnerId = (long)u.Id,

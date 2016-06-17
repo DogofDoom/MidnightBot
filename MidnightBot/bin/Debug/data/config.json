@@ -2,6 +2,7 @@
   "DontJoinServers": true,
   "ForwardMessages": true,
   "IsRotatingStatus": false,
+  "BufferSize": 4194304,
   "RemindMessageFormat": "❗⏰**Mir wurde von %user% aufgetragen, dich an '%message%' zu erinnern.**⏰❗",
   "CustomReactions": {
     "\\o\\": [
@@ -110,7 +111,7 @@
   "Regeln": [
     "Keine Fremdwerbung jeglicher art! (Ob für Konfi,Server oder Forum)",
     "Obwohl es hoffentlich verständlich ist, keinerlei Rassistische, Sexistische Äußerungen!",
-    "Kein Spam!Weder TTS, Command noch normal!",
+    "Kein Spam! Weder TTS, Command noch normal!",
     "Bei Benutzung des Voicechats hat der richtige Channel gewählt zu werden, sodass in den Spiel - Channeln gespielt wird und im Plauderchannel geredet wird!",
     "Bitte versucht wenigstens einigermaßen auf eure Rechtschreibung zu achten!",
     "Beleidigungen boshafter Art sind zu unterlassen!",
@@ -118,5 +119,6 @@
   ],
   "CurrencySign": ":euro:",
   "CurrencyName": "Euro",
-  "DMHelpString": "Gib `-h` ein für Hilfe."
+  "DMHelpString": "Gib `-h` ein für Hilfe.",
+  "HelpString": "Du kannst den Befehl `{0}modules` benutzen, um eine Liste aller Module zu sehen.\nDu kannst den Befehl `{0}commands ModuleName`\n(zum Beispiel `{0}commands Administration`) benutzen, um eine Liste aller Befehle in diesem Modul zu sehen.\nUm einen speziellen Befehl zu sehen kannst du `{0}h Command name` (zum Beispiel `-h !m q`) benutzen.\n\n\n**LISTE DER BEFEHLE KANN BEI DIESEM LINK GEFUNDEN WERDEN**\n<https://github.com/Midnight-Myth/MidnightBot/blob/master/commandlist.md>\n\n\nMidnightBot Support Server: <https://discord.gg/0p3mZ7JeMSzGdT7L>"
 }

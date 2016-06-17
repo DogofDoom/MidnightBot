@@ -6,9 +6,7 @@ using MidnightBot.Classes;
 using MidnightBot.Extensions;
 using MidnightBot.Modules.Administration.Commands;
 using MidnightBot.Modules.Permissions.Classes;
-using Newtonsoft.Json.Linq;
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Text;
@@ -175,7 +173,7 @@ namespace MidnightBot.Modules.Administration
                         var roleToEdit = e.Server.FindRoles (r1).FirstOrDefault ();
                         if (roleToEdit == null)
                         {
-                            await e.Channel.SendMessage ("Kann diese Rolle nicht finden.");
+                            await e.Channel.SendMessage ("Kann diese Rolle nicht finden.").ConfigureAwait (false);
                             return;
                         }
 
@@ -183,15 +181,15 @@ namespace MidnightBot.Modules.Administration
                         {
                             if (roleToEdit.Position > e.Server.CurrentUser.Roles.Max (r => r.Position))
                             {
-                                await e.Channel.SendMessage ("Ich kann Rollen die höher sind als meine nicht bearbeiten.");
+                                await e.Channel.SendMessage ("Ich kann Rollen die höher sind als meine nicht bearbeiten.").ConfigureAwait (false);
                                 return;
                             }
                             await roleToEdit.Edit (r2);
-                            await e.Channel.SendMessage ("Rolle umbenannt.");
+                            await e.Channel.SendMessage ("Rolle umbenannt.").ConfigureAwait (false);
                         }
                         catch (Exception)
                         {
-                            await e.Channel.SendMessage ("Fehler beim umbennennen der Rolle. Wahrscheinlich nicht genug Rechte.");
+                            await e.Channel.SendMessage ("Fehler beim umbennennen der Rolle. Wahrscheinlich nicht genug Rechte.").ConfigureAwait (false);
                         }
                     });
 
@@ -337,6 +335,42 @@ namespace MidnightBot.Modules.Administration
                                  }
                              }
                          });
+
+                cgb.CreateCommand(Prefix + "sb").Alias(Prefix + "softban")
+                    .Parameter("user", ParameterType.Required)
+                    .Parameter("msg", ParameterType.Optional)
+                    .Description("Bannt und entbannt einen Benutzer per ID, oder Name mit optionaler Nachricht.\n**Benutzung**: .sb \"@some Guy\" Your behaviour is toxic.")
+                        .Do(async e =>
+                        {
+                            var msg = e.GetArg("msg");
+                            var user = e.GetArg("user");
+                            if (e.User.ServerPermissions.BanMembers)
+                            {
+                                var usr = e.Server.FindUsers(user).FirstOrDefault();
+                                if (usr == null)
+                                {
+                                    await e.Channel.SendMessage("Benutzer nicht gefunden.").ConfigureAwait(false);
+                                    return;
+                                }
+                                if (!string.IsNullOrWhiteSpace(msg))
+                                {
+                                    await usr.SendMessage($"**Du wurdest SOFT-GEBANNT vom Server `{e.Server.Name}`.**\n" +
+                                                          $"Begründung: {msg}").ConfigureAwait(false);
+                                    await Task.Delay(2000).ConfigureAwait(false); // temp solution; give time for a message to be send, fu volt
+                                }
+                                try
+                                {
+                                    await e.Server.Ban(usr, 7).ConfigureAwait(false);
+                                    await e.Server.Unban(usr).ConfigureAwait(false);
+
+                                    await e.Channel.SendMessage("Benutzer Soft-Banned" + usr.Name + " Id: " + usr.Id).ConfigureAwait(false);
+                                }
+                                catch
+                                {
+                                    await e.Channel.SendMessage("Fehler. Ich habe keine Rechte dafür.").ConfigureAwait(false);
+                                }
+                            }
+                        });
 
                 cgb.CreateCommand (Prefix + "k").Alias (Prefix + "kick")
                     .Parameter ("user")
@@ -621,7 +655,7 @@ namespace MidnightBot.Modules.Administration
                      });
 
                 cgb.CreateCommand (Prefix + "heap")
-                    .Description ("Zeigt benutzten Speicher - **Owner Only!**")
+                    .Description ("Zeigt benutzten Speicher - **Bot Owner Only!**")
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
                      {
@@ -630,7 +664,7 @@ namespace MidnightBot.Modules.Administration
                      });
 
                 cgb.CreateCommand (Prefix + "getinactive")
-                    .Description ("Zeigt anzahl inaktiver Benutzer - **Owner Only!**")
+                    .Description ("Zeigt anzahl inaktiver Benutzer - **Bot Owner Only!**")
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Parameter ("days",ParameterType.Required)
                     .Parameter ("prune",ParameterType.Optional)
@@ -779,7 +813,7 @@ namespace MidnightBot.Modules.Administration
 
                 cgb.CreateCommand (Prefix + "die")
                     .Alias (Prefix + "graceful")
-                    .Description ("Fährt den Bot herunter und benachrichtigt Benutzer über den Neustart. **Owner Only!**")
+                    .Description ("Fährt den Bot herunter und benachrichtigt Benutzer über den Neustart. **Bot Owner Only!**")
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
                     {
@@ -788,33 +822,21 @@ namespace MidnightBot.Modules.Administration
                         Environment.Exit (0);
                     });
 
-                //cgb.CreateCommand(Prefix + "newnick")
-                //    .Alias(Prefix + "setnick")
-                //    .Description("Gibt dem Bot einen neuen Nicknamen. Du benötigst 'manage server permissions'.")
-                //    .Parameter("new_nick", ParameterType.Unparsed)
-                //    .AddCheck(SimpleCheckers.ManageServer())
-                //    .Do(async e =>
-                //    {
-                //        if (e.GetArg("new_nick") == null) return;
-
-                //        await client.CurrentUser.Edit(MidnightBot.Creds.Password, e.GetArg("new_nick")).ConfigureAwait(false);
-                //    });
-
                 cgb.CreateCommand (Prefix + "newname")
                     .Alias (Prefix + "setname")
-                    .Description ("Gibt dem Bot einen neuen Namen. **Owner Only!**")
+                    .Description ("Gibt dem Bot einen neuen Namen. **Bot Owner Only!**")
                     .Parameter ("new_name",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
                      {
                          if (e.GetArg("new_name") == null) return;
 
-                         await client.CurrentUser.Edit (MidnightBot.Creds.Password,e.GetArg ("new_name")).ConfigureAwait (false);
+                         await client.CurrentUser.Edit ("",e.GetArg ("new_name")).ConfigureAwait (false);
                      });
 
                 cgb.CreateCommand (Prefix + "newavatar")
                     .Alias (Prefix + "setavatar")
-                    .Description ("Setzt ein neues Profilbild für MidnightBot. **Owner Only!**")
+                    .Description ("Setzt ein neues Profilbild für MidnightBot. **Bot Owner Only!**")
                     .Parameter ("img",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
@@ -825,7 +847,7 @@ namespace MidnightBot.Modules.Administration
                          var avatarAddress = e.GetArg ("img");
                          var imageStream = await SearchHelper.GetResponseStreamAsync (avatarAddress).ConfigureAwait (false);
                          var image = System.Drawing.Image.FromStream (imageStream);
-                         await client.CurrentUser.Edit (MidnightBot.Creds.Password,avatar: image.ToStream ()).ConfigureAwait (false);
+                         await client.CurrentUser.Edit ("",avatar: image.ToStream ()).ConfigureAwait (false);
 
                          // Send confirm.
                          await e.Channel.SendMessage ("Neuer Avatar gesetzt.").ConfigureAwait (false);
@@ -835,7 +857,7 @@ namespace MidnightBot.Modules.Administration
                      });
 
                 cgb.CreateCommand (Prefix + "setgame")
-                  .Description ("Setzt das Spiel des Bots. **Owner Only!**")
+                  .Description ("Setzt das Spiel des Bots. **Bot Owner Only!**")
                   .Parameter ("set_game",ParameterType.Unparsed)
                   .Do (e =>
                    {
@@ -863,7 +885,7 @@ namespace MidnightBot.Modules.Administration
                 Channel commsChannel = null;
 
                 cgb.CreateCommand (Prefix + "commsuser")
-                    .Description ("Setzt einen Benutzer für die Throug-Bot Kommunikation. Funktioniert nur, wenn Server gesetzt ist. Resettet commschannel. **Owner Only!**")
+                    .Description ("Setzt einen Benutzer für die Throug-Bot Kommunikation. Funktioniert nur, wenn Server gesetzt ist. Resettet commschannel. **Bot Owner Only!**")
                     .Parameter ("name",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
@@ -879,7 +901,7 @@ namespace MidnightBot.Modules.Administration
                      });
 
                 cgb.CreateCommand (Prefix + "commsserver")
-                    .Description ("Setzt einen Server für Through-Bot Kommunikation. **Owner Only!**")
+                    .Description ("Setzt einen Server für Through-Bot Kommunikation. **Bot Owner Only!**")
                     .Parameter ("server",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
@@ -892,7 +914,7 @@ namespace MidnightBot.Modules.Administration
                      });
 
                 cgb.CreateCommand (Prefix + "commschannel")
-                    .Description ("Setzt einen Channel für Through-Bot Kommunikation. Funktioniert nur, wenn Server gesetzt ist. Resettet commsuser. **Owner Only!**")
+                    .Description ("Setzt einen Channel für Through-Bot Kommunikation. Funktioniert nur, wenn Server gesetzt ist. Resettet commsuser. **Bot Owner Only!**")
                     .Parameter ("ch",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
@@ -908,7 +930,7 @@ namespace MidnightBot.Modules.Administration
                      });
 
                 cgb.CreateCommand (Prefix + "send")
-                    .Description ("Sende eine Nachricht an einen User auf einem anderen Server über den Bot..**Owner Only!****\n **Benutzung**: .send Message text multi word!")
+                    .Description ("Sende eine Nachricht an einen User auf einem anderen Server über den Bot..**Bot Owner Only!****\n **Benutzung**: .send Message text multi word!")
                     .Parameter ("msg",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
@@ -988,23 +1010,8 @@ namespace MidnightBot.Modules.Administration
                         }).ConfigureAwait (false);
                     });
 
-                cgb.CreateCommand (Prefix + "parsetosql")
-                  .Description ("Lädt exportierte Parsedata von /data/parsedata/ in Sqlite Datenbank.")
-                  .AddCheck (SimpleCheckers.OwnerOnly ())
-                  .Do (async e =>
-                   {
-                       await Task.Run (() =>
-                       {
-                           SaveParseToDb<Announcement> ("data/parsedata/Announcements.json");
-                           SaveParseToDb<DataModels.Command> ("data/parsedata/CommandsRan.json");
-                           SaveParseToDb<Request> ("data/parsedata/Requests.json");
-                           SaveParseToDb<Stats> ("data/parsedata/Stats.json");
-                           SaveParseToDb<TypingArticle> ("data/parsedata/TypingArticles.json");
-                       }).ConfigureAwait (false);
-                   });
-
                 cgb.CreateCommand (Prefix + "unstuck")
-                  .Description ("Löscht die Nachrichten-Liste. **Owner Only!**")
+                  .Description ("Löscht die Nachrichten-Liste. **Bot Owner Only!**")
                   .AddCheck (SimpleCheckers.OwnerOnly ())
                   .Do (e =>
                    {
@@ -1024,8 +1031,7 @@ namespace MidnightBot.Modules.Administration
                              await e.Channel.SendMessage (str + string.Join ("⭐",donatorsOrdered.Select (d => d.UserName))).ConfigureAwait (false);
                          }).ConfigureAwait (false);
                      });
-
-                //THIS IS INTENTED TO BE USED ONLY BY THE ORIGINAL BOT OWNER
+                
                 cgb.CreateCommand (Prefix + "adddon")
                     .Alias (Prefix + "donadd")
                     .Description ("Fügt einen Donator zur Datenbank hinzu.")
@@ -1077,7 +1083,7 @@ namespace MidnightBot.Modules.Administration
                    });
 
                 cgb.CreateCommand (Prefix + "sendmsg")
-                   .Description ($"Sendet eine Private Nachricht an einen User vom Bot aus.**Owner Only**\n**Benutzung**: {Prefix}sendmsg @Username Nachricht")
+                   .Description ($"Sendet eine Private Nachricht an einen User vom Bot aus.**Bot Owner Only**\n**Benutzung**: {Prefix}sendmsg @Username Nachricht")
                    .Parameter ("user",ParameterType.Required)
                    .Parameter ("msg",ParameterType.Unparsed)
                    .AddCheck (SimpleCheckers.OwnerOnly ())
@@ -1105,7 +1111,7 @@ namespace MidnightBot.Modules.Administration
                    });
 
                 cgb.CreateCommand (Prefix + "announce")
-                   .Description ($"Sends a message to all servers' general channel bot is connected to.**Owner Only!**\n**Benutzung**: {Prefix}announce Useless spam")
+                   .Description ($"Sends a message to all servers' general channel bot is connected to.**Bot Owner Only!**\n**Benutzung**: {Prefix}announce Useless spam")
                    .Parameter ("msg",ParameterType.Unparsed)
                    .AddCheck (SimpleCheckers.OwnerOnly ())
                    .Do (async e =>
@@ -1138,6 +1144,36 @@ namespace MidnightBot.Modules.Administration
                         else
                             await e.Channel.SendMessage ("```xl\n" + string.Join ("\n",arr.GroupBy (item => (i++) / 3).Select (ig => string.Join ("",ig.Select (el => $"• {el,-35}")))) + "\n```");
                     });
+
+                cgb.CreateCommand (Prefix + "servers")
+                     .Description ("Zeigt alle Server an, auf denen der Bot ist.")
+                     .AddCheck (SimpleCheckers.OwnerOnly ())
+                     .Do (async e =>
+                     {
+                         var sb = new StringBuilder ();
+                         foreach (Server s in MidnightBot.Client.Servers)
+                         {
+                             sb.AppendLine ($"ID: {s.Id} | Servername: {s.Name}");
+                         }
+                         await e.Channel.SendMessage (sb.ToString()).ConfigureAwait (false);
+                     });
+
+                
+
+                cgb.CreateCommand (Prefix + "leave")
+                     .Description ("Leaves a server with a supplied ID.\n**Benutzung**: `.leave 493243292839`")
+                     .Parameter ("num",ParameterType.Required)
+                     .AddCheck (SimpleCheckers.OwnerOnly ())
+                     .Do (async e =>
+                     {
+                         var srvr = MidnightBot.Client.Servers.Where (s => s.Id.ToString () == e.GetArg ("num").Trim ()).FirstOrDefault ();
+                         if (srvr == null)
+                         {
+                             return;
+                         }
+                         await srvr.Leave ().ConfigureAwait (false);
+                         await e.Channel.SendMessage ("`Done.`").ConfigureAwait (false);
+                     });
             });
         }
 
@@ -1150,19 +1186,6 @@ namespace MidnightBot.Modules.Administration
                     return u;
             }
             return null;
-        }
-
-        public void SaveParseToDb<T>(string where) where T : IDataModel
-        {
-            try {
-                var data = File.ReadAllText(where);
-                var arr = JObject.Parse(data)["results"] as JArray;
-                if (arr == null)
-                    return;
-                var objects = arr.Select(x => x.ToObject<T>());
-                DbHandler.Instance.InsertMany(objects);
-            }
-            catch { }
         }
     }
 }

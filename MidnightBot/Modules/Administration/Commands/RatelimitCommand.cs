@@ -43,15 +43,9 @@ namespace MidnightBot.Modules.Administration.Commands
         {
             cgb.CreateCommand (Module.Prefix + "slowmode")
                 .Description ("Schaltet Slow Mode um. Wenn AN, Benutzer können nur alle 5 Sekunden eine Nachricht schicken.")
-                .Parameter ("minutes",ParameterType.Optional)
                 .AddCheck (SimpleCheckers.ManageMessages ())
                 .Do (async e =>
                 {
-                    //var minutesStr = e.GetArg("minutes");
-                    //if (string.IsNullOrWhiteSpace(minutesStr)) {
-                    //    RatelimitingChannels.Remove(e.Channel.Id);
-                    //    return;
-                    //}
                     ConcurrentDictionary<ulong,DateTime> throwaway;
                     if (RatelimitingChannels.TryRemove (e.Channel.Id,out throwaway))
                     {
