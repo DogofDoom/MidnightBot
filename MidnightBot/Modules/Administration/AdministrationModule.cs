@@ -76,7 +76,7 @@ namespace MidnightBot.Modules.Administration
                         Environment.Exit (0);
                     });
 
-                cgb.CreateCommand (Prefix + "sr").Alias (Prefix + "setrole")
+                cgb.CreateCommand (Prefix + "setrole").Alias (Prefix + "sr")
                     .Description ("Setzt die Rolle für einen gegebenen Benutzer.\n**Benutzung**: .sr @User Gast")
                     .Parameter ("user_name",ParameterType.Required)
                     .Parameter ("role_name",ParameterType.Unparsed)
@@ -121,7 +121,7 @@ namespace MidnightBot.Modules.Administration
                          }
                      });
 
-                cgb.CreateCommand (Prefix + "rr").Alias (Prefix + "removerole")
+                cgb.CreateCommand (Prefix + "removerole").Alias (Prefix + "rr")
                     .Description ("Entfernt eine Rolle von einem gegebenen User.\n**Benutzung**: .rr @User Admin")
                     .Parameter ("user_name",ParameterType.Required)
                     .Parameter ("role_name",ParameterType.Unparsed)
@@ -159,8 +159,8 @@ namespace MidnightBot.Modules.Administration
                          }
                      });
 
-                cgb.CreateCommand (Prefix + "renr")
-                    .Alias (Prefix + "renamerole")
+                cgb.CreateCommand (Prefix + "renamerole")
+                    .Alias (Prefix + "renr")
                     .Description ($"Benennt eine Rolle um. Rolle die umbenannt werden soll muss muss in Liste niedriger sein als die höchste Rolle des Bots.\n**Benutzung**: `{Prefix}renr \"Erste Rolle\" ZweiteRolle`")
                     .Parameter ("r1",ParameterType.Required)
                     .Parameter ("r2",ParameterType.Required)
@@ -193,7 +193,7 @@ namespace MidnightBot.Modules.Administration
                         }
                     });
 
-                cgb.CreateCommand (Prefix + "rar").Alias (Prefix + "removeallroles")
+                cgb.CreateCommand (Prefix + "removeallroles").Alias (Prefix + "rar")
                     .Description ("Entfernt alle Rollen eines Benutzers.\n**Benutzung**: .rar @User")
                     .Parameter ("user_name",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.CanManageRoles)
@@ -219,7 +219,7 @@ namespace MidnightBot.Modules.Administration
                         }
                     });
 
-            cgb.CreateCommand (Prefix + "r").Alias (Prefix + "role").Alias (Prefix + "cr")
+                cgb.CreateCommand (Prefix + "createrole").Alias (Prefix + "cr")
                     .Description ("Erstelle eine Rolle mit einem bestimmten Namen.**Benutzung**: `.r Awesome Role`")
                     .Parameter ("role_name",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.CanManageRoles)
@@ -302,7 +302,7 @@ namespace MidnightBot.Modules.Administration
                        await e.Channel.SendMessage ("`Liste der Rollen:` \n• " + string.Join ("\n• ",e.Server.Roles)).ConfigureAwait (false);
                    });
 
-                cgb.CreateCommand (Prefix + "b").Alias (Prefix + "ban")
+                cgb.CreateCommand (Prefix + "ban").Alias (Prefix + "b")
                     .Parameter ("user",ParameterType.Required)
                     .Parameter ("msg",ParameterType.Optional)
                     .Description ("Bannt einen erwähnten Benutzer.\n**Benutzung**: .b \"@some Guy\" Your behaviour is toxic.")
@@ -336,7 +336,7 @@ namespace MidnightBot.Modules.Administration
                              }
                          });
 
-                cgb.CreateCommand(Prefix + "sb").Alias(Prefix + "softban")
+                cgb.CreateCommand (Prefix + "softban").Alias (Prefix + "sb")
                     .Parameter("user", ParameterType.Required)
                     .Parameter("msg", ParameterType.Optional)
                     .Description("Bannt und entbannt einen Benutzer per ID, oder Name mit optionaler Nachricht.\n**Benutzung**: .sb \"@some Guy\" Your behaviour is toxic.")
@@ -372,7 +372,7 @@ namespace MidnightBot.Modules.Administration
                             }
                         });
 
-                cgb.CreateCommand (Prefix + "k").Alias (Prefix + "kick")
+                cgb.CreateCommand (Prefix + "kick").Alias (Prefix + "k")
                     .Parameter ("user")
                     .Parameter ("msg",ParameterType.Unparsed)
                     .Description ("Kickt einen erwähnten User.")
@@ -485,7 +485,7 @@ namespace MidnightBot.Modules.Administration
                      });
 
                 cgb.CreateCommand (Prefix + "undeafen")
-                    .Alias (Prefix + "undeaf")
+                    .Alias (Prefix + "undef")
                     .Description ("Erwähnte Benutzer sind nicht mehr taub.")
                     .Parameter ("throwaway",ParameterType.Unparsed)
                     .Do (async e =>
@@ -511,8 +511,9 @@ namespace MidnightBot.Modules.Administration
                          }
                      });
 
-                cgb.CreateCommand (Prefix + "rvch")
-                    .Description ("Entfernt einen Voice-Channel mit einem gegebenen Namen..")
+                cgb.CreateCommand (Prefix + "delvoichanl")
+                    .Alias (Prefix + "dvch")
+                    .Description ("Löscht einen Voice-Channel mit einem gegebenen Namen..")
                     .Parameter ("channel_name",ParameterType.Required)
                     .Do (async e =>
                      {
@@ -533,7 +534,8 @@ namespace MidnightBot.Modules.Administration
                          }
                      });
 
-                cgb.CreateCommand (Prefix + "vch").Alias (Prefix + "cvch")
+                cgb.CreateCommand (Prefix + "creatvoichanl")
+                    .Alias (Prefix + "cvch")
                     .Description ("Erstellt einen neuen Voice-Channel mit einem gegebenen Namen.")
                     .Parameter ("channel_name",ParameterType.Required)
                     .Do (async e =>
@@ -552,8 +554,9 @@ namespace MidnightBot.Modules.Administration
                          }
                      });
 
-                cgb.CreateCommand (Prefix + "rch").Alias (Prefix + "rtch")
-                    .Description ("Entfernt einen Text-Channel mit einem gegebenen Namen.")
+                cgb.CreateCommand (Prefix + "deltxtchanl")
+                    .Alias (Prefix + "dtch")
+                    .Description ("Löscht einen Text-Channel mit einem gegebenen Namen.")
                     .Parameter ("channel_name",ParameterType.Required)
                     .Do (async e =>
                      {
@@ -574,7 +577,8 @@ namespace MidnightBot.Modules.Administration
                          }
                      });
 
-                cgb.CreateCommand (Prefix + "ch").Alias (Prefix + "tch")
+                cgb.CreateCommand (Prefix + "creatxtchanl")
+                    .Alias (Prefix + "ctch")
                     .Description ("Erstellt einen Text-Channel mit einem gegebenen Namen.")
                     .Parameter ("channel_name",ParameterType.Required)
                     .Do (async e =>
@@ -593,8 +597,8 @@ namespace MidnightBot.Modules.Administration
                         }
                     });
 
-                cgb.CreateCommand (Prefix + "st").Alias (Prefix + "settopic")
-                    .Alias (Prefix + "topic")
+                cgb.CreateCommand (Prefix + "settopic")
+                    .Alias (Prefix + "st")
                     .Description ("Setzt eine Beschreibung für den derzeitigen Channel.\n**Benutzung**: `{Prefix}st My new topic`")
                     .AddCheck (SimpleCheckers.ManageChannels ())
                     .Parameter ("topic",ParameterType.Unparsed)
@@ -605,8 +609,8 @@ namespace MidnightBot.Modules.Administration
                         await e.Channel.SendMessage (":ok: **Channel Topic gesetzt.**").ConfigureAwait (false);
                     });
 
-                cgb.CreateCommand (Prefix + "schn").Alias (Prefix + "setchannelname")
-                    .Alias (Prefix + "topic")
+                cgb.CreateCommand (Prefix + "setchanlname")
+                    .Alias (Prefix + "schn")
                     .Description ("Ändert den Namen des derzeitigen Channels.")
                     .AddCheck (SimpleCheckers.ManageChannels ())
                     .Parameter ("name",ParameterType.Unparsed)
@@ -619,7 +623,7 @@ namespace MidnightBot.Modules.Administration
                         await e.Channel.SendMessage (":ok: **Neuer Channel Name gesetzt.**").ConfigureAwait (false);
                     });
 
-                cgb.CreateCommand (Prefix + "uid").Alias (Prefix + "userid")
+                cgb.CreateCommand (Prefix + "userid").Alias (Prefix + "uid")
                     .Description ("Zeigt die ID eines Benutzers.")
                     .Parameter ("user",ParameterType.Unparsed)
                     .Do (async e =>
@@ -632,11 +636,11 @@ namespace MidnightBot.Modules.Administration
                          await e.Channel.SendMessage ($"Id des Users { usr.Name } ist { usr.Id }").ConfigureAwait (false);
                      });
 
-                cgb.CreateCommand (Prefix + "cid").Alias (Prefix + "channelid")
+                cgb.CreateCommand (Prefix + "channelid").Alias (Prefix + "cid")
                     .Description ("Zeigt ID des derzeitigen Channels")
                     .Do (async e => await e.Channel.SendMessage ("Die ID des derzeitigen Channels ist " + e.Channel.Id).ConfigureAwait (false));
 
-                cgb.CreateCommand (Prefix + "sid").Alias (Prefix + "serverid")
+                cgb.CreateCommand (Prefix + "serverid").Alias (Prefix + "sid")
                     .Description ("Zeigt ID des derzeitigen Servers.")
                     .Do (async e => await e.Channel.SendMessage ("Die ID des derzeitigen Servers ist " + e.Server.Id).ConfigureAwait (false));
 
@@ -664,6 +668,7 @@ namespace MidnightBot.Modules.Administration
                      });
 
                 cgb.CreateCommand (Prefix + "getinactive")
+                    .Alias(Prefix + "gi")
                     .Description ("Zeigt anzahl inaktiver Benutzer - **Bot Owner Only!**")
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Parameter ("days",ParameterType.Required)
@@ -812,7 +817,6 @@ namespace MidnightBot.Modules.Administration
                      });
 
                 cgb.CreateCommand (Prefix + "die")
-                    .Alias (Prefix + "graceful")
                     .Description ("Fährt den Bot herunter und benachrichtigt Benutzer über den Neustart. **Bot Owner Only!**")
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
@@ -822,8 +826,8 @@ namespace MidnightBot.Modules.Administration
                         Environment.Exit (0);
                     });
 
-                cgb.CreateCommand (Prefix + "newname")
-                    .Alias (Prefix + "setname")
+                cgb.CreateCommand (Prefix + "setname")
+                    .Alias (Prefix + "newnm")
                     .Description ("Gibt dem Bot einen neuen Namen. **Bot Owner Only!**")
                     .Parameter ("new_name",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
@@ -943,8 +947,8 @@ namespace MidnightBot.Modules.Administration
                              await e.Channel.SendMessage ("Fehlgeschlagen. Stell sicher, dass du den Server und [Channel oder User] angegeben hast.]").ConfigureAwait (false);
                      });
 
-                cgb.CreateCommand (Prefix + "menrole")
-                    .Alias (Prefix + "mentionrole")
+                cgb.CreateCommand (Prefix + "mentionrole")
+                    .Alias (Prefix + "menro")
                     .Description ("Erwähnt jeden User mit einer bestimmten Rolle oder bestimmten Rollen (Getrennt mit einem ',') auf diesem Server. 'Mention everyone' Berechtigung erforderlich.")
                     .Parameter ("roles",ParameterType.Unparsed)
                     .Do (async e =>
@@ -1031,9 +1035,8 @@ namespace MidnightBot.Modules.Administration
                              await e.Channel.SendMessage (str + string.Join ("⭐",donatorsOrdered.Select (d => d.UserName))).ConfigureAwait (false);
                          }).ConfigureAwait (false);
                      });
-                
-                cgb.CreateCommand (Prefix + "adddon")
-                    .Alias (Prefix + "donadd")
+
+                cgb.CreateCommand (Prefix + "donadd")
                     .Description ("Fügt einen Donator zur Datenbank hinzu.")
                     .Parameter ("donator")
                     .Parameter ("amount")
@@ -1059,28 +1062,6 @@ namespace MidnightBot.Modules.Administration
                              catch { }
                          }).ConfigureAwait (false);
                     });
-
-                cgb.CreateCommand (Prefix + "videocall")
-                  .Description ("Erstellt privaten appear.in Video Anruf Link für dich und eine erwähnte Person und sendet sie per privater Nachricht.")
-                  .Parameter ("arg",ParameterType.Unparsed)
-                  .Do (async e =>
-                   {
-                       try
-                       {
-                           var allUsrs = e.Message.MentionedUsers.Union (new User[] { e.User });
-                           var allUsrsArray = allUsrs as User[] ?? allUsrs.ToArray ();
-                           var str = allUsrsArray.Aggregate ("http://appear.in/",( current,usr ) => current + Uri.EscapeUriString (usr.Name[0].ToString ()));
-                           str += new Random ().Next ();
-                           foreach (var usr in allUsrsArray)
-                           {
-                               await usr.SendMessage (str).ConfigureAwait (false);
-                           }
-                       }
-                       catch (Exception ex)
-                       {
-                           Console.WriteLine (ex);
-                       }
-                   });
 
                 cgb.CreateCommand (Prefix + "sendmsg")
                    .Description ($"Sendet eine Private Nachricht an einen User vom Bot aus.**Bot Owner Only**\n**Benutzung**: {Prefix}sendmsg @Username Nachricht")

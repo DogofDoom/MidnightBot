@@ -132,6 +132,9 @@ namespace MidnightBot
             Console.WriteLine (string.IsNullOrWhiteSpace (Creds.SoundCloudClientID)
                 ? "Keine Soundcloud Client ID gefunden. Soundcloud Streaming ist deaktiviert."
                 : "SoundCloud Streaming aktiviert.");
+            Console.WriteLine (string.IsNullOrWhiteSpace (Creds.OsuAPIKey)
+                ? "Kein osu! API Key gefunden. Song & Top Score Suche werden nicht funktionieren. Benutzer Suche ist verwendbar."
+                : "osu! API Key gefunden.");
 
             BotMention = $"<@{Creds.BotId}>";
 

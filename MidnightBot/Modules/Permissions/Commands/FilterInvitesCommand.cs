@@ -54,8 +54,8 @@ namespace MidnightBot.Modules.Permissions.Commands
 
         internal override void Init ( CommandGroupBuilder cgb )
         {
-            cgb.CreateCommand (Module.Prefix + "cfi")
-                .Alias (Module.Prefix + "channelfilterinvites")
+            cgb.CreateCommand (Module.Prefix + "chnlfilterinv")
+                .Alias (Module.Prefix + "cfi")
                 .Description ("Aktiviert, oder deaktiviert automatische Löschung von Einladungen in diesem Channel." +
                              "Falls kein Channel gewählt, derzeitige Channel. Benutze ALL um alle derzeitig existierenden Channel zu wählen." +
                              "\n**Benutzung**: ;cfi enable #general-chat")
@@ -95,8 +95,8 @@ namespace MidnightBot.Modules.Permissions.Commands
                     }
                 });
 
-            cgb.CreateCommand (Module.Prefix + "sfi")
-                .Alias (Module.Prefix + "serverfilterinvites")
+            cgb.CreateCommand (Module.Prefix + "srvrfilterinv")
+                .Alias (Module.Prefix + "sfi")
                 .Description ("Aktiviert, oder deaktiviert automatische Löschung von Einladungenauf diesem Server.\n**Benutzung**: ;sfi disable")
                 .Parameter ("bool")
                 .Do (async e =>

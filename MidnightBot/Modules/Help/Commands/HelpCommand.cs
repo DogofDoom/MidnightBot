@@ -101,7 +101,7 @@ namespace MidnightBot.Classes.Help.Commands
     
         public static string HelpString {
             get {
-                var str = string.IsNullOrWhiteSpace(MidnightBot.Creds.ClientId) && !MidnightBot.Config.DontJoinServers
+                var str = !string.IsNullOrWhiteSpace (MidnightBot.Creds.ClientId) && !MidnightBot.Config.DontJoinServers
                     ? String.Format("To add me to your server, use this link -> <https://discordapp.com/oauth2/authorize?client_id={0}&scope=bot&permissions=66186303>\n", MidnightBot.Creds.ClientId)
                     : "";
                 return str + String.Format(MidnightBot.Config.HelpString, MidnightBot.Config.CommandPrefixes.Help);

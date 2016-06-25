@@ -93,6 +93,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 var channel = MidnightBot.Client.GetChannel (controls.GreetChannel);
 
                 var msg = controls.GreetText.Replace ("%user%",e.User.Mention).Trim ();
+                msg = msg.Replace ("%name%",e.User.Name);
                 if (string.IsNullOrEmpty (msg))
                     return;
                 if (controls.GreetPM)

@@ -83,14 +83,28 @@ namespace MidnightBot.Modules.Extra
                    });
                
                cgb.CreateCommand (Prefix + "rip")
-                   .Description ("Verteilt Kekse an eine bestimmte Person")
+                   .Description ("RIP")
                    .Parameter ("text",ParameterType.Required)
                    .AddCheck (SimpleCheckers.OwnerOnly ())
                    .Do (async e =>
                    {
-                       var targetStr = e.GetArg ("text")?.Trim ();
-                       if (string.IsNullOrWhiteSpace (targetStr))
-                           return;
+                       var targetStr = "";
+
+                       var usr = e.Channel.FindUsers (e.GetArg ("text")).FirstOrDefault ();
+                       if (usr == null)
+                       {
+                           targetStr = e.GetArg ("text")?.Trim ();
+                           if (string.IsNullOrWhiteSpace (targetStr))
+                               return;
+                       }
+                       else
+                       {
+                           targetStr = usr.Name;
+                       }
+
+
+                       targetStr = targetStr.Replace (" ","%20");
+                       targetStr = targetStr.Replace ("@","");
                        await e.Channel.SendMessage ($"http://ripme.xyz/{targetStr}").ConfigureAwait (false);
                    });
 

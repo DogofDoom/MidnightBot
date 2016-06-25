@@ -12,8 +12,8 @@ namespace MidnightBot.Modules.Translator
 
         internal override void Init ( CommandGroupBuilder cgb )
         {
-            cgb.CreateCommand(Module.Prefix + "trans")
-                .Alias(Module.Prefix + ("translate"))
+            cgb.CreateCommand (Module.Prefix + "translate")
+                .Alias (Module.Prefix + "trans")
                 .Description ("Übersetzt Text von>zu. Von der gegebenen Sprache in die Zielsprache.\n**Benutzung**:  'Prefix'trans en>de This is some text.")
                 .Parameter ("langs",ParameterType.Required)
                 .Parameter ("text",ParameterType.Unparsed)

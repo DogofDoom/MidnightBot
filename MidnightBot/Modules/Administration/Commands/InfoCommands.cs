@@ -16,8 +16,8 @@ namespace MidnightBot.Modules.Administration.Commands
 
         internal override void Init ( CommandGroupBuilder cgb )
         {
-            cgb.CreateCommand (Module.Prefix + "sinfo")
-                .Alias (Module.Prefix + "serverinfo")
+            cgb.CreateCommand (Module.Prefix + "serverinfo")
+                .Alias (Module.Prefix + "sinfo")
                 .Description ($"Zeigt Infos über den Server, auf dem der Bot läuft. Falls kein Server ausgewählt, derzeitiger wird ausgewählt.\n**Benutzung**:{Module.Prefix}sinfo Some Server")
                 .Parameter ("server",ParameterType.Optional)
                 .Do (async e =>
@@ -47,8 +47,8 @@ namespace MidnightBot.Modules.Administration.Commands
                     await e.Channel.SendMessage (sb.ToString ()).ConfigureAwait (false);
                 });
 
-            cgb.CreateCommand (Module.Prefix + "cinfo")
-                .Alias (Module.Prefix + "channelinfo")
+            cgb.CreateCommand (Module.Prefix + "channelinfo")
+                .Alias (Module.Prefix + "cinfo")
                 .Description ($"Zeigt Infos über einen Channel. Wenn kein Channel ausgewählt, derzeitiger wird angegeben.\n**Benutzung**:{Module.Prefix}cinfo #some-channel")
                 .Parameter ("channel",ParameterType.Optional)
                 .Do (async e =>
@@ -69,8 +69,8 @@ namespace MidnightBot.Modules.Administration.Commands
                     await e.Channel.SendMessage (sb.ToString ()).ConfigureAwait (false);
                 });
 
-            cgb.CreateCommand (Module.Prefix + "uinfo")
-                .Alias (Module.Prefix + "userinfo")
+            cgb.CreateCommand (Module.Prefix + "userinfo")
+                .Alias (Module.Prefix + "uinfo")
                 .Description ($"Zeigt eine Info über den User. Wenn kein User angegeben, User der den Befehl eingibt.\n**Benutzung**:{Module.Prefix}uinfo @SomeUser")
                 .Parameter ("user",ParameterType.Optional)
                 .Do (async e =>

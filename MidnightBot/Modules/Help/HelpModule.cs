@@ -39,8 +39,12 @@ namespace MidnightBot.Modules.Help
                     .Parameter ("module",ParameterType.Unparsed)
                     .Do (async e =>
                     {
+                        var module = e.GetArg("module")?.Trim().ToLower();
+                        if (string.IsNullOrWhiteSpace(module))
+                            return;
+
                         var cmds = MidnightBot.Client.GetService<CommandService> ().AllCommands
-                                                    .Where (c => c.Category.ToLower () == e.GetArg ("module").Trim ().ToLower ());
+                                                    .Where (c => c.Category.ToLower () == module);
                         var cmdsArray = cmds as Command[] ?? cmds.ToArray ();
                         if (!cmdsArray.Any ())
                         {
@@ -48,7 +52,15 @@ namespace MidnightBot.Modules.Help
                             return;
                         }
                         var i = 0;
-                        await e.Channel.SendMessage ("`Liste der Befehle:`\n```xl\n" + string.Join ("\n",cmdsArray.GroupBy (item => (i++) / 3).Select (ig => string.Join ("",ig.Select (el => $"{el.Text,-22}")))) + $"\n``` `Gib den Befehl \"{Prefix}h command_name\" ein, um Hilfe für einen spezifischen Befehl zu bekommen.`").ConfigureAwait (false);
+                        if (module != "customreactions" && module != "conversations")
+                            await e.Channel.SendMessage("`Liste der Befehle:`\n```xl\n" +
+                                string.Join("\n", cmdsArray.GroupBy(item => (i++) / 3)
+                                      .Select(ig => string.Join("", ig.Select(el => $"{el.Text,-15}" + $"{"[" + el.Aliases.FirstOrDefault() + "]",-8}"))))
+                                      + $"\n```")
+                                            .ConfigureAwait(false);
+                        else
+                            await e.Channel.SendMessage("`List Of Commands:`\n• " + string.Join("\n• ", cmdsArray.Select(c => $"{c.Text}")));
+                        await e.Channel.SendMessage ($"`Gib den Befehl \"{Prefix}h command_name\" ein, um Hilfe für einen spezifischen Befehl zu bekommen.`").ConfigureAwait (false);
                     });
             });
         }

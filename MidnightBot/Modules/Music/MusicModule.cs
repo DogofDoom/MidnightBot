@@ -38,8 +38,8 @@ namespace MidnightBot.Modules.Music
 
                 commands.ForEach (cmd => cmd.Init (cgb));
 
-                cgb.CreateCommand (Prefix + "n")
-                    .Alias (Prefix + "next")
+                cgb.CreateCommand (Prefix + "next")
+                    .Alias (Prefix + "n")
                     .Alias (Prefix + "skip")
                     .Description ("Geht zum nächsten Song in der Liste. Du musst im gleichen Voice-Channel wie der Bot sein.\n**Benutzung**: `!n`")
                     .Do (e =>
@@ -51,8 +51,8 @@ namespace MidnightBot.Modules.Music
                              musicPlayer.Next ();
                      });
 
-                cgb.CreateCommand (Prefix + "s")
-                    .Alias (Prefix + "stop")
+                cgb.CreateCommand (Prefix + "stop")
+                    .Alias (Prefix + "s")
                     .Description ("Stoppt die Musik komplett. Bleibt im Channel.Du musst im gleichen Voice-Channel wie der Bot sein.\n**Benutzung**: `!s`")
                     .Do (async e =>
                      {
@@ -66,8 +66,8 @@ namespace MidnightBot.Modules.Music
                          }).ConfigureAwait (false);
                      });
 
-                cgb.CreateCommand (Prefix + "d")
-                    .Alias (Prefix + "destroy")
+                cgb.CreateCommand (Prefix + "destroy")
+                    .Alias (Prefix + "d")
                     .Description ("Stoppt die Musik komplett.")
                     .Do (async e =>
                      {
@@ -80,8 +80,8 @@ namespace MidnightBot.Modules.Music
                          }).ConfigureAwait (false);
                      });
 
-                cgb.CreateCommand (Prefix + "p")
-                    .Alias (Prefix + "pause")
+                cgb.CreateCommand (Prefix + "pause")
+                    .Alias (Prefix + "p")
                     .Description ("Pausiert, oder unpausiert ein Lied.")
                     .Do (async e =>
                      {
@@ -97,7 +97,8 @@ namespace MidnightBot.Modules.Music
                              await e.Channel.SendMessage ("🎵`Musik wieder gestartet.`").ConfigureAwait (false);
                      });
 
-                cgb.CreateCommand (Prefix + "q")
+                cgb.CreateCommand (Prefix + "queue")
+                    .Alias (Prefix + "q")
                     .Alias (Prefix + "yq")
                     .Alias (Prefix + "songrequest")
                     .Description ("Listet einen Song mit Keyword oder Link. Bot joint dem eigenen Voice-Channel. **Du musst in einem Voice-Channel sein!**.\n**Benutzung**: `!q Dream Of Venice`")
@@ -112,9 +113,9 @@ namespace MidnightBot.Modules.Music
                          }
                      });
 
-                cgb.CreateCommand (Prefix + "lq")
-                    .Alias (Prefix + "ls").Alias (Prefix + "lp")
-                    .Description ("Zeigt bis zu 15 Songs die zurzeit in der Liste sind.")
+                cgb.CreateCommand (Prefix + "listqueue")
+                    .Alias (Prefix + "lq")
+                    .Description ("Zeigt bis zu 15 Songs per Seite. Standard Seite ist 1.\n**Benutzung**: `!lq` or `!lq 2`")
                     .Parameter ("page",ParameterType.Optional)
                     .Do (async e =>
                      {
@@ -149,8 +150,8 @@ namespace MidnightBot.Modules.Music
                         await e.Channel.SendMessage(toSend + string.Join("\n", musicPlayer.Playlist.Skip(startAt).Take(15).Select(v => $"`{number++}.` {v.PrettyName}"))).ConfigureAwait(false);
                      });
 
-                cgb.CreateCommand (Prefix + "np")
-                    .Alias (Prefix + "playing")
+                cgb.CreateCommand (Prefix + "nowplaying")
+                    .Alias (Prefix + "np")
                     .Description ("Zeigt den derzeit spielenden Song.")
                     .Do (async e =>
                      {
@@ -164,7 +165,8 @@ namespace MidnightBot.Modules.Music
                              $"{currentSong.PrettyCurrentTime ()}").ConfigureAwait (false);
                      });
 
-                cgb.CreateCommand (Prefix + "vol")
+                cgb.CreateCommand (Prefix + "volume")
+                    .Alias (Prefix + "vol")
                     .Description ("Setzt die Lautstärke auf 0-100%")
                     .Parameter ("val",ParameterType.Required)
                     .Do (async e =>
@@ -185,8 +187,8 @@ namespace MidnightBot.Modules.Music
                          await e.Channel.SendMessage ($"🎵 `Lautstärke auf {volume}% gesetzt.`").ConfigureAwait (false);
                      });
 
-                cgb.CreateCommand (Prefix + "dv")
-                    .Alias (Prefix + "defvol")
+                cgb.CreateCommand (Prefix + "defvol")
+                    .Alias (Prefix + "dv")
                     .Description ("Setzt die Standardlautstärke, wenn Musik startet. (0-100). Muss nach neustart neu eingestellt werden.\n**Benutzung**: !dv 80")
                     .Parameter ("val",ParameterType.Required)
                     .Do (async e =>
@@ -202,7 +204,7 @@ namespace MidnightBot.Modules.Music
                          await e.Channel.SendMessage ($"🎵 `Standardlautstärke auf {volume}% gesetzt.`").ConfigureAwait (false);
                      });
 
-                cgb.CreateCommand (Prefix + "min").Alias (Prefix + "mute")
+                cgb.CreateCommand (Prefix + "mute").Alias (Prefix + "min")
                     .Description ("Setzt die Lautstärke auf 0%")
                     .Do (e =>
                      {
@@ -238,7 +240,8 @@ namespace MidnightBot.Modules.Music
                          musicPlayer.SetVolume (50);
                      });
 
-                cgb.CreateCommand (Prefix + "sh")
+                cgb.CreateCommand (Prefix + "shuffle")
+                    .Alias (Prefix + "sh")
                     .Description ("Mischt die derzeitige Abspielliste.")
                     .Do (async e =>
                      {
@@ -267,8 +270,9 @@ namespace MidnightBot.Modules.Music
                                                      "It even persists through restarts.").ConfigureAwait (false);
                      });
 
-                cgb.CreateCommand (Prefix + "pl")
-                .Alias (Prefix + "playlistrequest")
+                cgb.CreateCommand (Prefix + "playlist")
+                    .Alias (Prefix + "pl")
+                    .Alias (Prefix + "playlistrequest")
                     .Description ("Listet bis zu 50 Lieder aus einer Youtubeplaylist, oder aus einem Suchbegriff.")
                     .Parameter ("playlist",ParameterType.Unparsed)
                     .Do (async e =>
@@ -308,7 +312,8 @@ namespace MidnightBot.Modules.Music
                          await msg.Edit ("🎵 `Playlist Listung erledigt.`").ConfigureAwait (false);
                      });
 
-                cgb.CreateCommand (Prefix + "lopl")
+                cgb.CreateCommand (Prefix + "localplaylst")
+                    .Alias (Prefix + "lopl")
                     .Description ("Listet alle Lieder von einem Verzeichnis. **Bot Owner Only!**")
                     .Parameter ("directory",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
@@ -348,7 +353,8 @@ namespace MidnightBot.Modules.Music
                          }
                      });
 
-                cgb.CreateCommand (Prefix + "lo")
+                cgb.CreateCommand (Prefix + "local")
+                    .Alias (Prefix + "lo")
                     .Description ("Listet einen lokalen Song mit vollen Pfad. **Bot Owner Only!**\n**Benutzung**: `!lo C:/music/mysong.mp3`")
                     .Parameter ("path",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
@@ -360,7 +366,8 @@ namespace MidnightBot.Modules.Music
                          await QueueSong (e.Channel,e.User.VoiceChannel,e.GetArg ("path"),musicType: MusicType.Local).ConfigureAwait (false);
                      });
 
-                cgb.CreateCommand (Prefix + "mv")
+                cgb.CreateCommand (Prefix + "move")
+                    .Alias (Prefix + "mv")
                     .Description ("Verschiebt den Bot in den eigenen Voice-Channel. (Funktioniert nur, wenn schon Musik läuft)")
                     .Do (e =>
                      {
@@ -371,7 +378,8 @@ namespace MidnightBot.Modules.Music
                          musicPlayer.MoveToVoiceChannel (voiceChannel);
                      });
 
-                cgb.CreateCommand (Prefix + "rm")
+                cgb.CreateCommand (Prefix + "remove")
+                    .Alias (Prefix + "rm")
                     .Description ("Entfernt einen Song mit seiner Id, oder 'all' um die komplette Liste zu löschen.")
                     .Parameter ("num",ParameterType.Required)
                     .Do (async e =>
@@ -403,6 +411,41 @@ namespace MidnightBot.Modules.Music
                          await e.Channel.SendMessage ($"🎵**Lied {song.PrettyName} auf Position `{num}` wurde entfernt.**").ConfigureAwait (false);
                      });
 
+                cgb.CreateCommand(Prefix + "movesong")
+                    .Alias(Prefix + "ms")
+                    .Description($"Moves a song from one position to another.\n**Usage**: `{Prefix} ms` 5>3")
+                    .Parameter("fromto")
+                    .Do(async e =>
+                    {
+                        MusicPlayer musicPlayer;
+                        if (!MusicPlayers.TryGetValue(e.Server, out musicPlayer))
+                        {
+                            return;
+                        }
+                        var fromto = e.GetArg("fromto").Trim();
+                        var fromtoArr = fromto.Split('>');
+
+                        int n1;
+                        int n2;
+
+                        var playlist = musicPlayer.Playlist as List<Song> ?? musicPlayer.Playlist.ToList();
+
+                        if (fromtoArr.Length != 2 || !int.TryParse(fromtoArr[0], out n1) ||
+                            !int.TryParse(fromtoArr[1], out n2) || n1 < 1 || n2 < 1 || n1 == n2 ||
+                            n1 > playlist.Count || n2 > playlist.Count)
+                        {
+                            await e.Channel.SendMessage("`Invalid input.`");
+                            return;
+                        }
+
+                        var s = playlist[n1 - 1];
+                        playlist.Insert(n2 - 1, s);
+                        var nn1 = n2 < n1 ? n1 : n1 - 1;
+                        playlist.RemoveAt (nn1);
+
+                        await e.Channel.SendMessage($"🎵`Moved` {s.PrettyName} `from #{n1} to #{n2}`");
+                    });
+
                 cgb.CreateCommand (Prefix + "cleanup")
                     .Description ("Bereinigt hängende Voice-Verbindung. **Bot Owner Only!**")
                     .AddCheck (SimpleCheckers.OwnerOnly ())
@@ -421,8 +464,8 @@ namespace MidnightBot.Modules.Music
                          }
                      });
 
-                cgb.CreateCommand (Prefix + "rcs")
-                    .Alias (Prefix + "repeatcurrentsong")
+                cgb.CreateCommand (Prefix + "reptcursong")
+                    .Alias (Prefix + "rcs")
                     .Description ("Schaltet das Wiederholen des derzeitigen Liedes um.")
                     .Do (async e =>
                     {
@@ -441,8 +484,8 @@ namespace MidnightBot.Modules.Music
                         .ConfigureAwait (false);
                     });
 
-                cgb.CreateCommand (Prefix + "rpl")
-                    .Alias (Prefix + "repeatplaylist")
+                cgb.CreateCommand (Prefix + "rpeatplaylst")
+                    .Alias (Prefix + "rpl")
                     .Description ("Schaltet das Wiederholen aller Songs in der Liste um. (Jedes beendete Lied wird an das Ende der Liste hinzugefügt).")
                     .Do (async e =>
                     {

@@ -88,6 +88,7 @@ namespace MidnightBot.Modules.Administration.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "cleanv+t")
+                .Alias (Module.Prefix + "cv+t")
                 .Description ("Löscht alle Text-Channel die auf `-voice` enden für die keine Voicechannels gefunden werden. **Benutzung auf eigene Gefahr.**")
                 .AddCheck (SimpleCheckers.CanManageRoles)
                 .AddCheck (SimpleCheckers.ManageChannels ())
@@ -117,8 +118,8 @@ namespace MidnightBot.Modules.Administration.Commands
                     await e.Channel.SendMessage ("`Erledigt.`");
                 });
 
-            cgb.CreateCommand (Module.Prefix + "v+t")
-                .Alias (Module.Prefix + "voice+text")
+            cgb.CreateCommand (Module.Prefix + "voice+text")
+                .Alias (Module.Prefix + "v+t")
                 .Description ("Erstellt einen Text-Channel für jeden Voice-Channel, welchen nur User im dazugehörigen Voice-Channel sehen können." +
                              "Als Server-Owner sieht du alle Channel, zu jeder Zeit.")
                 .AddCheck (SimpleCheckers.ManageChannels ())

@@ -58,8 +58,8 @@ namespace MidnightBot.Modules.Permissions
                          await e.Channel.SendMessage ($"Rolle `{role.Name}` ist nun benötigt um die Berechtigungen zu bearbeiten.").ConfigureAwait (false);
                      });
 
-                cgb.CreateCommand (Prefix + "rpc")
-                    .Alias (Prefix + "rolepermissionscopy")
+                cgb.CreateCommand (Prefix + "rolepermscopy")
+                    .Alias (Prefix + "rpc")
                     .Description ($"Kopiert BOT BERECHTIGUNGEN (nicht Discord Berechtigungen) von einer Rolle zu einer anderen.\n**Benutzung**:`{Prefix}rpc Some Role ~ Some other role`")
                     .Parameter ("from_to",ParameterType.Unparsed)
                     .Do (async e =>
@@ -86,8 +86,9 @@ namespace MidnightBot.Modules.Permissions
                             await e.Channel.SendMessage ($"💢{ex.Message}");
                         }
                     });
-                cgb.CreateCommand (Prefix + "cpc")
-                    .Alias (Prefix + "channelpermissionscopy")
+
+                cgb.CreateCommand (Prefix + "chnlpermscopy")
+                    .Alias (Prefix + "cpc")
                     .Description ($"Kopiert BOT BERECHTIGUNGEN (nicht Discord Berechtigungen) von einem Channel zu einem anderen.\n**Benutzung**:`{Prefix}cpc Some Channel ~ Some other channel`")
                     .Parameter ("from_to",ParameterType.Unparsed)
                     .Do (async e =>
@@ -114,8 +115,9 @@ namespace MidnightBot.Modules.Permissions
                             await e.Channel.SendMessage ($"💢{ex.Message}");
                         }
                     });
-                cgb.CreateCommand (Prefix + "upc")
-                    .Alias (Prefix + "userpermissionscopy")
+
+                cgb.CreateCommand (Prefix + "usrpermscopy")
+                    .Alias (Prefix + "upc")
                     .Description ($"Kopiert BOT BERECHTIGUNGEN (nicht Discord Berechtigungen) von einem Benutzer, zu einem anderen.\n**Benutzung**:`{Prefix}upc @SomeUser ~ @SomeOtherUser`")
                     .Parameter ("from_to",ParameterType.Unparsed)
                     .Do (async e =>
@@ -192,7 +194,7 @@ namespace MidnightBot.Modules.Permissions
                         await e.Channel.SendMessage (perms.ToString ()).ConfigureAwait (false);
                     });
 
-                cgb.CreateCommand (Prefix + "channelperms")
+                cgb.CreateCommand (Prefix + "chnlperms")
                     .Alias (Prefix + "cp")
                     .Description ("Zeigt gebannte Berechtigungen für einen bestimmten Channel. Kein Argument für derzeitigen Channel.\n**Benutzung**: ;cp #dev")
                     .Parameter ("channel",ParameterType.Unparsed)
@@ -241,7 +243,8 @@ namespace MidnightBot.Modules.Permissions
                         await e.Channel.SendMessage (perms.ToString ()).ConfigureAwait (false);
                     });
 
-                cgb.CreateCommand (Prefix + "sm").Alias (Prefix + "servermodule")
+                cgb.CreateCommand (Prefix + "srvrmdl")
+                    .Alias (Prefix + "sm")
                     .Parameter ("module",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Description ("Setzt die Berechtigung eines Moduls auf Serverlevel.\n**Benutzung**: ;sm [module_name] enable")
@@ -265,7 +268,7 @@ namespace MidnightBot.Modules.Permissions
                         }
                     });
 
-                cgb.CreateCommand (Prefix + "sc").Alias (Prefix + "servercommand")
+                cgb.CreateCommand (Prefix + "srvrcmd").Alias (Prefix + "sc")
                     .Parameter ("command",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Description ("Setzt die Berechtigung eines Befehls auf Serverlevel.\n**Benutzung**: ;sc [command_name] disable")
@@ -289,7 +292,7 @@ namespace MidnightBot.Modules.Permissions
                         }
                     });
 
-                cgb.CreateCommand (Prefix + "rm").Alias (Prefix + "rolemodule")
+                cgb.CreateCommand (Prefix + "rolemdl").Alias (Prefix + "rm")
                     .Parameter ("module",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("role",ParameterType.Unparsed)
@@ -327,7 +330,7 @@ namespace MidnightBot.Modules.Permissions
                         }
                     });
 
-                cgb.CreateCommand (Prefix + "rc").Alias (Prefix + "rolecommand")
+                cgb.CreateCommand (Prefix + "rolecmd").Alias (Prefix + "rc")
                     .Parameter ("command",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("role",ParameterType.Unparsed)
@@ -365,7 +368,7 @@ namespace MidnightBot.Modules.Permissions
                         }
                     });
 
-                cgb.CreateCommand (Prefix + "cm").Alias (Prefix + "channelmodule")
+                cgb.CreateCommand (Prefix + "chnlmdl").Alias (Prefix + "cm")
                     .Parameter ("module",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("channel",ParameterType.Unparsed)
@@ -409,7 +412,7 @@ namespace MidnightBot.Modules.Permissions
                         }
                     });
 
-                cgb.CreateCommand (Prefix + "cc").Alias (Prefix + "channelcommand")
+                cgb.CreateCommand (Prefix + "chnlcmd").Alias (Prefix + "cc")
                     .Parameter ("command",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("channel",ParameterType.Unparsed)
@@ -447,7 +450,7 @@ namespace MidnightBot.Modules.Permissions
                         }
                     });
 
-                cgb.CreateCommand (Prefix + "um").Alias (Prefix + "usermodule")
+                cgb.CreateCommand (Prefix + "usrmdl").Alias (Prefix + "um")
                     .Parameter ("module",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("user",ParameterType.Unparsed)
@@ -473,7 +476,7 @@ namespace MidnightBot.Modules.Permissions
                         }
                     });
 
-                cgb.CreateCommand (Prefix + "uc").Alias (Prefix + "usercommand")
+                cgb.CreateCommand (Prefix + "usrcmd").Alias (Prefix + "uc")
                     .Parameter ("command",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("user",ParameterType.Unparsed)
@@ -499,7 +502,7 @@ namespace MidnightBot.Modules.Permissions
                         }
                     });
 
-                cgb.CreateCommand (Prefix + "asm").Alias (Prefix + "allservermodules")
+                cgb.CreateCommand (Prefix + "allsrvrmdls").Alias (Prefix + "asm")
                     .Parameter ("bool",ParameterType.Required)
                     .Description ("Setzt die Berechtigung aller Module auf Serverlevel.\n**Benutzung**: ;asm [enable/disable]")
                     .Do (async e =>
@@ -524,7 +527,7 @@ namespace MidnightBot.Modules.Permissions
                         }
                     });
 
-                cgb.CreateCommand (Prefix + "asc").Alias (Prefix + "allservercommands")
+                cgb.CreateCommand (Prefix + "allsrvrcmds").Alias (Prefix + "asc")
                     .Parameter ("module",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Description ("Setzt Berechtigungen für alle Befehle eines bestimmten Moduls auf Serverlevel.\n**Benutzung**: ;asc [module_name] [enable/disable]")
@@ -551,7 +554,7 @@ namespace MidnightBot.Modules.Permissions
                         }
                     });
 
-                cgb.CreateCommand (Prefix + "acm").Alias (Prefix + "allchannelmodules")
+                cgb.CreateCommand (Prefix + "allchnlmdls").Alias (Prefix + "acm")
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("channel",ParameterType.Unparsed)
                     .Description ("Setzt Berechtigungen für alle Module auf Channellevel.\n**Benutzung**: ;acm [enable/disable] [channel_name]")
@@ -579,7 +582,7 @@ namespace MidnightBot.Modules.Permissions
                         }
                     });
 
-                cgb.CreateCommand (Prefix + "acc").Alias (Prefix + "allchannelcommands")
+                cgb.CreateCommand (Prefix + "allchnlcmds").Alias (Prefix + "acc")
                     .Parameter ("module",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("channel",ParameterType.Unparsed)
@@ -607,7 +610,7 @@ namespace MidnightBot.Modules.Permissions
                         }
                     });
 
-                cgb.CreateCommand (Prefix + "arm").Alias (Prefix + "allrolemodules")
+                cgb.CreateCommand (Prefix + "allrolemdls").Alias (Prefix + "arm")
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("role",ParameterType.Unparsed)
                     .Description ("Setzt Berechtigung von allen Modulen auf Rollenlevel.\n**Benutzung**: ;arm [enable/disable] [role_name]")
@@ -634,10 +637,10 @@ namespace MidnightBot.Modules.Permissions
                         }
                     });
 
-                cgb.CreateCommand (Prefix + "arc").Alias (Prefix + "allrolecommands")
+                cgb.CreateCommand (Prefix + "allrolecmds").Alias (Prefix + "arc")
                     .Parameter ("module",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
-                    .Parameter ("channel",ParameterType.Unparsed)
+                    .Parameter ("role",ParameterType.Unparsed)
                     .Description ("Setzt Berechtigungen für alle Befehle eines bestimmten Moduls auf Rollenlevel.\n**Benutzung**: ;arc [module_name] [enable/disable] [role_name]")
                     .Do (async e =>
                     {
@@ -645,12 +648,27 @@ namespace MidnightBot.Modules.Permissions
                         {
                             var state = PermissionHelper.ValidateBool (e.GetArg ("bool"));
                             var module = PermissionHelper.ValidateModule (e.GetArg ("module"));
-                            var role = PermissionHelper.ValidateRole (e.Server,e.GetArg ("channel"));
-                            foreach (var command in MidnightBot.Client.GetService<CommandService> ().AllCommands.Where (c => c.Category == module))
+                            if (e.GetArg("role")?.ToLower() == "all")
                             {
-                                PermissionsHandler.SetRoleCommandPermission (role,command.Text,state);
+                                foreach (var role in e.Server.Roles)
+                                {
+                                    foreach (var command in MidnightBot.Client.GetService<CommandService>().AllCommands.Where(c => c.Category == module))
+                                    {
+                                        PermissionsHandler.SetRoleCommandPermission(role, command.Text, state);
+                                    }
+                                }
+                                await e.Channel.SendMessage($"Alle Befehle des **{module}** Moduls wurden **{(state ? "aktiviert" : "deaktiviert")}** für **alle Rollen**.").ConfigureAwait(false);
                             }
-                            await e.Channel.SendMessage ($"Alle Befehle des **{module}** Moduls wurden **{(state ? "aktiviert" : "deaktiviert")}** für die **{role.Name}** Rolle..").ConfigureAwait (false);
+                            else
+                            {
+                                var role = PermissionHelper.ValidateRole(e.Server, e.GetArg("role"));
+
+                                foreach (var command in MidnightBot.Client.GetService<CommandService>().AllCommands.Where(c => c.Category == module))
+                                {
+                                    PermissionsHandler.SetRoleCommandPermission(role, command.Text, state);
+                                }
+                                await e.Channel.SendMessage($"Alle Befehle des **{module}** Moduls wurden **{(state ? "aktiviert" : "deaktiviert")}** für die **{role.Name}** Rolle.").ConfigureAwait(false);
+                            }
                         }
                         catch (ArgumentException exArg)
                         {

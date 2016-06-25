@@ -157,8 +157,6 @@
     <Compile Include="Modules\Conversations\Commands\RipCommand.cs" />
     <Compile Include="Modules\CustomReactions\CustomReactions.cs" />
     <Compile Include="Modules\Meme\MemeModule.cs" />
-    <Compile Include="Modules\Osu\OsuApi.cs" />
-    <Compile Include="Modules\Osu\User.cs" />
     <Compile Include="Modules\Pokemon\PokemonAttack.cs" />
     <Compile Include="Modules\Pokemon\PokemonMain.cs" />
     <Compile Include="Modules\Pokemon\TrainerStats.cs" />
@@ -169,6 +167,7 @@
     <Compile Include="Modules\Searches\Commands\IMDB\ImdbMovie.cs" />
     <Compile Include="Modules\Searches\Commands\IMDB\ImdbScraper.cs" />
     <Compile Include="Classes\IncidentsHandler.cs" />
+    <Compile Include="Modules\Searches\Commands\OsuCommands.cs" />
     <Compile Include="Modules\Searches\Commands\WowJokes.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -278,7 +277,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Compile Include="Modules\Osu\Map.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

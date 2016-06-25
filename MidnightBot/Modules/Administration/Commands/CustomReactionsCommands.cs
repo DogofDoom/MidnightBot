@@ -19,7 +19,7 @@ namespace MidnightBot.Modules.Administration.Commands
         {
             var Prefix = Module.Prefix;
 
-            cgb.CreateCommand (Prefix + "addcustomreaction")
+            cgb.CreateCommand (Prefix + "addcustreact")
                 .Alias (Prefix + "acr")
                 .Description ($"Fügt eine \"Custom Reaction\" hinzu. **Bot Owner Only!**\n**Benutzung**: {Prefix}acr \"hello\" I love saying hello to %user%")
                 .AddCheck (SimpleCheckers.OwnerOnly ())
@@ -43,7 +43,7 @@ namespace MidnightBot.Modules.Administration.Commands
 
                 });
 
-            cgb.CreateCommand (Prefix + "listcustomreactions")
+            cgb.CreateCommand (Prefix + "listcustreact")
             .Alias (Prefix + "lcr")
             .Description ("Listet alle derzeitigen \"Custom Reactions\" (Seitenweise mit 5 Commands je Seite).\n**Benutzung**:.lcr 1")
             .Parameter ("num",ParameterType.Required)
@@ -56,7 +56,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 await e.Channel.SendMessage (result);
             });
 
-            cgb.CreateCommand (Prefix + "deletecustomreaction")
+            cgb.CreateCommand (Prefix + "delcustreact")
             .Alias (Prefix + "dcr")
             .Description ("Löscht eine \"Custome Reaction\" mit gegebenen Namen (und Index)")
             .AddCheck (SimpleCheckers.OwnerOnly ())

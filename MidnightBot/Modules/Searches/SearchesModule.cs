@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Discord.Modules;
 using MidnightBot.Classes;
 using MidnightBot.Classes.JSONModels;
@@ -29,6 +30,7 @@ namespace MidnightBot.Modules.Searches
             commands.Add (new RedditCommand (this));
             commands.Add (new WowJokeCommand (this));
             commands.Add (new CalcCommand (this));
+            commands.Add (new OsuCommands (this));
             commands.Add (new APICommands (this));
             rng = new Random ();
         }
@@ -274,38 +276,6 @@ namespace MidnightBot.Modules.Searches
                        }
                    });
 
-                cgb.CreateCommand (Prefix + "osustats")
-                  .Description ("Zeigt Osu-Statistiken für einen Spieler.\n**Benutzung**:~osustats Name")
-                  .Parameter ("usr",ParameterType.Unparsed)
-                  .Do (async e =>
-                   {
-                       if (string.IsNullOrWhiteSpace (e.GetArg ("usr")))
-                           return;
-
-                       using (WebClient cl = new WebClient ())
-                       {
-                           try
-                           {
-                               cl.CachePolicy = new System.Net.Cache.RequestCachePolicy (System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
-                               cl.Headers.Add (HttpRequestHeader.UserAgent,"Mozilla/5.0 (Windows NT 6.2; Win64; x64)");
-                               cl.DownloadDataAsync (new Uri ($"http://lemmmy.pw/osusig/sig.php?uname={ e.GetArg ("usr") }&flagshadow&xpbar&xpbarhex&pp=2"));
-                               cl.DownloadDataCompleted += async ( s,cle ) =>
-                               {
-                                   try
-                                   {
-                                       await e.Channel.SendFile ($"{e.GetArg ("usr")}.png",new MemoryStream (cle.Result)).ConfigureAwait (false);
-                                       await e.Channel.SendMessage ($"`Profil Link:`https://osu.ppy.sh/u/{Uri.EscapeDataString (e.GetArg ("usr"))}\n`Bild bereitgestellt von https://lemmmy.pw/osusig`").ConfigureAwait (false);
-                                   }
-                                   catch { }
-                               };
-                           }
-                           catch
-                           {
-                               await e.Channel.SendMessage ("💢 Osu Signatur konnte nicht bereitgestellt werden :\\").ConfigureAwait (false);
-                           }
-                       }
-                   });
-
                 cgb.CreateCommand (Prefix + "ud")
                   .Description ("Durchsucht das Urban Dictionary nach einem Wort.\n**Benutzung**:~ud Pineapple")
                   .Parameter ("query",ParameterType.Unparsed)
@@ -408,150 +378,6 @@ namespace MidnightBot.Modules.Searches
                        var response = await SearchHelper.GetResponseStringAsync ("http://api.icndb.com/jokes/random/").ConfigureAwait (false);
                        await e.Channel.SendMessage ("`" + JObject.Parse (response)["value"]["joke"].ToString () + "` 😆").ConfigureAwait (false);
                    });
-
-                cgb.CreateCommand (Prefix + "osumap")
-                   .Alias (Prefix + "om")
-                   .Description ("Zeigt Informationen über eine bestimmte Beatmap\n**Benutzung**: ~osumap 252002:std")
-                   .Parameter ("input",ParameterType.Unparsed)
-                   .Do (async e =>
-                   {
-                       if (string.IsNullOrWhiteSpace (e.GetArg ("input")))
-                       {
-                           await e.Send ("Bitte gib eine Beatmap-ID ein.").ConfigureAwait (false);
-                           return;
-                       }
-
-                       var beatmap = e.GetArg ("input");
-
-                       String[] uxm = beatmap.Split (':');
-                       var mode = uxm[1];
-                       try
-                       {
-                           if (uxm[1].Equals ("std",StringComparison.OrdinalIgnoreCase) || uxm[1].Equals ("0") || uxm[1].Equals ("standard",StringComparison.OrdinalIgnoreCase))
-                           {
-                               mode = "0";
-                           }
-                           else if (uxm[1].Equals ("taiko",StringComparison.OrdinalIgnoreCase) || uxm[1].Equals ("1"))
-                           {
-                               mode = "1";
-                           }
-                           else if (uxm[1].Equals ("ctb",StringComparison.OrdinalIgnoreCase) || uxm[1].Equals ("2") || uxm[1].Equals ("catch the beat",StringComparison.OrdinalIgnoreCase))/*|| choice == "ctb" || choice == "Ctb" || choice == "CTb" || choice == "CTB" || choice == "cTb" || choice == "ctB"*/
-                           {
-                               mode = "2";
-                           }
-                           else if (uxm[1].Equals ("mania",StringComparison.OrdinalIgnoreCase) || uxm[1].Equals ("3"))
-                           {
-                               mode = "3";
-                           }
-                           else if (uxm[1] == "")
-                           {
-                               uxm[1] = "std";
-                               mode = "0";
-                           }
-                           else
-                           {
-                               await e.Send ("Muss ein gültiger Modus sein.").ConfigureAwait (false);
-                               return;
-                           }
-                       }
-
-                       catch (Exception ex)
-                       {
-                           Console.WriteLine ($"Fehler beim Modus: " + ex);
-                           return;
-                       }
-
-                       var api = new Osu.OsuApi (MidnightBot.Creds.OsuAPIKey);
-                       var oBeatmap = api.GetMap (uxm[0],mode);
-                       var formatString =
-                                "```" + "Modus: " + uxm[1]
-                              + "\nBeatmapname: " + oBeatmap.title
-                              + "\nLänge: " + oBeatmap.total_length + " Sekunden"
-                              + "\nKünstler: " + oBeatmap.artist
-                              + "\nBeatmap-ID: " + oBeatmap.beatmap_id
-                              + "\nRanking Datum: " + oBeatmap.approved_date
-                              + "\nErsteller: " + oBeatmap.creator
-                              + "\nBPM: " + oBeatmap.bpm
-                              + "\nSchwierigkeit: " + oBeatmap.difficultyrating + " Sterne"
-                              + "\nCS: " + oBeatmap.diff_size
-                              + "\nOD: " + oBeatmap.diff_overall
-                              + "\nAR: " + oBeatmap.diff_approach
-                              + "\nHP: " + oBeatmap.diff_drain
-                              + "\nMaximale Combo: " + oBeatmap.max_combo + "```";
-
-                       await e.Send (formatString).ConfigureAwait (false);
-                   });
-
-                cgb.CreateCommand (Prefix + "osu")
-                   .Alias (Prefix + "oq")
-                   .Description ("Zeigt Osu Benutzer Statistiken\n**Benutzung**: ~osu Cookiezi:standard")
-                   .Parameter ("input",ParameterType.Unparsed)
-                   .Do (async e =>
-                   {
-                       if (string.IsNullOrWhiteSpace (e.GetArg ("input")))
-                       {
-                           await e.Send ("Bitte gib einen Benutzernamen ein.").ConfigureAwait (false);
-                           return;
-                       }
-
-
-                       var user = e.GetArg ("input");
-
-                       String[] uxm = user.Split (':');
-                       var mode = uxm[1];
-                       try
-                       {
-                           if (uxm[1].Equals ("std",StringComparison.OrdinalIgnoreCase) || uxm[1].Equals ("0") || uxm[1].Equals ("standard",StringComparison.OrdinalIgnoreCase))
-                           {
-                               mode = "0";
-                           }
-                           else if (uxm[1].Equals ("taiko",StringComparison.OrdinalIgnoreCase) || uxm[1].Equals ("1"))
-                           {
-                               mode = "1";
-                           }
-                           else if (uxm[1].Equals ("ctb",StringComparison.OrdinalIgnoreCase) || uxm[1].Equals ("2") || uxm[1].Equals ("catch the beat",StringComparison.OrdinalIgnoreCase))/*|| choice == "ctb" || choice == "Ctb" || choice == "CTb" || choice == "CTB" || choice == "cTb" || choice == "ctB"*/
-                           {
-                               mode = "2";
-                           }
-                           else if (uxm[1].Equals ("mania",StringComparison.OrdinalIgnoreCase) || uxm[1].Equals ("3"))
-                           {
-                               mode = "3";
-                           }
-                           else if (uxm[1] == "")
-                           {
-                               uxm[1] = "std";
-                               mode = "0";
-                           }
-                           else
-                           {
-                               await e.Send ("Muss ein gültiger Modus sein.").ConfigureAwait (false);
-                               return;
-                           }
-                       }
-
-                       catch (Exception ex)
-                       {
-                           Console.WriteLine ($"Fehler beim Modus: " + ex);
-                           return;
-                       }
-
-                       var api = new Osu.OsuApi (MidnightBot.Creds.OsuAPIKey);
-                       var oUser = api.GetUser (uxm[0],mode);
-                       var formatString =
-                                "```" + "Modus: " + uxm[1]
-                              + "\nBenutzername: " + uxm[0]
-                              + "\nLand: " + oUser.country
-                              + "\nPP: " + oUser.pp_raw
-                              + "\nPP Rang: #" + String.Format ("{0:###,###}",oUser.pp_rank)
-                              + "\nGerankete Punktzahl: " + String.Format ("{0:###,###}",oUser.ranked_score)
-                              + "\nLevel: " + oUser.level
-                              + "\nGenauigkeit: " + oUser.accuracy + "%"
-                              + "\n\nSS Ränge: " + oUser.count_rank_ss
-                              + "\nS Ränge: " + oUser.count_rank_s
-                              + "\nA Ränge: " + oUser.count_rank_a + "```";
-
-                       await e.Send (formatString).ConfigureAwait (false);
-                   });
                 
                 cgb.CreateCommand (Prefix + "stardew")
                     .Description ($"Gibt einen Link zum Stardew Valley Wiki mit gegebenem Topic zurück.\n**Benutzung**: {Prefix}stardew Cow")
@@ -568,8 +394,8 @@ namespace MidnightBot.Modules.Searches
                         await e.Channel.SendMessage ($"Ich habe nach: {upperTopic} gesucht und folgendes gefunden: http://stardewvalleywiki.com/{topic}").ConfigureAwait (false);
                     });
 
-                cgb.CreateCommand (Prefix + "mi")
-                   .Alias (Prefix + "magicitem")
+                cgb.CreateCommand (Prefix + "magicitem")
+                .Alias (Prefix + "mi")
                    .Description ("Zeigt ein zufälliges Magic-Item von <https://1d4chan.org/wiki/List_of_/tg/%27s_magic_items>")
                    .Do (async e =>
                    {
@@ -662,7 +488,7 @@ namespace MidnightBot.Modules.Searches
                         var red = Convert.ToInt32 (arg1.Substring (0,2),16);
                         var green = Convert.ToInt32 (arg1.Substring (2,2),16);
                         var blue = Convert.ToInt32 (arg1.Substring (4,2),16);
-                        var brush = new SolidBrush (Color.FromArgb (red,green,blue));
+                        var brush = new SolidBrush (System.Drawing.Color.FromArgb (red,green,blue));
 
                         using (Graphics g = Graphics.FromImage (img))
                         {
@@ -672,6 +498,28 @@ namespace MidnightBot.Modules.Searches
 
                         await e.Channel.SendFile ("arg1.png",img.ToStream ());
                     });
+
+                cgb.CreateCommand(Prefix + "videocall")
+                  .Description("Erstellt einen privaten <http://www.appear.in> Video Anruf Link für dich und andere erwähnte Personen. Der Link wird allen erwähnten Personen per persönlicher Nachricht geschickt.")
+                  .Parameter("arg", ParameterType.Unparsed)
+                  .Do(async e =>
+                  {
+                      try
+                      {
+                          var allUsrs = e.Message.MentionedUsers.Union(new User[] { e.User });
+                          var allUsrsArray = allUsrs as User[] ?? allUsrs.ToArray();
+                          var str = allUsrsArray.Aggregate("http://appear.in/", (current, usr) => current + Uri.EscapeUriString(usr.Name[0].ToString()));
+                          str += new Random().Next();
+                          foreach (var usr in allUsrsArray)
+                          {
+                              await usr.SendMessage(str).ConfigureAwait(false);
+                          }
+                      }
+                      catch (Exception ex)
+                      {
+                          Console.WriteLine(ex);
+                      }
+                  });
             });
         }
     }
