@@ -11,7 +11,7 @@ namespace Discord.API.Client.Rest
 
         public ulong GuildId { get; set; }
 
-        public int Days { get; set; }
+        public int Days { get; set; } = 30;
         public bool IsSimulation { get; set; } = false;
 
         public PruneMembersRequest(ulong guildId)

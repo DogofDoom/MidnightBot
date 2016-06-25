@@ -516,7 +516,7 @@ namespace Discord
 
         /// <summary> Kicks all users with an inactivity greater or equal to the provided number of days. </summary>
         /// <param name="simulate">If true, no pruning will actually be done but instead return the number of users that would be pruned. </param>
-        public async Task<int> PruneUsers(int days, bool simulate)
+        public async Task<int> PruneUsers(int days = 30, bool simulate = false)
         {
             if (days <= 0) throw new ArgumentOutOfRangeException(nameof(days));
 
