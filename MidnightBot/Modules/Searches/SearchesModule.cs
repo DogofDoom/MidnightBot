@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 
 namespace MidnightBot.Modules.Searches
@@ -31,6 +30,7 @@ namespace MidnightBot.Modules.Searches
             commands.Add (new WowJokeCommand (this));
             commands.Add (new CalcCommand (this));
             commands.Add (new OsuCommands (this));
+            commands.Add (new PokemonSearchCommands (this));
             commands.Add (new APICommands (this));
             rng = new Random ();
         }

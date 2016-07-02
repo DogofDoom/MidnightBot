@@ -624,6 +624,23 @@ namespace MidnightBot.Modules.Music
                             e.Channel.SendMessage($"```js\n--- Liste der gespeicherten Playlisten ---\n\n" + string.Join("\n", result.Select(r => $"'{r.Name}-{r.Id}' von {r.Creator} ({r.SongCnt} Lieder)")) + $"\n\n        --- Seite {num} ---```");
                     });
 
+                cgb.CreateCommand("deleteplaylist")
+                    .Alias("delpls")
+                    .Description("Löscht eine gespeicherte Playlist. Nur wenn du sie erstellt hast, oder wenn du der Bot-Owner bist. | `!m delpls animu-5`")
+                    .Parameter("pl", ParameterType.Required)
+                    .Do(async e =>
+                    {
+                        var pl = e.GetArg("pl").Trim().Split('-')[1];
+                        if (string.IsNullOrWhiteSpace(pl))
+                            return;
+                        var plnum = int.Parse(pl);
+                        if (MidnightBot.IsOwner(e.User.Id))
+                            DbHandler.Instance.Delete<MusicPlaylist>(plnum);
+                        else
+                            DbHandler.Instance.DeleteWhere<MusicPlaylist>(mp => mp.Id == plnum && (long)e.User.Id == mp.CreatorId);
+                        await e.Channel.SendMessage("`Ok.` :ok:");
+                    });
+
                 cgb.CreateCommand (Prefix + "goto")
                     .Description ("Skipped zu einer bestimmten Zeit in Sekunden im aktuellen Lied.")
                     .Parameter ("time")

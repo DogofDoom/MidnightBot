@@ -30,6 +30,22 @@ namespace MidnightBot.Modules.Administration
             commands.Add (new CustomReactionsCommands (this));
             commands.Add (new AutoAssignRole (this));
             commands.Add (new SelfCommands (this));
+
+            MidnightBot.Client.GetService<CommandService> ().CommandExecuted += DeleteCommandMessage;
+        }
+
+        private void DeleteCommandMessage ( object sender,CommandEventArgs e )
+        {
+            if (e.Server == null || e.Channel.IsPrivate)
+                return;
+            var conf = SpecificConfigurations.Default.Of (e.Server.Id);
+            if (!conf.AutoDeleteMessagesOnCommand)
+                return;
+            try
+            {
+                e.Message.Delete();
+            }
+            catch { }
         }
 
         public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Administration;
@@ -57,6 +73,21 @@ namespace MidnightBot.Modules.Administration
                             count++;
                         }
                         await e.Channel.SendMessage (rules.ToString ()).ConfigureAwait (false);
+                    });
+
+                cgb.CreateCommand(Prefix + "delmsgoncmd")
+                    .Description("Ändert das automatische Löschen von erfolgreichen Befehls Aufrufen um Chat Spam zu verhindern. Server Manager Only.")
+                    .AddCheck(SimpleCheckers.ManageServer())
+                    .Do(async e =>
+                    {
+                        var conf = SpecificConfigurations.Default.Of(e.Server.Id);
+                        conf.AutoDeleteMessagesOnCommand = !conf.AutoDeleteMessagesOnCommand;
+                        Classes.JSONModels.ConfigHandler.SaveConfig();
+                        if (conf.AutoDeleteMessagesOnCommand)
+                            await e.Channel.SendMessage("❗`Ich lösche jetzt automatisch die Befehlsaufrufe.`");
+                        else
+                            await e.Channel.SendMessage("❗`Ich lösche jetzt nicht mehr automatisch die Befehlsaufrufe.`");
+
                     });
 
                 cgb.CreateCommand (Prefix + "restart")
@@ -304,7 +335,7 @@ namespace MidnightBot.Modules.Administration
 
                 cgb.CreateCommand (Prefix + "ban").Alias (Prefix + "b")
                     .Parameter ("user",ParameterType.Required)
-                    .Parameter ("msg",ParameterType.Optional)
+                    .Parameter ("msg",ParameterType.Unparsed)
                     .Description ("Bannt einen erwähnten Benutzer.\n**Benutzung**: .b \"@some Guy\" Your behaviour is toxic.")
                         .Do (async e =>
                          {
@@ -338,7 +369,7 @@ namespace MidnightBot.Modules.Administration
 
                 cgb.CreateCommand (Prefix + "softban").Alias (Prefix + "sb")
                     .Parameter("user", ParameterType.Required)
-                    .Parameter("msg", ParameterType.Optional)
+                    .Parameter("msg", ParameterType.Unparsed)
                     .Description("Bannt und entbannt einen Benutzer per ID, oder Name mit optionaler Nachricht.\n**Benutzung**: .sb \"@some Guy\" Your behaviour is toxic.")
                         .Do(async e =>
                         {

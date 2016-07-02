@@ -14,6 +14,11 @@ namespace MidnightBot.Classes
         /// </summary>
         protected DiscordModule Module { get; }
 
+        /// Parent module's prefix
+        /// </summary>
+        protected string Prefix => Module.Prefix;
+
+        /// <summary>
         /// <summary>
         /// Creates a new instance of discord command,
         /// use ": base(module)" in the derived class'

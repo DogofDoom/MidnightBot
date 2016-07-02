@@ -16,8 +16,8 @@ namespace MidnightBot.Modules.Searches.Commands
 
         internal override void Init ( CommandGroupBuilder cgb )
         {
-            cgb.CreateCommand (Module.Prefix + "osu u")
-                  .Description ("Zeigt Osu-Stats für einen Spieler.\n**Benutzer**:~osu u Name")
+            cgb.CreateCommand (Module.Prefix + "osu")
+                  .Description ("Zeigt Osu-Stats für einen Spieler.\n**Benutzer**:~osu Name")
                   .Parameter ("usr",ParameterType.Required)
                   .Parameter ("mode",ParameterType.Unparsed)
                   .Do (async e =>
@@ -116,23 +116,22 @@ namespace MidnightBot.Modules.Searches.Commands
 
                         var reqString = $"https://osu.ppy.sh/api/get_user_best?k={MidnightBot.Creds.OsuAPIKey}&u={Uri.EscapeDataString (e.GetArg ("usr"))}&type=string&limit=5&m={m}";
                         var obj = JArray.Parse (await SearchHelper.GetResponseStringAsync (reqString).ConfigureAwait (false));
-                        var sb = new System.Text.StringBuilder ();
-                        sb.AppendLine ($"Top 5 Plays von {e.GetArg ("usr")}:");
-                        sb.AppendLine ("");
+                        var sb = new System.Text.StringBuilder ($"`Top 5 Plays für {e.GetArg ("usr")}:`\n```xl" + Environment.NewLine);
                         foreach (var item in obj)
                         {
                             var mapReqString = $"https://osu.ppy.sh/api/get_beatmaps?k={MidnightBot.Creds.OsuAPIKey}&b={item["beatmap_id"]}";
                             var map = JArray.Parse (await SearchHelper.GetResponseStringAsync (mapReqString).ConfigureAwait (false))[0];
-                            //var pp = ($"{item["pp"]}");
+                            //var pp = Math.Round (Double.Parse ($"{item["pp"]}"),2);
                             var pp = $"{item["pp"]}";
                             pp = pp.Substring (0,(pp.IndexOf ('.') + 3));
                             var acc = CalculateAcc (item,m);
                             var mods = ResolveMods (Int32.Parse ($"{item["enabled_mods"]}"));
                             if (mods != "+")
-                                sb.AppendLine ($"**{pp}pp** | {acc}% | {map["artist"]} - {map["title"]} ({map["version"]}) **{mods}** | /b/{item["beatmap_id"]}");
+                                sb.AppendLine ($"{pp + "pp",-7} | {acc + "%",-7} | {map["artist"] + "-" + map["title"] + " ("+ map["version"],-40}) | **{mods,-10}** | /b/{item["beatmap_id"]}");
                             else
-                                sb.AppendLine ($"**{pp}pp** | {acc}% | {map["artist"]} - {map["title"]} ({map["version"]})  | /b/{item["beatmap_id"]}");
+                                sb.AppendLine ($"{pp + "pp",-7} | {acc + "%",-7} | {map["artist"] + "-" + map["title"] + " ("+ map["version"],-40}) | /b/{item["beatmap_id"]}");
                         }
+                        sb.Append ("```");
                         await e.Channel.SendMessage (sb.ToString ()).ConfigureAwait (false);
                     }
                     catch

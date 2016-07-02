@@ -10,9 +10,11 @@
 obj/
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+**/Bin/MidnightBot.zip
 **/Bin/Debug/**
 **/Bin/Release/
 **/Bin/PRIVATE/
+**/Bin/MidnightBot/
 !**/Bin/Debug/opus.dll
 !**/Bin/Debug/libsodium.dll
 !**/Bin/Debug/Nito.AsyncEx.Enlightenment.dll
@@ -32,8 +34,13 @@ Tests/
 !**/packages/build/
 # Uncomment if necessary however generally it will be regenerated when needed
 #!**/packages/repositories.config
-NadekoBot/bin/Debug/data/nadekobot.sqlite
-NadekoBot/bin/Debug/data/nadekobotKopie.sqlite
-NadekoBot/bin/Debug/data/config.json
-NadekoBot/Bin/Debug/data/incidents/*
-NadekoBot/Bin/Debug/data/permissions/*
+MidnightBot/bin/Debug/data/MidnightBot.sqlite
+MidnightBot/bin/Debug/data/config.json
+MidnightBot/bin/Debug/data/incidents/*
+MidnightBot/bin/Debug/data/permissions/*
+MidnightBot/bin/Debug/data/ServerSpecificConfigs.json
+MidnightBot/bin/Debug/credentials.json
+MidnightBot.sln.iml
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/modules.xml 
