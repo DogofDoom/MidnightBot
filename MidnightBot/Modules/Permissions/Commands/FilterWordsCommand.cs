@@ -23,9 +23,9 @@ namespace MidnightBot.Modules.Permissions.Commands
                     if (serverPerms.Words.Any(w => wordsInMessage.Contains(w)))
                     {
                         await args.Message.Delete().ConfigureAwait (false);
-                        IncidentsHandler.Add(args.Server.Id, $"Benutzer [{args.User.Name}/{args.User.Id}] schreib ein " +
-                                                             $"gebanntes Wort im Channel [{args.Channel.Name}/{args.Channel.Id}]. " +
-                                                             $"Ganze Nachricht: [[{args.Message.Text}]]");
+                        IncidentsHandler.Add(args.Server.Id,args.Channel.Id,$"Benutzer [{args.User.Name}/{args.User.Id}] schreib ein " +
+                                                             $"gebanntes Wort im Channel [{args.Channel.Name}/{args.Channel.Id}].\n" +
+                                                             $"`Ganze Nachricht:` {args.Message.Text}");
                         if (serverPerms.Verbose)
                             await args.Channel.SendMessage($"{args.User.Mention} Ein, oder mehrere Wörter " +
                                                            $"in diesem Satz sind hier nicht erlaubt.")

@@ -70,7 +70,8 @@
     "Gambling": "$",
     "Permissions": ";",
     "Programming": "%",
-    "Pokemon": ">"
+    "Pokemon": ">",
+    "Utility": "."
   },
   "ServerBlacklist": [],
   "ChannelBlacklist": [],

@@ -67,6 +67,7 @@ namespace MidnightBot.Classes
             get { return voicePlusTextEnabled; }
             set {
                 voicePlusTextEnabled = value;
+                if (!SpecificConfigurations.Instantiated) return;
                 OnPropertyChanged();
             }
         }
@@ -83,6 +84,7 @@ namespace MidnightBot.Classes
             set
             {
                 sendPrivateMessageOnMention = value;
+                if (!SpecificConfigurations.Instantiated) return;
                 OnPropertyChanged ();
             }
         }
@@ -151,6 +153,17 @@ namespace MidnightBot.Classes
                             return;
                         OnPropertyChanged ();
                     };
+            }
+        }
+
+         [JsonIgnore]
+        private float defaultMusicVolume = 1f;
+        public float DefaultMusicVolume {
+            get { return defaultMusicVolume; }
+            set {
+                defaultMusicVolume = value;
+                if (!SpecificConfigurations.Instantiated) return;
+                OnPropertyChanged();
             }
         }
 

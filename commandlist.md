@@ -2,7 +2,7 @@
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
 #MidnightBot List Of Commands  
-Version: `MidnightBot v0.9.6020.39923`
+Version: `MidnightBot v0.9.6027.36202`
 ### Help  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
@@ -45,17 +45,17 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.lsar`  |  Lists all self-assignable roles.
 `.iam`  |  Adds a role to you that you choose. Role must be on a list of self-assignable roles. |  .iam Gamer
 `.iamnot`, `.iamn`  |  Removes a role to you that you choose. Role must be on a list of self-assignable roles. |  .iamn Gamer
-`.remind`  |  Sendet nach einer bestimmten Zeit eine Nachricht in den Channel. Erstes Argument ist me/here/'channelname'. Zweites Argument ist die Zeit in absteigender Reihenfolge (mo>w>d>h>m) Beispiel: 1w5d3h10m. Drittes Argument ist eine (Multiwort)Nachricht.  |  `.remind me 1d5h Do something` or `.remind #general Start now!`
-`.remindmsg`  |  Setzt Nachricht, wenn die Erinnerung ausgelöst wird.  Verfügbare Platzhalter sind %user% - Benutzer der den Command ausgeführt hat, %message% - Nachricht spezifiziert in Erinnerung, %target% - Ziel Channel der Erinnerung. **Bot Owner Only!**
-`.serverinfo`, `.sinfo`  |  Zeigt Infos über den Server, auf dem der Bot läuft. Falls kein Server ausgewählt, derzeitiger wird ausgewählt. | .sinfo Some Server
-`.channelinfo`, `.cinfo`  |  Zeigt Infos über einen Channel. Wenn kein Channel ausgewählt, derzeitiger wird angegeben. | .cinfo #some-channel
-`.userinfo`, `.uinfo`  |  Zeigt eine Info über den User. Wenn kein User angegeben, User der den Befehl eingibt. | .uinfo @SomeUser
 `.addcustreact`, `.acr`  |  Fügt eine "Custom Reaction" hinzu. **Bot Owner Only!** |  .acr "hello" I love saying hello to %user%
-`.listcustreact`, `.lcr`  |  Listet alle derzeitigen "Custom Reactions" (Seitenweise mit 5 Commands je Seite). | .lcr 1
+`.listcustreact`, `.lcr`  |  Listet alle derzeitigen "Custom Reactions" (Seitenweise mit 30 Commands je Seite). | .lcr 1
+`.showcustreact`, `.scr`  |  Zeigt alle möglichen Reaktionen von einer einzigen Custom Reaction. | .scr %mention% bb
+`.editcustreact`, `.ecr`  |  Bearbeitet eine Custom Reaction, Argumente sind der Custom Reaction Name, Index welcher geändert werden soll und eine (Multiwort) Nachricht.**Bot Owner Only** |  `.ecr "%mention% disguise" 2 Test 123`
 `.delcustreact`, `.dcr`  |  Löscht eine "Custome Reaction" mit gegebenen Namen (und Index)
 `.autoassignrole`, `.aar`  |  Fügt automatisch jedem Benutzer der dem Server joint eine Rolle zu. Gib `.aar` ein um zu deaktivieren, `.aar Rollen Name` um zu aktivieren.
 `.leave`  |  Lässt  den Server verlassen. Entweder Name, oder ID benötigt. | `.leave 123123123331`
+`.listincidents`, `.lin`  |  Listet alle UNGELESENEN Vorfälle und markiert sie als gelesen.
+`.listallincidents`, `.lain`  |  Sendet dir eine Datei mit allen Vorfällen und markiert sie als gelesen.
 `.rules`  |  Regeln
+`.delmsgoncmd`  |  Ändert das automatische Löschen von erfolgreichen Befehls Aufrufen um Chat Spam zu verhindern. Server Manager Only.
 `.restart`  |  Startet den Bot neu. Könnte nicht funktionieren.
 `.setrole`, `.sr`  |  Setzt die Rolle für einen gegebenen Benutzer. |  .sr @User Gast
 `.removerole`, `.rr`  |  Entfernt eine Rolle von einem gegebenen User. |  .rr @User Admin
@@ -63,7 +63,6 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.removeallroles`, `.rar`  |  Entfernt alle Rollen eines Benutzers. |  .rar @User
 `.createrole`, `.cr`  |  Erstelle eine Rolle mit einem bestimmten Namen. |  `.r Awesome Role`
 `.rolecolor`, `.rc`  |  Setzt die Farbe einer Rolle zur Hex, oder RGB Farb-Value die gegeben wird. |  `.color Admin 255 200 100 oderr .color Admin ffba55`
-`.roles`  |  Listet alle Rollen auf diesem Server, oder die eines Benutzers wenn spezifiziert.
 `.ban`, `.b`  |  Bannt einen erwähnten Benutzer. |  .b "@some Guy" Your behaviour is toxic.
 `.softban`, `.sb`  |  Bannt und entbannt einen Benutzer per ID, oder Name mit optionaler Nachricht. |  .sb "@some Guy" Your behaviour is toxic.
 `.kick`, `.k`  |  Kickt einen erwähnten User.
@@ -77,35 +76,40 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.creatxtchanl`, `.ctch`  |  Erstellt einen Text-Channel mit einem gegebenen Namen.
 `.settopic`, `.st`  |  Setzt eine Beschreibung für den derzeitigen Channel. |  `{Prefix}st My new topic`
 `.setchanlname`, `.schn`  |  Ändert den Namen des derzeitigen Channels.
-`.userid`, `.uid`  |  Zeigt die ID eines Benutzers.
-`.channelid`, `.cid`  |  Zeigt ID des derzeitigen Channels
-`.serverid`, `.sid`  |  Zeigt ID des derzeitigen Servers.
-`.stats`  |  Zeigt ein paar Statisitken über MidnightBot.
-`.dysyd`  |  Zeigt ein paar Statisitken über MidnightBot.
 `.heap`  |  Zeigt benutzten Speicher - **Bot Owner Only!**
 `.getinactive`, `.gi`  |  Zeigt anzahl inaktiver Benutzer - **Bot Owner Only!**
-`.permissions`, `.perms`  |  Zeigt Berechtigungen eines Users
 `.prune`, `.clr`  |  `.prune` alle von MidnightBots Nachrichten, in den letzten 100 Nachrichten.`.prune X` entfernt die letzten X Nachrichten von diesem Channel (bis zu 100)`.prune @Someone` Entfernt alle Nachrichten einer Person. in den letzten 100 Nachrichten.`.prune @Someone X` Entfernt die letzen X Nachrichten einer Person in diesem Channel.\n |  `.prune` oder `.prune 5` oder `.prune @Someone` oder `.prune @Someone X`
 `.die`  |  Fährt den Bot herunter und benachrichtigt Benutzer über den Neustart. **Bot Owner Only!**
 `.setname`, `.newnm`  |  Gibt dem Bot einen neuen Namen. **Bot Owner Only!**
 `.newavatar`, `.setavatar`  |  Setzt ein neues Profilbild für MidnightBot. **Bot Owner Only!**
 `.setgame`  |  Setzt das Spiel des Bots. **Bot Owner Only!**
-`.checkmyperms`  |  Kontrolliere deine Berechtigungen auf diesem Server.
-`.commsuser`  |  Setzt einen Benutzer für die Throug-Bot Kommunikation. Funktioniert nur, wenn Server gesetzt ist. Resettet commschannel. **Bot Owner Only!**
-`.commsserver`  |  Setzt einen Server für Through-Bot Kommunikation. **Bot Owner Only!**
-`.commschannel`  |  Setzt einen Channel für Through-Bot Kommunikation. Funktioniert nur, wenn Server gesetzt ist. Resettet commsuser. **Bot Owner Only!**
-`.send`  |  Sende eine Nachricht an einen User auf einem anderen Server über den Bot..**Bot Owner Only!****
-  |  .send Message text multi word!
+`.send`  |  Sendet eine Nachricht an einen Benutzer auf einem anderen Server, über den Bot. **Bot Owner Only!** |  `.send serverid|u:user_id Send this to a user!` oder `.send serverid|c:channel_id Send this to a channel!`
 `.mentionrole`, `.menro`  |  Erwähnt jeden User mit einer bestimmten Rolle oder bestimmten Rollen (Getrennt mit einem ',') auf diesem Server. 'Mention everyone' Berechtigung erforderlich.
-`.inrole`  |  Listet alle Benutzer von einer angegebenen Rolle, oder Rollen (getrennt mit einem ',') auf diesem Server.
 `.unstuck`  |  Löscht die Nachrichten-Liste. **Bot Owner Only!**
 `.donators`  |  Liste von Leuten die dieses Projekt unterstützen.
 `.donadd`  |  Fügt einen Donator zur Datenbank hinzu.
-`.sendmsg`  |  Sendet eine Private Nachricht an einen User vom Bot aus.**Bot Owner Only** |  .sendmsg @Username Nachricht
 `.announce`  |  Sends a message to all servers' general channel bot is connected to.**Bot Owner Only!** |  .announce Useless spam
-`.whoplays`  |  Zeigt eine Liste von Benutzern die ein gewähltes Spiel spielen.
 `.servers`  |  Zeigt alle Server an, auf denen der Bot ist.
 `.leave`  |  Leaves a server with a supplied ID. |  `.leave 493243292839`
+`.savechat`  |  Speichert eine Anzahl an Nachrichten in eine Textdate und sendet sie zu dir. **Bot Owner Only** |  `.chatsave 150`
+
+### Utility  
+Befehl und Alternativen | Beschreibung | Benutzung
+----------------|--------------|-------
+`.remind`  |  Sendet nach einer bestimmten Zeit eine Nachricht in den Channel. Erstes Argument ist me/here/'channelname'. Zweites Argument ist die Zeit in absteigender Reihenfolge (mo>w>d>h>m) Beispiel: 1w5d3h10m. Drittes Argument ist eine (Multiwort)Nachricht.  |  `.remind me 1d5h Do something` or `.remind #general Start now!`
+`.remindmsg`  |  Setzt Nachricht, wenn die Erinnerung ausgelöst wird.  Verfügbare Platzhalter sind %user% - Benutzer der den Command ausgeführt hat, %message% - Nachricht spezifiziert in Erinnerung, %target% - Ziel Channel der Erinnerung. **Bot Owner Only!**
+`.serverinfo`, `.sinfo`  |  Zeigt Infos über den Server, auf dem der Bot läuft. Falls kein Server ausgewählt, derzeitiger wird ausgewählt. | .sinfo Some Server
+`.channelinfo`, `.cinfo`  |  Zeigt Infos über einen Channel. Wenn kein Channel ausgewählt, derzeitiger wird angegeben. | .cinfo #some-channel
+`.userinfo`, `.uinfo`  |  Zeigt eine Info über den User. Wenn kein User angegeben, User der den Befehl eingibt. | .uinfo @SomeUser
+`.whoplays`  |  Zeigt eine Liste von Benutzern die ein gewähltes Spiel spielen.
+`.inrole`  |  Listet alle Benutzer von einer angegebenen Rolle, oder Rollen (getrennt mit einem ',') auf diesem Server.
+`.checkmyperms`  |  Kontrolliere deine Berechtigungen auf diesem Server.
+`.stats`  |  Zeigt ein paar Statisitken über MidnightBot.
+`.dysyd`  |  Zeigt ein paar Statisitken über MidnightBot.
+`.userid`, `.uid`  |  Zeigt die ID eines Benutzers.
+`.channelid`, `.cid`  |  Zeigt ID des derzeitigen Channels
+`.serverid`, `.sid`  |  Zeigt ID des derzeitigen Servers.
+`.roles`  |  Listet alle Rollen auf diesem Server, oder die eines Benutzers wenn spezifiziert.
 
 ### Permissions  
 Befehl und Alternativen | Beschreibung | Benutzung
@@ -155,8 +159,6 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `..qdel`, `..quotedelete`  |  Löscht alle Zitate mit angegebenen Keyword. Du musst entweder der Bot-Besitzer oder der Ersteller des Quotes sein um es zu löschen. |  `..qdel abc`
 `..qdelothers`, `..quotedeleteothers`  |  Löscht alle Zitate mit eigenem Namen als Keyword, welche von anderen geaddet wurden.  |  `..qdelothers`
 `..qshow`  |  Zeigt alle Zitate mit angegebenen Keyword. |  `..qshow abc`
-`@BotName copyme`, `@BotName cm`  |   macht alles nach, was du schreibst. Deaktivieren mit cs
-`@BotName cs`, `@BotName copystop`  |   kopiert dich nicht mehr.
 `@BotName rip`  |  Zeigt ein Grab von jemanden mit einem Startjahr |  @ rip @Someone 2000
 `@BotName uptime`  |  Zeigt wie lange  schon läuft.
 `@BotName die`  |  Funktioniert nur für den Owner. Fährt den Bot herunter.
@@ -168,8 +170,6 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `@BotName slm`  |  Zeigt die Nachricht in der du in diesem Channel zuletzt erwähnt wurdest (checked die letzten 10k Nachrichten)
 `@BotName dump`  |  Dumped alle Einladungen die er findet in dump.txt.** Owner Only.**
 `@BotName ab`  |  Versuche 'abalabahaha' zu bekommen
-`@BotName av`, `@BotName avatar`  |  Zeigt den Avatar einer erwähnten Person.
-  |  ~av @X
 
 ### Gambling  
 Befehl und Alternativen | Beschreibung | Benutzung
@@ -223,6 +223,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `!shuffle`, `!sh`  |  Mischt die derzeitige Abspielliste.
 `!setgame`  |  Setzt das Spiel auf die Nummer der Lieder die gespielt werden. **Bot Owner Only!**
 `!playlist`, `!pl`, `!playlistrequest`  |  Listet bis zu 50 Lieder aus einer Youtubeplaylist, oder aus einem Suchbegriff.
+`soundcloudpl`, `scpl`  |  Listet eine SounCloud Playlist per Link. |  `!scpl https://soundcloud.com/saratology/sets/symphony`
 `!localplaylst`, `!lopl`  |  Listet alle Lieder von einem Verzeichnis. **Bot Owner Only!**
 `!radio`, `!ra`  |  Listet einen direkten Radio Stream von einem Link.
 `!local`, `!lo`  |  Listet einen lokalen Song mit vollen Pfad. **Bot Owner Only!** |  `!lo C:/music/mysong.mp3`
@@ -236,8 +237,10 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `!save`  |  Speichert eine Playlist unter einem bestimmten Namen. Name darf nicht länger als 20 Zeichen sein und darf keine Kommas beinhalten. |  `!save classical1`
 `!load`  |  Lädt eine Playlist mit bestimmten Namen. |  `!load classical1`
 `!playlists`, `!pls`  |  Listet alle Playlisten. Seitenweiße. 20 je Seote. Standard-Seite ist 0. | `!pls 1`
+`deleteplaylist`, `delpls`  |  Löscht eine gespeicherte Playlist. Nur wenn du sie erstellt hast, oder wenn du der Bot-Owner bist. |  `!m delpls animu-5`
 `!goto`  |  Skipped zu einer bestimmten Zeit in Sekunden im aktuellen Lied.
 `!getlink`, `!gl`  |  Zeigt einen Link zum derzeitigen Lied.
+`!autoplay`, `!ap`  |  Toggles Autoplay - Wenn das Lied vorbei ist, listet automatisch einen verwandten YouTube-Song. (Funktioniert nur für YouTubes Songs und wenn Songliste leer ist)
 
 ### Searches  
 Befehl und Alternativen | Beschreibung | Benutzung
@@ -247,19 +250,26 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `~hitbox`, `~hb`  |  Benachrichtigt diesen Channek wenn ein bestimmter User anfängt zu streamen. |  ~hitbox SomeStreamer
 `~twitch`, `~tw`  |  Benachrichtigt diesen Channek wenn ein bestimmter User anfängt zu streamen. |  ~twitch SomeStreamer
 `~beam`, `~bm`  |  Benachrichtigt diesen Channek wenn ein bestimmter User anfängt zu streamen. |  ~beam SomeStreamer
+`~checkhitbox`, `~chhb`  |  Checkt ob ein bestimmter User auf gerade auf Hitbox streamt. |  ~chhb SomeStreamer
+`~checktwitch`, `~chtw`  |  Checkt ob ein bestimmter User auf gerade auf Twitch streamt. |  ~chtw SomeStreamer
+`~checkbeam`, `~chbm`  |  Checkt ob ein bestimmter User auf gerade auf Beam streamt. |  ~chbm SomeStreamer
 `~removestream`, `~rms`  |  Entfernt Benachrichtigung eines bestimmten Streamers auf diesem Channel. |  ~rms SomeGuy
 `~liststreams`, `~ls`  |  Listet alle Streams die du auf diesem Server folgst. |  ~ls
-`~convert`  |  Konvertiert Einheiten von>zu. Beispiel: `~convert m>km 1000`
+`~convert`  |  Konvertiert Einheiten von>zu. |  `~convert m>km 1000`
 `~convertlist`  |  Liste der kovertierbaren Dimensionen und Währungen.
 `~wowjoke`  |  Get one of Kwoth's penultimate WoW jokes.
 `~calculate`, `~calc`  |  Berechnet eine mathematische Angabe
 `~calclist`  |  List operations of parser
-`~osu u`  |  Zeigt Osu-Stats für einen Spieler.
-**Benutzer**:~osu u Name
+`~osu`  |  Zeigt Osu-Stats für einen Spieler.
+**Benutzer**:~osu Name
 `~osu b`  |  Zeigt Informationen über eine Beatmap. | ~osu b https://osu.ppy.sh/s/127712
 `~osu top5`  |  Zeigt die Top 5 Spiele eines Benutzers.  | ~osu top5 Name
+`~pokemon`, `~poke`  |  Sucht nach einem Pokemon.
+`~pokemonability`, `~pokab`  |  Sucht nach einer Pokemon Fähigkeit.
 `~randomcat`, `~meow`  |  Queries http://www.random.cat/meow.
 `~i`, `~image`  |  Queries .
+`~memelist`  |  Zeigt eine Liste von Memes, die du mit `~memegen` benutzen kannst, von http://memegen.link/templates/
+`~memegen`  |  Erstellt ein Meme von Memelist mit Top und Bottom Text. |  `~memegen biw "gets iced coffee" "in the winter"`
 `~we`  |  Zeigt Wetter-Daten für eine genannte Stadt und ein Land. BEIDES IST BENÖTIGT. Wetter Api ist sehr zufällig, wenn du einen Fehler machst. |  ~we Moskau RF
 `~yt`  |  Durchsucht Youtube und zeigt das erste Ergebnis.
 `~ani`, `~anime`, `~aq`  |  Durchsucht anilist nach einem Anime und zeigt das erste Ergebnis.
@@ -286,6 +296,8 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `~wiki`  |  Gibt einen Wikipedia-Link zurück.
 `~clr`  |  Zeigt dir die zum Hex zugehörige Farbe. |  `~clr 00ff00`
 `~videocall`  |  Erstellt einen privaten <http://www.appear.in> Video Anruf Link für dich und andere erwähnte Personen. Der Link wird allen erwähnten Personen per persönlicher Nachricht geschickt.
+`~av`, `~avatar`  |  Zeigt den Avatar einer erwähnten Person.
+  |  ~av @X
 
 ### Extra  
 Befehl und Alternativen | Beschreibung | Benutzung

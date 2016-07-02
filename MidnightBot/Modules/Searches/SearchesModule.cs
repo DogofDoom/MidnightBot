@@ -32,6 +32,7 @@ namespace MidnightBot.Modules.Searches
             commands.Add (new OsuCommands (this));
             commands.Add (new PokemonSearchCommands (this));
             commands.Add (new APICommands (this));
+            commands.Add (new MemegenCommands (this));
             rng = new Random ();
         }
 
@@ -204,17 +205,16 @@ namespace MidnightBot.Modules.Searches
                                 return;
                             try
                             {
-                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString(e.GetArg("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={rng.Next(1,150)}&fields=items%2Flink&key={apikey}";
+                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString(e.GetArg("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={rng.Next(1,50)}&fields=items%2Flink&key={apikey}";
                                 var obj = JObject.Parse (await SearchHelper.GetResponseStringAsync (reqString).ConfigureAwait (false));
-
                                 var items = obj["items"] as JArray;
-                                await e.Channel.SendMessage (items[rng.Next (0,items.Count)]["link"].ToString ()).ConfigureAwait (false);
+                                await e.Channel.SendMessage (items[0]["link"].ToString ()).ConfigureAwait (false);
                             }
                             catch (HttpRequestException exception)
                             {
                                 if (exception.Message.Contains ("403 (Forbidden)"))
                                 {
-                                    await e.Channel.SendMessage ("Limit erreicht!").ConfigureAwait (false);
+                                    await e.Channel.SendMessage ("Tägliches Limit erreicht!").ConfigureAwait (false);
                                 }
                                 else
                                 {
@@ -520,6 +520,20 @@ namespace MidnightBot.Modules.Searches
                           Console.WriteLine(ex);
                       }
                   });
+
+                cgb.CreateCommand (Prefix + "av").Alias (Prefix + "avatar")
+                    .Parameter ("mention",ParameterType.Required)
+                    .Description ("Zeigt den Avatar einer erwähnten Person.\n **Benutzung**: ~av @X")
+                    .Do (async e =>
+                    {
+                        var usr = e.Channel.FindUsers (e.GetArg ("mention")).FirstOrDefault ();
+                        if (usr == null)
+                        {
+                            await e.Channel.SendMessage ("Ungültiger Benutzer.").ConfigureAwait (false);
+                            return;
+                        }
+                        await e.Channel.SendMessage (await usr.AvatarUrl.ShortenUrl ()).ConfigureAwait (false);
+                    });
             });
         }
     }

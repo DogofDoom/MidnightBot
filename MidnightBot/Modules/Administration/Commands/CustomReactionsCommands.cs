@@ -2,6 +2,7 @@
 using Discord.Commands;
 using MidnightBot.Classes;
 using MidnightBot.Modules.Permissions.Classes;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,15 +46,88 @@ namespace MidnightBot.Modules.Administration.Commands
 
             cgb.CreateCommand (Prefix + "listcustreact")
             .Alias (Prefix + "lcr")
-            .Description ("Listet alle derzeitigen \"Custom Reactions\" (Seitenweise mit 5 Commands je Seite).\n**Benutzung**:.lcr 1")
+            .Description ("Listet alle derzeitigen \"Custom Reactions\" (Seitenweise mit 30 Commands je Seite).\n**Benutzung**:.lcr 1")
             .Parameter ("num",ParameterType.Required)
             .Do (async e =>
             {
                 int num;
-                if (!int.TryParse (e.GetArg ("num"),out num) || num <= 0)
-                    return;
-                string result = GetCustomsOnPage (num - 1); //People prefer starting with 1
-                await e.Channel.SendMessage (result);
+                if (!int.TryParse(e.GetArg("num"), out num) || num <= 0) num = 1;
+                    var cmds = GetCustomsOnPage(num - 1);
+                    if (!cmds.Any())
+                    {
+                        await e.Channel.SendMessage("");
+                    }
+                    else
+                    {
+                        string result = SearchHelper.ShowInPrettyCode<string>(cmds, s => $"{s,-25}"); //People prefer starting with 1
+                        await e.Channel.SendMessage($"`Zeige Seite {num}:`\n" + result).ConfigureAwait(false);
+                    }
+                });
+
+            cgb.CreateCommand(Prefix + "showcustreact")
+                .Alias(Prefix + "scr")
+                .Description($"Zeigt alle möglichen Reaktionen von einer einzigen Custom Reaction.\n**Benutzung**:{Prefix}scr %mention% bb")
+                .Parameter("name", ParameterType.Unparsed)
+                .Do(async e =>
+                {
+                    var name = e.GetArg("name")?.Trim();
+                    if (string.IsNullOrWhiteSpace(name))
+                        return;
+                    if (!MidnightBot.Config.CustomReactions.ContainsKey(name))
+                    {
+                        await e.Channel.SendMessage("`Kann die Custom Reaction nicht finden.`").ConfigureAwait(false);
+                        return;
+                    }
+                    var items = MidnightBot.Config.CustomReactions[name];
+                    var message = new StringBuilder($"Antwort für {Format.Bold(name)}:\n");
+                    var last = items.Last();
+
+                    int i = 1;
+                    foreach (var reaction in items)
+                    {
+                        message.AppendLine($"[{i++}] " + Format.Code(reaction));
+                    }
+                    await e.Channel.SendMessage(message.ToString());
+                });
+
+            cgb.CreateCommand(Prefix + "editcustreact")
+                .Alias(Prefix + "ecr")
+                .Description($"Bearbeitet eine Custom Reaction, Argumente sind der Custom Reaction Name, Index welcher geändert werden soll und eine (Multiwort) Nachricht.**Bot Owner Only**\n**Benutzung**: `{Prefix}ecr \"%mention% disguise\" 2 Test 123`")
+                .Parameter("name", ParameterType.Required)
+                .Parameter("index", ParameterType.Required)
+                .Parameter("message", ParameterType.Unparsed)
+                .AddCheck(SimpleCheckers.OwnerOnly())
+                .Do(async e =>
+                {
+                    var name = e.GetArg("name")?.Trim();
+                    if (string.IsNullOrWhiteSpace(name))
+                        return;
+                    var indexstr = e.GetArg("index")?.Trim();
+                    if (string.IsNullOrWhiteSpace(indexstr))
+                        return;
+                    var msg = e.GetArg("message")?.Trim();
+                    if (string.IsNullOrWhiteSpace(msg))
+                        return;
+
+
+
+                    if (!MidnightBot.Config.CustomReactions.ContainsKey(name))
+                    {
+                        await e.Channel.SendMessage("`Konnte gegebenen Befehls-Namen nicht finden`").ConfigureAwait(false);
+                        return;
+                    }
+
+                    int index;
+                    if (!int.TryParse(indexstr, out index) || index < 1 || index > MidnightBot.Config.CustomReactions[name].Count)
+                    {
+                        await e.Channel.SendMessage("`Ungültiger Index.`").ConfigureAwait(false);
+                        return;
+                    }
+                    index = index - 1;
+                    MidnightBot.Config.CustomReactions[name][index] = msg;
+
+                    await Task.Run(() => Classes.JSONModels.ConfigHandler.SaveConfig()).ConfigureAwait(false);
+                    await e.Channel.SendMessage($"Antwort #{index + 1} von `{name}` bearbeitet").ConfigureAwait(false);
             });
 
             cgb.CreateCommand (Prefix + "delcustreact")
@@ -101,15 +175,17 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
         }
 
-        private readonly int ItemsPerPage = 5;
+        private readonly int ItemsPerPage = 30;
 
-        private string GetCustomsOnPage ( int page )
+        private IEnumerable<string> GetCustomsOnPage ( int page )
         {
             var items = MidnightBot.Config.CustomReactions.Skip (page * ItemsPerPage).Take (ItemsPerPage);
             if (!items.Any ())
             {
-                return $"Keine Reactions auf Seite {page + 1}.";
+                return Enumerable.Empty<string> ();
             }
+            return items.Select (kvp => kvp.Key);
+            /*
             var message = new StringBuilder ($"--- Custom Reactions - Seite {page + 1} ---\n");
             foreach (var cr in items)
             {
@@ -125,6 +201,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 }
             }
             return message.ToString () + "\n";
+            */
         }
     }
 }

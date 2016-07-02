@@ -169,6 +169,7 @@ namespace MidnightBot.Classes.JSONModels
         public string Permissions { get; set; } = ";";
         public string Programming { get; set; } = "%";
         public string Pokemon { get; set; } = ">";
+        public string Utility { get; set; } = ".";
     }
 
     public static class ConfigHandler

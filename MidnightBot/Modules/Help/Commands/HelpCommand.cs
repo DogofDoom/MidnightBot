@@ -163,9 +163,11 @@ Version: `{MidnightStats.Instance.BotVersion}`";
                 .AddCheck (SimpleCheckers.OwnerOnly ())
                 .Do (async e =>
                      await e.Channel.SendMessage (
- @"**FULL README**: <https://github.com/Midnight-Myth/MidnightBot/blob/master/README.md>
+ @"**Wiki with all info**: <https://github.com/Midnight-Myth/MidnightBot/wiki>
 
-**GUIDE ONLY**: <https://github.com/Midnight-Myth/MidnightBot/blob/master/ComprehensiveGuide.md>
+ **WINDOWS SETUP GUIDE**: <https://github.com/Midnight-Myth/MidnightBot/blob/master/ComprehensiveGuide.md>
+  
+ **LINUX SETUP GUIDE**: <https://github.com/Midnight-Myth/MidnightBot/blob/master/LinuxSetup.md>
 
 **LIST OF COMMANDS**: <https://github.com/Midnight-Myth/MidnightBot/blob/master/commandlist.md>").ConfigureAwait (false));
 

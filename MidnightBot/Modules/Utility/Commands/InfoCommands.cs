@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using System.Text;
 
-namespace MidnightBot.Modules.Administration.Commands
+namespace MidnightBot.Modules.Utility.Commands
 {
     class InfoCommands : DiscordCommand
     {

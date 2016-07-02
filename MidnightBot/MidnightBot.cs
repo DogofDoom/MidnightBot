@@ -23,6 +23,7 @@ using MidnightBot.Modules.Searches;
 using MidnightBot.Modules.Sound;
 using MidnightBot.Modules.Translator;
 using MidnightBot.Modules.Trello;
+using MidnightBot.Modules.Utility;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -190,6 +191,7 @@ namespace MidnightBot
             //install modules
             modules.Add (new HelpModule (),"Help",ModuleFilter.None);
             modules.Add (new AdministrationModule (),"Administration",ModuleFilter.None);
+            modules.Add (new UtilityModule (),"Utility",ModuleFilter.None);
             modules.Add (new PermissionModule (),"Permissions",ModuleFilter.None);
             modules.Add (new Conversations (),"Conversations",ModuleFilter.None);
             modules.Add (new GamblingModule (),"Gambling",ModuleFilter.None);

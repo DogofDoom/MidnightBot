@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.Modules;
-using MidnightBot.Classes.Conversations.Commands;
 using MidnightBot.Extensions;
 using MidnightBot.Modules.Conversations.Commands;
 using MidnightBot.DataModels;
@@ -20,7 +19,6 @@ namespace MidnightBot.Modules.Conversations
         private int tester = 0;
         public Conversations ()
         {
-            commands.Add (new CopyCommand (this));
             commands.Add (new RipCommand (this));
         }
         public string BotName { get; set; } = MidnightBot.BotName;
@@ -384,23 +382,6 @@ namespace MidnightBot.Modules.Conversations
                         }
                         await e.Channel.SendMessage (construct).ConfigureAwait (false);
                     });
-
-                cgb.CreateCommand ("av").Alias ("avatar")
-                    .Parameter ("mention",ParameterType.Required)
-                    .Description ("Zeigt den Avatar einer erwähnten Person.\n **Benutzung**: ~av @X")
-                    .Do (async e =>
-                    {
-                        var usr = e.Channel.FindUsers (e.GetArg ("mention")).FirstOrDefault ();
-                        if (usr == null)
-                        {
-                            await e.Channel.SendMessage ("Ungültiger Benutzer.").ConfigureAwait (false);
-                            return;
-                        }
-                        await e.Channel.SendMessage (await usr.AvatarUrl.ShortenUrl ()).ConfigureAwait (false);
-                    });
-
-                
-
             });
         }
         

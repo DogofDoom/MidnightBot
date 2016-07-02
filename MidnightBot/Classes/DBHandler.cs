@@ -32,6 +32,7 @@ namespace MidnightBot.Classes
                 conn.CreateTable<SongInfo> ();
                 conn.CreateTable<PlaylistSongInfo> ();
                 conn.CreateTable<MusicPlaylist> ();
+                conn.CreateTable<Incident> ();
                 conn.Execute (Queries.TransactionTriggerQuery);
                 try
                 {
@@ -99,6 +100,14 @@ namespace MidnightBot.Classes
             using (var conn = new SQLiteConnection (FilePath))
             {
                 conn.Update (o,typeof (T));
+            }
+        }
+
+        internal void UpdateAll<T>(IEnumerable<T> objs) where T : IDataModel
+        {
+            using (var conn = new SQLiteConnection(FilePath))
+            {
+                conn.UpdateAll(objs);
             }
         }
 
@@ -191,7 +200,7 @@ namespace MidnightBot.Classes
         {
             using (var conn = new SQLiteConnection (FilePath))
             {
-                return conn.Table<CurrencyState> ().Take (n).ToList ().OrderBy (cs => -cs.Value);
+                return conn.Table<CurrencyState> ().OrderBy (cs => -cs.Value).Take (n).ToList ();
             }
         }
     }
@@ -207,7 +216,7 @@ public class PlaylistData
 
 public static class Queries
 {
-    public static string TransactionTriggerQuery = @"
+    public const string TransactionTriggerQuery = @"
 CREATE TRIGGER IF NOT EXISTS OnTransactionAdded
 AFTER INSERT ON CurrencyTransaction
 BEGIN
@@ -218,8 +227,8 @@ INSERT OR REPLACE INTO CurrencyState (Id, UserId, Value, DateAdded)
             NEW.DateAdded);
 END
 ";
-    public static string DeletePlaylistTriggerQuery = @"
-CREATE TRIGGER music_playlist
+    public const string DeletePlaylistTriggerQuery = @"
+CREATE TRIGGER IF NOT EXISTS music_playlist
 AFTER DELETE ON MusicPlaylist
 FOR EACH ROW
 BEGIN

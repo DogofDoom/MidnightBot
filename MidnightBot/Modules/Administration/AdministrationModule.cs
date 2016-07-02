@@ -6,10 +6,12 @@ using MidnightBot.Classes;
 using MidnightBot.Extensions;
 using MidnightBot.Modules.Administration.Commands;
 using MidnightBot.Modules.Permissions.Classes;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MidnightBot.Modules.Administration
 { 
@@ -25,11 +27,10 @@ namespace MidnightBot.Modules.Administration
             commands.Add(new VoicePlusTextCommand(this));
             commands.Add(new CrossServerTextChannel(this));
             commands.Add(new SelfAssignedRolesCommand (this));
-            commands.Add (new Remind (this));
-            commands.Add (new InfoCommands (this));
             commands.Add (new CustomReactionsCommands (this));
             commands.Add (new AutoAssignRole (this));
             commands.Add (new SelfCommands (this));
+            commands.Add (new IncidentsCommands (this));
 
             MidnightBot.Client.GetService<CommandService> ().CommandExecuted += DeleteCommandMessage;
         }
@@ -316,23 +317,6 @@ namespace MidnightBot.Modules.Administration
                          }
                      });
 
-                cgb.CreateCommand (Prefix + "roles")
-                  .Description ("Listet alle Rollen auf diesem Server, oder die eines Benutzers wenn spezifiziert.")
-                  .Parameter ("user",ParameterType.Unparsed)
-                  .Do (async e =>
-                   {
-                       if (!string.IsNullOrWhiteSpace (e.GetArg ("user")))
-                       {
-                           var usr = e.Server.FindUsers (e.GetArg ("user")).FirstOrDefault ();
-                           if (usr == null)
-                               return;
-
-                           await e.Channel.SendMessage ($"`Liste der Rollen von **{usr.Name}**:` \n• " + string.Join ("\n• ",usr.Roles)).ConfigureAwait (false);
-                           return;
-                       }
-                       await e.Channel.SendMessage ("`Liste der Rollen:` \n• " + string.Join ("\n• ",e.Server.Roles)).ConfigureAwait (false);
-                   });
-
                 cgb.CreateCommand (Prefix + "ban").Alias (Prefix + "b")
                     .Parameter ("user",ParameterType.Required)
                     .Parameter ("msg",ParameterType.Unparsed)
@@ -436,6 +420,7 @@ namespace MidnightBot.Modules.Administration
                              }
                          }
                      });
+
                 cgb.CreateCommand (Prefix + "mute")
                     .Description ("Mutet erwähnte Benutzer.")
                     .Parameter ("throwaway",ParameterType.Unparsed)
@@ -654,41 +639,6 @@ namespace MidnightBot.Modules.Administration
                         await e.Channel.SendMessage (":ok: **Neuer Channel Name gesetzt.**").ConfigureAwait (false);
                     });
 
-                cgb.CreateCommand (Prefix + "userid").Alias (Prefix + "uid")
-                    .Description ("Zeigt die ID eines Benutzers.")
-                    .Parameter ("user",ParameterType.Unparsed)
-                    .Do (async e =>
-                     {
-                         var usr = e.User;
-                         if (!string.IsNullOrWhiteSpace (e.GetArg ("user")))
-                             usr = e.Channel.FindUsers (e.GetArg ("user")).FirstOrDefault ();
-                         if (usr == null)
-                             return;
-                         await e.Channel.SendMessage ($"Id des Users { usr.Name } ist { usr.Id }").ConfigureAwait (false);
-                     });
-
-                cgb.CreateCommand (Prefix + "channelid").Alias (Prefix + "cid")
-                    .Description ("Zeigt ID des derzeitigen Channels")
-                    .Do (async e => await e.Channel.SendMessage ("Die ID des derzeitigen Channels ist " + e.Channel.Id).ConfigureAwait (false));
-
-                cgb.CreateCommand (Prefix + "serverid").Alias (Prefix + "sid")
-                    .Description ("Zeigt ID des derzeitigen Servers.")
-                    .Do (async e => await e.Channel.SendMessage ("Die ID des derzeitigen Servers ist " + e.Server.Id).ConfigureAwait (false));
-
-                cgb.CreateCommand (Prefix + "stats")
-                    .Description ("Zeigt ein paar Statisitken über MidnightBot.")
-                    .Do (async e =>
-                     {
-                         await e.Channel.SendMessage (await MidnightStats.Instance.GetStats ());
-                     });
-
-                cgb.CreateCommand (Prefix + "dysyd")
-                    .Description ("Zeigt ein paar Statisitken über MidnightBot.")
-                    .Do (async e =>
-                     {
-                         await e.Channel.SendMessage ((await MidnightStats.Instance.GetStats ()).Matrix ().TrimTo (1990)).ConfigureAwait (false);
-                     });
-
                 cgb.CreateCommand (Prefix + "heap")
                     .Description ("Zeigt benutzten Speicher - **Bot Owner Only!**")
                     .AddCheck (SimpleCheckers.OwnerOnly ())
@@ -717,51 +667,6 @@ namespace MidnightBot.Modules.Administration
                             var users = await e.Server.PruneUsers (Convert.ToInt32 (e.GetArg ("days")),false);
                             await e.Channel.SendMessage ($"Inaktive Benutzer gelöscht:` {users}").ConfigureAwait (false);
                         }
-                    });
-
-                cgb.CreateCommand (Prefix + "permissions")
-                    .Alias (Prefix + "perms")
-                    .Parameter ("user",ParameterType.Unparsed)
-                    .Description ("Zeigt Berechtigungen eines Users")
-                    .Do (async e =>
-                    {
-                        var usr = e.User;
-                        if (!string.IsNullOrWhiteSpace (e.GetArg ("user")))
-                            usr = e.Channel.FindUsers (e.GetArg ("user")).FirstOrDefault ();
-                        if (usr == null)
-                            return;
-
-                        var permString = new StringBuilder ();
-
-                        permString.AppendLine ($"__**{usr.Name}**__");
-                        permString.AppendLine ("**Informationen**");
-                        permString.AppendLine ($"Besitzer: {usr.Server.IsOwner}");
-                        permString.AppendLine ($"Bot: {usr.IsBot}");
-                        permString.AppendLine ($"Selbst taub gestellt: {usr.IsSelfDeafened}");
-                        permString.AppendLine ($"Selbst stumm gestellt: {usr.IsSelfMuted}");
-                        permString.AppendLine ($"Vom Server taub gestellt: {usr.IsServerDeafened}");
-                        permString.AppendLine ($"Vom Server stumm gestellt: {usr.IsServerMuted}");
-                        permString.AppendLine ("**Rechte**");
-                        permString.AppendLine ($"Administrator: {usr.ServerPermissions.Administrator}");
-                        permString.AppendLine ($"Server bearbeiten: {usr.ServerPermissions.ManageServer}");
-                        permString.AppendLine ($"Rollen bearbeiten: {usr.ServerPermissions.ManageRoles}");
-                        permString.AppendLine ($"Dateien anhängen: {usr.ServerPermissions.AttachFiles}");
-                        permString.AppendLine ($"Benutzer bannen: {usr.ServerPermissions.BanMembers}");
-                        permString.AppendLine ($"Benutzer kicken: {usr.ServerPermissions.KickMembers}");
-                        permString.AppendLine ($"Benutzer taub stellen: {usr.ServerPermissions.DeafenMembers}");
-                        permString.AppendLine ($"Benutzer stumm stellen: {usr.ServerPermissions.MuteMembers}");
-                        permString.AppendLine ($"Benutzer in anderen Voice-Channel ziehen: {usr.ServerPermissions.MoveMembers}");
-                        permString.AppendLine ($"Nicknamen anderer bearbeiten: {usr.ServerPermissions.ManageNicknames}");
-                        permString.AppendLine ($"Eigenen Nicknamen ändern: {usr.ServerPermissions.ChangeNickname}");
-                        permString.AppendLine ($"Channel bearbeiten: {usr.ServerPermissions.ManageChannels}");
-                        permString.AppendLine ($"Alle Nachrichten löschen: {usr.ServerPermissions.ManageMessages}");
-                        permString.AppendLine ($"Jeden erwähnen: {usr.ServerPermissions.MentionEveryone}");
-                        permString.AppendLine ($"Zu Voice-Channel verbinden: {usr.ServerPermissions.Connect}");
-                        permString.AppendLine ($"Einladungslink erstellen: {usr.ServerPermissions.CreateInstantInvite}");
-                        permString.AppendLine ($"Links einbinden: {usr.ServerPermissions.EmbedLinks}");
-                        permString.AppendLine ($"TTS Nachrichten schicken: {usr.ServerPermissions.SendTTSMessages}");
-
-                        await e.Channel.SendMessage (permString.ToString()).ConfigureAwait (false);
                     });
 
                 cgb.CreateCommand (Prefix + "prune")
@@ -902,80 +807,51 @@ namespace MidnightBot.Modules.Administration
                        client.SetGame (e.GetArg ("set_game"));
                    });
 
-                cgb.CreateCommand (Prefix + "checkmyperms")
-                    .Description ("Kontrolliere deine Berechtigungen auf diesem Server.")
-                    .Do (async e =>
-                     {
-                         var output = "```\n";
-                         foreach (var p in e.User.ServerPermissions.GetType ().GetProperties ().Where (p => !p.GetGetMethod ().GetParameters ().Any ()))
-                         {
-                             output += p.Name + ": " + p.GetValue (e.User.ServerPermissions,null).ToString () + "\n";
-                         }
-                         output += "```";
-                         await e.User.SendMessage (output).ConfigureAwait (false);
-                     });
-
-                Server commsServer = null;
-                User commsUser = null;
-                Channel commsChannel = null;
-
-                cgb.CreateCommand (Prefix + "commsuser")
-                    .Description ("Setzt einen Benutzer für die Throug-Bot Kommunikation. Funktioniert nur, wenn Server gesetzt ist. Resettet commschannel. **Bot Owner Only!**")
-                    .Parameter ("name",ParameterType.Unparsed)
-                    .AddCheck (SimpleCheckers.OwnerOnly ())
-                    .Do (async e =>
-                     {
-                         commsUser = commsServer?.FindUsers (e.GetArg ("name")).FirstOrDefault ();
-                         if (commsUser != null)
-                         {
-                             commsChannel = null;
-                             await e.Channel.SendMessage ("Benutzer für Kommunikation gesetzt.").ConfigureAwait (false);
-                         }
-                         else
-                             await e.Channel.SendMessage ("Kein Server, oder Benutzer spezifiziert.").ConfigureAwait (false);
-                     });
-
-                cgb.CreateCommand (Prefix + "commsserver")
-                    .Description ("Setzt einen Server für Through-Bot Kommunikation. **Bot Owner Only!**")
-                    .Parameter ("server",ParameterType.Unparsed)
-                    .AddCheck (SimpleCheckers.OwnerOnly ())
-                    .Do (async e =>
-                     {
-                         commsServer = client.FindServers (e.GetArg ("server")).FirstOrDefault ();
-                         if (commsServer != null)
-                             await e.Channel.SendMessage ("Server for Kommunikation gesetzt.").ConfigureAwait (false);
-                         else
-                             await e.Channel.SendMessage ("Kein solcher Server.").ConfigureAwait (false);
-                     });
-
-                cgb.CreateCommand (Prefix + "commschannel")
-                    .Description ("Setzt einen Channel für Through-Bot Kommunikation. Funktioniert nur, wenn Server gesetzt ist. Resettet commsuser. **Bot Owner Only!**")
-                    .Parameter ("ch",ParameterType.Unparsed)
-                    .AddCheck (SimpleCheckers.OwnerOnly ())
-                    .Do (async e =>
-                     {
-                         commsChannel = commsServer?.FindChannels (e.GetArg ("ch"),ChannelType.Text).FirstOrDefault ();
-                         if (commsChannel != null)
-                         {
-                             commsUser = null;
-                             await e.Channel.SendMessage ("Server für Kommunikation gesetzt.").ConfigureAwait (false);
-                         }
-                         else
-                             await e.Channel.SendMessage ("Kein Server spezifiziert, oder Channel ungültig.").ConfigureAwait (false);
-                     });
-
                 cgb.CreateCommand (Prefix + "send")
-                    .Description ("Sende eine Nachricht an einen User auf einem anderen Server über den Bot..**Bot Owner Only!****\n **Benutzung**: .send Message text multi word!")
+                    .Description ("Sendet eine Nachricht an einen Benutzer auf einem anderen Server, über den Bot. **Bot Owner Only!**\n**Benutzung**: `.send serverid|u:user_id Send this to a user!` oder `.send serverid|c:channel_id Send this to a channel!`")
+                    .Parameter ("ids",ParameterType.Required)
                     .Parameter ("msg",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
                      {
-                         if (commsUser != null)
-                             await commsUser.SendMessage (e.GetArg ("msg")).ConfigureAwait (false);
-                         else if (commsChannel != null)
-                             await commsChannel.SendMessage (e.GetArg ("msg")).ConfigureAwait (false);
+                         var msg = e.GetArg ("msg")?.Trim ();
+
+                         if (string.IsNullOrWhiteSpace(msg))
+                            return;
+
+                var ids = e.GetArg("ids").Split('-');
+                        if (ids.Length != 2)
+                            return;
+                        var sid = ulong.Parse(ids[0]);
+                        var server = MidnightBot.Client.Servers.Where(s => s.Id == sid).FirstOrDefault();
+
+                        if (server == null)
+                            return;
+
+                        if (ids[1].ToUpperInvariant().StartsWith("C:"))
+                         {
+                            var cid = ulong.Parse(ids[1].Substring(2));
+                            var channel = server.TextChannels.Where(c => c.Id == cid).FirstOrDefault();
+                            if (channel == null)
+                            {
+                                return;
+                            }
+                            await channel.SendMessage(msg);
+                        }
+                        else if (ids[1].ToUpperInvariant().StartsWith("U:"))
+                        {
+                            var uid = ulong.Parse(ids[1].Substring(2));
+                            var user = server.Users.Where(u => u.Id == uid).FirstOrDefault();
+                            if (user == null)
+                            {
+                                return;
+                            }
+                            await user.SendMessage(msg);
+                         }
                          else
-                             await e.Channel.SendMessage ("Fehlgeschlagen. Stell sicher, dass du den Server und [Channel oder User] angegeben hast.]").ConfigureAwait (false);
+                             {
+                            await e.Channel.SendMessage("`Ungültiges Format.`");
+                        }
                      });
 
                 cgb.CreateCommand (Prefix + "mentionrole")
@@ -1011,39 +887,6 @@ namespace MidnightBot.Modules.Administration
                              await e.Channel.Send (send).ConfigureAwait (false);
                          }).ConfigureAwait (false);
                      });
-
-                cgb.CreateCommand (Prefix + "inrole")
-                    .Description ("Listet alle Benutzer von einer angegebenen Rolle, oder Rollen (getrennt mit einem ',') auf diesem Server.")
-                    .Parameter ("roles",ParameterType.Unparsed)
-                    .Do (async e =>
-                    {
-                        await Task.Run (async () =>
-                        {
-                            if (!e.User.ServerPermissions.MentionEveryone)
-                                return;
-                            var arg = e.GetArg ("roles").Split (',').Select (r => r.Trim ());
-                            string send = $"`Hier ist eine Liste alle Benutzer mit einer bestimmten Rolle:`";
-                            foreach (var roleStr in arg.Where (str => !string.IsNullOrWhiteSpace (str)))
-                            {
-                                var role = e.Server.FindRoles (roleStr).FirstOrDefault ();
-                                if (role == null)
-                                    continue;
-                                send += $"\n`{role.Name}`\n";
-                                send += string.Join (", ",role.Members.Select (r => "**" + r.Name + "**#" + r.Discriminator));
-                            }
-
-                            while (send.Length > 2000)
-                            {
-                                var curstr = send.Substring (0,2000);
-                                await
-                                    e.Channel.Send (curstr.Substring (0,
-                                        curstr.LastIndexOf (", ",StringComparison.Ordinal) + 1)).ConfigureAwait (false);
-                                send = curstr.Substring (curstr.LastIndexOf (", ",StringComparison.Ordinal) + 1) +
-                                       send.Substring (2000);
-                            }
-                            await e.Channel.Send (send).ConfigureAwait (false);
-                        }).ConfigureAwait (false);
-                    });
 
                 cgb.CreateCommand (Prefix + "unstuck")
                   .Description ("Löscht die Nachrichten-Liste. **Bot Owner Only!**")
@@ -1094,34 +937,6 @@ namespace MidnightBot.Modules.Administration
                          }).ConfigureAwait (false);
                     });
 
-                cgb.CreateCommand (Prefix + "sendmsg")
-                   .Description ($"Sendet eine Private Nachricht an einen User vom Bot aus.**Bot Owner Only**\n**Benutzung**: {Prefix}sendmsg @Username Nachricht")
-                   .Parameter ("user",ParameterType.Required)
-                   .Parameter ("msg",ParameterType.Unparsed)
-                   .AddCheck (SimpleCheckers.OwnerOnly ())
-                   .Do (async e =>
-                   {
-                       var u = findUser(e.GetArg ("user"));
-                       
-                       if (u == null)
-                       {
-                           await e.Channel.SendMessage ("Ungültiger Benutzer.").ConfigureAwait (false);
-                           return;
-                       }
-                       else if (u.Id == MidnightBot.Client.CurrentUser.Id)
-                       {
-                           await e.Channel.SendMessage ("Ich kann mir selber keine NAchricht schicken.")
-                           .ConfigureAwait (false);
-                           return;
-                       }
-
-                       var msg = e.GetArg ("msg");
-                       if (string.IsNullOrWhiteSpace (msg))
-                           return;
-                       
-                       await u.SendMessage ($"{e.User.Name} schreibt: {msg}");
-                   });
-
                 cgb.CreateCommand (Prefix + "announce")
                    .Description ($"Sends a message to all servers' general channel bot is connected to.**Bot Owner Only!**\n**Benutzung**: {Prefix}announce Useless spam")
                    .Parameter ("msg",ParameterType.Unparsed)
@@ -1136,27 +951,6 @@ namespace MidnightBot.Modules.Administration
                        await e.User.SendMessage (":ok:");
                    });
 
-                cgb.CreateCommand (Prefix + "whoplays")
-                    .Description ("Zeigt eine Liste von Benutzern die ein gewähltes Spiel spielen.")
-                    .Parameter ("game",ParameterType.Unparsed)
-                    .Do (async e =>
-                    {
-                        var game = e.GetArg ("game")?.Trim ().ToUpperInvariant ();
-                        if (string.IsNullOrWhiteSpace (game))
-                            return;
-                        var en = e.Server.Users
-                            .Where (u => u.CurrentGame?.Name?.ToUpperInvariant () == game)
-                                .Select (u => u.Name);
-
-                        var arr = en as string[] ?? en.ToArray ();
-
-                        int i = 0;
-                        if (arr.Length == 0)
-                            await e.Channel.SendMessage ("Niemand. (nicht 100% sicher)");
-                        else
-                            await e.Channel.SendMessage ("```xl\n" + string.Join ("\n",arr.GroupBy (item => (i++) / 3).Select (ig => string.Join ("",ig.Select (el => $"• {el,-35}")))) + "\n```");
-                    });
-
                 cgb.CreateCommand (Prefix + "servers")
                      .Description ("Zeigt alle Server an, auf denen der Bot ist.")
                      .AddCheck (SimpleCheckers.OwnerOnly ())
@@ -1169,8 +963,6 @@ namespace MidnightBot.Modules.Administration
                          }
                          await e.Channel.SendMessage (sb.ToString()).ConfigureAwait (false);
                      });
-
-                
 
                 cgb.CreateCommand (Prefix + "leave")
                      .Description ("Leaves a server with a supplied ID.\n**Benutzung**: `.leave 493243292839`")
@@ -1186,6 +978,33 @@ namespace MidnightBot.Modules.Administration
                          await srvr.Leave ().ConfigureAwait (false);
                          await e.Channel.SendMessage ("`Done.`").ConfigureAwait (false);
                      });
+
+                cgb.CreateCommand(Prefix + "savechat")
+                    .Description($"Speichert eine Anzahl an Nachrichten in eine Textdate und sendet sie zu dir. **Bot Owner Only**\n**Benutzung**: `{Prefix}chatsave 150`")
+                    .Parameter("cnt", ParameterType.Required)
+                    .AddCheck(SimpleCheckers.OwnerOnly())
+                    .Do(async e =>
+                    {
+                        var cntstr = e.GetArg("cnt")?.Trim();
+                        int cnt;
+                        if (!int.TryParse(cntstr, out cnt))
+                            return;
+                        ulong? lastmsgId = null;
+                        var sb = new StringBuilder();
+                        var msgs = new List<Message>(cnt);
+                        while (cnt > 0)
+                        {
+                            var dlcnt = cnt < 100 ? cnt : 100;
+
+                            var dledMsgs = await e.Channel.DownloadMessages(dlcnt, lastmsgId);
+                            if (!dledMsgs.Any())
+                                break;
+                            msgs.AddRange(dledMsgs);
+                            lastmsgId = msgs[msgs.Count - 1].Id;
+                            cnt -= 100;
+                        }
+                        await e.User.SendFile($"Chatlog-{e.Server.Name}/#{e.Channel.Name}-{DateTime.Now}.txt", JsonConvert.SerializeObject(new { Messages = msgs.Select(s => s.ToString()) }, Formatting.Indented).ToStream());
+                    });
             });
         }
 

@@ -27,9 +27,9 @@ namespace MidnightBot.Modules.Permissions.Commands
                     if (filterRegex.IsMatch (args.Message.RawText))
                     {
                         await args.Message.Delete ().ConfigureAwait (false);
-                        IncidentsHandler.Add (args.Server.Id,$"Benutzer [{args.User.Name}/{args.User.Id}] hat einen " +
-                                                             $"EINLADUNGS LINK im [{args.Channel.Name}/{args.Channel.Id}] Channel gepostet. " +
-                                                             $"Ganze Nachricht: [[{args.Message.Text}]]");
+                        IncidentsHandler.Add (args.Server.Id,args.Channel.Id,$"Benutzer [{args.User.Name}/{args.User.Id}] hat einen " +
+                                                             $"EINLADUNGS LINK im [{args.Channel.Name}/{args.Channel.Id}] Channel gepostet.\n" +
+                                                             $"`Ganze Nachricht:` {args.Message.Text}");
                         if (serverPerms.Verbose)
                             await args.Channel.SendMessage ($"{args.User.Mention} Invite Links sind " +
                                                            $"in diesem Channel nicht erlaubt.")
