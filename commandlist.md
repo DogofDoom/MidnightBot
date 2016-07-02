@@ -2,7 +2,7 @@
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
 #MidnightBot List Of Commands  
-Version: `MidnightBot v0.9.6027.36202`
+Version: `MidnightBot v0.9.6027.36768`
 ### Help  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
@@ -229,8 +229,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `!local`, `!lo`  |  Listet einen lokalen Song mit vollen Pfad. **Bot Owner Only!** |  `!lo C:/music/mysong.mp3`
 `!move`, `!mv`  |  Verschiebt den Bot in den eigenen Voice-Channel. (Funktioniert nur, wenn schon Musik läuft)
 `!remove`, `!rm`  |  Entfernt einen Song mit seiner Id, oder 'all' um die komplette Liste zu löschen.
-`!movesong`, `!ms`  |  Moves a song from one position to another.
-**Usage**: `! ms` 5>3
+`!movesong`, `!ms`  |  Moves a song from one position to another. |  `! ms` 5>3
 `!cleanup`  |  Bereinigt hängende Voice-Verbindung. **Bot Owner Only!**
 `!reptcursong`, `!rcs`  |  Schaltet das Wiederholen des derzeitigen Liedes um.
 `!rpeatplaylst`, `!rpl`  |  Schaltet das Wiederholen aller Songs in der Liste um. (Jedes beendete Lied wird an das Ende der Liste hinzugefügt).
@@ -260,8 +259,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `~wowjoke`  |  Get one of Kwoth's penultimate WoW jokes.
 `~calculate`, `~calc`  |  Berechnet eine mathematische Angabe
 `~calclist`  |  List operations of parser
-`~osu`  |  Zeigt Osu-Stats für einen Spieler.
-**Benutzer**:~osu Name
+`~osu`  |  Zeigt Osu-Stats für einen Spieler. | ~osu Name
 `~osu b`  |  Zeigt Informationen über eine Beatmap. | ~osu b https://osu.ppy.sh/s/127712
 `~osu top5`  |  Zeigt die Top 5 Spiele eines Benutzers.  | ~osu top5 Name
 `~pokemon`, `~poke`  |  Sucht nach einem Pokemon.

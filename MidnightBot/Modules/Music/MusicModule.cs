@@ -438,7 +438,7 @@ namespace MidnightBot.Modules.Music
 
                 cgb.CreateCommand(Prefix + "movesong")
                     .Alias(Prefix + "ms")
-                    .Description($"Moves a song from one position to another.\n**Usage**: `{Prefix} ms` 5>3")
+                    .Description($"Moves a song from one position to another.\n**Benutzung**: `{Prefix} ms` 5>3")
                     .Parameter("fromto")
                     .Do(async e =>
                     {
