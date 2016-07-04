@@ -196,7 +196,7 @@ Type/ Copy and hit **Enter**.
 <pre><code class="language-bash">cd midnightbot
 </code></pre>
 
-**20)**
+######**20)**
 
 <pre><code class="language-bash">mono MidnightBot.exe
 </code></pre>
