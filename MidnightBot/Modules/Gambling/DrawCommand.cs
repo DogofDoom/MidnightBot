@@ -81,7 +81,7 @@ namespace MidnightBot.Modules.Gambling
                 await e.Channel.SendFile(images.Count + " cards.jpg", bitmap.ToStream());
                 if (cardObjects.Count == 5)
                 {
-                    await e.Channel.SendMessage(Cards.GetHandValue(cardObjects)).ConfigureAwait (false);
+                    await e.Channel.SendMessage ($"{e.User.Mention} `{Cards.GetHandValue (cardObjects)}`").ConfigureAwait (false);
                 }
             }
             catch (Exception ex)

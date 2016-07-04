@@ -2,25 +2,53 @@
   "147439310096826368": {
     "VoicePlusTextEnabled": false,
     "SendPrivateMessageOnMention": false,
+    "LogChannel": null,
+    "LogPresenceChannel": null,
+    "VoiceChannelLog": {},
     "ListOfSelfAssignableRoles": [],
-    "ObservingStreams": []
+    "AutoAssignedRole": 0,
+    "GenerateCurrencyChannels": [],
+    "AutoDeleteMessagesOnCommand": false,
+    "ObservingStreams": [],
+    "DefaultMusicVolume": 1.0
   },
   "148181171845595136": {
     "VoicePlusTextEnabled": false,
     "SendPrivateMessageOnMention": false,
+    "LogChannel": null,
+    "LogPresenceChannel": null,
+    "VoiceChannelLog": {},
     "ListOfSelfAssignableRoles": [],
-    "ObservingStreams": []
+    "AutoAssignedRole": 0,
+    "GenerateCurrencyChannels": [],
+    "AutoDeleteMessagesOnCommand": false,
+    "ObservingStreams": [],
+    "DefaultMusicVolume": 1.0
   },
   "148765535461441536": {
     "VoicePlusTextEnabled": false,
     "SendPrivateMessageOnMention": false,
+    "LogChannel": null,
+    "LogPresenceChannel": null,
+    "VoiceChannelLog": {},
     "ListOfSelfAssignableRoles": [],
-    "ObservingStreams": []
+    "AutoAssignedRole": 0,
+    "GenerateCurrencyChannels": [],
+    "AutoDeleteMessagesOnCommand": false,
+    "ObservingStreams": [],
+    "DefaultMusicVolume": 1.0
   },
   "148914682848083970": {
     "VoicePlusTextEnabled": false,
     "SendPrivateMessageOnMention": false,
+    "LogChannel": null,
+    "LogPresenceChannel": null,
+    "VoiceChannelLog": {},
     "ListOfSelfAssignableRoles": [],
-    "ObservingStreams": []
+    "AutoAssignedRole": 0,
+    "GenerateCurrencyChannels": [],
+    "AutoDeleteMessagesOnCommand": false,
+    "ObservingStreams": [],
+    "DefaultMusicVolume": 1.0
   }
 }

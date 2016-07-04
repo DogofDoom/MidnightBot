@@ -937,6 +937,34 @@ namespace MidnightBot.Modules.Administration
                          }).ConfigureAwait (false);
                     });
 
+                cgb.CreateCommand (Prefix + "sendmsg")
+                   .Description ($"Sendet eine Private Nachricht an einen User vom Bot aus.**Bot Owner Only**\n**Benutzung**: {Prefix}sendmsg @Username Nachricht")
+                   .Parameter ("user",ParameterType.Required)
+                   .Parameter ("msg",ParameterType.Unparsed)
+                   .AddCheck (SimpleCheckers.OwnerOnly ())
+                   .Do (async e =>
+                   {
+                       var u = findUser(e.GetArg ("user"));
+                       
+                       if (u == null)
+                       {
+                           await e.Channel.SendMessage ("Ungültiger Benutzer.").ConfigureAwait (false);
+                           return;
+                       }
+                       else if (u.Id == MidnightBot.Client.CurrentUser.Id)
+                       {
+                           await e.Channel.SendMessage ("Ich kann mir selber keine NAchricht schicken.")
+                           .ConfigureAwait (false);
+                           return;
+                       }
+
+                       var msg = e.GetArg ("msg");
+                       if (string.IsNullOrWhiteSpace (msg))
+                           return;
+                       
+                       await u.SendMessage ($"{e.User.Name} schreibt: {msg}");
+                   });
+
                 cgb.CreateCommand (Prefix + "announce")
                    .Description ($"Sends a message to all servers' general channel bot is connected to.**Bot Owner Only!**\n**Benutzung**: {Prefix}announce Useless spam")
                    .Parameter ("msg",ParameterType.Unparsed)

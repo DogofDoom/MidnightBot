@@ -51,11 +51,9 @@ namespace MidnightBot.Modules.Administration.Commands
                     {
                         if (PlayingPlaceholders.Count == 0
                             || MidnightBot.Config.RotatingStatuses.Count == 0
-                            || i >= PlayingPlaceholders.Count
                             || i >= MidnightBot.Config.RotatingStatuses.Count)
                         {
-                            i = -1;
-                            return;
+                            i = 0;
                         }
                         status = MidnightBot.Config.RotatingStatuses[i];
                         status = PlayingPlaceholders.Aggregate (status,

@@ -2,7 +2,7 @@
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
 #MidnightBot List Of Commands  
-Version: `MidnightBot v0.9.6027.36768`
+Version: `MidnightBot v0.9.6029.24528`
 ### Help  
 Befehl und Alternativen | Beschreibung | Benutzung
 ----------------|--------------|-------
@@ -88,6 +88,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `.unstuck`  |  Löscht die Nachrichten-Liste. **Bot Owner Only!**
 `.donators`  |  Liste von Leuten die dieses Projekt unterstützen.
 `.donadd`  |  Fügt einen Donator zur Datenbank hinzu.
+`.sendmsg`  |  Sendet eine Private Nachricht an einen User vom Bot aus.**Bot Owner Only** |  .sendmsg @Username Nachricht
 `.announce`  |  Sends a message to all servers' general channel bot is connected to.**Bot Owner Only!** |  .announce Useless spam
 `.servers`  |  Zeigt alle Server an, auf denen der Bot ist.
 `.leave`  |  Leaves a server with a supplied ID. |  `.leave 493243292839`
@@ -199,6 +200,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `>pollend`  |  Stoppt derzeitige Umfrage und gibt das Ergebnis aus.
 `>pick`  |  Nimmt einen in diesem Channel hinterlegten Euro.
 `>plant`  |  Gib einen Euro aus, um in in diesen Channel zu legen. (Wenn der Bot neustartet, oder crashed, ist der Euro verloren)
+`>gencurrency`, `>gc`  |  Ändert Währungs Erstellung in diesem Channel. Jede geschriebene Nachricht hat eine Chance von 2%, einen Euro zu spawnen. Benötigt Manage Messages Berechtigungen | `gc`
 `>leet`  |  Konvertiert einen Text zu Leetspeak mit 6 (1-6) Stärke-Graden. |  >leet 3 Hallo
 `>choose`  |  Sucht eine Sache aus einer Liste von Sachen aus. |  >choose Get up;Sleep;Sleep more
 `>helix`  |  Stell dem allmächtigen Helix Fossil eine Ja/Nein Frage.
@@ -259,7 +261,7 @@ Befehl und Alternativen | Beschreibung | Benutzung
 `~wowjoke`  |  Get one of Kwoth's penultimate WoW jokes.
 `~calculate`, `~calc`  |  Berechnet eine mathematische Angabe
 `~calclist`  |  List operations of parser
-`~osu`  |  Zeigt Osu-Stats für einen Spieler. | ~osu Name
+`~osu`  |  Zeigt Osu-Stats für einen Spieler. | ~osu Name taiko
 `~osu b`  |  Zeigt Informationen über eine Beatmap. | ~osu b https://osu.ppy.sh/s/127712
 `~osu top5`  |  Zeigt die Top 5 Spiele eines Benutzers.  | ~osu top5 Name
 `~pokemon`, `~poke`  |  Sucht nach einem Pokemon.

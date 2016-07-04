@@ -17,7 +17,7 @@ namespace MidnightBot.Modules.Searches.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "osu")
-                  .Description ("Zeigt Osu-Stats für einen Spieler.\n**Benutzung**:~osu Name")
+                  .Description ("Zeigt Osu-Stats für einen Spieler.\n**Benutzung**:~osu Name taiko")
                   .Parameter ("usr",ParameterType.Required)
                   .Parameter ("mode",ParameterType.Unparsed)
                   .Do (async e =>

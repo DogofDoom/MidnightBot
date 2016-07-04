@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\BombermanGame.cs" />
+    <Compile Include="Classes\ObservableConcurrentDictionary.cs" />
     <Compile Include="Classes\SongScrapeHelper.cs" />
     <Compile Include="Modules\Administration\Commands\AutoAssignRole.cs" />
     <Compile Include="Modules\Administration\Commands\CustomReactionsCommands.cs" />

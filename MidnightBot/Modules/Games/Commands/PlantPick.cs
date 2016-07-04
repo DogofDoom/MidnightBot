@@ -1,10 +1,12 @@
 ﻿using Discord;
 using Discord.Commands;
 using MidnightBot.Classes;
+using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace MidnightBot.Modules.Games.Commands
@@ -18,9 +20,28 @@ namespace MidnightBot.Modules.Games.Commands
     /// </summary>
     class PlantPick : DiscordCommand
     {
+        private Random rng;
         public PlantPick ( DiscordModule module ) : base (module)
         {
+            MidnightBot.Client.MessageReceived += PotentialFlowerGeneration;
+            rng = new Random ();
+        }
 
+        private async void PotentialFlowerGeneration ( object sender,Discord.MessageEventArgs e )
+        {
+            if (e.Server == null || e.Channel.IsPrivate)
+                return;
+            var config = Classes.SpecificConfigurations.Default.Of (e.Server.Id);
+            if (config.GenerateCurrencyChannels.Contains(e.Channel.Id))
+            {
+                var rnd = Math.Abs (GetRandomNumber ());
+                if ((rnd % 50) == 0)
+                {
+                    var msg = await e.Channel.SendFile (GetRandomCurrencyImagePath ());
+                    await e.Channel.SendMessage ($"❗ Ein {MidnightBot.Config.CurrencyName} ist aufgetaucht! Hebe Ihn auf, indem du `>pick` eingibst.");
+                    plantedFlowerChannels.AddOrUpdate(e.Channel.Id, msg, (u, m) => { m.Delete().GetAwaiter ().GetResult (); return msg; });
+                }
+            }
         }
 
         //channelid/messageid pair
@@ -65,8 +86,7 @@ namespace MidnightBot.Modules.Games.Commands
                             return;
                         }
 
-                        var rng = new Random ();
-                        var file = Directory.GetFiles ("data/currency_images").OrderBy (s => rng.Next ()).FirstOrDefault ();
+                        var file = GetRandomCurrencyImagePath ();
                         Message msg;
                         if (file == null)
                             msg = e.Channel.SendMessage (MidnightBot.Config.CurrencySign).GetAwaiter ().GetResult ();
@@ -80,6 +100,38 @@ namespace MidnightBot.Modules.Games.Commands
                     await Task.Delay (20000).ConfigureAwait (false);
                     await msg2.Delete ().ConfigureAwait (false);
                 });
+
+            cgb.CreateCommand(Prefix + "gencurrency")
+                .Alias(Prefix + "gc")
+                .Description($"Ändert Währungs Erstellung in diesem Channel. Jede geschriebene Nachricht hat eine Chance von 2%, einen {MidnightBot.Config.CurrencyName} zu spawnen. Benötigt Manage Messages Berechtigungen | `gc`")
+                .AddCheck (SimpleCheckers.ManageMessages ())
+                .Do(async e =>
+                {
+                    var config = SpecificConfigurations.Default.Of(e.Server.Id);
+                    if (config.GenerateCurrencyChannels.Remove(e.Channel.Id))
+                    {
+                        await e.Channel.SendMessage("`Währungs Erstellung deaktiviert in diesem Channel.`");
+                    }
+                    else
+                    {
+                        config.GenerateCurrencyChannels.Add(e.Channel.Id);
+                        await e.Channel.SendMessage("`Währungs Erstellung aktiviert in diesem Channel.`");
+                    }
+                });
+        }
+
+        private string GetRandomCurrencyImagePath() =>
+            Directory.GetFiles("data/currency_images").OrderBy(s => rng.Next()).FirstOrDefault();
+
+        int GetRandomNumber()
+        {
+            using (RNGCryptoServiceProvider rg = new RNGCryptoServiceProvider())
+            {
+                byte[] rno = new byte[4];
+                rg.GetBytes(rno);
+                int randomvalue = BitConverter.ToInt32(rno, 0);
+                return randomvalue;
+            }
         }
     }
 }

@@ -106,6 +106,21 @@ namespace MidnightBot.Modules.Music
                          }
                      });
 
+                //cgb.CreateCommand("soundcloudqueue")
+                //    .Alias("sq")
+                //    .Description("Queue a soundcloud song using keywords. Bot will join your voice channel." +
+                //                 "**You must be in a voice channel**.\n**Usage**: `!m sq Dream Of Venice`")
+                //    .Parameter("query", ParameterType.Unparsed)
+                //    .Do(async e =>
+                //    {
+                //        await QueueSong(e.Channel, e.User.VoiceChannel, e.GetArg("query")).ConfigureAwait(false);
+                //        if (e.Server.CurrentUser.GetPermissions(e.Channel).ManageMessages)
+                //        {
+                //            await Task.Delay(10000).ConfigureAwait(false);
+                //            await e.Message.Delete().ConfigureAwait(false);
+                //        }
+                //    });
+
                 cgb.CreateCommand (Prefix + "listqueue")
                     .Alias (Prefix + "lq")
                     .Description ("Zeigt bis zu 15 Songs per Seite. Standard Seite ist 1.\n**Benutzung**: `!lq` or `!lq 2`")

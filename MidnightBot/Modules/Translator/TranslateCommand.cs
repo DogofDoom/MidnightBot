@@ -27,12 +27,16 @@ namespace MidnightBot.Modules.Translator
                 await e.Channel.SendIsTyping ().ConfigureAwait (false);
                 string from = e.GetArg ("langs").ToLowerInvariant ().Split ('>')[0];
                 string to = e.GetArg ("langs").ToLowerInvariant ().Split ('>')[1];
+                var text = e.GetArg("text")?.Trim();
+                if (string.IsNullOrWhiteSpace(text))
+                    return;
 
-                string translation = t.Translate (e.GetArg ("text"),from,to);
+                string translation = await t.Translate (text,from,to).ConfigureAwait (false);
                 await e.Channel.SendMessage ( translation).ConfigureAwait (false);
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine (ex);
                 await e.Channel.SendMessage ("Falsches Eingabeformat, oder etwas ist schief gelaufen...").ConfigureAwait (false);
             }
 
