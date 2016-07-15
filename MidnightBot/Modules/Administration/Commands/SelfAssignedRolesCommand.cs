@@ -17,7 +17,7 @@ namespace MidnightBot.Modules.Administration.Commands
         {
             cgb.CreateCommand (Module.Prefix + "asar")
                 .Description ("Adds a role, or list of roles separated by whitespace" +
-                             "(use quotations for multiword roles) to the list of self-assignable roles.\n**Benutzung**: .asar Gamer")
+                             "(use quotations for multiword roles) to the list of self-assignable roles. | .asar Gamer")
                 .Parameter ("roles",ParameterType.Multiple)
                 .AddCheck (SimpleCheckers.CanManageRoles)
                 .Do (async e =>
@@ -99,7 +99,7 @@ namespace MidnightBot.Modules.Administration.Commands
             cgb.CreateCommand (Module.Prefix + "iam")
                 .Description ("Adds a role to you that you choose. " +
                              "Role must be on a list of self-assignable roles." +
-                             "\n**Benutzung**: .iam Gamer")
+                             " | .iam Gamer")
                 .Parameter ("role",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -132,8 +132,8 @@ namespace MidnightBot.Modules.Administration.Commands
                         await e.Channel.SendMessage($":anger:`I am unable to add that role to you. I can't add roles to owners or other roles higher than my role in the role hierarchy.`").ConfigureAwait (false);
                     }
                     var msg = await e.Channel.SendMessage ($":ok:You now have {role.Name} role.").ConfigureAwait (false);
-                    await Task.Delay (3000);
-                    await msg.Delete ();
+                    await Task.Delay(3000).ConfigureAwait(false);
+                    await msg.Delete().ConfigureAwait(false);
                     try
                     {
                         await e.Message.Delete ().ConfigureAwait (false);
@@ -145,7 +145,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 .Alias (Module.Prefix + "iamn")
                 .Description ("Removes a role to you that you choose. " +
                               "Role must be on a list of self-assignable roles." +
-                              "\n**Benutzung**: .iamn Gamer")
+                              " | .iamn Gamer")
                 .Parameter ("role",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -170,7 +170,14 @@ namespace MidnightBot.Modules.Administration.Commands
                         return;
                     }
                     await e.User.RemoveRoles (role).ConfigureAwait (false);
-                    await e.Channel.SendMessage ($":ok:Successfuly removed {role.Name} role from you.").ConfigureAwait (false);
+                    var msg = await e.Channel.SendMessage ($":ok:Successfuly removed {role.Name} role from you.").ConfigureAwait (false);
+                    await Task.Delay(3000).ConfigureAwait(false);
+                    await msg.Delete().ConfigureAwait(false);
+                    try
+                    {
+                        await e.Message.Delete().ConfigureAwait(false);
+                    }
+                    catch { }
                 });
         }
     }

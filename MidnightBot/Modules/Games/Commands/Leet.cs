@@ -701,7 +701,7 @@ namespace MidnightBot.Modules.Games.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "leet")
-                .Description ($"Konvertiert einen Text zu Leetspeak mit 6 (1-6) Stärke-Graden.\n**Benutzung**: {Module.Prefix}leet 3 Hallo")
+                .Description ($"Konvertiert einen Text zu Leetspeak mit 6 (1-6) Stärke-Graden. | {Module.Prefix}leet 3 Hallo")
                 .Parameter ("level",ParameterType.Required)
                 .Parameter ("text",ParameterType.Unparsed)
                 .Do (async e =>

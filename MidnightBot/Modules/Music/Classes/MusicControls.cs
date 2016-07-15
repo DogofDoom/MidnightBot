@@ -13,7 +13,8 @@ namespace MidnightBot.Modules.Music.Classes
     {
         Radio,
         Normal,
-        Local
+        Local,
+        Soundcloud
     }
 
     public enum StreamState
@@ -51,7 +52,8 @@ namespace MidnightBot.Modules.Music.Classes
         private bool Destroyed { get; set; } = false;
         public bool RepeatSong { get; private set; } = false;
         public bool RepeatPlaylist { get; private set; } = false;
-        public bool Autoplay { get; private set; } = false;
+        public bool Autoplay { get; set; } = false;
+        public uint MaxQueueSize { get; set; } = 0;
 
         public MusicPlayer ( Channel startingVoiceChannel,float? defaultVolume )
         {
@@ -173,6 +175,7 @@ namespace MidnightBot.Modules.Music.Classes
         {
             if (s == null)
                 throw new ArgumentNullException (nameof (s));
+            ThrowIfQueueFull();
             lock (playlistLock)
             {
                 s.MusicPlayer = this;
@@ -180,13 +183,15 @@ namespace MidnightBot.Modules.Music.Classes
             }
         }
 
-        public void AddSong ( Song s,int index )
+        public void AddSong(Song s, string username)
         {
             if (s == null)
                 throw new ArgumentNullException (nameof (s));
             lock (playlistLock)
             {
-                playlist.Insert (index,s);
+                s.MusicPlayer = this;
+                s.QueuerName = username.TrimTo(10);
+                playlist.Add(s);
             }
         }
 
@@ -243,5 +248,13 @@ namespace MidnightBot.Modules.Music.Classes
 
         internal bool ToggleRepeatPlaylist () => this.RepeatPlaylist = !this.RepeatPlaylist;
         internal bool ToggleAutoplay () => this.Autoplay = !this.Autoplay;
-    }
+
+        internal void ThrowIfQueueFull()
+        {
+            if (MaxQueueSize == 0)
+                return;
+            if (playlist.Count >= MaxQueueSize)
+                throw new PlaylistFullException();
+        }
+}
 }

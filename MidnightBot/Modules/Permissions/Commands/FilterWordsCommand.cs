@@ -53,7 +53,7 @@ namespace MidnightBot.Modules.Permissions.Commands
                 .Alias (Module.Prefix + "cfw")
                 .Description("Aktiviert, oder deaktiviert automatische Löschung von Nachrichten auf diesem Channel, die gebannte Wörter beinhalten." +
                              "Wenn kein Channel ausgewählt, dieser hier. Benutze ALL um auf alle derzeit existierenden Channel zu aktivieren." +
-                             "\n**Benutzung**: ;cfw enable #general-chat")
+                             " | ;cfw enable #general-chat")
                 .Parameter("bool")
                 .Parameter("channel", ParameterType.Optional)
                 .Do(async e =>
@@ -92,7 +92,7 @@ namespace MidnightBot.Modules.Permissions.Commands
             cgb.CreateCommand (Module.Prefix + "addfilterword")
                .Alias (Module.Prefix + "afw")
                .Description("Fügt ein neues Wort zur Liste der gefilterten Wörter hinzu." +
-                            "\n**Benutzung**: ;afw poop")
+                            " | ;afw poop")
                .Parameter("word", ParameterType.Unparsed)
                .Do(async e => 
                {
@@ -115,7 +115,7 @@ namespace MidnightBot.Modules.Permissions.Commands
             cgb.CreateCommand (Module.Prefix + "rmvfilterword")
                .Alias (Module.Prefix + "rfw")
                .Description("Entfernt ein Wort von der Liste der gefilterten Wörter." +
-                            "\n**Benutzung**: ;rw poop")
+                            " | ;rw poop")
                .Parameter("word", ParameterType.Unparsed)
                .Do(async e =>
                {
@@ -138,7 +138,7 @@ namespace MidnightBot.Modules.Permissions.Commands
             cgb.CreateCommand (Module.Prefix + "lstfilterwords")
                .Alias (Module.Prefix + "lfw")
                .Description("Zeigt Liste der gefilterten Wörter." +
-                            "\n**Benutzung**: ;lfw")
+                            " | ;lfw")
                .Do(async e => 
                {
                    try
@@ -157,7 +157,7 @@ namespace MidnightBot.Modules.Permissions.Commands
 
             cgb.CreateCommand (Module.Prefix + "srvrfilterwords")
                 .Alias (Module.Prefix + "sfw")
-                .Description("Aktiviert, oder deaktiviert automatische Löschung von Nachrichten auf dem Server, die verbotene Wörter enthalten.\n**Benutzung**: ;sfi disable")
+                .Description("Aktiviert, oder deaktiviert automatische Löschung von Nachrichten auf dem Server, die verbotene Wörter enthalten. | ;sfi disable")
                 .Parameter("bool")
                 .Do(async e =>
                 {

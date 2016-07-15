@@ -3,38 +3,13 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using MidnightBot.Extensions;
+using System.Runtime.Serialization;
 
 namespace MidnightBot.Classes.JSONModels
 {
     public class Configuration
     {
-        public bool DontJoinServers { get; set; } = false;
-        public bool ForwardMessages { get; set; } = true;
-        public bool IsRotatingStatus { get; set; } = false;
-        public int BufferSize { get; set; } = 4.MiB ();
-        [JsonIgnore]
-        public List<Quote> Quotes { get; set; } = new List<Quote> ();
-
-        [JsonIgnore]
-        public List<PokemonType> PokemonTypes { get; set; } = new List<PokemonType> ();
-
-        public string RemindMessageFormat { get; set; } = "❗⏰**Mir wurde von %user% aufgetragen, dich an '%message%' zu erinnern.**⏰❗";
-
-        public Dictionary<string,List<string>> CustomReactions { get; set; } = new Dictionary<string,List<string>> ();
-
-        public List<string> RotatingStatuses { get; set; } = new List<string> ();
-        public CommandPrefixesModel CommandPrefixes { get; set; } = new CommandPrefixesModel ();
-        public HashSet<ulong> ServerBlacklist { get; set; } = new HashSet<ulong> ();
-        public HashSet<ulong> ChannelBlacklist { get; set; } = new HashSet<ulong> ();
-
-        public HashSet<ulong> UserBlacklist { get; set; } = new HashSet<ulong> () {
-            105309315895693312,
-            119174277298782216,
-            143515953525817344
-        };
-
-        [JsonIgnore]
-        public Dictionary<string,List<string>> DefaultReactions { get; } = new Dictionary<string,List<string>> ()
+        public static readonly Dictionary<string, List<string>> DefaultCustomReactions = new Dictionary<string, List<string>>
         {
             {@"\o\", new List<string>()
             { "/o/" } },
@@ -94,6 +69,50 @@ namespace MidnightBot.Classes.JSONModels
 
             } }
         };
+
+        public bool DontJoinServers { get; set; } = false;
+        public bool ForwardMessages { get; set; } = true;
+        public bool ForwardToAllOwners { get; set; } = false;
+        public bool IsRotatingStatus { get; set; } = false;
+        public int BufferSize { get; set; } = 4.MiB();
+
+        public List<Quote> Quotes { get; set; } = new List<Quote>();
+
+        [JsonIgnore]
+        public List<PokemonType> PokemonTypes { get; set; } = new List<PokemonType>();
+
+        public string RemindMessageFormat { get; set; } = "❗⏰**I've been told to remind you to '%message%' now by %user%.**⏰❗";
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public Dictionary<string, List<string>> CustomReactions { get; set; }
+
+          public List<string> RotatingStatuses { get; set; } = new List<string>();
+        public CommandPrefixesModel CommandPrefixes { get; set; } = new CommandPrefixesModel();
+        public HashSet<ulong> ServerBlacklist { get; set; } = new HashSet<ulong>();
+        public HashSet<ulong> ChannelBlacklist { get; set; } = new HashSet<ulong>();
+
+        public HashSet<ulong> UserBlacklist { get; set; } = new HashSet<ulong>() {
+             105309315895693312,
+             119174277298782216,
+              143515953525817344
+          };
+
+        [OnDeserialized]
+        internal void OnDeserialized(StreamingContext context)
+        {
+            if (CustomReactions == null)
+            {
+                CustomReactions = DefaultCustomReactions;
+            }
+        }
+        [OnSerializing]
+        internal void OnSerializing(StreamingContext context)
+        {
+            if (CustomReactions == null)
+            {
+                CustomReactions = DefaultCustomReactions;
+            }
+        }
 
         public string[] _8BallResponses
         {

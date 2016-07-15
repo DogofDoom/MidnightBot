@@ -155,8 +155,6 @@ namespace MidnightBot.Classes
 
         public static async Task<string> FindYoutubeUrlByKeywords ( string keywords )
         {
-            if (string.IsNullOrWhiteSpace (MidnightBot.GetRndGoogleAPIKey ()))
-                throw new InvalidCredentialException ("Google API Key is missing.");
             if (string.IsNullOrWhiteSpace (keywords))
                 throw new ArgumentNullException (nameof (keywords),"Query not specified.");
             if (keywords.Length > 150)
@@ -168,6 +166,9 @@ namespace MidnightBot.Classes
             {
                 return $"https://www.youtube.com/watch?v={match.Groups["id"].Value}";
             }
+
+            if (string.IsNullOrWhiteSpace(MidnightBot.GetRndGoogleAPIKey()))
+                throw new InvalidCredentialException("Google API Key is missing.");
             var response = await GetResponseStringAsync(
                                            $"https://www.googleapis.com/youtube/v3/search?" +
                                            $"part=snippet&maxResults=1" +
@@ -460,7 +461,7 @@ namespace MidnightBot.Classes
 
                 using (var streamWriter = new StreamWriter (await httpWebRequest.GetRequestStreamAsync ().ConfigureAwait (false)))
                 {
-                    var json = "{\"longUrl\":\"" + url + "\"}";
+                    var json = "{\"longUrl\":\"" + Uri.EscapeDataString(url) + "\"}";
                     streamWriter.Write (json);
                 }
 

@@ -71,7 +71,7 @@ namespace MidnightBot.Modules.Trello
                 cgb.CreateCommand (Prefix + "bind")
                     .Description ("Bindet einen trello Bot an einen einzigen Server. " +
                                  "Du erhälst Benachrichtigungen, wenn etwas entfernt, oder hinzugefügt wird." +
-                                 "\n**Benutzung**: bind [board_id]")
+                                 " | bind [board_id]")
                     .Parameter ("board_id",Discord.Commands.ParameterType.Required)
                     .Do (async e =>
                     {

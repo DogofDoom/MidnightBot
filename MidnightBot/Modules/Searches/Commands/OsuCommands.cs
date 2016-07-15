@@ -17,7 +17,7 @@ namespace MidnightBot.Modules.Searches.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "osu")
-                  .Description ("Zeigt Osu-Stats für einen Spieler.\n**Benutzung**:~osu Name taiko")
+                  .Description ("Zeigt Osu-Stats für einen Spieler. |~osu Name taiko")
                   .Parameter ("usr",ParameterType.Required)
                   .Parameter ("mode",ParameterType.Unparsed)
                   .Do (async e =>
@@ -56,7 +56,7 @@ namespace MidnightBot.Modules.Searches.Commands
                   });
 
             cgb.CreateCommand (Module.Prefix + "osu b")
-                .Description ("Zeigt Informationen über eine Beatmap.\n**Benutzung**:~osu b https://osu.ppy.sh/s/127712")
+                .Description ("Zeigt Informationen über eine Beatmap. |~osu b https://osu.ppy.sh/s/127712")
                 .Parameter ("map",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -89,7 +89,7 @@ namespace MidnightBot.Modules.Searches.Commands
                 });
 
             cgb.CreateCommand (Module.Prefix + "osu top5")
-                .Description ("Zeigt die Top 5 Spiele eines Benutzers. \n**Benutzung**:~osu top5 Name")
+                .Description ("Zeigt die Top 5 Spiele eines Benutzers.  |~osu top5 Name")
                 .Parameter ("usr",ParameterType.Required)
                 .Parameter ("mode",ParameterType.Unparsed)
                 .Do (async e =>

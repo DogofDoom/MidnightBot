@@ -26,7 +26,7 @@ namespace MidnightBot.Modules.Pokemon
                 cgb.AddCheck (PermissionChecker.Instance);
 
                 cgb.CreateCommand (Prefix + "active")
-                .Description ("Zeigt das aktive Pokemon von jemandem oder einem selbst\n**Benutzung**:{Prefix}active oder {Prefix}active @Someone")
+                .Description ("Zeigt das aktive Pokemon von jemandem oder einem selbst |{Prefix}active oder {Prefix}active @Someone")
                 .Parameter ("target",ParameterType.Optional)
                 .Do (async e =>
                 {
@@ -54,7 +54,7 @@ namespace MidnightBot.Modules.Pokemon
 
                 cgb.CreateCommand(Prefix + "movelist")
                 .Alias(Prefix + "ml")
-                .Description("Zeigt eine Liste der verfügbaren Angriffe.\n**Benutzung**:{Prefix}movelist, {Prefix}ml, {Prefix}ml charmander")
+                .Description("Zeigt eine Liste der verfügbaren Angriffe. |{Prefix}movelist, {Prefix}ml, {Prefix}ml charmander")
                 .Parameter ("name",ParameterType.Optional)
                 .Do(async e =>
                 {
@@ -65,7 +65,7 @@ namespace MidnightBot.Modules.Pokemon
                 });
 
                 cgb.CreateCommand (Prefix + "switch")
-                .Description ($"Setzt dein aktives Pokemon per Nickname\n**Benutzung**:{Prefix}switch mudkip")
+                .Description ($"Setzt dein aktives Pokemon per Nickname |{Prefix}switch mudkip")
                 .Parameter ("name",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -113,7 +113,7 @@ namespace MidnightBot.Modules.Pokemon
                 });
 
                 cgb.CreateCommand(Prefix + "allmoves")
-                .Description("Sendet dir eine private Nachticht mit allen Attacken deiner Pokemon.\n**Benutzung**:{Prefix}allmoves, {Prefix}am")
+                .Description("Sendet dir eine private Nachticht mit allen Attacken deiner Pokemon. |{Prefix}allmoves, {Prefix}am")
                 .Alias(Prefix + "am")
                 .Do(async e =>
                 {
@@ -152,7 +152,7 @@ namespace MidnightBot.Modules.Pokemon
                 });
 
                 cgb.CreateCommand(Prefix + "elite4")
-                .Description($"Zeigt die 5 stärksten Pokemon.\n**Benutzung**:{Prefix}elite4")
+                .Description($"Zeigt die 5 stärksten Pokemon. |{Prefix}elite4")
                 .Alias(Prefix + "e4")
                 .Do(async e =>
                 {
@@ -169,7 +169,7 @@ namespace MidnightBot.Modules.Pokemon
                 });
 
                 cgb.CreateCommand (Prefix + "heal")
-                .Description ($"Heilt dein angegebenes Pokemon (per Nicknamen) oder das aktive Pokemon der gegebenen Person.\n**Benutzung**:{Prefix}heal bulbasaur, {Prefix}heal @user, {Prefix}heal all")
+                .Description ($"Heilt dein angegebenes Pokemon (per Nicknamen) oder das aktive Pokemon der gegebenen Person. |{Prefix}heal bulbasaur, {Prefix}heal @user, {Prefix}heal all")
                 .Parameter ("args",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -189,7 +189,7 @@ namespace MidnightBot.Modules.Pokemon
                                 await e.Channel.SendMessage($"{e.User.Mention}, All of your pokemon are at full health!");
                                 return;
                             }
-                            if (FlowersHandler.RemoveFlowers(target, "Healed pokemon", count))
+                            if (await FlowersHandler.RemoveFlowers(target, "Healed pokemon", count))
                             {
                                 foreach (var pkm in pkms)
                                 {
@@ -218,7 +218,7 @@ namespace MidnightBot.Modules.Pokemon
                             return;
                         }
 
-                        if (FlowersHandler.RemoveFlowers (target,"Healed pokemon",1))
+                        if (await FlowersHandler.RemoveFlowers(target, "Healed pokemon", 1))
                         {
                             var hp = toHeal.HP;
                             toHeal.HP = toHeal.MaxHP;
@@ -238,7 +238,7 @@ namespace MidnightBot.Modules.Pokemon
                         await e.Channel.SendMessage ($"Konnte Pokemon von {target.Name} nicht finden");
                         return;
                     }
-                    if (FlowersHandler.RemoveFlowers (target,"Healed pokemon",1))
+                    if (await FlowersHandler.RemoveFlowers(target, "Healed pokemon", 1))
                     {
                         var hp = toHealn.HP;
                         toHealn.HP = toHealn.MaxHP;
@@ -254,7 +254,7 @@ namespace MidnightBot.Modules.Pokemon
 
                 cgb.CreateCommand (Prefix + "rename")
                 .Alias (Prefix + "rn")
-                .Description ($"Benennt dein aktives Pokemon um.\n**Benutzung**: {Prefix}rename dickbutt, {Prefix}rn Mittens")
+                .Description ($"Benennt dein aktives Pokemon um. | {Prefix}rename dickbutt, {Prefix}rn Mittens")
                 .Parameter ("name",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -272,7 +272,7 @@ namespace MidnightBot.Modules.Pokemon
 
 
                 cgb.CreateCommand (Prefix + "reset")
-                .Description ($"Setzt deine Pokemon zurück. KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN\n**Benutzung**:{Prefix}reset true")
+                .Description ($"Setzt deine Pokemon zurück. KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN |{Prefix}reset true")
                 .Parameter ("true",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -299,16 +299,11 @@ namespace MidnightBot.Modules.Pokemon
 
                 Random rand = new Random ();
                 cgb.CreateCommand(Prefix + "catch")
-                .Description($"Versucht das derzeitige wilde Pokemon zu fangen. Du musst das Pokemon angeben, welches du ersetzen willst. Kostet einen {MidnightBot.Config.CurrencyName}\n**Benutzung**:{Prefix}catch MyMudkip")
+                .Description($"Versucht das derzeitige wilde Pokemon zu fangen. Du musst das Pokemon angeben, welches du ersetzen willst. Kostet einen {MidnightBot.Config.CurrencyName} |{Prefix}catch MyMudkip")
                 .Parameter("replace", ParameterType.Unparsed)
                 .Do(async e =>
                 {
                     string str = "";
-                    var defenderPokemon = ActivePokemon(e.Server.GetUser(MidnightBot.Creds.BotId));
-                    if (!FlowersHandler.RemoveFlowers(e.User,"Catching pokemon", 1)){
-                        await e.Channel.SendMessage($"{e.User.Mention}, es benötigt einen {MidnightBot.Config.CurrencySign} {MidnightBot.Config.CurrencyName} um einen Pokeball zu kaufen!");
-                        return;
-                    }
                     var list = PokemonList(e.User);
                     var pkm = list.Where(x => x.NickName == e.GetArg("replace").Trim()).DefaultIfEmpty(null).FirstOrDefault();
                     if (pkm == null)
@@ -316,7 +311,13 @@ namespace MidnightBot.Modules.Pokemon
                         await e.Channel.SendMessage($"Konnte Pokemon mit Namen \"{e.GetArg("replace").Trim()}\" nicht finden.");
                         return;
                     }
-
+                    var defenderPokemon = ActivePokemon(e.Server.GetUser(MidnightBot.Creds.BotId));
+                    var removed = FlowersHandler.RemoveFlowers(e.User, "Put a euro down.", 1).GetAwaiter().GetResult();
+                    if (!removed)
+                    {
+                        await e.Channel.SendMessage($"{e.User.Mention}, es benötigt einen {MidnightBot.Config.CurrencySign} {MidnightBot.Config.CurrencyName} um einen Pokeball zu kaufen!");
+                        return;
+                    }
                     int rate = 1;
                     int chance = ((3 * defenderPokemon.MaxHP - 2 * defenderPokemon.HP) * rate) / 3 * defenderPokemon.MaxHP;
                     //str += chance.ToString() + "\n";
@@ -352,7 +353,7 @@ namespace MidnightBot.Modules.Pokemon
 
                 cgb.CreateCommand (Prefix + "attack")
                 .Alias (Prefix)
-                .Description ($"Greift gegebenes Ziel mit gegebener Attacke an.\n**Benutzung**: {Prefix}attack hyperbeam @user, {Prefix}attack @user flame-charge, {Prefix} sunny-day @user")
+                .Description ($"Greift gegebenes Ziel mit gegebener Attacke an. | {Prefix}attack hyperbeam @user, {Prefix}attack @user flame-charge, {Prefix} sunny-day @user")
                 .Parameter ("args",ParameterType.Unparsed)
                 .Do (async e =>
                 {

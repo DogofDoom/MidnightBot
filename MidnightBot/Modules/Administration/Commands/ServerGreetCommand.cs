@@ -259,7 +259,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand (Module.Prefix + "greetmsg")
-                .Description ("Setzt einen neuen Gruß. Gib %user% ein, wenn du den neuen Benutzer erwähnen möchtest. Ohne nachfolgende Nachricht, zeigt es die derzeitige Nachricht.\n**Benutzung**: .greetmsg Welcome to the server, %user%.")
+                .Description ("Setzt einen neuen Gruß. Gib %user% ein, wenn du den neuen Benutzer erwähnen möchtest. Ohne nachfolgende Nachricht, zeigt es die derzeitige Nachricht. | .greetmsg Welcome to the server, %user%.")
                 .Parameter ("msg",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -291,7 +291,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand (Module.Prefix + "byemsg")
-                .Description ("Setzt eine neue Verabschiedung. Gib %user% ein, wenn du den Benutzer erwähnen möchtest. Ohne nachfolgende Nachricht, zeigt es die derzeitige Nachricht.\n**Benutzung**: .byemsg %user% has left the server.")
+                .Description ("Setzt eine neue Verabschiedung. Gib %user% ein, wenn du den Benutzer erwähnen möchtest. Ohne nachfolgende Nachricht, zeigt es die derzeitige Nachricht. | .byemsg %user% has left the server.")
                 .Parameter ("msg",ParameterType.Unparsed)
                 .Do (async e =>
                 {

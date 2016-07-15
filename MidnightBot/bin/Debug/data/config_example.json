@@ -1,9 +1,11 @@
 {
   "DontJoinServers": false,
   "ForwardMessages": true,
+  "ForwardToAllOwners": false,
   "IsRotatingStatus": false,
   "BufferSize": 4194304,
-  "RemindMessageFormat": "❗⏰**Mir wurde von %user% aufgetragen, dich an '%message%' zu erinnern.**⏰❗",
+  "Quotes": [],
+  "RemindMessageFormat": "❗⏰**I've been told to remind you to '%message%' now by %user%.**⏰❗",
   "CustomReactions": {
     "\\o\\": [
       "/o/"

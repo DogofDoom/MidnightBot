@@ -25,7 +25,7 @@ namespace MidnightBot.Modules.Conversations.Commands
         internal override void Init(CommandGroupBuilder cgb)
         {
             cgb.CreateCommand("rip")
-                    .Description ($"Zeigt ein Grab von jemanden mit einem Startjahr\n**Benutzung**: @{BotName} rip @Someone 2000")
+                    .Description ($"Zeigt ein Grab von jemanden mit einem Startjahr | @{BotName} rip @Someone 2000")
                     .Parameter("user", ParameterType.Required)
                     .Parameter("year", ParameterType.Optional)
                     .Do(async e =>

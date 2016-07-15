@@ -116,7 +116,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="ScaredFingers.UnitsConversion">
-      <HintPath>lib\ScaredFingers.UnitsConversion.dll</HintPath>
+      <HintPath>..\packages\ScaredFingers.UnitsConversion.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -159,6 +159,7 @@
     <Compile Include="Modules\Conversations\Commands\RipCommand.cs" />
     <Compile Include="Modules\CustomReactions\CustomReactions.cs" />
     <Compile Include="Modules\Meme\MemeModule.cs" />
+    <Compile Include="Modules\Music\Classes\PlaylistFullException.cs" />
     <Compile Include="Modules\Pokemon\PokemonAttack.cs" />
     <Compile Include="Modules\Pokemon\PokemonMain.cs" />
     <Compile Include="Modules\Pokemon\TrainerStats.cs" />

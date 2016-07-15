@@ -43,7 +43,7 @@ namespace MidnightBot
         public static string BotMention { get; set; } = "";
         public static bool Ready { get; set; } = false;
 
-        private static Channel OwnerPrivateChannel { get; set; }
+        private static List<Channel> OwnerPrivateChannels { get; set; }
 
         public static String GetRndGoogleAPIKey ()
         {
@@ -58,8 +58,6 @@ namespace MidnightBot
             
             try
             {
-                var defaultConfig = new Configuration ();
-                defaultConfig.CustomReactions = defaultConfig.DefaultReactions;
                 List<_Models.JSONModels.APIConfig> apis = new List<_Models.JSONModels.APIConfig>() {
                     {new _Models.JSONModels.APIConfig
                     {
@@ -78,7 +76,7 @@ namespace MidnightBot
                     } }
                 };
                 File.WriteAllText("data/apis.json", JsonConvert.SerializeObject(apis, Formatting.Indented));
-                File.WriteAllText ("data/config_example.json",JsonConvert.SerializeObject (defaultConfig,Formatting.Indented));
+                File.WriteAllText ("data/config_example.json",JsonConvert.SerializeObject (new Configuration(), Formatting.Indented));
                 if (!File.Exists ("data/config.json"))
                     File.Copy ("data/config_example.json","data/config.json");
                 File.WriteAllText ("credentials_example.json",JsonConvert.SerializeObject (new Credentials (),Formatting.Indented));
@@ -229,13 +227,17 @@ namespace MidnightBot
                 Console.WriteLine (await MidnightStats.Instance.GetStats ().ConfigureAwait (false));
                 Console.WriteLine ("-----------------");
 
-                try
+                OwnerPrivateChannels = new List<Channel>(Creds.OwnerIds.Length);
+                foreach (var id in Creds.OwnerIds)
                 {
-                    OwnerPrivateChannel = await Client.CreatePrivateChannel (Creds.OwnerIds[0]).ConfigureAwait (false);
-                }
-                catch
-                {
-                    Console.WriteLine ("Privater Channel mit 1. Owner in credentials.json konnte nicht erstellt werden.");
+                    try
+                    {
+                        OwnerPrivateChannels.Add(await Client.CreatePrivateChannel(id).ConfigureAwait(false));
+                    }
+                    catch
+                    {
+                        Console.WriteLine($"Konnte keinen privaten Channel mit dem Owner, welcher mit der ID {id} in der credentials.json gelistet ist");
+                    }
                 }
 
                 //foreach (var ch in MidnightBot.Client.Servers.Select (s => s.DefaultChannel))
@@ -268,8 +270,18 @@ namespace MidnightBot
 
         public static async Task SendMessageToOwner ( string message )
         {
-            if (Config.ForwardMessages && OwnerPrivateChannel != null)
-                await OwnerPrivateChannel.SendMessage (message).ConfigureAwait (false);
+            if (Config.ForwardMessages && OwnerPrivateChannels.Any())
+                if (Config.ForwardToAllOwners)
+                    OwnerPrivateChannels.ForEach(async c =>
+                    {
+                        try { await c.SendMessage(message).ConfigureAwait(false); } catch { }
+                    });
+                else
+                {
+                    var c = OwnerPrivateChannels.FirstOrDefault();
+                    if (c != null)
+                        await c.SendMessage(message).ConfigureAwait(false);
+                }
         }
 
         private static bool repliedRecently = false;
@@ -284,8 +296,8 @@ namespace MidnightBot
                 if (ConfigHandler.IsBlackListed (e))
                     return;
 
-                if (Config.ForwardMessages && !MidnightBot.Creds.OwnerIds.Contains (e.User.Id) && OwnerPrivateChannel != null)
-                    await OwnerPrivateChannel.SendMessage (e.User + ": ```\n" + e.Message.Text + "\n```").ConfigureAwait (false);
+                if (Config.ForwardMessages && !MidnightBot.Creds.OwnerIds.Contains(e.User.Id) && OwnerPrivateChannels.Any())
+                    await SendMessageToOwner(e.User + ": ```\n" + e.Message.Text + "\n```").ConfigureAwait(false);
 
                 if (repliedRecently)
                     return;

@@ -37,7 +37,7 @@ namespace MidnightBot.Modules.Games
                 commands.ForEach (cmd => cmd.Init (cgb));
 
                 cgb.CreateCommand (Prefix + "choose")
-                  .Description ("Sucht eine Sache aus einer Liste von Sachen aus.\n**Benutzung**: >choose Get up;Sleep;Sleep more")
+                  .Description ("Sucht eine Sache aus einer Liste von Sachen aus. | >choose Get up;Sleep;Sleep more")
                   .Parameter ("list",ParameterType.Unparsed)
                   .Do (async e =>
                    {
@@ -68,7 +68,7 @@ namespace MidnightBot.Modules.Games
                      });
 
                 cgb.CreateCommand (Prefix + "rps")
-                .Description ($"Spiel eine Runde Stein, Schere, Papier mit {BotName}.\n**Benutzung**: >rps scissors")
+                .Description ($"Spiel eine Runde Stein, Schere, Papier mit {BotName}. | >rps scissors")
                 .Parameter ("input",ParameterType.Required)
                 .Do (async e =>
                 {
@@ -111,7 +111,7 @@ namespace MidnightBot.Modules.Games
                 });
 
                 cgb.CreateCommand (Prefix + "linux")
-                        .Description ("Prints a customizable Linux interjection.\n**Benutzung**: `{Prefix}linux Spyware Windows`")
+                        .Description ("Prints a customizable Linux interjection. | `{Prefix}linux Spyware Windows`")
                         .Parameter ("gnu",ParameterType.Required)
                         .Parameter ("linux",ParameterType.Required)
                         .Do (async e =>

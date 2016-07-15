@@ -2,6 +2,7 @@
 using Discord.Commands;
 using MidnightBot.Classes;
 using MidnightBot.Modules.Permissions.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,7 @@ namespace MidnightBot.Modules.Administration.Commands
 
             cgb.CreateCommand (Prefix + "addcustreact")
                 .Alias (Prefix + "acr")
-                .Description ($"Fügt eine \"Custom Reaction\" hinzu. **Bot Owner Only!**\n**Benutzung**: {Prefix}acr \"hello\" I love saying hello to %user%")
+                .Description ($"Fügt eine \"Custom Reaction\" hinzu. **Bot Owner Only!** | {Prefix}acr \"hello\" I love saying hello to %user%")
                 .AddCheck (SimpleCheckers.OwnerOnly ())
                 .Parameter ("name",ParameterType.Required)
                 .Parameter ("message",ParameterType.Unparsed)
@@ -46,27 +47,40 @@ namespace MidnightBot.Modules.Administration.Commands
 
             cgb.CreateCommand (Prefix + "listcustreact")
             .Alias (Prefix + "lcr")
-            .Description ("Listet alle derzeitigen \"Custom Reactions\" (Seitenweise mit 30 Commands je Seite).\n**Benutzung**:.lcr 1")
+            .Description($"Listet Custom Reactions auf(Seitenweise mit 30 Befehlen per Seite). Benutze 'all' anstatt einer Seitenzahl um alle Custom Reactions per Privater Nachricht zu erhalten.  |{Prefix}lcr 1")
             .Parameter ("num",ParameterType.Required)
             .Do (async e =>
             {
+                var numStr = e.GetArg("num");
+
+                if (numStr.ToUpperInvariant() == "ALL")
+                {
+                    var fullstr = String.Join("\n", MidnightBot.Config.CustomReactions.Select(kvp => kvp.Key));
+                    do
+                    {
+                        var str = string.Concat(fullstr.Take(1900));
+                        fullstr = new string(fullstr.Skip(1900).ToArray());
+                        await e.User.SendMessage("```xl\n" + str + "```");
+                    } while (fullstr.Length != 0);
+                    return;
+                }
                 int num;
-                if (!int.TryParse(e.GetArg("num"), out num) || num <= 0) num = 1;
-                    var cmds = GetCustomsOnPage(num - 1);
-                    if (!cmds.Any())
-                    {
-                        await e.Channel.SendMessage("");
-                    }
-                    else
-                    {
-                        string result = SearchHelper.ShowInPrettyCode<string>(cmds, s => $"{s,-25}"); //People prefer starting with 1
-                        await e.Channel.SendMessage($"`Zeige Seite {num}:`\n" + result).ConfigureAwait(false);
-                    }
-                });
+                if (!int.TryParse(numStr, out num) || num <= 0) num = 1;
+                var cmds = GetCustomsOnPage(num - 1);
+                if (!cmds.Any())
+                {
+                    await e.Channel.SendMessage("`Da sind keine Custom Reactions.`");
+                }
+                else
+                {
+                    string result = SearchHelper.ShowInPrettyCode<string>(cmds, s => $"{s,-25}"); //People prefer starting with 1
+                    await e.Channel.SendMessage($"`Zeige Seite {num}:`\n" + result).ConfigureAwait(false);
+                }
+            });
 
             cgb.CreateCommand(Prefix + "showcustreact")
                 .Alias(Prefix + "scr")
-                .Description($"Zeigt alle möglichen Reaktionen von einer einzigen Custom Reaction.\n**Benutzung**:{Prefix}scr %mention% bb")
+                .Description($"Zeigt alle möglichen Reaktionen von einer einzigen Custom Reaction. |{Prefix}scr %mention% bb")
                 .Parameter("name", ParameterType.Unparsed)
                 .Do(async e =>
                 {
@@ -85,14 +99,14 @@ namespace MidnightBot.Modules.Administration.Commands
                     int i = 1;
                     foreach (var reaction in items)
                     {
-                        message.AppendLine($"[{i++}] " + Format.Code(reaction));
+                        message.AppendLine($"[{i++}] " + Format.Code(Format.Escape(reaction)));
                     }
                     await e.Channel.SendMessage(message.ToString());
                 });
 
             cgb.CreateCommand(Prefix + "editcustreact")
                 .Alias(Prefix + "ecr")
-                .Description($"Bearbeitet eine Custom Reaction, Argumente sind der Custom Reaction Name, Index welcher geändert werden soll und eine (Multiwort) Nachricht.**Bot Owner Only**\n**Benutzung**: `{Prefix}ecr \"%mention% disguise\" 2 Test 123`")
+                .Description($"Bearbeitet eine Custom Reaction, Argumente sind der Custom Reaction Name, Index welcher geändert werden soll und eine (Multiwort) Nachricht.**Bot Owner Only** | `{Prefix}ecr \"%mention% disguise\" 2 Test 123`")
                 .Parameter("name", ParameterType.Required)
                 .Parameter("index", ParameterType.Required)
                 .Parameter("message", ParameterType.Unparsed)

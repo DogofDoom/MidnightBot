@@ -58,7 +58,7 @@ namespace MidnightBot.Modules.Permissions.Commands
                 .Alias (Module.Prefix + "cfi")
                 .Description ("Aktiviert, oder deaktiviert automatische Löschung von Einladungen in diesem Channel." +
                              "Falls kein Channel gewählt, derzeitige Channel. Benutze ALL um alle derzeitig existierenden Channel zu wählen." +
-                             "\n**Benutzung**: ;cfi enable #general-chat")
+                             " | ;cfi enable #general-chat")
                 .Parameter ("bool")
                 .Parameter ("channel",ParameterType.Optional)
                 .Do (async e =>
@@ -97,7 +97,7 @@ namespace MidnightBot.Modules.Permissions.Commands
 
             cgb.CreateCommand (Module.Prefix + "srvrfilterinv")
                 .Alias (Module.Prefix + "sfi")
-                .Description ("Aktiviert, oder deaktiviert automatische Löschung von Einladungenauf diesem Server.\n**Benutzung**: ;sfi disable")
+                .Description ("Aktiviert, oder deaktiviert automatische Löschung von Einladungenauf diesem Server. | ;sfi disable")
                 .Parameter ("bool")
                 .Do (async e =>
                 {

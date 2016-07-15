@@ -49,7 +49,7 @@ namespace MidnightBot.Modules.CustomReactions
                     var c = cgb.CreateCommand (commandName);
                     if (commandName.Contains (MidnightBot.BotMention))
                        c.Alias (commandName.Replace ("<@","<@!"));
-                       c.Description ($"Custom Reaction.\n**Benutzung**:{command.Key}")
+                       c.Description ($"Custom Reaction. |{command.Key}")
                         .Parameter ("args",ParameterType.Unparsed)
                          .Do (async e =>
                          {

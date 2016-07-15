@@ -109,7 +109,7 @@ namespace MidnightBot.Modules.Administration
                     });
 
                 cgb.CreateCommand (Prefix + "setrole").Alias (Prefix + "sr")
-                    .Description ("Setzt die Rolle für einen gegebenen Benutzer.\n**Benutzung**: .sr @User Gast")
+                    .Description ("Setzt die Rolle für einen gegebenen Benutzer. | .sr @User Gast")
                     .Parameter ("user_name",ParameterType.Required)
                     .Parameter ("role_name",ParameterType.Unparsed)
                     //.AddCheck (SimpleCheckers.CanManageRoles)
@@ -154,7 +154,7 @@ namespace MidnightBot.Modules.Administration
                      });
 
                 cgb.CreateCommand (Prefix + "removerole").Alias (Prefix + "rr")
-                    .Description ("Entfernt eine Rolle von einem gegebenen User.\n**Benutzung**: .rr @User Admin")
+                    .Description ("Entfernt eine Rolle von einem gegebenen User. | .rr @User Admin")
                     .Parameter ("user_name",ParameterType.Required)
                     .Parameter ("role_name",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.CanManageRoles)
@@ -193,7 +193,7 @@ namespace MidnightBot.Modules.Administration
 
                 cgb.CreateCommand (Prefix + "renamerole")
                     .Alias (Prefix + "renr")
-                    .Description ($"Benennt eine Rolle um. Rolle die umbenannt werden soll muss muss in Liste niedriger sein als die höchste Rolle des Bots.\n**Benutzung**: `{Prefix}renr \"Erste Rolle\" ZweiteRolle`")
+                    .Description ($"Benennt eine Rolle um. Rolle die umbenannt werden soll muss muss in Liste niedriger sein als die höchste Rolle des Bots. | `{Prefix}renr \"Erste Rolle\" ZweiteRolle`")
                     .Parameter ("r1",ParameterType.Required)
                     .Parameter ("r2",ParameterType.Required)
                     .AddCheck (new SimpleCheckers.ManageRoles ())
@@ -226,7 +226,7 @@ namespace MidnightBot.Modules.Administration
                     });
 
                 cgb.CreateCommand (Prefix + "removeallroles").Alias (Prefix + "rar")
-                    .Description ("Entfernt alle Rollen eines Benutzers.\n**Benutzung**: .rar @User")
+                    .Description ("Entfernt alle Rollen eines Benutzers. | .rar @User")
                     .Parameter ("user_name",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.CanManageRoles)
                     .Do (async e =>
@@ -252,7 +252,7 @@ namespace MidnightBot.Modules.Administration
                     });
 
                 cgb.CreateCommand (Prefix + "createrole").Alias (Prefix + "cr")
-                    .Description ("Erstelle eine Rolle mit einem bestimmten Namen.**Benutzung**: `.r Awesome Role`")
+                    .Description ("Erstelle eine Rolle mit einem bestimmten Namen. | `.r Awesome Role`")
                     .Parameter ("role_name",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.CanManageRoles)
                     .Do (async e =>
@@ -275,7 +275,7 @@ namespace MidnightBot.Modules.Administration
                     .Parameter ("r",ParameterType.Optional)
                     .Parameter ("g",ParameterType.Optional)
                     .Parameter ("b",ParameterType.Optional)
-                    .Description ("Setzt die Farbe einer Rolle zur Hex, oder RGB Farb-Value die gegeben wird.\n**Benutzung**: `.color Admin 255 200 100 oderr .color Admin ffba55`")
+                    .Description ("Setzt die Farbe einer Rolle zur Hex, oder RGB Farb-Value die gegeben wird. | `.color Admin 255 200 100 oderr .color Admin ffba55`")
                     .Do (async e =>
                      {
                          if (!e.User.ServerPermissions.ManageRoles)
@@ -320,7 +320,7 @@ namespace MidnightBot.Modules.Administration
                 cgb.CreateCommand (Prefix + "ban").Alias (Prefix + "b")
                     .Parameter ("user",ParameterType.Required)
                     .Parameter ("msg",ParameterType.Unparsed)
-                    .Description ("Bannt einen erwähnten Benutzer.\n**Benutzung**: .b \"@some Guy\" Your behaviour is toxic.")
+                    .Description ("Bannt einen erwähnten Benutzer. | .b \"@some Guy\" Your behaviour is toxic.")
                         .Do (async e =>
                          {
                              var msg = e.GetArg ("msg");
@@ -354,7 +354,7 @@ namespace MidnightBot.Modules.Administration
                 cgb.CreateCommand (Prefix + "softban").Alias (Prefix + "sb")
                     .Parameter("user", ParameterType.Required)
                     .Parameter("msg", ParameterType.Unparsed)
-                    .Description("Bannt und entbannt einen Benutzer per ID, oder Name mit optionaler Nachricht.\n**Benutzung**: .sb \"@some Guy\" Your behaviour is toxic.")
+                    .Description("Bannt und entbannt einen Benutzer per ID, oder Name mit optionaler Nachricht. | .sb \"@some Guy\" Your behaviour is toxic.")
                         .Do(async e =>
                         {
                             var msg = e.GetArg("msg");
@@ -615,7 +615,7 @@ namespace MidnightBot.Modules.Administration
 
                 cgb.CreateCommand (Prefix + "settopic")
                     .Alias (Prefix + "st")
-                    .Description ("Setzt eine Beschreibung für den derzeitigen Channel.\n**Benutzung**: `{Prefix}st My new topic`")
+                    .Description ("Setzt eine Beschreibung für den derzeitigen Channel. | `{Prefix}st My new topic`")
                     .AddCheck (SimpleCheckers.ManageChannels ())
                     .Parameter ("topic",ParameterType.Unparsed)
                     .Do (async e =>
@@ -671,7 +671,7 @@ namespace MidnightBot.Modules.Administration
 
                 cgb.CreateCommand (Prefix + "prune")
                     .Alias (Prefix + "clr")
-                    .Description (@"`.prune` alle von MidnightBots Nachrichten, in den letzten 100 Nachrichten.`.prune X` entfernt die letzten X Nachrichten von diesem Channel (bis zu 100)`.prune @Someone` Entfernt alle Nachrichten einer Person. in den letzten 100 Nachrichten.`.prune @Someone X` Entfernt die letzen X Nachrichten einer Person in diesem Channel.\n**Benutzung**: `.prune` oder `.prune 5` oder `.prune @Someone` oder `.prune @Someone X`")
+                    .Description (@"`.prune` alle von MidnightBots Nachrichten, in den letzten 100 Nachrichten.`.prune X` entfernt die letzten X Nachrichten von diesem Channel (bis zu 100)`.prune @Someone` Entfernt alle Nachrichten einer Person. in den letzten 100 Nachrichten.`.prune @Someone X` Entfernt die letzen X Nachrichten einer Person in diesem Channel. | `.prune` oder `.prune 5` oder `.prune @Someone` oder `.prune @Someone X`")
                     .Parameter ("user_or_num",ParameterType.Optional)
                     .Parameter ("num",ParameterType.Optional)
                     .Do (async e =>
@@ -808,7 +808,7 @@ namespace MidnightBot.Modules.Administration
                    });
 
                 cgb.CreateCommand (Prefix + "send")
-                    .Description ("Sendet eine Nachricht an einen Benutzer auf einem anderen Server, über den Bot. **Bot Owner Only!**\n**Benutzung**: `.send serverid|u:user_id Send this to a user!` oder `.send serverid|c:channel_id Send this to a channel!`")
+                    .Description ("Sendet eine Nachricht an einen Benutzer auf einem anderen Server, über den Bot. **Bot Owner Only!** | `.send serverid|u:user_id Send this to a user!` oder `.send serverid|c:channel_id Send this to a channel!`")
                     .Parameter ("ids",ParameterType.Required)
                     .Parameter ("msg",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
@@ -938,7 +938,7 @@ namespace MidnightBot.Modules.Administration
                     });
 
                 cgb.CreateCommand (Prefix + "sendmsg")
-                   .Description ($"Sendet eine Private Nachricht an einen User vom Bot aus.**Bot Owner Only**\n**Benutzung**: {Prefix}sendmsg @Username Nachricht")
+                   .Description ($"Sendet eine Private Nachricht an einen User vom Bot aus.**Bot Owner Only** | {Prefix}sendmsg @Username Nachricht")
                    .Parameter ("user",ParameterType.Required)
                    .Parameter ("msg",ParameterType.Unparsed)
                    .AddCheck (SimpleCheckers.OwnerOnly ())
@@ -966,7 +966,7 @@ namespace MidnightBot.Modules.Administration
                    });
 
                 cgb.CreateCommand (Prefix + "announce")
-                   .Description ($"Sends a message to all servers' general channel bot is connected to.**Bot Owner Only!**\n**Benutzung**: {Prefix}announce Useless spam")
+                   .Description ($"Sends a message to all servers' general channel bot is connected to.**Bot Owner Only!** | {Prefix}announce Useless spam")
                    .Parameter ("msg",ParameterType.Unparsed)
                    .AddCheck (SimpleCheckers.OwnerOnly ())
                    .Do (async e =>
@@ -993,7 +993,7 @@ namespace MidnightBot.Modules.Administration
                      });
 
                 cgb.CreateCommand (Prefix + "leave")
-                     .Description ("Leaves a server with a supplied ID.\n**Benutzung**: `.leave 493243292839`")
+                     .Description ("Leaves a server with a supplied ID. | `.leave 493243292839`")
                      .Parameter ("num",ParameterType.Required)
                      .AddCheck (SimpleCheckers.OwnerOnly ())
                      .Do (async e =>
@@ -1008,7 +1008,7 @@ namespace MidnightBot.Modules.Administration
                      });
 
                 cgb.CreateCommand(Prefix + "savechat")
-                    .Description($"Speichert eine Anzahl an Nachrichten in eine Textdate und sendet sie zu dir. **Bot Owner Only**\n**Benutzung**: `{Prefix}chatsave 150`")
+                    .Description($"Speichert eine Anzahl an Nachrichten in eine Textdate und sendet sie zu dir. **Bot Owner Only** | `{Prefix}chatsave 150`")
                     .Parameter("cnt", ParameterType.Required)
                     .AddCheck(SimpleCheckers.OwnerOnly())
                     .Do(async e =>

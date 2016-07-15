@@ -75,7 +75,7 @@ namespace MidnightBot.Modules.Searches.Commands
         internal override void Init(CommandGroupBuilder cgb)
         {
             cgb.CreateCommand(Module.Prefix + "lolchamp")
-                  .Description("Überprüft die Statistiken eines LOL Champions. Bei Leerzeichen zusammenschreiben. Optionale Rolle.\n**Benutzung**:~lolchamp Riven or ~lolchamp Annie sup")
+                  .Description("Überprüft die Statistiken eines LOL Champions. Bei Leerzeichen zusammenschreiben. Optionale Rolle. |~lolchamp Riven or ~lolchamp Annie sup")
                   .Parameter("champ", ParameterType.Required)
                   .Parameter("position", ParameterType.Unparsed)
                   .Do(async e => 

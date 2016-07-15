@@ -30,7 +30,7 @@ namespace MidnightBot.Modules.Searches.Commands
                 });
 
             cgb.CreateCommand(Prefix + "memegen")
-                .Description("Erstellt ein Meme von Memelist mit Top und Bottom Text.\n**Benutzung**: `~memegen biw \"gets iced coffee\" \"in the winter\"`")
+                .Description("Erstellt ein Meme von Memelist mit Top und Bottom Text. | `~memegen biw \"gets iced coffee\" \"in the winter\"`")
                 .Parameter("meme", ParameterType.Required)
                 .Parameter("toptext", ParameterType.Required)
                 .Parameter("bottext", ParameterType.Required)

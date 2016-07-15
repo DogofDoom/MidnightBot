@@ -1,6 +1,7 @@
 {
   "DontJoinServers": true,
   "ForwardMessages": true,
+  "ForwardToAllOwners": false,
   "IsRotatingStatus": false,
   "BufferSize": 4194304,
   "RemindMessageFormat": "❗⏰**Mir wurde von %user% aufgetragen, dich an '%message%' zu erinnern.**⏰❗",
@@ -120,6 +121,6 @@
   ],
   "CurrencySign": ":euro:",
   "CurrencyName": "Euro",
-  "DMHelpString": "Gib `-h` ein für Hilfe.",
+  "DMHelpString": "",
   "HelpString": "Du kannst den Befehl `{0}modules` benutzen, um eine Liste aller Module zu sehen.\nDu kannst den Befehl `{0}commands ModuleName`\n(zum Beispiel `{0}commands Administration`) benutzen, um eine Liste aller Befehle in diesem Modul zu sehen.\nUm einen speziellen Befehl zu sehen kannst du `{0}h Command name` (zum Beispiel `-h !m q`) benutzen.\n\n\n**LISTE DER BEFEHLE KANN BEI DIESEM LINK GEFUNDEN WERDEN**\n<https://github.com/Midnight-Myth/MidnightBot/blob/master/commandlist.md>\n\n\nMidnightBot Support Server: <https://discord.gg/0p3mZ7JeMSzGdT7L>"
 }

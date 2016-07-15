@@ -14,7 +14,7 @@ namespace MidnightBot.Modules.Translator
         {
             cgb.CreateCommand (Module.Prefix + "translate")
                 .Alias (Module.Prefix + "trans")
-                .Description ("Übersetzt Text von>zu. Von der gegebenen Sprache in die Zielsprache.\n**Benutzung**:  'Prefix'trans en>de This is some text.")
+                .Description ("Übersetzt Text von>zu. Von der gegebenen Sprache in die Zielsprache. |  'Prefix'trans en>de This is some text.")
                 .Parameter ("langs",ParameterType.Required)
                 .Parameter ("text",ParameterType.Unparsed)
                 .Do ( TranslateFunc());

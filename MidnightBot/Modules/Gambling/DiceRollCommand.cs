@@ -21,11 +21,11 @@ namespace MidnightBot.Modules.Gambling
         {
             cgb.CreateCommand (Module.Prefix + "roll")
                 .Description ("Würfelt von 0-100. Wenn du eine Zahl [x] angibst werden bis zu 30 normale Würfel geworfen." +
-                              " Wenn du 2 Zahlen mit einem d trennst (xdy) werden x Würfel von 0 bis y geworfen.\n**Benutzung**: $roll oder $roll 7 oder $roll 3d5")
+                              " Wenn du 2 Zahlen mit einem d trennst (xdy) werden x Würfel von 0 bis y geworfen. | $roll oder $roll 7 oder $roll 3d5")
                 .Parameter ("num",ParameterType.Optional)
                 .Do (RollFunc ());
             cgb.CreateCommand (Module.Prefix + "nroll")
-                .Description ("Würfelt in einer gegebenen Zahlenreichweite.\n**Benutzung**: `$nroll 5` (rolls 0-5) or `$nroll 5-15`")
+                .Description ("Würfelt in einer gegebenen Zahlenreichweite. | `$nroll 5` (rolls 0-5) or `$nroll 5-15`")
                 .Parameter ("range",ParameterType.Required)
                 .Do (NRollFunc ());
         }

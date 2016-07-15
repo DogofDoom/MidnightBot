@@ -73,7 +73,7 @@ namespace MidnightBot.Modules.Administration.Commands
 
             cgb.CreateCommand (Module.Prefix + "repeat")
                 .Description ("Wiederholt eine Nachricht alle X Minuten. Falls nicht spezifiziert, " +
-                             "Wiederholung ist deaktiviert. Benötigt 'manage messages'.\n**Benutzung**:`.repeat 5 Hello there`")
+                             "Wiederholung ist deaktiviert. Benötigt 'manage messages'. |`.repeat 5 Hello there`")
                 .Parameter ("minutes",ParameterType.Optional)
                 .Parameter ("msg",ParameterType.Unparsed)
                 .AddCheck (SimpleCheckers.ManageMessages ())

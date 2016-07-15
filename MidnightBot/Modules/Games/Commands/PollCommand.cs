@@ -23,7 +23,7 @@ namespace MidnightBot.Modules.Games.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "poll")
-                  .Description ("Startet eine Umfrage, Nur Personen mit 'Manage Server' Berechtigungen können dies tun.\n**Benutzung**: >poll Question?;Answer1;Answ 2;A_3")
+                  .Description ("Startet eine Umfrage, Nur Personen mit 'Manage Server' Berechtigungen können dies tun. | >poll Question?;Answer1;Answ 2;A_3")
                   .Parameter ("allargs",ParameterType.Unparsed)
                   .Do (async e =>
                   {

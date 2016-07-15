@@ -87,7 +87,7 @@ namespace MidnightBot.Modules.Utility.Commands
                 .Description ("Sendet nach einer bestimmten Zeit eine Nachricht in den Channel. " +
                               "Erstes Argument ist me/here/'channelname'. Zweites Argument ist die Zeit in absteigender Reihenfolge (mo>w>d>h>m) Beispiel: 1w5d3h10m. " +
                               "Drittes Argument ist eine (Multiwort)Nachricht. " +
-                              "\n**Benutzung**: `.remind me 1d5h Do something` or `.remind #general Start now!`")
+                              " | `.remind me 1d5h Do something` or `.remind #general Start now!`")
                 .Parameter ("meorchannel",ParameterType.Required)
                 .Parameter ("time",ParameterType.Required)
                 .Parameter ("message",ParameterType.Unparsed)

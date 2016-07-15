@@ -163,8 +163,9 @@ namespace MidnightBot.Classes
         }
 
         [JsonIgnore]
-        private ObservableCollection<ulong> generateCurrencyChannels;
-        public ObservableCollection<ulong> GenerateCurrencyChannels {
+        private ObservableConcurrentDictionary<ulong, int> generateCurrencyChannels;
+        public ObservableConcurrentDictionary<ulong, int> GenerateCurrencyChannels
+        {
             get { return generateCurrencyChannels; }
             set {
                 generateCurrencyChannels = value;
@@ -224,7 +225,7 @@ namespace MidnightBot.Classes
         {
             ListOfSelfAssignableRoles = new ObservableCollection<ulong> ();
             ObservingStreams = new ObservableCollection<StreamNotificationConfig> ();
-            GenerateCurrencyChannels = new ObservableCollection<ulong> ();
+            GenerateCurrencyChannels = new ObservableConcurrentDictionary<ulong, int>();
             VoiceChannelLog = new ObservableConcurrentDictionary<ulong,ulong> ();
         }
 

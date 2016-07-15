@@ -95,7 +95,7 @@ namespace MidnightBot.Classes.Help.Commands
                 .FirstOrDefault(c => c.Text.ToLowerInvariant().Equals(comToFind) ||
                                         c.Aliases.Select(a => a.ToLowerInvariant()).Contains(comToFind));
             if (com != null)
-                await e.Channel.SendMessage($"`Hilfe für '{com.Text}':` **{com.Description}**").ConfigureAwait(false);
+                await e.Channel.SendMessage($"**__Hilfe für `{com.Text}`__ / __`{("" + com.Aliases.FirstOrDefault() + "" ?? "")}`__**\n**Beschreibung:** {com.Description.Replace("|", "\n**Benutzung:**")}").ConfigureAwait(false);
         }).ConfigureAwait(false);
     };
     
@@ -133,7 +133,7 @@ Version: `{MidnightStats.Instance.BotVersion}`";
                 helpstr += PrintCommandHelp (com);
             }
             helpstr = helpstr.Replace (MidnightBot.BotMention,"@BotName");
-            helpstr = helpstr.Replace ("\n**Benutzung**:"," | ").Replace ("**Benutzung**:"," | ").Replace ("**Beschreibung:**"," | ").Replace ("\n|"," |  \n");
+            helpstr = helpstr.Replace (" |"," | ").Replace ("**Benutzung**:"," | ").Replace ("**Beschreibung:**"," | ").Replace ("\n|"," |  \n");
 #if DEBUG
             File.WriteAllText ("../../../commandlist.md",helpstr);
 #else
@@ -146,11 +146,11 @@ Version: `{MidnightStats.Instance.BotVersion}`";
         {
             cgb.CreateCommand (Module.Prefix + "h")
                 .Alias (Module.Prefix + "help",MidnightBot.BotMention + " help",MidnightBot.BotMention + " h","~h")
-                .Description ("Hilfe-Befehl.\n**Benutzung**: '-h !m q' or just '-h' ")
+                .Description ("Hilfe-Befehl. | '-h !m q' or just '-h' ")
                 .Parameter ("module",ParameterType.Unparsed)
                 .Do (HelpFunc ());
             cgb.CreateCommand (Module.Prefix + "hh")
-                .Description ("Hilfe-Befehl.\n**Benutzung**: '-hh !m q' or just '-h' ")
+                .Description ("Hilfe-Befehl. | '-hh !m q' or just '-h' ")
                 .Parameter ("command",ParameterType.Unparsed)
                 .Do (NewHelpFunc ());
             cgb.CreateCommand (Module.Prefix + "hgit")

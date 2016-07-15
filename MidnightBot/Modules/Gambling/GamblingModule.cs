@@ -61,7 +61,7 @@ namespace MidnightBot.Modules.Gambling
                     });
 
                cgb.CreateCommand (Prefix + "award")
-                   .Description (string.Format ($"Gibt jemanden eine bestimmte Anzahl an {MidnightBot.Config.CurrencyName}. **Bot Owner Only!**\n**Benutzung**: $award 5 @Benutzer"))
+                   .Description (string.Format ($"Gibt jemanden eine bestimmte Anzahl an {MidnightBot.Config.CurrencyName}. **Bot Owner Only!** | $award 5 @Benutzer"))
                    .AddCheck (SimpleCheckers.OwnerOnly ())
                    .Parameter ("amount",ParameterType.Required)
                    .Parameter ("receiver",ParameterType.Unparsed)
@@ -83,7 +83,7 @@ namespace MidnightBot.Modules.Gambling
                    });
 
                cgb.CreateCommand (Prefix + "take")
-                   .Description (string.Format ($"Entfernt eine bestimmte Anzahl an {MidnightBot.Config.CurrencyName} von jemanden. **Bot Owner Only!**\n**Benutzung**: $take 5 @Benutzer"))
+                   .Description (string.Format ($"Entfernt eine bestimmte Anzahl an {MidnightBot.Config.CurrencyName} von jemanden. **Bot Owner Only!** | $take 5 @Benutzer"))
                    .AddCheck (SimpleCheckers.OwnerOnly ())
                    .Parameter ("amount",ParameterType.Required)
                    .Parameter ("rektperson",ParameterType.Unparsed)
@@ -99,13 +99,13 @@ namespace MidnightBot.Modules.Gambling
                        if (mentionedUser == null)
                            return;
 
-                       FlowersHandler.RemoveFlowers (mentionedUser,$"Taken by bot owner.({e.User.Name}/{e.User.Id})",(int)amount);
+                       await FlowersHandler.RemoveFlowers (mentionedUser,$"Taken by bot owner.({e.User.Name}/{e.User.Id})",(int)amount);
 
                        await e.Channel.SendMessage ($"{e.User.Mention} erfolgreich {amount} {MidnightBot.Config.CurrencyName} von {mentionedUser.Mention} entfernt!").ConfigureAwait (false);
                    });
 
                cgb.CreateCommand (Prefix + "give")
-                        .Description (string.Format ($"Gibt jemanden eine Anzahl {MidnightBot.Config.CurrencyName}.\n**Benutzung**: $give 5 @Benutzer"))
+                        .Description (string.Format ($"Gibt jemanden eine Anzahl {MidnightBot.Config.CurrencyName}. | $give 5 @Benutzer"))
                         .Parameter ("amount",ParameterType.Required)
                         .Parameter ("receiver",ParameterType.Unparsed)
                         .Do (async e =>
@@ -129,7 +129,7 @@ namespace MidnightBot.Modules.Gambling
                                 return;
                             }
 
-                            FlowersHandler.RemoveFlowers (e.User,"Gift",(int)amount);
+                            await FlowersHandler.RemoveFlowers (e.User,"Gift",(int)amount);
                             await FlowersHandler.AddFlowersAsync (mentionedUser,"Gift",(int)amount).ConfigureAwait (false);
 
                             await e.Channel.SendMessage ($"{e.User.Mention} erfolgreich {amount}{MidnightBot.Config.CurrencyName} gesendet an {mentionedUser.Mention}!").ConfigureAwait (false);
@@ -146,15 +146,14 @@ namespace MidnightBot.Modules.Gambling
                         await e.Channel.SendMessage
                         (
                             richest.Aggregate (new StringBuilder (
-$@"```xl
-┏━━━━━━━━━━━━━━━━━━━┳━━━━━━━┓
-┃        Id         ┃  $$$  ┃
+    $@"```xl
+┏━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━┓
+┃        Id           ┃  $$$  ┃
 "),
                             ( cur,cs ) => cur.AppendLine (
-$@"┣━━━━━━━━━━━━━━━━━━━╋━━━━━━━┫
-┃{cs.UserId,-18} ┃ {cs.Value,5} ┃")
-                                ).ToString () + "┗━━━━━━━━━━━━━━━━━━━┻━━━━━━━┛```");
-                    });
+    $@"┣━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━┫
+┃{(e.Server.Users.Where(u => u.Id == (ulong)cs.UserId).FirstOrDefault()?.Name.TrimTo(18, true) ?? cs.UserId.ToString()),-20} ┃ {cs.Value,5} ┃")
+                                    ).ToString() + "┗━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━┛```");                    });
            });
         }
 

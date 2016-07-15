@@ -21,7 +21,7 @@ namespace MidnightBot.Modules.Games.Commands
             cgb.CreateCommand (Module.Prefix + "t")
                 .Description ($"Startet ein Quiz. Du kannst nohint hinzufügen um Tipps zu verhindern." +
                                "Erster Spieler mit 10 Punkten gewinnt. 30 Sekunden je Frage." +
-                              $"\n**Benutzung**:`{Module.Prefix}t nohint` oder `{Module.Prefix}t 5 nohint`")
+                              $" |`{Module.Prefix}t nohint` oder `{Module.Prefix}t 5 nohint`")
                  .Parameter ("args",ParameterType.Multiple)
                  .AddCheck(SimpleCheckers.ManageMessages())
                  .Do (async e =>

@@ -32,7 +32,7 @@ namespace MidnightBot.Modules.Searches.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "convert")
-                .Description ("Konvertiert Einheiten von>zu.\n**Benutzung**: `~convert m>km 1000`")
+                .Description ("Konvertiert Einheiten von>zu. | `~convert m>km 1000`")
                 .Parameter ("from-to",ParameterType.Required)
                 .Parameter ("quantity",ParameterType.Optional)
                 .Do (ConvertFunc ());

@@ -101,7 +101,7 @@ namespace MidnightBot.Modules.Utility
                     .Description ("Zeigt ein paar Statisitken über MidnightBot.")
                     .Do (async e =>
                     {
-                        await e.Channel.SendMessage (await MidnightStats.Instance.GetStats ());
+                        await e.Channel.SendMessage (await MidnightStats.Instance.GetStats ()).ConfigureAwait(false);
                     });
 
                 cgb.CreateCommand (Prefix + "dysyd")

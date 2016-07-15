@@ -34,7 +34,7 @@ namespace MidnightBot.Modules.Conversations
                 cgb.AddCheck (PermissionChecker.Instance);
 
                 cgb.CreateCommand ("..")
-                    .Description ("Fügt ein neues Zitat mit Keyword (einzelnes Wort) und Nachricht (kein Limit).\n**Benutzung**: .. abc My message")
+                    .Description ("Fügt ein neues Zitat mit Keyword (einzelnes Wort) und Nachricht (kein Limit). | .. abc My message")
                     .Parameter ("keyword",ParameterType.Required)
                     .Parameter ("text",ParameterType.Unparsed)
                     .Do (async e =>
@@ -56,7 +56,7 @@ namespace MidnightBot.Modules.Conversations
 
 
                 cgb.CreateCommand ("...")
-                    .Description ("Zeigt ein zufälliges Zitat eines Benutzers.\n**Benutzung**: .. abc")
+                    .Description ("Zeigt ein zufälliges Zitat eines Benutzers. | .. abc")
                     .Parameter ("keyword",ParameterType.Required)
                     .Do (async e =>
                     {
@@ -76,7 +76,7 @@ namespace MidnightBot.Modules.Conversations
 
                 cgb.CreateCommand ("..qdel")
                     .Alias ("..quotedelete")
-                    .Description ("Löscht alle Zitate mit angegebenen Keyword. Du musst entweder der Bot-Besitzer oder der Ersteller des Quotes sein um es zu löschen.\n**Benutzung**: `..qdel abc`")
+                    .Description ("Löscht alle Zitate mit angegebenen Keyword. Du musst entweder der Bot-Besitzer oder der Ersteller des Quotes sein um es zu löschen. | `..qdel abc`")
                     .Parameter ("quote",ParameterType.Required)
                     .Do (async e =>
                     {
@@ -96,7 +96,7 @@ namespace MidnightBot.Modules.Conversations
 
                 cgb.CreateCommand ("..qdelothers")
                     .Alias ("..quotedeleteothers")
-                    .Description ("Löscht alle Zitate mit eigenem Namen als Keyword, welche von anderen geaddet wurden. \n**Benutzung**: `..qdelothers`")
+                    .Description ("Löscht alle Zitate mit eigenem Namen als Keyword, welche von anderen geaddet wurden.  | `..qdelothers`")
                     .Do (async e =>
                     {
                         var text = e.User.Name.ToLowerInvariant ();
@@ -109,7 +109,7 @@ namespace MidnightBot.Modules.Conversations
                     });
 
                 cgb.CreateCommand ("..qshow")
-                    .Description ("Zeigt alle Zitate mit angegebenen Keyword.\n**Benutzung**: `..qshow abc`")
+                    .Description ("Zeigt alle Zitate mit angegebenen Keyword. | `..qshow abc`")
                     .Parameter ("quote",ParameterType.Required)
                     .Do (async e =>
                     {
@@ -139,15 +139,6 @@ namespace MidnightBot.Modules.Conversations
                 cgb.AddCheck (PermissionChecker.Instance);
 
                 commands.ForEach (cmd => cmd.Init (cgb));
-
-                cgb.CreateCommand ("uptime")
-                    .Description ($"Zeigt wie lange {BotName} schon läuft.")
-                    .Do (async e =>
-                    {
-                        var time = (DateTime.Now - Process.GetCurrentProcess ().StartTime);
-                        var str = string.Format ("Ich bin online seit: {0} Tagen, {1} Stunden, und {2} Minuten.",time.Days,time.Hours,time.Minutes);
-                        await e.Channel.SendMessage (str).ConfigureAwait (false);
-                    });
 
                 cgb.CreateCommand ("die")
                     .Description ("Funktioniert nur für den Owner. Fährt den Bot herunter.")
@@ -200,7 +191,7 @@ namespace MidnightBot.Modules.Conversations
 
                 cgb.CreateCommand ("insult")
                     .Parameter ("mention",ParameterType.Required)
-                    .Description ($"Beleidigt @X Person.\n**Benutzung**: @{BotName} insult @X.")
+                    .Description ($"Beleidigt @X Person. | @{BotName} insult @X.")
                     .Do (async e =>
                     {
                         var u = e.Channel.FindUsers (e.GetArg ("mention")).FirstOrDefault ();
@@ -247,7 +238,7 @@ namespace MidnightBot.Modules.Conversations
                     });
 
                 cgb.CreateCommand ("praise")
-                    .Description ($"Lobt @X Person.\n**Benutzung**: @{BotName} praise @X.")
+                    .Description ($"Lobt @X Person. | @{BotName} praise @X.")
                     .Parameter ("mention",ParameterType.Required)
                     .Do (async e =>
                     {
@@ -277,7 +268,7 @@ namespace MidnightBot.Modules.Conversations
                     });
 
                 cgb.CreateCommand ("fire")
-                    .Description ($"Zeigt eine unicode Feuer Nachricht. Optionaler Parameter [x] sagt ihm wie oft er das Feuer wiederholen soll.\n**Benutzung**: @{BotName} fire [x]")
+                    .Description ($"Zeigt eine unicode Feuer Nachricht. Optionaler Parameter [x] sagt ihm wie oft er das Feuer wiederholen soll. | @{BotName} fire [x]")
                     .Parameter ("times",ParameterType.Optional)
                     .Do (async e =>
                     {
@@ -297,48 +288,6 @@ namespace MidnightBot.Modules.Conversations
                             str += firestr;
                         }
                         await e.Channel.SendMessage (str).ConfigureAwait (false);
-                    });
-
-                cgb.CreateCommand ("slm")
-                    .Description ("Zeigt die Nachricht in der du in diesem Channel zuletzt erwähnt wurdest (checked die letzten 10k Nachrichten)")
-                    .Do (async e =>
-                    {
-
-                        Message msg = null;
-                        var msgs = (await e.Channel.DownloadMessages (100).ConfigureAwait (false))
-                                    .Where (m => m.MentionedUsers.Contains (e.User))
-                                    .OrderByDescending (m => m.Timestamp);
-                        if (msgs.Any ())
-                            msg = msgs.First ();
-                        else
-                        {
-                            var attempt = 0;
-                            Message lastMessage = null;
-                            while (msg == null && attempt++ < 5)
-                            {
-                                var msgsarr = await e.Channel.DownloadMessages (100,lastMessage?.Id).ConfigureAwait (false);
-                                msg = msgsarr
-                                        .Where (m => m.MentionedUsers.Contains (e.User))
-                                        .OrderByDescending (m => m.Timestamp)
-                                        .FirstOrDefault ();
-                                lastMessage = msgsarr.OrderBy (m => m.Timestamp).First ();
-                            }
-                        }
-                        tester = 0;
-                        //var msgs = (await e.Channel.DownloadMessages (100)).Where (m => m.User.Id == MidnightBot.client.CurrentUser.Id);
-                        foreach (var m in (await e.Channel.DownloadMessages (10)).Where (m => m.User.Id == e.User.Id))
-                        {
-                            if (tester == 0)
-                            {
-                                await m.Delete ();
-                                tester++;
-                            }
-                        }
-                        if (msg != null)
-                            await e.User.SendMessage ($"Die letzte Nachricht in der du erwähnt wurdest war um {msg.Timestamp}\n**Nachricht von {msg.User.Name}:** {msg.RawText}")
-                            .ConfigureAwait (false);
-                        else
-                            await e.User.SendMessage ("Ich kann keine Nachricht finden, in der du erwähnt wirst.").ConfigureAwait (false);
                     });
 
                 cgb.CreateCommand ("dump")

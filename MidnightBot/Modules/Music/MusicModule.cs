@@ -41,7 +41,7 @@ namespace MidnightBot.Modules.Music
                 cgb.CreateCommand (Prefix + "next")
                     .Alias (Prefix + "n")
                     .Alias (Prefix + "skip")
-                    .Description ("Geht zum nächsten Song in der Liste. Du musst im gleichen Voice-Channel wie der Bot sein.\n**Benutzung**: `!n`")
+                    .Description ("Geht zum nächsten Song in der Liste. Du musst im gleichen Voice-Channel wie der Bot sein. | `!n`")
                     .Do (e =>
                      {
                          MusicPlayer musicPlayer;
@@ -53,13 +53,16 @@ namespace MidnightBot.Modules.Music
 
                 cgb.CreateCommand (Prefix + "stop")
                     .Alias (Prefix + "s")
-                    .Description ("Stoppt die Musik komplett. Bleibt im Channel.Du musst im gleichen Voice-Channel wie der Bot sein.\n**Benutzung**: `!s`")
+                    .Description ("Stoppt die Musik komplett. Bleibt im Channel.Du musst im gleichen Voice-Channel wie der Bot sein. | `!s`")
                     .Do (e =>
                      {
                         MusicPlayer musicPlayer;
                         if (!MusicPlayers.TryGetValue(e.Server, out musicPlayer)) return;
-                        if (e.User.VoiceChannel == musicPlayer.PlaybackVoiceChannel)
-                            musicPlayer.Stop();
+                         if (e.User.VoiceChannel == musicPlayer.PlaybackVoiceChannel)
+                         {
+                             musicPlayer.Autoplay = false;
+                             musicPlayer.Stop();
+                         }
                      });
 
                 cgb.CreateCommand (Prefix + "destroy")
@@ -94,11 +97,11 @@ namespace MidnightBot.Modules.Music
                     .Alias (Prefix + "q")
                     .Alias (Prefix + "yq")
                     .Alias (Prefix + "songrequest")
-                    .Description ("Listet einen Song mit Keyword oder Link. Bot joint dem eigenen Voice-Channel. **Du musst in einem Voice-Channel sein!**.\n**Benutzung**: `!q Dream Of Venice`")
+                    .Description ("Listet einen Song mit Keyword oder Link. Bot joint dem eigenen Voice-Channel. **Du musst in einem Voice-Channel sein!**. | `!q Dream Of Venice`")
                     .Parameter ("query",ParameterType.Unparsed)
                     .Do (async e =>
                      {
-                         await QueueSong (e.Channel,e.User.VoiceChannel,e.GetArg ("query")).ConfigureAwait (false);
+                         await QueueSong(e.User, e.Channel, e.User.VoiceChannel, e.GetArg("query")).ConfigureAwait(false);
                          if (e.Server.CurrentUser.GetPermissions (e.Channel).ManageMessages)
                          {
                              await Task.Delay (10000).ConfigureAwait (false);
@@ -106,24 +109,24 @@ namespace MidnightBot.Modules.Music
                          }
                      });
 
-                //cgb.CreateCommand("soundcloudqueue")
-                //    .Alias("sq")
-                //    .Description("Queue a soundcloud song using keywords. Bot will join your voice channel." +
-                //                 "**You must be in a voice channel**.\n**Usage**: `!m sq Dream Of Venice`")
-                //    .Parameter("query", ParameterType.Unparsed)
-                //    .Do(async e =>
-                //    {
-                //        await QueueSong(e.Channel, e.User.VoiceChannel, e.GetArg("query")).ConfigureAwait(false);
-                //        if (e.Server.CurrentUser.GetPermissions(e.Channel).ManageMessages)
-                //        {
-                //            await Task.Delay(10000).ConfigureAwait(false);
-                //            await e.Message.Delete().ConfigureAwait(false);
-                //        }
-                //    });
+                cgb.CreateCommand("soundcloudqueue")
+                    .Alias("sq")
+                    .Description("Queue a soundcloud song using keywords. Bot will join your voice channel." +
+                                 "**You must be in a voice channel**. | `!m sq Dream Of Venice`")
+                    .Parameter("query", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        await QueueSong(e.User, e.Channel, e.User.VoiceChannel, e.GetArg("query"), musicType: MusicType.Soundcloud).ConfigureAwait(false);
+                        if (e.Server.CurrentUser.GetPermissions(e.Channel).ManageMessages)
+                        {
+                            await Task.Delay(10000).ConfigureAwait(false);
+                            await e.Message.Delete().ConfigureAwait(false);
+                        }
+                    });
 
                 cgb.CreateCommand (Prefix + "listqueue")
                     .Alias (Prefix + "lq")
-                    .Description ("Zeigt bis zu 15 Songs per Seite. Standard Seite ist 1.\n**Benutzung**: `!lq` or `!lq 2`")
+                    .Description ("Zeigt bis zu 15 Songs per Seite. Standard Seite ist 1. | `!lq` or `!lq 2`")
                     .Parameter ("page",ParameterType.Optional)
                     .Do (async e =>
                      {
@@ -197,7 +200,7 @@ namespace MidnightBot.Modules.Music
 
                 cgb.CreateCommand (Prefix + "defvol")
                     .Alias (Prefix + "dv")
-                    .Description ("Setzt die Standardlautstärke, wenn Musik startet. (0-100). Muss nach neustart neu eingestellt werden.\n**Benutzung**: !dv 80")
+                    .Description ("Setzt die Standardlautstärke, wenn Musik startet. (0-100). Muss nach neustart neu eingestellt werden. | !dv 80")
                     .Parameter ("val",ParameterType.Required)
                     .Do (async e =>
                      {
@@ -226,7 +229,7 @@ namespace MidnightBot.Modules.Music
                      });
 
                 cgb.CreateCommand (Prefix + "max")
-                    .Description ("Setzt de Lautstärke auf 100% (Echte Höchstgrenze ist bei 150%).")
+                    .Description ("Setzt de Lautstärke auf 100%.")
                     .Do (e =>
                      {
                          MusicPlayer musicPlayer;
@@ -282,7 +285,7 @@ namespace MidnightBot.Modules.Music
                 cgb.CreateCommand (Prefix + "playlist")
                     .Alias (Prefix + "pl")
                     .Alias (Prefix + "playlistrequest")
-                    .Description ("Listet bis zu 50 Lieder aus einer Youtubeplaylist, oder aus einem Suchbegriff.")
+                    .Description ("Listet bis zu 500 Lieder aus einer Youtubeplaylist, oder aus einem Suchbegriff.")
                     .Parameter ("playlist",ParameterType.Unparsed)
                     .Do (async e =>
                      {
@@ -303,7 +306,7 @@ namespace MidnightBot.Modules.Music
                          var ids = await SearchHelper.GetVideoIDs (plId,500).ConfigureAwait (false);
                          if (ids == null || ids.Count == 0)
                          {
-                             await e.Channel.SendMessage ($"🎵`Keine Lieder gefunden.`");
+                             await e.Channel.SendMessage ($"🎵`Keine Lieder gefunden.`").ConfigureAwait(false);
                              return;
                          }
                          var idArray = ids as string[] ?? ids.ToArray ();
@@ -314,8 +317,10 @@ namespace MidnightBot.Modules.Music
                          {
                              try
                              {
-                                 await QueueSong (e.Channel,e.User.VoiceChannel,id,true).ConfigureAwait (false);
+                                 await QueueSong(e.User, e.Channel, e.User.VoiceChannel, id, true).ConfigureAwait(false);
                              }
+                             catch (PlaylistFullException)
+                             { break; }
                              catch { }
                          }
                          await msg.Edit ("🎵 `Playlist Listung erledigt.`").ConfigureAwait (false);
@@ -323,7 +328,7 @@ namespace MidnightBot.Modules.Music
 
                 cgb.CreateCommand("soundcloudpl")
                     .Alias("scpl")
-                    .Description("Listet eine SounCloud Playlist per Link.\n**Benutzung**: `!scpl https://soundcloud.com/saratology/sets/symphony`")
+                    .Description("Listet eine SounCloud Playlist per Link. | `!scpl https://soundcloud.com/saratology/sets/symphony`")
                     .Parameter("pl", ParameterType.Unparsed)
                     .Do(async e =>
                     {
@@ -332,8 +337,8 @@ namespace MidnightBot.Modules.Music
                         if (string.IsNullOrWhiteSpace(pl))
                             return;
 
-                        var scvids = JObject.Parse(await SearchHelper.GetResponseStringAsync($"http://api.soundcloud.com/resolve?url={pl}&client_id={MidnightBot.Creds.SoundCloudClientID}"))["tracks"].ToObject<SoundCloudVideo[]>();
-                        await QueueSong(e.Channel, e.User.VoiceChannel, scvids[0].TrackLink);
+                        var scvids = JObject.Parse(await SearchHelper.GetResponseStringAsync($"http://api.soundcloud.com/resolve?url={pl}&client_id={MidnightBot.Creds.SoundCloudClientID}").ConfigureAwait(false))["tracks"].ToObject<SoundCloudVideo[]>();
+                        await QueueSong(e.User, e.Channel, e.User.VoiceChannel, scvids[0].TrackLink).ConfigureAwait(false);
 
                         MusicPlayer mp;
                         if (!MusicPlayers.TryGetValue(e.Server, out mp))
@@ -341,14 +346,18 @@ namespace MidnightBot.Modules.Music
 
                         foreach (var svideo in scvids.Skip(1))
                         {
-                            mp.AddSong(new Song(new Classes.SongInfo
+                            try
                             {
-                                Title = svideo.FullName,
-                                Provider = "SoundCloud",
-                                Uri = svideo.StreamLink,
-                                ProviderType = MusicType.Normal,
-                                Query = svideo.TrackLink,
-                            }));
+                                mp.AddSong(new Song(new Classes.SongInfo
+                                {
+                                    Title = svideo.FullName,
+                                    Provider = "SoundCloud",
+                                    Uri = svideo.StreamLink,
+                                    ProviderType = MusicType.Normal,
+                                    Query = svideo.TrackLink,
+                                }), e.User.Name);
+                            }
+                            catch (PlaylistFullException) { break; }
                         }
                     });
 
@@ -368,7 +377,15 @@ namespace MidnightBot.Modules.Music
                                                 .Where (x => !x.Attributes.HasFlag (FileAttributes.Hidden | FileAttributes.System));
                              foreach (var file in fileEnum)
                              {
-                                 await QueueSong (e.Channel,e.User.VoiceChannel,file.FullName,true,MusicType.Local).ConfigureAwait (false);
+                                 try
+                                {
+                                    await QueueSong(e.User, e.Channel, e.User.VoiceChannel, file.FullName, true, MusicType.Local).ConfigureAwait(false);
+                                }
+                                catch (PlaylistFullException)
+                                {
+                                    break;
+                                }
+                                catch { }
                              }
                              await e.Channel.SendMessage ("🎵 `Verzeichnis-Listung komplett.`").ConfigureAwait (false);
                          }
@@ -385,7 +402,7 @@ namespace MidnightBot.Modules.Music
                              await e.Channel.SendMessage ("💢 Du musst in einem Voice-Channel auf diesem Server sein.").ConfigureAwait (false);
                              return;
                          }
-                         await QueueSong (e.Channel,e.User.VoiceChannel,e.GetArg ("radio_link"),musicType: MusicType.Radio).ConfigureAwait (false);
+                         await QueueSong(e.User, e.Channel, e.User.VoiceChannel, e.GetArg("radio_link"), musicType: MusicType.Radio).ConfigureAwait(false);
                          if (e.Server.CurrentUser.GetPermissions (e.Channel).ManageMessages)
                          {
                              await Task.Delay (10000).ConfigureAwait (false);
@@ -395,7 +412,7 @@ namespace MidnightBot.Modules.Music
 
                 cgb.CreateCommand (Prefix + "local")
                     .Alias (Prefix + "lo")
-                    .Description ("Listet einen lokalen Song mit vollen Pfad. **Bot Owner Only!**\n**Benutzung**: `!lo C:/music/mysong.mp3`")
+                    .Description ("Listet einen lokalen Song mit vollen Pfad. **Bot Owner Only!** | `!lo C:/music/mysong.mp3`")
                     .Parameter ("path",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
@@ -403,7 +420,7 @@ namespace MidnightBot.Modules.Music
                          var arg = e.GetArg ("path");
                          if (string.IsNullOrWhiteSpace (arg))
                              return;
-                         await QueueSong (e.Channel,e.User.VoiceChannel,e.GetArg ("path"),musicType: MusicType.Local).ConfigureAwait (false);
+                         await QueueSong(e.User, e.Channel, e.User.VoiceChannel, e.GetArg("path"), musicType: MusicType.Local).ConfigureAwait(false);
                      });
 
                 cgb.CreateCommand (Prefix + "move")
@@ -453,7 +470,7 @@ namespace MidnightBot.Modules.Music
 
                 cgb.CreateCommand(Prefix + "movesong")
                     .Alias(Prefix + "ms")
-                    .Description($"Moves a song from one position to another.\n**Benutzung**: `{Prefix} ms` 5>3")
+                    .Description($"Moves a song from one position to another. | `{Prefix} ms` 5>3")
                     .Parameter("fromto")
                     .Do(async e =>
                     {
@@ -474,7 +491,7 @@ namespace MidnightBot.Modules.Music
                             !int.TryParse(fromtoArr[1], out n2) || n1 < 1 || n2 < 1 || n1 == n2 ||
                             n1 > playlist.Count || n2 > playlist.Count)
                         {
-                            await e.Channel.SendMessage("`Invalid input.`");
+                            await e.Channel.SendMessage("`Invalid input.`").ConfigureAwait(false);
                             return;
                         }
 
@@ -483,7 +500,30 @@ namespace MidnightBot.Modules.Music
                         var nn1 = n2 < n1 ? n1 : n1 - 1;
                         playlist.RemoveAt (nn1);
 
-                        await e.Channel.SendMessage($"🎵`Moved` {s.PrettyName} `from #{n1} to #{n2}`");
+                        await e.Channel.SendMessage($"🎵`Moved` {s.PrettyName} `from #{n1} to #{n2}`").ConfigureAwait(false);
+                    });
+
+                cgb.CreateCommand("setmaxqueue")
+                    .Alias("smq")
+                    .Description($"Setzt eine Maximale Listengröße. Gib 0, oder nichts ein, um kein Limit zu haben.  | `{Prefix} smq` 50 oder `{Prefix} smq`")
+                    .Parameter("size", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        MusicPlayer musicPlayer;
+                        if (!MusicPlayers.TryGetValue(e.Server, out musicPlayer))
+                        {
+                            return;
+                        }
+
+                        var sizeStr = e.GetArg("size")?.Trim();
+                        uint size = 0;
+                        if (string.IsNullOrWhiteSpace(sizeStr) || !uint.TryParse(sizeStr, out size))
+                        {
+                            size = 0;
+                        }
+
+                        musicPlayer.MaxQueueSize = size;
+                        await e.Channel.SendMessage($"🎵 `Max queue set to {(size == 0 ? ("unlimited") : size + " tracks")}`");
                     });
 
                 cgb.CreateCommand (Prefix + "cleanup")
@@ -540,7 +580,7 @@ namespace MidnightBot.Modules.Music
                     });
 
                 cgb.CreateCommand (Prefix + "save")
-                    .Description ("Speichert eine Playlist unter einem bestimmten Namen. Name darf nicht länger als 20 Zeichen sein und darf keine Kommas beinhalten.\n**Benutzung**: `!save classical1`")
+                    .Description ("Speichert eine Playlist unter einem bestimmten Namen. Name darf nicht länger als 20 Zeichen sein und darf keine Kommas beinhalten. | `!save classical1`")
                     .Parameter ("name",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -593,7 +633,7 @@ namespace MidnightBot.Modules.Music
                     });
 
                 cgb.CreateCommand (Prefix + "load")
-                    .Description ("Lädt eine Playlist mit bestimmten Namen.\n**Benutzung**: `!load classical1`")
+                    .Description ("Lädt eine Playlist mit bestimmten Namen. | `!load classical1`")
                     .Parameter ("name",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -638,7 +678,11 @@ namespace MidnightBot.Modules.Music
                         {
                             try
                             {
-                                await QueueSong (textCh,voiceCh,si.Query,true,(MusicType)si.ProviderType).ConfigureAwait (false);
+                                await QueueSong(e.User, textCh, voiceCh, si.Query, true, (MusicType)si.ProviderType).ConfigureAwait(false);
+                            }
+                            catch (PlaylistFullException)
+                            {
+                                break;
                             }
                             catch (Exception ex)
                             {
@@ -649,7 +693,7 @@ namespace MidnightBot.Modules.Music
 
                  cgb.CreateCommand(Prefix + "playlists")
                     .Alias(Prefix + "pls")
-                    .Description("Listet alle Playlisten. Seitenweiße. 20 je Seote. Standard-Seite ist 0.\n**Benutzung**:`!pls 1`")
+                    .Description("Listet alle Playlisten. Seitenweiße. 20 je Seote. Standard-Seite ist 0. |`!pls 1`")
                     .Parameter("num", ParameterType.Optional)
                     .Do(e =>
                     {
@@ -659,14 +703,14 @@ namespace MidnightBot.Modules.Music
                             return;
                         var result = DbHandler.Instance.GetPlaylistData(num);
                         if (result.Count == 0)
-                            e.Channel.SendMessage($"`Keine gespeicherten Playlisten auf Seite {num} gefunden`");
+                            e.Channel.SendMessage($"`Keine gespeicherten Playlisten auf Seite {num} gefunden`").ConfigureAwait(false);
                         else
-                            e.Channel.SendMessage($"```js\n--- Liste der gespeicherten Playlisten ---\n\n" + string.Join("\n", result.Select(r => $"'{r.Name}-{r.Id}' von {r.Creator} ({r.SongCnt} Lieder)")) + $"\n\n        --- Seite {num} ---```");
+                            e.Channel.SendMessage($"```js\n--- Liste der gespeicherten Playlisten ---\n\n" + string.Join("\n", result.Select(r => $"'{r.Name}-{r.Id}' von {r.Creator} ({r.SongCnt} Lieder)")) + $"\n\n        --- Seite {num} ---```").ConfigureAwait(false);
                     });
 
                 cgb.CreateCommand("deleteplaylist")
                     .Alias("delpls")
-                    .Description("Löscht eine gespeicherte Playlist. Nur wenn du sie erstellt hast, oder wenn du der Bot-Owner bist.\n**Benutzung**: `!m delpls animu-5`")
+                    .Description("Löscht eine gespeicherte Playlist. Nur wenn du sie erstellt hast, oder wenn du der Bot-Owner bist. | `!m delpls animu-5`")
                     .Parameter("pl", ParameterType.Required)
                     .Do(async e =>
                     {
@@ -678,7 +722,7 @@ namespace MidnightBot.Modules.Music
                             DbHandler.Instance.Delete<MusicPlaylist>(plnum);
                         else
                             DbHandler.Instance.DeleteWhere<MusicPlaylist>(mp => mp.Id == plnum && (long)e.User.Id == mp.CreatorId);
-                        await e.Channel.SendMessage("`Ok.` :ok:");
+                        await e.Channel.SendMessage("`Ok.` :ok:").ConfigureAwait(false);
                     });
 
                 cgb.CreateCommand (Prefix + "goto")
@@ -705,7 +749,7 @@ namespace MidnightBot.Modules.Music
                         //currentSong.PrintStatusMessage = false;
                         var gotoSong = currentSong.Clone ();
                         gotoSong.SkipTo = skipTo;
-                        musicPlayer.AddSong (gotoSong,0);
+                        musicPlayer.AddSong (gotoSong);
                         musicPlayer.Next ();
 
                         var minutes = (skipTo / 60).ToString ();
@@ -730,7 +774,7 @@ namespace MidnightBot.Modules.Music
                        var curSong = musicPlayer.CurrentSong;
                        if (curSong == null)
                            return;
-                       await e.Channel.SendMessage ($"🎶`Derzeitiges Lied:` <{curSong.SongInfo.Query}>");
+                       await e.Channel.SendMessage ($"🎶`Derzeitiges Lied:` <{curSong.SongInfo.Query}>").ConfigureAwait(false);
                    });
 
                 cgb.CreateCommand(Prefix + "autoplay")
@@ -744,14 +788,14 @@ namespace MidnightBot.Modules.Music
                             return;
 
                         if (!musicPlayer.ToggleAutoplay())
-                            await e.Channel.SendMessage("🎶`Autoplay deaktiviert.`");
+                            await e.Channel.SendMessage("🎶`Autoplay deaktiviert.`").ConfigureAwait(false);
                         else
-                            await e.Channel.SendMessage("🎶`Autoplay aktiviert.`");
+                            await e.Channel.SendMessage("🎶`Autoplay aktiviert.`").ConfigureAwait(false);
                     });
             });
         }
 
-        public static async Task QueueSong ( Channel textCh,Channel voiceCh,string query,bool silent = false,MusicType musicType = MusicType.Normal )
+        public static async Task QueueSong(User queuer, Channel textCh, Channel voiceCh, string query, bool silent = false, MusicType musicType = MusicType.Normal)
         {
             if (voiceCh == null || voiceCh.Server != textCh.Server)
             {
@@ -783,7 +827,7 @@ namespace MidnightBot.Modules.Music
                             lastFinishedMessage = await textCh.SendMessage ($"🎵`Finished`{song.PrettyName}").ConfigureAwait (false);
                             if (mp.Autoplay && mp.Playlist.Count == 0 && song.SongInfo.Provider == "YouTube")
                             {
-                                await QueueSong(textCh, voiceCh, await SearchHelper.GetRelatedVideoId(song.SongInfo.Query), silent, musicType).ConfigureAwait(false);
+                                await QueueSong(queuer, textCh, voiceCh, await SearchHelper.GetRelatedVideoId(song.SongInfo.Query), silent, musicType).ConfigureAwait(false);
                             }
                         }
                         catch (Exception e)
@@ -811,9 +855,21 @@ namespace MidnightBot.Modules.Music
                 };
                 return mp;
             });
-            var resolvedSong = await Song.ResolveSong (query,musicType);
+            Song resolvedSong;
 
-            musicPlayer.AddSong (resolvedSong);
+            try
+            {
+                musicPlayer.ThrowIfQueueFull();
+                resolvedSong = await Song.ResolveSong(query, musicType).ConfigureAwait(false);
+
+                musicPlayer.AddSong(resolvedSong, queuer.Name);
+            }
+            catch (PlaylistFullException)
+            {
+                await textCh.SendMessage($"🎵 `Queue is full at {musicPlayer.MaxQueueSize}/{musicPlayer.MaxQueueSize}.` ");
+                throw;
+            }
+
             if (!silent)
             {
                 var queuedMessage = await textCh.SendMessage ($"🎵`Queued`{resolvedSong.PrettyName} **at** `#{musicPlayer.Playlist.Count}`").ConfigureAwait (false);

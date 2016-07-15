@@ -36,7 +36,7 @@ namespace MidnightBot.Modules.Administration.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "voicenotif")
-                  .Description ("Aktiviert Benachrichtigung wer den Voice-Channel gejoined/verlassen hat.\n**Benutzung**:.voicenotif Karaoke club")
+                  .Description ("Aktiviert Benachrichtigung wer den Voice-Channel gejoined/verlassen hat. |.voicenotif Karaoke club")
                   .Parameter ("voice_name",ParameterType.Unparsed)
                   .Do (DoFunc ());
         }

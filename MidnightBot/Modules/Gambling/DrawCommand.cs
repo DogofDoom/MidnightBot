@@ -19,7 +19,7 @@ namespace MidnightBot.Modules.Gambling
         internal override void Init(CommandGroupBuilder cgb)
         {
             cgb.CreateCommand(Module.Prefix + "draw")
-                .Description("Zieht eine Karte vom Stapel.Wenn du eine Nummer angibst [x], werden bis zu 5 Karten vom Stapel gezogen.\n**Benutzung**: $draw [x]")
+                .Description("Zieht eine Karte vom Stapel.Wenn du eine Nummer angibst [x], werden bis zu 5 Karten vom Stapel gezogen. | $draw [x]")
                 .Parameter("count", ParameterType.Optional)
                 .Do(DrawCardFunc());
 
