@@ -7,7 +7,7 @@ namespace MidnightBot.Classes
     /// Base DiscordCommand Class.
     /// Inherit this class to create your own command.
     /// </summary>
-    internal abstract class DiscordCommand
+    public abstract class DiscordCommand
     {
         /// <summary>
         /// Parent module

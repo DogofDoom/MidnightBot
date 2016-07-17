@@ -26,7 +26,7 @@ namespace MidnightBot.Classes
             await u.SendMessage("Glückwunsch!👑\nDu hast folgendes erhalten: " + flows).ConfigureAwait (false);
         }
 
-        public static async Task<bool> RemoveFlowers(Discord.User u, string reason, int amount)
+        public static async Task<bool> RemoveFlowers(Discord.User u, string reason, int amount, bool silent = false, string message = "👎`Bot Owner hat: {0}{1} von dir entfernt.`")
         {
             if (amount <= 0)
                 return false;
@@ -42,7 +42,10 @@ namespace MidnightBot.Classes
                 UserId = (long)u.Id,
                 Value = -amount,
             });
-            await u.SendMessage($"👎`Bot Owner hat: {amount}{MidnightBot.Config.CurrencySign} von dir entfernt.`").ConfigureAwait(false);
+            if (silent)
+                return true;
+
+            await u.SendMessage(string.Format(message,amount,MidnightBot.Config.CurrencySign)).ConfigureAwait(false);
             return true;
         }
     }

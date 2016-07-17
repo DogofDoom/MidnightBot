@@ -13,7 +13,6 @@ namespace MidnightBot.Modules.Gambling
 {
     internal class GamblingModule : DiscordModule
     {
-
         public GamblingModule ()
         {
             commands.Add (new DrawCommand (this));
@@ -99,7 +98,7 @@ namespace MidnightBot.Modules.Gambling
                        if (mentionedUser == null)
                            return;
 
-                       await FlowersHandler.RemoveFlowers (mentionedUser,$"Taken by bot owner.({e.User.Name}/{e.User.Id})",(int)amount);
+                       await FlowersHandler.RemoveFlowers (mentionedUser,$"Taken by bot owner.({e.User.Name}/{e.User.Id})",(int)amount).ConfigureAwait(false);
 
                        await e.Channel.SendMessage ($"{e.User.Mention} erfolgreich {amount} {MidnightBot.Config.CurrencyName} von {mentionedUser.Mention} entfernt!").ConfigureAwait (false);
                    });
@@ -129,12 +128,60 @@ namespace MidnightBot.Modules.Gambling
                                 return;
                             }
 
-                            await FlowersHandler.RemoveFlowers (e.User,"Gift",(int)amount);
+                            await FlowersHandler.RemoveFlowers(e.User, "Gift", (int)amount, true).ConfigureAwait(false);
                             await FlowersHandler.AddFlowersAsync (mentionedUser,"Gift",(int)amount).ConfigureAwait (false);
 
                             await e.Channel.SendMessage ($"{e.User.Mention} erfolgreich {amount}{MidnightBot.Config.CurrencyName} gesendet an {mentionedUser.Mention}!").ConfigureAwait (false);
 
                         });
+
+               cgb.CreateCommand(Prefix + "betroll")
+                    .Alias(Prefix + "br")
+                    .Description($"Wettet einen bestimmten Betrag an {MidnightBot.Config.CurrencyName} und wirft einen Würfel. Bei über 66 Punkten: x2 {MidnightBot.Config.CurrencyName}, über 90 Punkte: x3 und 100 x10. | {Prefix}br 5")
+                    .Parameter("amount",ParameterType.Required)
+                    .Do(async e =>
+                    {
+                        var amountstr = e.GetArg("amount").Trim();
+                        int amount;
+
+                        if (!int.TryParse(amountstr, out amount) || amount < 1)
+                            return;
+
+                        var userFlowers = GetUserFlowers(e.User.Id);
+
+                        if (userFlowers < amount)
+                        {
+                            await e.Channel.SendMessage($"{e.User.Mention} Du hast nicht genug {MidnightBot.Config.CurrencyName}. Du hast nur {userFlowers}{MidnightBot.Config.CurrencySign}.").ConfigureAwait(false);
+                            return;
+                        }
+
+                        await FlowersHandler.RemoveFlowers(e.User, "Betroll Gamble", (int)amount, true).ConfigureAwait(false);
+
+                        var rng = new Random().Next(0, 101);
+                        var str = $"{e.User.Mention} `Du hast folgende Punktzahl geworfen: {rng}` ";
+                        if (rng < 67)
+                        {
+                            str += "Viel Glück beim nächsten Mal.";
+                        }
+                        else if (rng < 90)
+                        {
+                            str += $"Glückwunsch! Du hast {amount * 2}{MidnightBot.Config.CurrencySign} für das erzielen von mehr als 66 Punkten gewonnen.";
+                            await FlowersHandler.AddFlowersAsync(e.User, "Betroll Gamble", amount * 2, true).ConfigureAwait(false);
+                        }
+                        else if (rng < 100)
+                        {
+                            str += $"Glückwunsch! Du hast {amount * 3}{MidnightBot.Config.CurrencySign} für das erzielen von mehr als 90 Punkten gewonnen.";
+                            await FlowersHandler.AddFlowersAsync(e.User, "Betroll Gamble", amount * 3, true).ConfigureAwait(false);
+                        }
+                        else {
+                            str += $"👑 Glückwunsch! Du hast {amount * 10}{MidnightBot.Config.CurrencySign} für das erzielen von **100** Punkten gewonnen. 👑";
+                            await FlowersHandler.AddFlowersAsync(e.User, "Betroll Gamble", amount * 10, true).ConfigureAwait(false);
+                        }
+
+                        await e.Channel.SendMessage(str).ConfigureAwait(false);
+
+                    });
+
                cgb.CreateCommand (Prefix + "leaderboard")
                     .Alias (Prefix + "lb")
                     .Do (async e =>
@@ -153,11 +200,12 @@ namespace MidnightBot.Modules.Gambling
                             ( cur,cs ) => cur.AppendLine (
     $@"┣━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━┫
 ┃{(e.Server.Users.Where(u => u.Id == (ulong)cs.UserId).FirstOrDefault()?.Name.TrimTo(18, true) ?? cs.UserId.ToString()),-20} ┃ {cs.Value,5} ┃")
-                                    ).ToString() + "┗━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━┛```");                    });
+                                    ).ToString() + "┗━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━┛```").ConfigureAwait(false);
+                    });
            });
         }
 
-        private static long GetUserFlowers ( ulong userId ) =>
+        public static long GetUserFlowers ( ulong userId ) =>
         DbHandler.Instance.GetStateByUserId ((long)userId)?.Value ?? 0;
 
     }

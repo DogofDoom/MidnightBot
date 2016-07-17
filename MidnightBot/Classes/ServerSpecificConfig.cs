@@ -27,7 +27,13 @@ namespace MidnightBot.Classes
                 {
                     configs = JsonConvert
                         .DeserializeObject<ConcurrentDictionary<ulong, ServerSpecificConfig>>(
-                            File.ReadAllText(filePath));
+                            File.ReadAllText(filePath), new JsonSerializerSettings() {
+                                Error = (s,e) => {
+                                    if (e.ErrorContext.Member.ToString() == "GenerateCurrencyChannels") {
+                                        e.ErrorContext.Handled = true;
+                                    }
+                                }
+                            });
                 }
                 catch (Exception ex)
                 {
@@ -98,6 +104,21 @@ namespace MidnightBot.Classes
                 logServerChannel = value;
                 if (!SpecificConfigurations.Instantiated) return;
                 OnPropertyChanged();
+            }
+        }
+
+        [JsonIgnore]
+        private ObservableCollection<ulong> logserverIgnoreChannels;
+        public ObservableCollection<ulong> LogserverIgnoreChannels {
+            get { return logserverIgnoreChannels; }
+            set {
+                logserverIgnoreChannels = value;
+                if (value != null)
+                    logserverIgnoreChannels.CollectionChanged += (s, e) =>
+                    {
+                        if (!SpecificConfigurations.Instantiated) return;
+                        OnPropertyChanged();
+                    };
             }
         }
 
@@ -227,6 +248,7 @@ namespace MidnightBot.Classes
             ObservingStreams = new ObservableCollection<StreamNotificationConfig> ();
             GenerateCurrencyChannels = new ObservableConcurrentDictionary<ulong, int>();
             VoiceChannelLog = new ObservableConcurrentDictionary<ulong,ulong> ();
+            LogserverIgnoreChannels = new ObservableCollection<ulong>();
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { SpecificConfigurations.Default.Save(); };
@@ -259,7 +281,7 @@ namespace MidnightBot.Classes
 
         public override int GetHashCode()
         {
-            return (int) ((int) ServerId + Username.Length + (int) Type);
+            return (int)ServerId + Username.Length + (int)Type;
         }
     }
 }

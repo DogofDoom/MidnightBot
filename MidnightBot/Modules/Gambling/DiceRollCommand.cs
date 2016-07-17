@@ -28,6 +28,12 @@ namespace MidnightBot.Modules.Gambling
                 .Description ("Würfelt in einer gegebenen Zahlenreichweite. | `$nroll 5` (rolls 0-5) or `$nroll 5-15`")
                 .Parameter ("range",ParameterType.Required)
                 .Do (NRollFunc ());
+
+            cgb.CreateCommand(Module.Prefix + "rolluo")
+                .Description("Würfelt von 0-100. Wenn du eine Zahl [x] angibst werden bis zu 30 normale Würfel geworfen." +
+                              " Wenn du 2 Zahlen mit einem d trennst (xdy) werden x Würfel von 0 bis y geworfen. | $rolluo oderr $rolluo 7 oder $rolluo 3d5")
+                .Parameter("num", ParameterType.Optional)
+                .Do(RollFunc(false));
         }
 
         private static double Evaluate(string expression)
@@ -48,56 +54,43 @@ namespace MidnightBot.Modules.Gambling
                                             }.Merge ();
 
         Regex dndRegex = new Regex (@"(?<n1>\d+)d(?<n2>\d+)",RegexOptions.Compiled);
-        private Func<CommandEventArgs,Task> RollFunc ()
+        private Func<CommandEventArgs, Task> RollFunc(bool ordered = true)
         {
-            var r = new Random ();
+            var r = new Random();
             return async e =>
             {
-                var arg = e.Args[0]?.Trim ();
-                if (string.IsNullOrWhiteSpace (arg))
+                var arg = e.Args[0]?.Trim();
+                if (string.IsNullOrWhiteSpace(arg))
                 {
-                    var gen = r.Next (0,101);
+                    var gen = r.Next(0, 101);
 
                     var num1 = gen / 10;
                     var num2 = gen % 10;
 
-                    var imageStream = new Image[2] { GetDice (num1),GetDice (num2) }.Merge ().ToStream (ImageFormat.Png);
+                    var imageStream = new Image[2] { GetDice(num1), GetDice(num2) }.Merge().ToStream(ImageFormat.Png);
 
-                    await e.Channel.SendFile ("dice.png",imageStream).ConfigureAwait (false);
+                    await e.Channel.SendFile("dice.png", imageStream).ConfigureAwait(false);
                     return;
                 }
-                //Match m;
-                if (arg.IndexOf ('d') != -1 && arg.IndexOf ('d') != 0)
+                Match m;
+                if ((m = dndRegex.Match(arg)).Length != 0)
                 {
-                    string rollExpression = "";
-                    int prevSubstring = 0;
-                    foreach (Match match in dndRegex.Matches(arg))
+                    int n1;
+                    int n2;
+                    if (int.TryParse(m.Groups["n1"].ToString(), out n1) &&
+                        int.TryParse(m.Groups["n2"].ToString(), out n2) &&
+                        n1 <= 50 && n2 <= 100000 && n1 > 0 && n2 > 0)
                     {
-                        int newSubstring = arg.IndexOf(match.ToString(), StringComparison.Ordinal);
-                        string preInfo = arg.Substring(prevSubstring, newSubstring - prevSubstring);
-                        prevSubstring = match.ToString().Length + newSubstring;
-                        int n1 = 0;
-                        int n2 = 0;
-                        string computedRolls = "";
-                        if (int.TryParse(match.Groups["n1"].ToString(), out n1) &&
-                            int.TryParse(match.Groups["n2"].ToString(), out n2) &&
-                            n1 <= 50 && n2 <= 100000 && n1 > 0 && n2 > 0)
+                        var arr = new int[n1];
+                        for (int i = 0; i < n1; i++)
                         {
-                            var arr = new int[n1];
-                            for (int i = 0; i < n1; i++)
-                            {
-                                arr[i] += r.Next(1, n2 + 1);
-                            }
-                            int elemCnt = 0;
-                            computedRolls = "(" +string.Join("+", arr.OrderBy(x => x).Select(x => elemCnt++ % 2 == 0 ? $"{x}" : x.ToString())) + ")";
+                            arr[i] = r.Next(1, n2 + 1);
                         }
-                        rollExpression += preInfo + computedRolls;
+                        var elemCnt = 0;
+                        await e.Channel.SendMessage($"`Geworfen {n1} {(n1 == 1 ? "die" : "dice")} 1-{n2}.`\n`Ergebnis:` " + string.Join(", ", (ordered ? arr.OrderBy(x => x).AsEnumerable() : arr).Select(x => elemCnt++ % 2 == 0 ? $"**{x}**" : x.ToString()))).ConfigureAwait(false);
                     }
-                    rollExpression += arg.Substring (prevSubstring,arg.Length - prevSubstring);
-                    rollExpression = rollExpression.Replace (" ",string.Empty);
-                    double answer = Evaluate (rollExpression);
-                    await e.Channel.SendMessage ($"`Gewürfelt {rollExpression}`\n`Ergebnis:` {answer}").ConfigureAwait (false);
                     return;
+
                 }
                 try
                 {
@@ -115,17 +108,24 @@ namespace MidnightBot.Modules.Gambling
                     {
                         var randomNumber = r.Next (1,7);
                         var toInsert = dices.Count;
-                        if (randomNumber == 6 || dices.Count == 0)
-                            toInsert = 0;
-                        else if (randomNumber != 1)
-                            for (var j = 0; j < dices.Count; j++)
-                            {
-                                if (values[j] < randomNumber)
+                        if (ordered)
+                        {
+                            if (randomNumber == 6 || dices.Count == 0)
+                                toInsert = 0;
+                            else if (randomNumber != 1)
+                                for (var j = 0; j < dices.Count; j++)
                                 {
-                                toInsert = j;
-                                    break;
+                                if (values[j] < randomNumber)
+                                    {
+                                        toInsert = j;
+                                        break;
+                                    }
                                 }
                             }
+                        else
+                        {
+                            toInsert = dices.Count;
+                        }
                         dices.Insert (toInsert,GetDice (randomNumber));
                         values.Insert (toInsert,randomNumber);
                     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using MidnightBot.Classes;
 
 namespace MidnightBot.Modules {
-    internal abstract class DiscordModule : IModule {
+    public abstract class DiscordModule : IModule {
         protected readonly HashSet<DiscordCommand> commands = new HashSet<DiscordCommand>();
 
         public abstract string Prefix { get; }

@@ -992,21 +992,6 @@ namespace MidnightBot.Modules.Administration
                          await e.Channel.SendMessage (sb.ToString()).ConfigureAwait (false);
                      });
 
-                cgb.CreateCommand (Prefix + "leave")
-                     .Description ("Leaves a server with a supplied ID. | `.leave 493243292839`")
-                     .Parameter ("num",ParameterType.Required)
-                     .AddCheck (SimpleCheckers.OwnerOnly ())
-                     .Do (async e =>
-                     {
-                         var srvr = MidnightBot.Client.Servers.Where (s => s.Id.ToString () == e.GetArg ("num").Trim ()).FirstOrDefault ();
-                         if (srvr == null)
-                         {
-                             return;
-                         }
-                         await srvr.Leave ().ConfigureAwait (false);
-                         await e.Channel.SendMessage ("`Done.`").ConfigureAwait (false);
-                     });
-
                 cgb.CreateCommand(Prefix + "savechat")
                     .Description($"Speichert eine Anzahl an Nachrichten in eine Textdate und sendet sie zu dir. **Bot Owner Only** | `{Prefix}chatsave 150`")
                     .Parameter("cnt", ParameterType.Required)
@@ -1031,7 +1016,7 @@ namespace MidnightBot.Modules.Administration
                             lastmsgId = msgs[msgs.Count - 1].Id;
                             cnt -= 100;
                         }
-                        await e.User.SendFile($"Chatlog-{e.Server.Name}/#{e.Channel.Name}-{DateTime.Now}.txt", JsonConvert.SerializeObject(new { Messages = msgs.Select(s => s.ToString()) }, Formatting.Indented).ToStream());
+                        await e.User.SendFile($"Chatlog-{e.Server.Name}/#{e.Channel.Name}-{DateTime.Now}.txt", JsonConvert.SerializeObject(new { Messages = msgs.Select(s => s.ToString()) }, Formatting.Indented).ToStream()).ConfigureAwait(false);
                     });
             });
         }
