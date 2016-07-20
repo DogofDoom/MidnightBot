@@ -56,28 +56,58 @@ namespace MidnightBot.Modules.Gambling
             await FlowersHandler.RemoveFlowers(e.User, "Betflip Gamble", (int)amount, true).ConfigureAwait(false);
             //kopf = true
             //zahl = false
-
-            var guess = guessStr == "KOPF" || guessStr == "K";
-            bool result = false;
-            if (rng.Next(0, 2) == 1) {
-                await e.Channel.SendFile("heads.png", Properties.Resources.heads.ToStream(System.Drawing.Imaging.ImageFormat.Png)).ConfigureAwait(false);
-                result = true;
-            }
-            else {
-                await e.Channel.SendFile("tails.png", Properties.Resources.tails.ToStream(System.Drawing.Imaging.ImageFormat.Png)).ConfigureAwait(false);
-            }
-
-            string str;
-            if (guess == result)
+            if (guessStr == "KOPF" || guessStr == "K")
             {
-                str = $"{e.User.Mention}`Du hast richtig geraten!` Du hast {amount * 2}{MidnightBot.Config.CurrencySign} gewonnen.";
-                await FlowersHandler.AddFlowersAsync(e.User, "Betflip Gamble", amount* 2, true).ConfigureAwait(false);
+                var guess = guessStr == "KOPF" || guessStr == "K";
+                bool result = false;
+                if (rng.Next(0, 4) == 1)
+                {
+                    await e.Channel.SendFile("heads.png", Properties.Resources.heads.ToStream(System.Drawing.Imaging.ImageFormat.Png)).ConfigureAwait(false);
+                    result = true;
+                }
+                else
+                {
+                    await e.Channel.SendFile("tails.png", Properties.Resources.tails.ToStream(System.Drawing.Imaging.ImageFormat.Png)).ConfigureAwait(false);
+                }
 
+                string str;
+                if (guess == result)
+                {
+                    str = $"{e.User.Mention}`Du hast richtig geraten!` Du hast {amount * 2}{MidnightBot.Config.CurrencySign} gewonnen.";
+                    await FlowersHandler.AddFlowersAsync(e.User, "Betflip Gamble", amount * 2, true).ConfigureAwait(false);
+
+                }
+                else
+                    str = $"{e.User.Mention}`Viel Glück beim nächsten Mal.`";
+
+                await e.Channel.SendMessage(str).ConfigureAwait(false);
             }
             else
-                str = $"{e.User.Mention}`Viel Glück beim nächsten Mal.`";
+            {
+                var guess = guessStr == "ZAHL" || guessStr == "Z";
+                bool result = false;
+                if (rng.Next(0, 4) == 1)
+                {
+                    await e.Channel.SendFile("tails.png", Properties.Resources.heads.ToStream(System.Drawing.Imaging.ImageFormat.Png)).ConfigureAwait(false);
+                    result = true;
+                }
+                else
+                {
+                    await e.Channel.SendFile("heads.png", Properties.Resources.tails.ToStream(System.Drawing.Imaging.ImageFormat.Png)).ConfigureAwait(false);
+                }
 
-            await e.Channel.SendMessage(str).ConfigureAwait(false);
+                string str;
+                if (guess == result)
+                {
+                    str = $"{e.User.Mention}`Du hast richtig geraten!` Du hast {amount * 3}{MidnightBot.Config.CurrencySign} gewonnen.";
+                    await FlowersHandler.AddFlowersAsync(e.User, "Betflip Gamble", amount * 3, true).ConfigureAwait(false);
+
+                }
+                else
+                    str = $"{e.User.Mention}`Viel Glück beim nächsten Mal.`";
+
+                await e.Channel.SendMessage(str).ConfigureAwait(false);
+            }
         };
 
         public Func<CommandEventArgs, Task> FlipCoinFunc() => async e =>
