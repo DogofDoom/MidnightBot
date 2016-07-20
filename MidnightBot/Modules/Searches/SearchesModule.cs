@@ -15,6 +15,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Web;
 
 namespace MidnightBot.Modules.Searches
 {
@@ -234,6 +235,18 @@ namespace MidnightBot.Modules.Searches
                          await e.Channel.SendMessage (await $"http://lmgtfy.com/?q={ Uri.EscapeUriString (e.GetArg ("ffs").ToString ()) }".ShortenUrl ())
                          .ConfigureAwait (false);
                      });
+
+                cgb.CreateCommand(Prefix + "google")
+                    .Description("Gibt einen Google-Suchlink für einen Begriff zurück.")
+                    .Parameter("terms", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        var terms = e.GetArg("terms")?.Trim().Replace(' ', '+');
+                        if (string.IsNullOrWhiteSpace(terms))
+                            return;
+                        await e.Channel.SendMessage($"https://google.com/search?q={ HttpUtility.UrlEncode(terms) }")
+                                       .ConfigureAwait(false);
+                    });
 
                 cgb.CreateCommand (Prefix + "hs")
                   .Description ("Sucht eine Heartstone-Karte und zeigt ihr Bild. Braucht eine Weile zum beenden.\n**Benutzung**:~hs Ysera")

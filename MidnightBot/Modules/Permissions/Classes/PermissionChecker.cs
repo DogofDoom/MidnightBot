@@ -4,6 +4,7 @@ using Discord.Commands.Permissions;
 using MidnightBot.Classes.JSONModels;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MidnightBot.Modules.Permissions.Classes
@@ -13,7 +14,10 @@ namespace MidnightBot.Modules.Permissions.Classes
     {
         public static PermissionChecker Instance { get; } = new PermissionChecker ();
 
-        private ConcurrentDictionary<User,DateTime> timeBlackList { get; } = new ConcurrentDictionary<User,DateTime> ();
+        //key - sid:command
+        //value - userid
+        private ConcurrentDictionary<string, ulong> commandCooldowns = new ConcurrentDictionary<string, ulong>();
+        private HashSet<ulong> timeBlackList { get; } = new HashSet<ulong>();
 
         static PermissionChecker () { }
         private PermissionChecker ()
@@ -46,20 +50,26 @@ namespace MidnightBot.Modules.Permissions.Classes
                 return false;
             }
 
-            if (timeBlackList.ContainsKey (user))
+            if (timeBlackList.Contains(user.Id))
                 return false;
 
-
-
-            timeBlackList.TryAdd (user,DateTime.Now);
-
-            if (!channel.IsPrivate && !channel.Server.CurrentUser.GetPermissions (channel).SendMessages)
+            if (!channel.IsPrivate && !channel.Server.CurrentUser.GetPermissions(channel).SendMessages)
             {
                 return false;
             }
-            //{
-            //    user.SendMessage($"I ignored your command in {channel.Server.Name}/#{channel.Name} because i don't have permissions to write to it. Please use `;acm channel_name 0` in that server instead of muting me.").GetAwaiter().GetResult();
-            //}
+
+            timeBlackList.Add(user.Id);
+
+            ServerPermissions perms;
+            PermissionsHandler.PermissionsDict.TryGetValue(user.Server.Id, out perms);
+
+            AddUserCooldown(user.Server.Id, user.Id, command.Text.ToLower());
+            if (commandCooldowns.Keys.Contains(user.Server.Id+":"+command.Text.ToLower()))
+            {
+                if(perms?.Verbose == true)
+                    error = $"{user.Mention} Du hast einen Cooldown auf diesem Befehl.";
+                return false;
+            }
 
             try
             {
@@ -77,8 +87,6 @@ namespace MidnightBot.Modules.Permissions.Classes
                     catch { }
                     if (user.Server.Owner.Id == user.Id || (role != null && user.HasRole (role)) || MidnightBot.IsOwner (user.Id))
                         return true;
-                    ServerPermissions perms;
-                    PermissionsHandler.PermissionsDict.TryGetValue (user.Server.Id,out perms);
                     throw new Exception ($"Du hast nicht die benötigte Rolle (**{(perms?.PermissionsControllerRole ?? "Admin")}**) um die Berechtigungen zu ändern.");
                 }
 
@@ -130,8 +138,7 @@ namespace MidnightBot.Modules.Permissions.Classes
                 Console.WriteLine ($"Exception in canrun: {ex}");
                 try
                 {
-                    ServerPermissions perms;
-                    if (PermissionsHandler.PermissionsDict.TryGetValue (user.Server.Id,out perms) && perms.Verbose)
+                    if (perms != null && perms.Verbose)
                         //if verbose - print errors
                         error = ex.Message;
                 }
@@ -141,6 +148,26 @@ namespace MidnightBot.Modules.Permissions.Classes
                 }
                 return false;
             }
+        }
+        public void AddUserCooldown(ulong serverId, ulong userId, string commandName) {
+            commandCooldowns.TryAdd(commandName, userId);
+            var tosave = serverId + ":" + commandName;
+            Task.Run(async () =>
+            {
+                ServerPermissions perms;
+                PermissionsHandler.PermissionsDict.TryGetValue(serverId, out perms);
+                int cd;
+                if (!perms.CommandCooldowns.TryGetValue(commandName,out cd)) {
+                    return;
+                }
+                if (commandCooldowns.TryAdd(tosave, userId))
+                {
+                    await Task.Delay(cd * 1000);
+                    ulong throwaway;
+                    commandCooldowns.TryRemove(tosave, out throwaway);
+                }
+
+            });
         }
     }
 }

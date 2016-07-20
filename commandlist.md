@@ -2,7 +2,7 @@
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
 #MidnightBot List Of Commands  
-Version: `MidnightBot v0.9.6042.36719`
+Version: `MidnightBot v0.9.6045.21762`
 ### Help  
 Befehl und Alternativen |  Beschreibung |  Benutzung
 ----------------|--------------|-------
@@ -44,6 +44,7 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 `.asar`  |  Adds a role, or list of roles separated by whitespace(use quotations for multiword roles) to the list of self-assignable roles. |  .asar Gamer
 `.rsar`  |  Removes a specified role from the list of self-assignable roles.
 `.lsar`  |  Lists all self-assignable roles.
+`.togglexclsar`, `.tesar`  |  Ändert ob die Self-Assigned Roles exklusiv, oder nicht exklusiv sind.
 `.iam`  |  Adds a role to you that you choose. Role must be on a list of self-assignable roles. |  .iam Gamer
 `.iamnot`, `.iamn`  |  Removes a role to you that you choose. Role must be on a list of self-assignable roles. |  .iamn Gamer
 `.addcustreact`, `.acr`  |  Fügt eine "Custom Reaction" hinzu. **Bot Owner Only!** |  .acr "hello" I love saying hello to %user%
@@ -151,6 +152,8 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 `;cubl`  |  Unblacklists einen erwähnten Channel (#general zum Beispiel). |  ;cubl #some_channel
 `;sbl`  |  Blacklists einen Server per Name, oder ID (#general zum Beispiel). |  ;usl [servername/serverid]
 `;subl`  |  Unblacklists einen erwähnten Server (#general zum Beispiel). |  ;cubl #some_channel
+`;cmdcooldown`, `;cmdcd`  |  Setzt einen Cooldown für einen Befehl per Benutzer. Setze auf 0, um den Cooldown zu entfernen. |  `;cmdcd "some cmd" 5`
+`;allcmdcooldowns`, `;acmdcds`  |  Zeigt eine Liste aller Befehle und Ihrer Cooldowns.
 
 ### Conversations  
 Befehl und Alternativen |  Beschreibung |  Benutzung
@@ -285,6 +288,7 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 `~ir`  |  Zeigt ein zufälliges Bild bei einem angegeben Suchwort.
  |  ~ir cute kitten
 `~lmgtfy`  |  Google etwas für einen Idioten.
+`~google`  |  Gibt einen Google-Suchlink für einen Begriff zurück.
 `~hs`  |  Sucht eine Heartstone-Karte und zeigt ihr Bild. Braucht eine Weile zum beenden.
  | ~hs Ysera
 `~ud`  |  Durchsucht das Urban Dictionary nach einem Wort.

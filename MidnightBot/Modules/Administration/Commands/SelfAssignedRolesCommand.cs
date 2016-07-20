@@ -76,7 +76,7 @@ namespace MidnightBot.Modules.Administration.Commands
                     var config = SpecificConfigurations.Default.Of (e.Server.Id);
                     var msg = new StringBuilder ($"There are `{config.ListOfSelfAssignableRoles.Count}` self assignable roles:\n");
                     var toRemove = new HashSet<ulong> ();
-                    foreach (var roleId in config.ListOfSelfAssignableRoles)
+                    foreach (var roleId in config.ListOfSelfAssignableRoles.OrderBy(r => r.ToString()))
                     {
                         var role = e.Server.GetRole (roleId);
                         if (role == null)
@@ -96,6 +96,17 @@ namespace MidnightBot.Modules.Administration.Commands
                     await e.Channel.SendMessage (msg.ToString ()).ConfigureAwait (false);
                 });
 
+            cgb.CreateCommand(Module.Prefix + "togglexclsar").Alias(Module.Prefix +"tesar")
+                .Description("Ändert ob die Self-Assigned Roles exklusiv, oder nicht exklusiv sind.")
+                .AddCheck(SimpleCheckers.CanManageRoles)
+                .Do(async e =>
+                {
+                    var config = SpecificConfigurations.Default.Of(e.Server.Id);
+                    config.ExclusiveSelfAssignedRoles = !config.ExclusiveSelfAssignedRoles;
+                    string exl = config.ExclusiveSelfAssignedRoles ? "exklusiv" : "nichtt exklusiv";
+                    await e.Channel.SendMessage("Self Assigned Roles sind jetzt " + exl);
+                });
+
             cgb.CreateCommand (Module.Prefix + "iam")
                 .Description ("Adds a role to you that you choose. " +
                              "Role must be on a list of self-assignable roles." +
@@ -109,18 +120,24 @@ namespace MidnightBot.Modules.Administration.Commands
                     var role = e.Server.FindRoles (roleName).FirstOrDefault ();
                     if (role == null)
                     {
-                        await e.Channel.SendMessage (":anger:That role does not exist.").ConfigureAwait (false);
+                        await e.Channel.SendMessage (":anger:Dieser Rang nicht.").ConfigureAwait (false);
                         return;
                     }
                     var config = SpecificConfigurations.Default.Of (e.Server.Id);
                     if (!config.ListOfSelfAssignableRoles.Contains (role.Id))
                     {
-                        await e.Channel.SendMessage (":anger:That role is not self-assignable.").ConfigureAwait (false);
+                        await e.Channel.SendMessage (":anger:Dieser Rang ist nicht selbst zuweisebar.").ConfigureAwait (false);
                         return;
                     }
                     if (e.User.HasRole (role))
                     {
-                        await e.Channel.SendMessage ($":anger:You already have {role.Name} role.").ConfigureAwait (false);
+                        await e.Channel.SendMessage ($":anger:Du hast bereits den {role.Name} Rang.").ConfigureAwait (false);
+                        return;
+                    }
+                    var sameRoles = e.User.Roles.Where(r => config.ListOfSelfAssignableRoles.Contains(r.Id));
+                    if (config.ExclusiveSelfAssignedRoles && sameRoles.Any())
+                    {
+                        await e.Channel.SendMessage($":anger:Du hast bereits den {sameRoles.FirstOrDefault().Name} Rang.").ConfigureAwait(false);
                         return;
                     }
                     try
@@ -129,9 +146,9 @@ namespace MidnightBot.Modules.Administration.Commands
                     }
                     catch
                     {
-                        await e.Channel.SendMessage($":anger:`I am unable to add that role to you. I can't add roles to owners or other roles higher than my role in the role hierarchy.`").ConfigureAwait (false);
+                        await e.Channel.SendMessage($":anger:`Ich kann dir diese Rolle nicht hinzufügen. Ich kann Ownern, oder Rängen die in der Hierarchy über mir sind, keine Ränge zuweisen.`").ConfigureAwait (false);
                     }
-                    var msg = await e.Channel.SendMessage ($":ok:You now have {role.Name} role.").ConfigureAwait (false);
+                    var msg = await e.Channel.SendMessage ($":ok:Du hast jetzt den {role.Name} Rang.").ConfigureAwait (false);
                     await Task.Delay(3000).ConfigureAwait(false);
                     await msg.Delete().ConfigureAwait(false);
                     try

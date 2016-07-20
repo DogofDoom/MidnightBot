@@ -6,7 +6,7 @@ namespace MidnightBot.Classes.JSONModels
     public class Credentials
     {
         public string Token { get; set; } = "";
-        public string ClientId { get; set; } = "116275390695079945";
+        public string ClientId { get; set; } = "170254782546575360";
         public ulong BotId { get; set; } = 1231231231231;
         public ulong[] OwnerIds { get; set; } = { 123123123123,5675675679845 };
         public string[] GoogleAPIKey = { "" };

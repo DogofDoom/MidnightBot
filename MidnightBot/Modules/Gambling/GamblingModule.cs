@@ -66,19 +66,35 @@ namespace MidnightBot.Modules.Gambling
                    .Parameter ("receiver",ParameterType.Unparsed)
                    .Do (async e =>
                    {
-                       var amountStr = e.GetArg ("amount")?.Trim ();
+                       var amountStr = e.GetArg("amount")?.Trim();
                        long amount;
-                       if (!long.TryParse (amountStr,out amount) || amount < 0)
+                       if (!long.TryParse(amountStr, out amount) || amount <= 0)
                            return;
-
-                       var mentionedUser = e.Message.MentionedUsers.FirstOrDefault (u =>
-                       u.Id != MidnightBot.Client.CurrentUser.Id);
-                       if (mentionedUser == null)
+                       if (e.GetArg("receiver")?.ToLower() == "all")
+                       {
+                           var anzahl = 0;
+                           var users = e.Server.Users;
+                           foreach(User u in users)
+                           {
+                               if(u.Status.Equals("Online"))
+                               await FlowersHandler.AddFlowersAsync(u, $"Awarded by bot owner for all. ({e.User.Name}/{e.User.Id})", (int)amount).ConfigureAwait(false);
+                               anzahl++;
+                               await e.Channel.SendIsTyping();
+                           }
+                           await e.Channel.SendMessage($"{e.User.Mention} erfolgreich {amount}  {MidnightBot.Config.CurrencyName} zu {anzahl} aktiver Benutzern hinzugefügt!").ConfigureAwait(false);
                            return;
+                       }
+                       else
+                       {
+                           var mentionedUser = e.Message.MentionedUsers.FirstOrDefault(u =>
+                           u.Id != MidnightBot.Client.CurrentUser.Id);
+                           if (mentionedUser == null)
+                               return;
 
-                       await FlowersHandler.AddFlowersAsync (mentionedUser,$"Awarded by bot owner. ({e.User.Name}/{e.User.Id})",(int)amount).ConfigureAwait (false);
+                           await FlowersHandler.AddFlowersAsync(mentionedUser, $"Awarded by bot owner. ({e.User.Name}/{e.User.Id})", (int)amount).ConfigureAwait(false);
 
-                       await e.Channel.SendMessage ($"{e.User.Mention} erfolgreich {amount}  {MidnightBot.Config.CurrencyName} zu {mentionedUser.Mention} hinzugefügt!").ConfigureAwait (false);
+                           await e.Channel.SendMessage($"{e.User.Mention} erfolgreich {amount}  {MidnightBot.Config.CurrencyName} zu {mentionedUser.Mention} hinzugefügt!").ConfigureAwait(false);
+                       }
                    });
 
                cgb.CreateCommand (Prefix + "take")
@@ -111,7 +127,7 @@ namespace MidnightBot.Modules.Gambling
                         {
                             var amountStr = e.GetArg ("amount")?.Trim ();
                             long amount;
-                            if (!long.TryParse (amountStr,out amount) || amount < 0)
+                            if (!long.TryParse(amountStr, out amount) || amount <= 0)
                                 return;
 
                             var mentionedUser = e.Message.MentionedUsers.FirstOrDefault (u =>

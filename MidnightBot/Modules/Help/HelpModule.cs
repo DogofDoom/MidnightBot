@@ -45,7 +45,9 @@ namespace MidnightBot.Modules.Help
                            return;
 
                        var cmds = MidnightBot.Client.GetService<CommandService>().AllCommands
-                                                   .Where(c => c.Category.ToLower() == module);
+                                                   .Where(c => c.Category.ToLower() == module)
+                                                    .OrderBy(c => c.Text)
+                                                    .AsEnumerable();
                        var cmdsArray = cmds as Command[] ?? cmds.ToArray();
                        if (!cmdsArray.Any())
                        {

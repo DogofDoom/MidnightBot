@@ -429,6 +429,21 @@ namespace MidnightBot.Modules.Permissions.Classes
             Task.Run (() => WriteServerToJson (serverPerms));
         }
 
+        public static void SetCommandCooldown(Server server, string commandName, int value)
+        {
+            var serverPerms = PermissionsDict.GetOrAdd(server.Id,
+                new ServerPermissions(server.Id, server.Name));
+            if (value == 0) {
+                int throwaway;
+                serverPerms.CommandCooldowns.TryRemove(commandName, out throwaway);
+            }
+            else {
+                serverPerms.CommandCooldowns.AddOrUpdate(commandName, value, (str, v) => value);
+            }
+
+            Task.Run(() => WriteServerToJson(serverPerms));
+        }
+
         public static void AddFilteredWord ( Server server,string word )
         {
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
@@ -549,6 +564,10 @@ namespace MidnightBot.Modules.Permissions.Classes
         public Dictionary<ulong,Permissions> UserPermissions { get; set; }
         public Dictionary<ulong,Permissions> ChannelPermissions { get; set; }
         public Dictionary<ulong,Permissions> RolePermissions { get; set; }
+        /// <summary>
+        /// Dictionary of command names with their respective cooldowns
+        /// </summary>
+        public ConcurrentDictionary<string, int> CommandCooldowns { get; set; }
 
         public ServerPermissions ( ulong id,string name )
         {
@@ -561,6 +580,7 @@ namespace MidnightBot.Modules.Permissions.Classes
             UserPermissions = new Dictionary<ulong,Permissions> ();
             ChannelPermissions = new Dictionary<ulong,Permissions> ();
             RolePermissions = new Dictionary<ulong,Permissions> ();
+            CommandCooldowns = new ConcurrentDictionary<string, int>();
             Words = new HashSet<string> ();
         }
     }
