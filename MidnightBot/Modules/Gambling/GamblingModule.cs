@@ -70,22 +70,6 @@ namespace MidnightBot.Modules.Gambling
                        long amount;
                        if (!long.TryParse(amountStr, out amount) || amount <= 0)
                            return;
-                       if (e.GetArg("receiver")?.ToLower() == "all")
-                       {
-                           var anzahl = 0;
-                           var users = e.Server.Users;
-                           foreach(User u in users)
-                           {
-                               if(u.Status.Equals("Online"))
-                               await FlowersHandler.AddFlowersAsync(u, $"Awarded by bot owner for all. ({e.User.Name}/{e.User.Id})", (int)amount).ConfigureAwait(false);
-                               anzahl++;
-                               await e.Channel.SendIsTyping();
-                           }
-                           await e.Channel.SendMessage($"{e.User.Mention} erfolgreich {amount}  {MidnightBot.Config.CurrencyName} zu {anzahl} aktiver Benutzern hinzugefügt!").ConfigureAwait(false);
-                           return;
-                       }
-                       else
-                       {
                            var mentionedUser = e.Message.MentionedUsers.FirstOrDefault(u =>
                            u.Id != MidnightBot.Client.CurrentUser.Id);
                            if (mentionedUser == null)
@@ -94,6 +78,39 @@ namespace MidnightBot.Modules.Gambling
                            await FlowersHandler.AddFlowersAsync(mentionedUser, $"Awarded by bot owner. ({e.User.Name}/{e.User.Id})", (int)amount).ConfigureAwait(false);
 
                            await e.Channel.SendMessage($"{e.User.Mention} erfolgreich {amount}  {MidnightBot.Config.CurrencyName} zu {mentionedUser.Mention} hinzugefügt!").ConfigureAwait(false);
+                   });
+
+               cgb.CreateCommand(Prefix + "dailymoney")
+                   .Description($"Tägliches Geld (50 Euro, wird um 0 Uhr zurückgesetzt.)")
+                   .Do(async e =>
+                   {
+                       DateTime today = DateTime.Today;
+                       var uid = (long)e.User.Id;
+                       var sid = (long)e.Server.Id;
+
+                       var user = DbHandler.Instance.FindOne<DailyMoney>(dm => dm.UserId == uid && dm.ServerId == sid);
+                       if (user == null)
+                       {
+                           var data = new DailyMoney
+                           {
+                               UserId = (long)e.User.Id,
+                               LastTimeGotten = today.AddDays(-1),
+                               ServerId = (long)e.Server.Id
+                           };
+                           DbHandler.Instance.InsertData(data);
+                           user = DbHandler.Instance.FindOne<DailyMoney>(dm => dm.UserId == uid && dm.ServerId == sid);
+                       }
+                       if (user.LastTimeGotten.Date.DayOfYear < today.Date.DayOfYear)
+                       {
+                           var data = DbHandler.Instance.FindAll<DailyMoney>(d => d.ServerId == sid && d.UserId == uid);
+                           DbHandler.Instance.UpdateAll<DailyMoney>(data.Select(i => { i.LastTimeGotten = today; return i; }));
+                           await FlowersHandler.AddFlowersAsync(e.User, $"Daily Reward. ({e.User.Name}/{e.User.Id})", 20).ConfigureAwait(false);
+                           await e.Channel.SendMessage($"{e.User.Mention} hat sich seinen täglichen Anteil  von 20 {MidnightBot.Config.CurrencyName} abgeholt.");
+                           return;
+                       }
+                       else
+                       {
+                           await e.Channel.SendMessage("Du hast deinen täglichen Anteil heute bereits abgeholt.");
                        }
                    });
 

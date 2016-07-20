@@ -180,6 +180,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="_Models\DataModels\DailyMoneyModel.cs" />
     <Compile Include="_Models\DataModels\Incident.cs" />
     <Compile Include="_Models\DataModels\PokemonSprite.cs" />
     <Compile Include="_Models\JSONModels\AnimeResult.cs" />

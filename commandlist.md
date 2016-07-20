@@ -2,7 +2,7 @@
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
 #MidnightBot List Of Commands  
-Version: `MidnightBot v0.9.6045.21762`
+Version: `MidnightBot v0.9.6045.25428`
 ### Help  
 Befehl und Alternativen |  Beschreibung |  Benutzung
 ----------------|--------------|-------
@@ -186,6 +186,7 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 `$raffle`  |  Schreibt den Namen und die ID eines zufälligen Benutzers aus der Online Liste einer (optionalen) Rolle.
 `$$$`  |  Überprüft, wieviele Euro du hast.
 `$award`  |  Gibt jemanden eine bestimmte Anzahl an Euro. **Bot Owner Only!** |  $award 5 @Benutzer
+`$dailymoney`  |  Tägliches Geld (50 Euro, wird um 0 Uhr zurückgesetzt.)
 `$take`  |  Entfernt eine bestimmte Anzahl an Euro von jemanden. **Bot Owner Only!** |  $take 5 @Benutzer
 `$give`  |  Gibt jemanden eine Anzahl Euro. |  $give 5 @Benutzer
 `$betroll`, `$br`  |  Wettet einen bestimmten Betrag an Euro und wirft einen Würfel. Bei über 66 Punkten: x2 Euro, über 90 Punkte: x3 und 100 x10. |  $br 5

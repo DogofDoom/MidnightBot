@@ -33,6 +33,7 @@ namespace MidnightBot.Classes
                 conn.CreateTable<PlaylistSongInfo> ();
                 conn.CreateTable<MusicPlaylist> ();
                 conn.CreateTable<Incident> ();
+                conn.CreateTable<DailyMoney>();
                 conn.Execute (Queries.TransactionTriggerQuery);
                 try
                 {
