@@ -59,7 +59,7 @@ namespace MidnightBot.Modules.Translator.Helpers
             }
 
             // Return result
-            return JArray.Parse (text)[0][0][0].ToString ();
+            return (string.Concat(JArray.Parse(text)[0].Select(x => x[0])));
         }
 
         #endregion

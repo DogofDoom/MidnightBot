@@ -4,6 +4,16 @@
   "ForwardToAllOwners": false,
   "IsRotatingStatus": false,
   "BufferSize": 4194304,
+  "RaceAnimals": [
+    "🐼",
+    "🐻",
+    "🐧",
+    "🐨",
+    "🐬",
+    "🐞",
+    "🦀",
+    "🦄"
+  ],
   "RemindMessageFormat": "❗⏰**Mir wurde von %user% aufgetragen, dich an '%message%' zu erinnern.**⏰❗",
   "CustomReactions": {
     "\\o\\": [

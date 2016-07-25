@@ -30,7 +30,6 @@ namespace MidnightBot.Modules.Searches.Commands
         }
 
         private static Dictionary<string, CachedChampion> CachedChampionImages = new Dictionary<string, CachedChampion>();
-        private readonly object cacheLock = new object();
 
 
         private System.Timers.Timer clearTimer { get; } = new System.Timers.Timer();
@@ -42,7 +41,6 @@ namespace MidnightBot.Modules.Searches.Commands
             {
                 try
                 {
-                    lock (cacheLock)
                         CachedChampionImages = CachedChampionImages
                             .Where(kvp => DateTime.Now - kvp.Value.AddedAt > new TimeSpan(1, 0, 0))
                             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
@@ -87,16 +85,13 @@ namespace MidnightBot.Modules.Searches.Commands
                           var resolvedRole = role;
                           var name = e.GetArg("champ").Replace(" ", "").ToLower ();
                           CachedChampion champ = null;
-                          lock (cacheLock)
-                          {
-                              CachedChampionImages.TryGetValue(name + "_" + resolvedRole, out champ);
-                          }
-                          if (champ != null)
-                          {
-                              champ.ImageStream.Position = 0;
-                              await e.Channel.SendFile("champ.png", champ.ImageStream).ConfigureAwait (false);
-                              return;
-                          }
+                          if(CachedChampionImages.TryGetValue(name + "_" + resolvedRole, out champ))
+                              if (champ != null)
+                              {
+                                  champ.ImageStream.Position = 0;
+                                  await e.Channel.SendFile("champ.png", champ.ImageStream).ConfigureAwait(false);
+                                  return;
+                              }
                           var allData = JArray.Parse(await Classes.SearchHelper.GetResponseStringAsync($"http://api.champion.gg/champion/{name}?api_key={MidnightBot.Creds.LOLAPIKey}").ConfigureAwait (false));
                           JToken data = null;
                           if (role != null)
@@ -121,17 +116,13 @@ namespace MidnightBot.Modules.Searches.Commands
                               role = allData[0]["role"].ToString();
                               resolvedRole = ResolvePos(role);
                           }
-                          lock (cacheLock)
-                          {
-                              CachedChampionImages.TryGetValue(name + "_" + resolvedRole, out champ);
-                          }
-                          if (champ != null)
-                          {
-                              Console.WriteLine("Sendet LOL Bild aus dem Cache.");
-                              champ.ImageStream.Position = 0;
-                              await e.Channel.SendFile("champ.png", champ.ImageStream).ConfigureAwait (false);
-                              return;
-                          }
+                          if(CachedChampionImages.TryGetValue(name + "_" + resolvedRole, out champ))
+                              if (champ != null)
+                              {
+                                  champ.ImageStream.Position = 0;
+                                  await e.Channel.SendFile("champ.png", champ.ImageStream).ConfigureAwait(false);
+                                  return;
+                              }
                           //name = data["title"].ToString();
                           // get all possible roles, and "select" the shown one
                           var roles = new string[allData.Count];

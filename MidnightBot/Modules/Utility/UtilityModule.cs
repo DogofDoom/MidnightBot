@@ -48,7 +48,7 @@ namespace MidnightBot.Modules.Utility
                         if (arr.Length == 0)
                             await e.Channel.SendMessage ("Niemand. (nicht 100% sicher)");
                         else
-                            await e.Channel.SendMessage ("```xl\n" + string.Join ("\n",arr.GroupBy (item => (i++) / 3).Select (ig => string.Join ("",ig.Select (el => $"• {el,-35}")))) + "\n```");
+                            await e.Channel.SendMessage("```xl\n" + string.Join("\n", arr.GroupBy(item => (i++) / 3).Select(ig => string.Concat(ig.Select(el => $"• {el,-35}")))) + "\n```").ConfigureAwait(false);
                     });
 
                 cgb.CreateCommand (Prefix + "inrole")
@@ -148,6 +148,17 @@ namespace MidnightBot.Modules.Utility
                       }
                       await e.Channel.SendMessage ("`Liste der Rollen:` \n• " + string.Join ("\n• ",e.Server.Roles)).ConfigureAwait (false);
                   });
+
+                cgb.CreateCommand(Prefix + "channeltopic")
+                    .Alias(Prefix + "ct")
+                    .Description($"Sends current channel's topic as a message. | `{Prefix}ct`")
+                    .Do(async e =>
+                    {
+                        var topic = e.Channel.Topic;
+                        if (string.IsNullOrWhiteSpace(topic))
+                            return;
+                        await e.Channel.SendMessage(topic).ConfigureAwait(false);
+                    });
             });
         }
     }

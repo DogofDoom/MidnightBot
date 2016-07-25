@@ -7,8 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace MidnightBot.Modules.Administration.Commands
 {
@@ -36,7 +38,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 {"%trivia%", () => Games.Commands.TriviaCommands.RunningTrivias.Count.ToString()}
             };
 
-        private readonly object playingPlaceholderLock = new object ();
+        private readonly SemaphoreSlim playingPlaceholderLock = new SemaphoreSlim(1, 1);
 
         public PlayingRotate ( DiscordModule module ) : base (module)
         {
@@ -47,7 +49,9 @@ namespace MidnightBot.Modules.Administration.Commands
                 {
                     i++;
                     var status = "";
-                    lock (playingPlaceholderLock)
+                    //wtf am i doing, just use a queue ffs
+                    await playingPlaceholderLock.WaitAsync().ConfigureAwait(false);
+                    try
                     {
                         if (PlayingPlaceholders.Count == 0
                             || MidnightBot.Config.RotatingStatuses.Count == 0
@@ -59,6 +63,7 @@ namespace MidnightBot.Modules.Administration.Commands
                         status = PlayingPlaceholders.Aggregate (status,
                             ( current,kvp ) => current.Replace (kvp.Key,kvp.Value ()));
                     }
+                    finally { playingPlaceholderLock.Release(); }
                     if (string.IsNullOrWhiteSpace (status))
                         return;
                     await Task.Run (() => { MidnightBot.Client.SetGame (status); });
@@ -71,14 +76,18 @@ namespace MidnightBot.Modules.Administration.Commands
 
         public Func<CommandEventArgs,Task> DoFunc () => async e =>
         {
-            lock (playingPlaceholderLock)
+            await playingPlaceholderLock.WaitAsync().ConfigureAwait(false);
+            try
             {
                 if (timer.Enabled)
                     timer.Stop ();
                 else
                     timer.Start ();
                 MidnightBot.Config.IsRotatingStatus = timer.Enabled;
-                ConfigHandler.SaveConfig ();
+                await ConfigHandler.SaveConfig().ConfigureAwait(false);
+            }
+            finally {
+                playingPlaceholderLock.Release();
             }
             await e.Channel.SendMessage ($"❗`Rotating Play Status wurde {(timer.Enabled ? "aktiviert" : "deaktiviert")}.`").ConfigureAwait (false);
         };
@@ -102,10 +111,15 @@ namespace MidnightBot.Modules.Administration.Commands
                     var arg = e.GetArg ("text");
                     if (string.IsNullOrWhiteSpace (arg))
                         return;
-                    lock (playingPlaceholderLock)
+                    await playingPlaceholderLock.WaitAsync().ConfigureAwait(false);
+                    try
                     {
                         MidnightBot.Config.RotatingStatuses.Add (arg);
-                        ConfigHandler.SaveConfig ();
+                        await ConfigHandler.SaveConfig();
+                    }
+                    finally
+                    {
+                        playingPlaceholderLock.Release();
                     }
                     await e.Channel.SendMessage ("🆗 `Added a new playing string.`").ConfigureAwait (false);
                 });
@@ -137,14 +151,15 @@ namespace MidnightBot.Modules.Administration.Commands
                     var arg = e.GetArg ("number");
                     int num;
                     string str;
-                    lock (playingPlaceholderLock)
-                    {
+                    await playingPlaceholderLock.WaitAsync().ConfigureAwait(false);
+                    try {
                         if (!int.TryParse (arg.Trim (),out num) || num <= 0 || num > MidnightBot.Config.RotatingStatuses.Count)
                             return;
                         str = MidnightBot.Config.RotatingStatuses[num - 1];
                         MidnightBot.Config.RotatingStatuses.RemoveAt (num - 1);
-                        ConfigHandler.SaveConfig ();
+                        await ConfigHandler.SaveConfig().ConfigureAwait(false);
                     }
+                    finally { playingPlaceholderLock.Release(); }
                     await e.Channel.SendMessage ($"🆗 `Removed playing string #{num}`({str})").ConfigureAwait (false);
                 });
         }

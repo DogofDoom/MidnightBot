@@ -55,7 +55,7 @@ namespace MidnightBot.Modules.Permissions
                              await e.Channel.SendMessage ($"Rolle `{arg}` existiert nicht. Erstelle zuerst eine Rolle mit diesem Namen.").ConfigureAwait (false);
                              return;
                          }
-                         PermissionsHandler.SetPermissionsRole (e.Server,role.Name);
+                         await PermissionsHandler.SetPermissionsRole(e.Server, role.Name).ConfigureAwait(false);
                          await e.Channel.SendMessage ($"Rolle `{role.Name}` ist nun benötigt um die Berechtigungen zu bearbeiten.").ConfigureAwait (false);
                      });
 
@@ -71,7 +71,7 @@ namespace MidnightBot.Modules.Permissions
                         var args = arg.Split ('~').Select (a => a.Trim ()).ToArray ();
                         if (args.Length > 2)
                         {
-                            await e.Channel.SendMessage ("💢Ungültige Anzahl von '~'s in den Argumenten.");
+                            await e.Channel.SendMessage ("💢Ungültige Anzahl von '~'s in den Argumenten.").ConfigureAwait(false);
                             return;
                         }
                         try
@@ -79,12 +79,12 @@ namespace MidnightBot.Modules.Permissions
                             var fromRole = PermissionHelper.ValidateRole (e.Server,args[0]);
                             var toRole = PermissionHelper.ValidateRole (e.Server,args[1]);
 
-                            PermissionsHandler.CopyRolePermissions (fromRole,toRole);
-                            await e.Channel.SendMessage ($"CBerechtigungseinstellungen von **{fromRole.Name}** zu **{toRole.Name}** kopiert.");
+                            await PermissionsHandler.CopyRolePermissions(fromRole, toRole).ConfigureAwait(false);
+                            await e.Channel.SendMessage ($"CBerechtigungseinstellungen von **{fromRole.Name}** zu **{toRole.Name}** kopiert.").ConfigureAwait(false);
                         }
                         catch (Exception ex)
                         {
-                            await e.Channel.SendMessage ($"💢{ex.Message}");
+                            await e.Channel.SendMessage ($"💢{ex.Message}").ConfigureAwait(false);
                         }
                     });
 
@@ -100,7 +100,7 @@ namespace MidnightBot.Modules.Permissions
                         var args = arg.Split ('~').Select (a => a.Trim ()).ToArray ();
                         if (args.Length > 2)
                         {
-                            await e.Channel.SendMessage ("💢Ungültige Anzahl von '~'s in den Argumenten.");
+                            await e.Channel.SendMessage ("💢Ungültige Anzahl von '~'s in den Argumenten.").ConfigureAwait(false);
                             return;
                         }
                         try
@@ -108,8 +108,8 @@ namespace MidnightBot.Modules.Permissions
                             var fromChannel = PermissionHelper.ValidateChannel (e.Server,args[0]);
                             var toChannel = PermissionHelper.ValidateChannel (e.Server,args[1]);
 
-                            PermissionsHandler.CopyChannelPermissions (fromChannel,toChannel);
-                            await e.Channel.SendMessage ($"Berechtigungseinstellungen von **{fromChannel.Name}** zu **{toChannel.Name}** kopiert.");
+                            await PermissionsHandler.CopyChannelPermissions(fromChannel, toChannel).ConfigureAwait(false);
+                            await e.Channel.SendMessage ($"Berechtigungseinstellungen von **{fromChannel.Name}** zu **{toChannel.Name}** kopiert.").ConfigureAwait(false);
                         }
                         catch (Exception ex)
                         {
@@ -137,8 +137,8 @@ namespace MidnightBot.Modules.Permissions
                             var fromUser = PermissionHelper.ValidateUser (e.Server,args[0]);
                             var toUser = PermissionHelper.ValidateUser (e.Server,args[1]);
 
-                            PermissionsHandler.CopyUserPermissions (fromUser,toUser);
-                            await e.Channel.SendMessage ($"Berechtigungseinstellungen von **{fromUser.ToString ()}** zu * *{toUser.ToString ()}** kopiert.");
+                            await PermissionsHandler.CopyUserPermissions(fromUser, toUser).ConfigureAwait(false);
+                            await e.Channel.SendMessage ($"Berechtigungseinstellungen von **{fromUser.ToString ()}** zu * *{toUser.ToString ()}** kopiert.").ConfigureAwait(false);
                         }
                         catch (Exception ex)
                         {
@@ -154,7 +154,7 @@ namespace MidnightBot.Modules.Permissions
                     {
                         var arg = e.GetArg ("arg");
                         var val = PermissionHelper.ValidateBool (arg);
-                        PermissionsHandler.SetVerbosity (e.Server,val);
+                        await PermissionsHandler.SetVerbosity(e.Server, val).ConfigureAwait(false);
                         await e.Channel.SendMessage ($"Verbosity wurde gesetzt auf {val}.").ConfigureAwait (false);
                     });
 
@@ -256,8 +256,8 @@ namespace MidnightBot.Modules.Permissions
                             var module = PermissionHelper.ValidateModule (e.GetArg ("module"));
                             var state = PermissionHelper.ValidateBool (e.GetArg ("bool"));
 
-                            PermissionsHandler.SetServerModulePermission (e.Server,module,state);
-                            await e.Channel.SendMessage ($"Modul **{module}** wurde **{(state ? "aktiviert" : "deaktiviert")}** auf diesem Server.").ConfigureAwait (false);
+                            await PermissionsHandler.SetServerModulePermission(e.Server, module, state).ConfigureAwait(false);
+                            await e.Channel.SendMessage($"Modul **{module}** wurde **{(state ? "aktiviert" : "deaktiviert")}** auf diesem Server.").ConfigureAwait(false);
                         }
                         catch (ArgumentException exArg)
                         {
@@ -280,7 +280,7 @@ namespace MidnightBot.Modules.Permissions
                             var command = PermissionHelper.ValidateCommand (e.GetArg ("command"));
                             var state = PermissionHelper.ValidateBool (e.GetArg ("bool"));
 
-                            PermissionsHandler.SetServerCommandPermission (e.Server,command,state);
+                            await PermissionsHandler.SetServerCommandPermission(e.Server, command, state).ConfigureAwait(false);
                             await e.Channel.SendMessage ($"Befehl **{command}** wurde **{(state ? "aktiviert" : "deaktiviert")}** auf diesem Server.").ConfigureAwait (false);
                         }
                         catch (ArgumentException exArg)
@@ -309,7 +309,7 @@ namespace MidnightBot.Modules.Permissions
                             {
                                 foreach (var role in e.Server.Roles)
                                 {
-                                    PermissionsHandler.SetRoleModulePermission (role,module,state);
+                                    await PermissionsHandler.SetRoleModulePermission(role, module, state).ConfigureAwait(false);
                                 }
                                 await e.Channel.SendMessage ($"Modul **{module}** wurde **{(state ? "aktiviert" : "deaktivert")}** für **ALLE** Rollen.").ConfigureAwait (false);
                             }
@@ -317,7 +317,7 @@ namespace MidnightBot.Modules.Permissions
                             {
                                 var role = PermissionHelper.ValidateRole (e.Server,e.GetArg ("role"));
 
-                                PermissionsHandler.SetRoleModulePermission (role,module,state);
+                                await PermissionsHandler.SetRoleModulePermission(role, module, state).ConfigureAwait(false);
                                 await e.Channel.SendMessage ($"Modul **{module}** wurde **{(state ? "aktiviert" : "deaktivert")}** für die **{role.Name}** Rolle.").ConfigureAwait (false);
                             }
                         }
@@ -347,7 +347,7 @@ namespace MidnightBot.Modules.Permissions
                             {
                                 foreach (var role in e.Server.Roles)
                                 {
-                                    PermissionsHandler.SetRoleCommandPermission (role,command,state);
+                                    await PermissionsHandler.SetRoleCommandPermission(role, command, state).ConfigureAwait(false);
                                 }
                                 await e.Channel.SendMessage ($"Befehl **{command}** wurde **{(state ? "aktivert" : "deaktivert")}** für **ALLE** Rollen.").ConfigureAwait (false);
                             }
@@ -355,7 +355,7 @@ namespace MidnightBot.Modules.Permissions
                             {
                                 var role = PermissionHelper.ValidateRole (e.Server,e.GetArg ("role"));
 
-                                PermissionsHandler.SetRoleCommandPermission (role,command,state);
+                                await PermissionsHandler.SetRoleCommandPermission(role, command, state).ConfigureAwait(false);
                                 await e.Channel.SendMessage ($"Befehl **{command}** wurde **{(state ? "aktivert" : "deaktiviert")}** für die **{role.Name}** Rolle.").ConfigureAwait (false);
                             }
                         }
@@ -386,20 +386,20 @@ namespace MidnightBot.Modules.Permissions
                             {
                                 foreach (var channel in e.Server.TextChannels)
                                 {
-                                    PermissionsHandler.SetChannelModulePermission (channel,module,state);
+                                    await PermissionsHandler.SetChannelModulePermission(channel, module, state).ConfigureAwait(false);
                                 }
                                 await e.Channel.SendMessage ($"Modul **{module}** wurde **{(state ? "aktiviert" : "deaktiviert")}** auf **ALLEN** Channels.").ConfigureAwait (false);
                             }
                             else if (string.IsNullOrWhiteSpace (channelArg))
                             {
-                                PermissionsHandler.SetChannelModulePermission (e.Channel,module,state);
+                                await PermissionsHandler.SetChannelModulePermission(e.Channel, module, state).ConfigureAwait(false);
                                 await e.Channel.SendMessage ($"Modul **{module}** wurde **{(state ? "aktiviert" : "deaktiviert")}** im **{e.Channel.Name}** Channel.").ConfigureAwait (false);
                             }
                             else
                             {
                                 var channel = PermissionHelper.ValidateChannel (e.Server,channelArg);
 
-                                PermissionsHandler.SetChannelModulePermission (channel,module,state);
+                                await PermissionsHandler.SetChannelModulePermission(channel, module, state).ConfigureAwait(false);
                                 await e.Channel.SendMessage ($"Modul **{module}** wurde **{(state ? "aktiviert" : "deaktiviert")}** für den **{channel.Name}** Channel.").ConfigureAwait (false);
                             }
                         }
@@ -429,7 +429,7 @@ namespace MidnightBot.Modules.Permissions
                             {
                                 foreach (var channel in e.Server.TextChannels)
                                 {
-                                    PermissionsHandler.SetChannelCommandPermission (channel,command,state);
+                                    await PermissionsHandler.SetChannelCommandPermission(channel, command, state).ConfigureAwait(false);
                                 }
                                 await e.Channel.SendMessage ($"Befehl **{command}** wurde **{(state ? "aktiviert" : "deaktivert")}** auf **ALLEN** Channeln.").ConfigureAwait (false);
                             }
@@ -437,7 +437,7 @@ namespace MidnightBot.Modules.Permissions
                             {
                                 var channel = PermissionHelper.ValidateChannel (e.Server,e.GetArg ("channel"));
 
-                                PermissionsHandler.SetChannelCommandPermission (channel,command,state);
+                                await PermissionsHandler.SetChannelCommandPermission(channel, command, state).ConfigureAwait(false);
                                 await e.Channel.SendMessage ($"Befehl **{command}** wurde **{(state ? "aktiviert" : "deaktiviert")}** für den **{channel.Name}** Channel.").ConfigureAwait (false);
                             }
                         }
@@ -464,7 +464,7 @@ namespace MidnightBot.Modules.Permissions
                             var state = PermissionHelper.ValidateBool (e.GetArg ("bool"));
                             var user = PermissionHelper.ValidateUser (e.Server,e.GetArg ("user"));
 
-                            PermissionsHandler.SetUserModulePermission (user,module,state);
+                            await PermissionsHandler.SetUserModulePermission(user, module, state).ConfigureAwait(false);
                             await e.Channel.SendMessage ($"Modul **{module}** wurde **{(state ? "aktiviert" : "deaktiviert")}** für Benutzer **{user.Name}**.").ConfigureAwait (false);
                         }
                         catch (ArgumentException exArg)
@@ -490,7 +490,7 @@ namespace MidnightBot.Modules.Permissions
                             var state = PermissionHelper.ValidateBool (e.GetArg ("bool"));
                             var user = PermissionHelper.ValidateUser (e.Server,e.GetArg ("user"));
 
-                            PermissionsHandler.SetUserCommandPermission (user,command,state);
+                            await PermissionsHandler.SetUserCommandPermission(user, command, state).ConfigureAwait(false);
                             await e.Channel.SendMessage ($"Befehl **{command}** wurde **{(state ? "aktiviert" : "deaktiviert")}** für Benutzer **{user.Name}**.").ConfigureAwait (false);
                         }
                         catch (ArgumentException exArg)
@@ -514,7 +514,7 @@ namespace MidnightBot.Modules.Permissions
 
                             foreach (var module in MidnightBot.Client.GetService<ModuleService> ().Modules)
                             {
-                                PermissionsHandler.SetServerModulePermission (e.Server,module.Name,state);
+                                await PermissionsHandler.SetServerModulePermission(e.Server, module.Name, state).ConfigureAwait(false);
                             }
                             await e.Channel.SendMessage ($"Alle Module wurden **{(state ? "aktivert" : "deaktivert")}** auf diesem Server.").ConfigureAwait (false);
                         }
@@ -541,7 +541,7 @@ namespace MidnightBot.Modules.Permissions
 
                             foreach (var command in MidnightBot.Client.GetService<CommandService> ().AllCommands.Where (c => c.Category == module))
                             {
-                                PermissionsHandler.SetServerCommandPermission (e.Server,command.Text,state);
+                                await PermissionsHandler.SetServerCommandPermission(e.Server, command.Text, state).ConfigureAwait(false);
                             }
                             await e.Channel.SendMessage ($"Alle Befehle des **{module}** Moduls wurden **{(state ? "aktiviert" : "deaktiviert")}** auf diesem Server.").ConfigureAwait (false);
                         }
@@ -568,7 +568,7 @@ namespace MidnightBot.Modules.Permissions
                             var channel = string.IsNullOrWhiteSpace (chArg) ? e.Channel : PermissionHelper.ValidateChannel (e.Server,chArg);
                             foreach (var module in MidnightBot.Client.GetService<ModuleService> ().Modules)
                             {
-                                PermissionsHandler.SetChannelModulePermission (channel,module.Name,state);
+                                await PermissionsHandler.SetChannelModulePermission(channel, module.Name, state).ConfigureAwait(false);
                             }
 
                             await e.Channel.SendMessage ($"Alle Module wurden **{(state ? "aktivert" : "deaktiviert")}** im **{channel.Name}** Channel.").ConfigureAwait (false);
@@ -597,7 +597,7 @@ namespace MidnightBot.Modules.Permissions
                             var channel = PermissionHelper.ValidateChannel (e.Server,e.GetArg ("channel"));
                             foreach (var command in MidnightBot.Client.GetService<CommandService> ().AllCommands.Where (c => c.Category == module))
                             {
-                                PermissionsHandler.SetChannelCommandPermission (channel,command.Text,state);
+                                await PermissionsHandler.SetChannelCommandPermission(channel, command.Text, state).ConfigureAwait(false);
                             }
                             await e.Channel.SendMessage ($"Alle Befehle des **{module}** Moduls wurden **{(state ? "aktiviert" : "deaktiviert")}** im **{channel.Name}** Channel.").ConfigureAwait (false);
                         }
@@ -623,7 +623,7 @@ namespace MidnightBot.Modules.Permissions
                             var role = PermissionHelper.ValidateRole (e.Server,e.GetArg ("role"));
                             foreach (var module in MidnightBot.Client.GetService<ModuleService> ().Modules)
                             {
-                                PermissionsHandler.SetRoleModulePermission (role,module.Name,state);
+                                await PermissionsHandler.SetRoleModulePermission(role, module.Name, state).ConfigureAwait(false);
                             }
 
                             await e.Channel.SendMessage ($"Alle Module wurden **{(state ? "aktiviert" : "deaktiviert")}** für die **{role.Name}** Rolle.").ConfigureAwait (false);
@@ -655,7 +655,7 @@ namespace MidnightBot.Modules.Permissions
                                 {
                                     foreach (var command in MidnightBot.Client.GetService<CommandService>().AllCommands.Where(c => c.Category == module))
                                     {
-                                        PermissionsHandler.SetRoleCommandPermission(role, command.Text, state);
+                                        await PermissionsHandler.SetRoleCommandPermission(role, command.Text, state).ConfigureAwait(false);
                                     }
                                 }
                                 await e.Channel.SendMessage($"Alle Befehle des **{module}** Moduls wurden **{(state ? "aktiviert" : "deaktiviert")}** für **alle Rollen**.").ConfigureAwait(false);
@@ -666,7 +666,7 @@ namespace MidnightBot.Modules.Permissions
 
                                 foreach (var command in MidnightBot.Client.GetService<CommandService>().AllCommands.Where(c => c.Category == module))
                                 {
-                                    PermissionsHandler.SetRoleCommandPermission(role, command.Text, state);
+                                    await PermissionsHandler.SetRoleCommandPermission(role, command.Text, state).ConfigureAwait(false);
                                 }
                                 await e.Channel.SendMessage($"Alle Befehle des **{module}** Moduls wurden **{(state ? "aktiviert" : "deaktiviert")}** für die **{role.Name}** Rolle.").ConfigureAwait(false);
                             }
@@ -693,7 +693,7 @@ namespace MidnightBot.Modules.Permissions
                                 return;
                             var usr = e.Message.MentionedUsers.First ();
                             MidnightBot.Config.UserBlacklist.Add (usr.Id);
-                            ConfigHandler.SaveConfig ();
+                            await ConfigHandler.SaveConfig().ConfigureAwait(false);
                             await e.Channel.SendMessage ($"`Benutzer {usr.Name}` erfolgreich geblacklisted.").ConfigureAwait (false);
                         }).ConfigureAwait (false);
                     });
@@ -712,7 +712,7 @@ namespace MidnightBot.Modules.Permissions
                            if (MidnightBot.Config.UserBlacklist.Contains (usr.Id))
                            {
                                MidnightBot.Config.UserBlacklist.Remove (usr.Id);
-                               ConfigHandler.SaveConfig ();
+                               await ConfigHandler.SaveConfig().ConfigureAwait(false);
                                await e.Channel.SendMessage ($"`Benutzer {usr.Name} erfolgreich aus der Blacklist entfernt`").ConfigureAwait (false);
                            }
                            else
@@ -736,7 +736,7 @@ namespace MidnightBot.Modules.Permissions
                                 return;
                             var ch = e.Message.MentionedChannels.First ();
                             MidnightBot.Config.UserBlacklist.Add (ch.Id);
-                            ConfigHandler.SaveConfig ();
+                            await ConfigHandler.SaveConfig().ConfigureAwait(false);
                             await e.Channel.SendMessage ($"`Channel {ch.Name}` erfolgreich geblacklisted.").ConfigureAwait (false);
                         }).ConfigureAwait (false);
                     });
@@ -752,7 +752,7 @@ namespace MidnightBot.Modules.Permissions
                                 return;
                             var ch = e.Message.MentionedChannels.First ();
                             MidnightBot.Config.UserBlacklist.Remove (ch.Id);
-                            ConfigHandler.SaveConfig ();
+                            await ConfigHandler.SaveConfig().ConfigureAwait(false);
                             await e.Channel.SendMessage ($"`Channel {ch.Name} erfolgreich von der Blacklist entfernt.`").ConfigureAwait (false);
                         }).ConfigureAwait (false);
                     });
@@ -777,7 +777,7 @@ namespace MidnightBot.Modules.Permissions
                             }
                             var serverId = server.Id;
                             MidnightBot.Config.ServerBlacklist.Add (serverId);
-                            ConfigHandler.SaveConfig ();
+                            await ConfigHandler.SaveConfig().ConfigureAwait(false);
                             //cleanup trivias and typeracing
                             Modules.Games.Commands.Trivia.TriviaGame trivia;
                             TriviaCommands.RunningTrivias.TryRemove (serverId,out trivia);
@@ -808,7 +808,7 @@ namespace MidnightBot.Modules.Permissions
                             var server = MidnightBot.Client.Servers.FirstOrDefault (s => s.Id.ToString () == arg) ??
                             MidnightBot.Client.FindServers (arg.Trim ()).FirstOrDefault ();
                             MidnightBot.Config.ServerBlacklist.Remove (serverId);
-                            ConfigHandler.SaveConfig ();
+                            await ConfigHandler.SaveConfig().ConfigureAwait(false);
                             if (server == null)
                             {
                                 await e.Channel.SendMessage ("Server nicht gefunden!").ConfigureAwait (false);
@@ -837,8 +837,8 @@ namespace MidnightBot.Modules.Permissions
                                 throw new ArgumentOutOfRangeException("secs", "Ungültiger zweiter Parameter. (Muss eine Zahl zwischen 0 und 3600 sein)");
 
 
-                            PermissionsHandler.SetCommandCooldown(e.Server, command, secs);
-                            if(secs == 0)
+                            await PermissionsHandler.SetCommandCooldown(e.Server, command, secs).ConfigureAwait(false);
+                            if (secs == 0)
                                 await e.Channel.SendMessage($"Befehl **{command}** hat jetzt keinen Cooldown mehr.").ConfigureAwait(false);
                             else
                                 await e.Channel.SendMessage($"Befehl **{command}** hat nun einen  **{secs} {(secs==1 ? "Sekunden" : "Sekunden")}** Cooldown.").ConfigureAwait(false);

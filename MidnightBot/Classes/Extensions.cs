@@ -46,10 +46,10 @@ namespace MidnightBot.Extensions
             if (num == 0)
                 return string.Empty;
             if (num <= 3)
-                return string.Join ("",str.Select (c => '.'));
+                return string.Concat(str.Select(c => '.'));
             if (str.Length < num)
                 return str;
-            return string.Join ("",str.Take (num - 3)) + (hideDots ? "" : "...");
+            return string.Concat(str.Take(num - 3)) + (hideDots ? "" : "...");
         }
         /// <summary>
         /// Removes trailing S or ES (if specified) on the given string if the num is 1
@@ -138,10 +138,8 @@ namespace MidnightBot.Extensions
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
-        public static void Shuffle<T> ( this IList<T> list )
+        public static IList<T> Shuffle<T>(this IList<T> list)
         {
-
-            
             // Thanks to @Joe4Evr for finding a bug in the old version of the shuffle
             var provider = new RNGCryptoServiceProvider ();
             var n = list.Count;
@@ -161,6 +159,7 @@ namespace MidnightBot.Extensions
                 list[k] = list[n];
                 list[n] = value;
             }
+            return list;
         }
 
         /// <summary>
@@ -237,7 +236,7 @@ namespace MidnightBot.Extensions
 
         public static string Matrix ( this string s )
             =>
-                string.Join ("",s.Select (c => c.ToString () + " ̵̢̬̜͉̞̭̖̰͋̉̎ͬ̔̇̌̀".TrimTo (rng.Next (0,12),true)));
+                string.Concat(s.Select(c => c.ToString() + " ̵̢̬̜͉̞̭̖̰͋̉̎ͬ̔̇̌̀".TrimTo(rng.Next(0, 12), true)));
         //.Replace("`", "");
 
         public static void ForEach<T> ( this IEnumerable<T> source,Action<T> action )
@@ -303,6 +302,15 @@ namespace MidnightBot.Extensions
         public static int GiB ( this int value ) => value.MiB () * 1024;
         public static int GB ( this int value ) => value.MB () * 1000;
 
+        public static ulong KiB(this ulong value) => value * 1024;
+        public static ulong KB(this ulong value) => value * 1000;
+
+        public static ulong MiB(this ulong value) => value.KiB() * 1024;
+        public static ulong MB(this ulong value) => value.KB() * 1000;
+
+        public static ulong GiB(this ulong value) => value.MiB() * 1024;
+        public static ulong GB(this ulong value) => value.MB() * 1000;
+
         public static Stream ToStream ( this Image img,System.Drawing.Imaging.ImageFormat format = null )
         {
             if (format == null)
@@ -361,5 +369,6 @@ namespace MidnightBot.Extensions
             sw.BaseStream.Position = 0;
             return sw.BaseStream;
         }
-}
+        public static double UnixTimestamp(this DateTime dt) => dt.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+    }
 }

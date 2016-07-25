@@ -194,8 +194,6 @@ namespace MidnightBot.Modules.Games.Commands
 
                     await e.Channel.SendMessage ("Neuer Text hinzugefügt.").ConfigureAwait (false);
                 });
-
-            //todo add user submissions
         }
     }
 }

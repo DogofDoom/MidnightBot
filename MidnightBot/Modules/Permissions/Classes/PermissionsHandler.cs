@@ -155,21 +155,21 @@ namespace MidnightBot.Modules.Permissions.Classes
             return PermissionBanType.None;
         }
 
-        private static void WriteServerToJson ( ServerPermissions serverPerms )
+        private static Task WriteServerToJson(ServerPermissions serverPerms) => Task.Run(() =>
         {
             string pathToFile = $"data/permissions/{serverPerms.Id}.json";
             File.WriteAllText (pathToFile,
                 Newtonsoft.Json.JsonConvert.SerializeObject (serverPerms,Newtonsoft.Json.Formatting.Indented));
-        }
+        });
 
-        public static void WriteToJson ()
+        public static Task WriteToJson() => Task.Run(() =>
         {
             Directory.CreateDirectory ("data/permissions/");
             foreach (var kvp in PermissionsDict)
             {
                 WriteServerToJson (kvp.Value);
             }
-        }
+        });
 
         public static string GetServerPermissionsRoleName ( Server server )
         {
@@ -179,25 +179,25 @@ namespace MidnightBot.Modules.Permissions.Classes
             return serverPerms.PermissionsControllerRole;
         }
 
-        internal static void SetPermissionsRole ( Server server,string roleName )
+        internal static async Task SetPermissionsRole(Server server, string roleName)
         {
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
                 new ServerPermissions (server.Id,server.Name));
 
             serverPerms.PermissionsControllerRole = roleName;
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        internal static void SetVerbosity ( Server server,bool val )
+        internal static async Task SetVerbosity(Server server, bool val)
         {
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
                 new ServerPermissions (server.Id,server.Name));
 
             serverPerms.Verbose = val;
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        internal static void CopyRolePermissions ( Role fromRole,Role toRole )
+        internal static async Task CopyRolePermissions(Role fromRole, Role toRole)
         {
             var server = fromRole.Server;
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
@@ -212,10 +212,10 @@ namespace MidnightBot.Modules.Permissions.Classes
 
             to.CopyFrom (from);
 
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        internal static void CopyChannelPermissions ( Channel fromChannel,Channel toChannel )
+        internal static async Task CopyChannelPermissions(Channel fromChannel, Channel toChannel)
         {
             var server = fromChannel.Server;
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
@@ -230,10 +230,10 @@ namespace MidnightBot.Modules.Permissions.Classes
 
             to.CopyFrom (from);
 
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        internal static void CopyUserPermissions ( User fromUser,User toUser )
+        internal static async Task CopyUserPermissions(User fromUser, User toUser)
         {
             var server = fromUser.Server;
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
@@ -248,10 +248,10 @@ namespace MidnightBot.Modules.Permissions.Classes
 
             to.CopyFrom (from);
 
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        public static void SetServerModulePermission ( Server server,string moduleName,bool value )
+        public static async Task SetServerModulePermission(Server server, string moduleName, bool value)
         {
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
                 new ServerPermissions (server.Id,server.Name));
@@ -261,10 +261,10 @@ namespace MidnightBot.Modules.Permissions.Classes
                 modules[moduleName] = value;
             else
                 modules.TryAdd (moduleName,value);
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        public static void SetServerCommandPermission ( Server server,string commandName,bool value )
+        public static async Task SetServerCommandPermission(Server server, string commandName, bool value)
         {
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
                 new ServerPermissions (server.Id,server.Name));
@@ -274,10 +274,10 @@ namespace MidnightBot.Modules.Permissions.Classes
                 commands[commandName] = value;
             else
                 commands.TryAdd (commandName,value);
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        public static void SetChannelModulePermission ( Channel channel,string moduleName,bool value )
+        public static async Task SetChannelModulePermission(Channel channel, string moduleName, bool value)
         {
             var server = channel.Server;
 
@@ -293,10 +293,10 @@ namespace MidnightBot.Modules.Permissions.Classes
                 modules[moduleName] = value;
             else
                 modules.TryAdd (moduleName,value);
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        public static void SetChannelCommandPermission ( Channel channel,string commandName,bool value )
+        public static async Task SetChannelCommandPermission(Channel channel, string commandName, bool value)
         {
             var server = channel.Server;
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
@@ -311,10 +311,10 @@ namespace MidnightBot.Modules.Permissions.Classes
                 commands[commandName] = value;
             else
                 commands.TryAdd (commandName,value);
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        public static void SetRoleModulePermission ( Role role,string moduleName,bool value )
+        public static async Task SetRoleModulePermission(Role role, string moduleName, bool value)
         {
             var server = role.Server;
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
@@ -329,10 +329,10 @@ namespace MidnightBot.Modules.Permissions.Classes
                 modules[moduleName] = value;
             else
                 modules.TryAdd (moduleName,value);
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        public static void SetRoleCommandPermission ( Role role,string commandName,bool value )
+        public static async Task SetRoleCommandPermission(Role role, string commandName, bool value)
         {
             var server = role.Server;
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
@@ -347,10 +347,10 @@ namespace MidnightBot.Modules.Permissions.Classes
                 commands[commandName] = value;
             else
                 commands.TryAdd (commandName,value);
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        public static void SetUserModulePermission ( User user,string moduleName,bool value )
+        public static async Task SetUserModulePermission(User user, string moduleName, bool value)
         {
             var server = user.Server;
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
@@ -365,10 +365,10 @@ namespace MidnightBot.Modules.Permissions.Classes
                 modules[moduleName] = value;
             else
                 modules.TryAdd (moduleName,value);
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        public static void SetUserCommandPermission ( User user,string commandName,bool value )
+        public static async Task SetUserCommandPermission(User user, string commandName, bool value)
         {
             var server = user.Server;
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
@@ -382,19 +382,19 @@ namespace MidnightBot.Modules.Permissions.Classes
                 commands[commandName] = value;
             else
                 commands.TryAdd (commandName,value);
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        public static void SetServerWordPermission ( Server server,bool value )
+        public static async Task SetServerWordPermission(Server server, bool value)
         {
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
                 new ServerPermissions (server.Id,server.Name));
 
             serverPerms.Permissions.FilterWords = value;
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        public static void SetChannelWordPermission ( Channel channel,bool value )
+        public static async Task SetChannelWordPermission(Channel channel, bool value)
         {
             var server = channel.Server;
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
@@ -404,19 +404,19 @@ namespace MidnightBot.Modules.Permissions.Classes
                 serverPerms.ChannelPermissions.Add (channel.Id,new Permissions (channel.Name));
 
             serverPerms.ChannelPermissions[channel.Id].FilterWords = value;
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        public static void SetServerFilterInvitesPermission ( Server server,bool value )
+        public static async Task SetServerFilterInvitesPermission(Server server, bool value)
         {
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
                 new ServerPermissions (server.Id,server.Name));
 
             serverPerms.Permissions.FilterInvites = value;
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        public static void SetChannelFilterInvitesPermission ( Channel channel,bool value )
+        public static async Task SetChannelFilterInvitesPermission(Channel channel, bool value)
         {
             var server = channel.Server;
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
@@ -426,10 +426,10 @@ namespace MidnightBot.Modules.Permissions.Classes
                 serverPerms.ChannelPermissions.Add (channel.Id,new Permissions (channel.Name));
 
             serverPerms.ChannelPermissions[channel.Id].FilterInvites = value;
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        public static void SetCommandCooldown(Server server, string commandName, int value)
+        public static async Task SetCommandCooldown(Server server, string commandName, int value)
         {
             var serverPerms = PermissionsDict.GetOrAdd(server.Id,
                 new ServerPermissions(server.Id, server.Name));
@@ -441,26 +441,26 @@ namespace MidnightBot.Modules.Permissions.Classes
                 serverPerms.CommandCooldowns.AddOrUpdate(commandName, value, (str, v) => value);
             }
 
-            Task.Run(() => WriteServerToJson(serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
-        public static void AddFilteredWord ( Server server,string word )
+        public static async Task AddFilteredWord(Server server, string word)
         {
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
                 new ServerPermissions (server.Id,server.Name));
             if (serverPerms.Words.Contains (word))
                 throw new InvalidOperationException ("Dieses Wort ist schon gebannt.");
             serverPerms.Words.Add (word);
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
-        public static void RemoveFilteredWord ( Server server,string word )
+        public static async Task RemoveFilteredWord(Server server, string word)
         {
             var serverPerms = PermissionsDict.GetOrAdd (server.Id,
                 new ServerPermissions (server.Id,server.Name));
             if (!serverPerms.Words.Contains (word))
                 throw new InvalidOperationException ("Dieses Wort ist nicht gebannt.");
             serverPerms.Words.Remove (word);
-            Task.Run (() => WriteServerToJson (serverPerms));
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
     }
     /// <summary>

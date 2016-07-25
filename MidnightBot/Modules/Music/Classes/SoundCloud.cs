@@ -8,30 +8,30 @@ namespace MidnightBot.Modules.Music.Classes
 {
     public class SoundCloud
     {
-        private static readonly SoundCloud _instance = new SoundCloud ();
+        private static readonly SoundCloud _instance = new SoundCloud();
         public static SoundCloud Default => _instance;
 
-        static SoundCloud () { }
-        public SoundCloud () { }
+        static SoundCloud() { }
+        public SoundCloud() { }
 
-        public async Task<SoundCloudVideo> ResolveVideoAsync( string url )
+        public async Task<SoundCloudVideo> ResolveVideoAsync(string url)
         {
-            if (string.IsNullOrWhiteSpace (url))
-                throw new ArgumentNullException (nameof (url));
-            if (string.IsNullOrWhiteSpace (MidnightBot.Creds.SoundCloudClientID))
-                throw new ArgumentNullException (nameof (MidnightBot.Creds.SoundCloudClientID));
+            if (string.IsNullOrWhiteSpace(url))
+                throw new ArgumentNullException(nameof(url));
+            if (string.IsNullOrWhiteSpace(MidnightBot.Creds.SoundCloudClientID))
+                throw new ArgumentNullException(nameof(MidnightBot.Creds.SoundCloudClientID));
 
-            var response = await SearchHelper.GetResponseStringAsync ($"http://api.soundcloud.com/resolve?url={url}&client_id={MidnightBot.Creds.SoundCloudClientID}").ConfigureAwait (false);
+            var response = await SearchHelper.GetResponseStringAsync($"http://api.soundcloud.com/resolve?url={url}&client_id={MidnightBot.Creds.SoundCloudClientID}").ConfigureAwait(false);
 
-            var responseObj = Newtonsoft.Json.JsonConvert.DeserializeObject<SoundCloudVideo> (response);
+            var responseObj = Newtonsoft.Json.JsonConvert.DeserializeObject<SoundCloudVideo>(response);
             if (responseObj?.Kind != "track")
-                throw new InvalidOperationException ("Url ist entweder kein Track, oder existiert nicht.");
+                throw new InvalidOperationException("Url is either not a track, or it doesn't exist.");
 
             return responseObj;
         }
 
-        public bool IsSoundCloudLink ( string url ) =>
-            System.Text.RegularExpressions.Regex.IsMatch (url,"(.*)(soundcloud.com|snd.sc)(.*)");
+        public bool IsSoundCloudLink(string url) =>
+            System.Text.RegularExpressions.Regex.IsMatch(url, "(.*)(soundcloud.com|snd.sc)(.*)");
 
         internal async Task<SoundCloudVideo> GetVideoByQueryAsync(string query)
         {
@@ -48,25 +48,25 @@ namespace MidnightBot.Modules.Music.Classes
 
             return responseObj;
         }
-}
+    }
 
     public class SoundCloudVideo
     {
         public string Kind { get; set; } = "";
         public long Id { get; set; } = 0;
-        public SoundCloudUser User { get; set; } = new SoundCloudUser ();
+        public SoundCloudUser User { get; set; } = new SoundCloudUser();
         public string Title { get; set; } = "";
         [JsonIgnore]
         public string FullName => User.Name + " - " + Title;
         public bool Streamable { get; set; } = false;
-        [JsonProperty ("permalink_url")]
+        [JsonProperty("permalink_url")]
         public string TrackLink { get; set; } = "";
         [JsonIgnore]
         public string StreamLink => $"https://api.soundcloud.com/tracks/{Id}/stream?client_id={MidnightBot.Creds.SoundCloudClientID}";
     }
     public class SoundCloudUser
     {
-        [Newtonsoft.Json.JsonProperty ("username")]
+        [Newtonsoft.Json.JsonProperty("username")]
         public string Name { get; set; }
     }
     /*

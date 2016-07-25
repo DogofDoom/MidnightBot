@@ -166,6 +166,14 @@ namespace MidnightBot.Modules.Searches
                          .ConfigureAwait (false);
                      });
 
+                cgb.CreateCommand(Prefix + "randomdog")
+                    .Alias(Prefix + "woof")
+                    .Description("Zeigt ein zufälliges Hundebild.")
+                    .Do(async e =>
+                    {
+                        await e.Channel.SendMessage("http://random.dog/" + await SearchHelper.GetResponseStringAsync("http://random.dog/woof").ConfigureAwait(false)).ConfigureAwait(false);
+                    });
+
                 cgb.CreateCommand (Prefix + "i")
                    .Description ("Zeigt das erste Ergebnis für eine Suche. Benutze ~ir für unterschiedliche Ergebnisse.\n**Benutzung**: ~i cute kitten")
                    .Parameter ("query",ParameterType.Unparsed)
@@ -237,14 +245,15 @@ namespace MidnightBot.Modules.Searches
                      });
 
                 cgb.CreateCommand(Prefix + "google")
+                    .Alias(Prefix + "g")
                     .Description("Gibt einen Google-Suchlink für einen Begriff zurück.")
                     .Parameter("terms", ParameterType.Unparsed)
                     .Do(async e =>
                     {
-                        var terms = e.GetArg("terms")?.Trim().Replace(' ', '+');
+                        var terms = e.GetArg("terms")?.Trim();
                         if (string.IsNullOrWhiteSpace(terms))
                             return;
-                        await e.Channel.SendMessage($"https://google.com/search?q={ HttpUtility.UrlEncode(terms) }")
+                        await e.Channel.SendMessage($"https://google.com/search?q={ HttpUtility.UrlEncode(terms).Replace(' ', '+') }")
                                        .ConfigureAwait(false);
                     });
 

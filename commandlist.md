@@ -2,7 +2,7 @@
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
 #MidnightBot List Of Commands  
-Version: `MidnightBot v0.9.6045.25428`
+Version: `MidnightBot v0.9.6050.37388`
 ### Help  
 Befehl und Alternativen |  Beschreibung |  Benutzung
 ----------------|--------------|-------
@@ -26,7 +26,7 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 `.greetpm`  |  Stellt ein ob der Gruß im Channel, oder per PN geschickt wird.
 `.spmom`  |  Toggles whether mentions of other offline users on your server will send a pm to them.
 `.logserver`  |  Toggles logging in this channel. Logs every message sent/deleted/edited on the server. **Bot Owner Only!**
-`.logignore`, `Toggles whether the .logserver command ignores this channel. Useful if you have hidden admin channel and public log channel.`  |  
+`.logignore`  |  Toggles whether the .logserver command ignores this channel. Useful if you have hidden admin channel and public log channel.
 `.userpresence`  |  Starts logging to this channel when someone from the server goes online/offline/idle. **Bot Owner Only!**
 `.voicepresence`  |  Toggles logging to this channel whenever someone joins or leaves a voice channel you are in right now. **Bot Owner Only!**
 `.repeatinvoke`, `.repinv`  |  Zeigt die Repeat Nachricht sofort an und startet den Timer neu.
@@ -112,6 +112,7 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 `.channelid`, `.cid`  |  Zeigt ID des derzeitigen Channels
 `.serverid`, `.sid`  |  Zeigt ID des derzeitigen Servers.
 `.roles`  |  Listet alle Rollen auf diesem Server, oder die eines Benutzers wenn spezifiziert.
+`.channeltopic`, `.ct`  |  Sends current channel's topic as a message. |  `.ct`
 
 ### Permissions  
 Befehl und Alternativen |  Beschreibung |  Benutzung
@@ -183,6 +184,8 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 `$roll`  |  Würfelt von 0-100. Wenn du eine Zahl [x] angibst werden bis zu 30 normale Würfel geworfen. Wenn du 2 Zahlen mit einem d trennst (xdy) werden x Würfel von 0 bis y geworfen. |  $roll oder $roll 7 oder $roll 3d5
 `$nroll`  |  Würfelt in einer gegebenen Zahlenreichweite. |  `$nroll 5` (rolls 0-5) or `$nroll 5-15`
 `$rolluo`  |  Würfelt von 0-100. Wenn du eine Zahl [x] angibst werden bis zu 30 normale Würfel geworfen. Wenn du 2 Zahlen mit einem d trennst (xdy) werden x Würfel von 0 bis y geworfen. |  $rolluo oderr $rolluo 7 oder $rolluo 3d5
+`$race`  |  Startet ein neues Tier-Rennen.
+`$joinrace`, `$jr`  |  Tritt einem neuem Rennen bei
 `$raffle`  |  Schreibt den Namen und die ID eines zufälligen Benutzers aus der Online Liste einer (optionalen) Rolle.
 `$$$`  |  Überprüft, wieviele Euro du hast.
 `$award`  |  Gibt jemanden eine bestimmte Anzahl an Euro. **Bot Owner Only!** |  $award 5 @Benutzer
@@ -215,40 +218,39 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 ### Music  
 Befehl und Alternativen |  Beschreibung |  Benutzung
 ----------------|--------------|-------
-`!next`, `!n`, `!skip`  |  Geht zum nächsten Song in der Liste. Du musst im gleichen Voice-Channel wie der Bot sein. |  `!n`
-`!stop`, `!s`  |  Stoppt die Musik komplett. Bleibt im Channel.Du musst im gleichen Voice-Channel wie der Bot sein. |  `!s`
-`!destroy`, `!d`  |  Stoppt die Musik komplett.
-`!pause`, `!p`  |  Pausiert, oder unpausiert ein Lied.
-`!queue`, `!q`, `!yq`, `!songrequest`  |  Listet einen Song mit Keyword oder Link. Bot joint dem eigenen Voice-Channel. **Du musst in einem Voice-Channel sein!**. |  `!q Dream Of Venice`
-`soundcloudqueue`, `sq`  |  Queue a soundcloud song using keywords. Bot will join your voice channel.**You must be in a voice channel**. |  `!m sq Dream Of Venice`
-`!listqueue`, `!lq`  |  Zeigt bis zu 15 Songs per Seite. Standard Seite ist 1. |  `!lq` or `!lq 2`
-`!nowplaying`, `!np`  |  Zeigt den derzeit spielenden Song.
-`!volume`, `!vol`  |  Setzt die Lautstärke auf 0-100%
-`!defvol`, `!dv`  |  Setzt die Standardlautstärke, wenn Musik startet. (0-100). Muss nach neustart neu eingestellt werden. |  !dv 80
-`!mute`, `!min`  |  Setzt die Lautstärke auf 0%
-`!max`  |  Setzt de Lautstärke auf 100%.
-`!half`  |  Setzt die Lautstärke auf 50%.
-`!shuffle`, `!sh`  |  Mischt die derzeitige Abspielliste.
-`!setgame`  |  Setzt das Spiel auf die Nummer der Lieder die gespielt werden. **Bot Owner Only!**
-`!playlist`, `!pl`, `!playlistrequest`  |  Listet bis zu 500 Lieder aus einer Youtubeplaylist, oder aus einem Suchbegriff.
-`soundcloudpl`, `scpl`  |  Listet eine SounCloud Playlist per Link. |  `!scpl https://soundcloud.com/saratology/sets/symphony`
-`!localplaylst`, `!lopl`  |  Listet alle Lieder von einem Verzeichnis. **Bot Owner Only!**
-`!radio`, `!ra`  |  Listet einen direkten Radio Stream von einem Link.
-`!local`, `!lo`  |  Listet einen lokalen Song mit vollen Pfad. **Bot Owner Only!** |  `!lo C:/music/mysong.mp3`
-`!move`, `!mv`  |  Verschiebt den Bot in den eigenen Voice-Channel. (Funktioniert nur, wenn schon Musik läuft)
-`!remove`, `!rm`  |  Entfernt einen Song mit seiner Id, oder 'all' um die komplette Liste zu löschen.
+`!next`, `!n`, `!skip`  |  Goes to the next song in the queue. You have to be in the same voice channel as the bot. |  `!n`
+`!stop`, `!s`  |  Stops the music and clears the playlist. Stays in the channel. |  `!s`
+`!destroy`, `!d`  |  Completely stops the music and unbinds the bot from the channel. (may cause weird behaviour) |  `!d`
+`!pause`, `!p`  |  Pauses or Unpauses the song. |  `!p`
+`!queue`, `!q`, `!yq`  |  Queue a song using keywords or a link. Bot will join your voice channel.**You must be in a voice channel**. |  `!q Dream Of Venice`
+`!soundcloudqueue`, `!sq`  |  Queue a soundcloud song using keywords. Bot will join your voice channel.**You must be in a voice channel**. |  `!sq Dream Of Venice`
+`!listqueue`, `!lq`  |  Lists 15 currently queued songs per page. Default page is 1. |  `!lq` or `!lq 2`
+`!nowplaying`, `!np`  |  Shows the song currently playing. |  `!np`
+`!volume`, `!vol`  |  Sets the music volume 0-100% |  `!vol 50`
+`!defvol`, `!dv`  |  Sets the default music volume when music playback is started (0-100). Persists through restarts. |  `!dv 80`
+`!mute`, `!min`  |  Sets the music volume to 0% |  `!min`
+`!max`  |  Sets the music volume to 100%. |  `!max`
+`!half`  |  Sets the music volume to 50%. |  `!half`
+`!shuffle`, `!sh`  |  Shuffles the current playlist. |  `!sh`
+`!playlist`, `!pl`  |  Queues up to 500 songs from a youtube playlist specified by a link, or keywords. |  `!pl playlist link or name`
+`!soundcloudpl`, `!scpl`  |  Queue a soundcloud playlist using a link. |  `!scpl https://soundcloud.com/saratology/sets/symphony`
+`!localplaylst`, `!lopl`  |  Queues all songs from a directory. **Bot Owner Only!** |  `!lopl C:/music/classical`
+`!radio`, `!ra`  |  Queues a radio stream from a link. It can be a direct mp3 radio stream, .m3u, .pls .asx or .xspf (Usage Video: <https://streamable.com/al54>) |  `!ra radio link here`
+`!local`, `!lo`  |  Queues a local file by specifying a full path. **Bot Owner Only!** |  `!lo C:/music/mysong.mp3`
+`!move`, `!mv`  |  Moves the bot to your voice channel. (works only if music is already playing) |  `!mv`
+`!remove`, `!rm`  |  Remove a song by its # in the queue, or 'all' to remove whole queue. |  `!rm 5`
 `!movesong`, `!ms`  |  Moves a song from one position to another. |  `! ms` 5>3
-`setmaxqueue`, `smq`  |  Setzt eine Maximale Listengröße. Gib 0, oder nichts ein, um kein Limit zu haben.  |  `! smq` 50 oder `! smq`
-`!cleanup`  |  Bereinigt hängende Voice-Verbindung. **Bot Owner Only!**
-`!reptcursong`, `!rcs`  |  Schaltet das Wiederholen des derzeitigen Liedes um.
-`!rpeatplaylst`, `!rpl`  |  Schaltet das Wiederholen aller Songs in der Liste um. (Jedes beendete Lied wird an das Ende der Liste hinzugefügt).
-`!save`  |  Speichert eine Playlist unter einem bestimmten Namen. Name darf nicht länger als 20 Zeichen sein und darf keine Kommas beinhalten. |  `!save classical1`
-`!load`  |  Lädt eine Playlist mit bestimmten Namen. |  `!load classical1`
-`!playlists`, `!pls`  |  Listet alle Playlisten. Seitenweiße. 20 je Seote. Standard-Seite ist 0. | `!pls 1`
-`deleteplaylist`, `delpls`  |  Löscht eine gespeicherte Playlist. Nur wenn du sie erstellt hast, oder wenn du der Bot-Owner bist. |  `!m delpls animu-5`
-`!goto`  |  Skipped zu einer bestimmten Zeit in Sekunden im aktuellen Lied.
-`!getlink`, `!gl`  |  Zeigt einen Link zum derzeitigen Lied.
-`!autoplay`, `!ap`  |  Toggles Autoplay - Wenn das Lied vorbei ist, listet automatisch einen verwandten YouTube-Song. (Funktioniert nur für YouTubes Songs und wenn Songliste leer ist)
+`!setmaxqueue`, `!smq`  |  Sets a maximum queue size. Supply 0 or no argument to have no limit.  |  `!smq` 50 or `!smq`
+`!cleanup`  |  Cleans up hanging voice connections. **Bot Owner Only!** |  `!cleanup`
+`!reptcursong`, `!rcs`  |  Toggles repeat of current song. |  `!rcs`
+`!rpeatplaylst`, `!rpl`  |  Toggles repeat of all songs in the queue (every song that finishes is added to the end of the queue). |  `!rpl`
+`!save`  |  Saves a playlist under a certain name. Name must be no longer than 20 characters and mustn't contain dashes. |  `!save classical1`
+`!load`  |  Loads a playlist under a certain name.  |  `!load classical-1`
+`!playlists`, `!pls`  |  Lists all playlists. Paginated. 20 per page. Default page is 0. | `!pls 1`
+`!deleteplaylist`, `!delpls`  |  Deletes a saved playlist. Only if you made it or if you are the bot owner. |  `!delpls animu-5`
+`!goto`  |  Goes to a specific time in seconds in a song.
+`!getlink`, `!gl`  |  Shows a link to the currently playing song.
+`!autoplay`, `!ap`  |  Toggles autoplay - When the song is finished, automatically queue a related youtube song. (Works only for youtube songs and when queue is empty)
 
 ### Searches  
 Befehl und Alternativen |  Beschreibung |  Benutzung
@@ -284,12 +286,13 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 `~imdb`  |  Durchsucht IMDB nach Filmen oder Serien und zeigt erstes Ergebnis.
 `~mang`, `~manga`, `~mq`  |  Durchsucht anilist nach einem Manga und zeigt das erste Ergebnis.
 `~randomcat`, `~meow`  |  Zeigt ein zufälliges Katzenbild.
+`~randomdog`, `~woof`  |  Zeigt ein zufälliges Hundebild.
 `~i`  |  Zeigt das erste Ergebnis für eine Suche. Benutze ~ir für unterschiedliche Ergebnisse.
  |  ~i cute kitten
 `~ir`  |  Zeigt ein zufälliges Bild bei einem angegeben Suchwort.
  |  ~ir cute kitten
 `~lmgtfy`  |  Google etwas für einen Idioten.
-`~google`  |  Gibt einen Google-Suchlink für einen Begriff zurück.
+`~google`, `~g`  |  Gibt einen Google-Suchlink für einen Begriff zurück.
 `~hs`  |  Sucht eine Heartstone-Karte und zeigt ihr Bild. Braucht eine Weile zum beenden.
  | ~hs Ysera
 `~ud`  |  Durchsucht das Urban Dictionary nach einem Wort.

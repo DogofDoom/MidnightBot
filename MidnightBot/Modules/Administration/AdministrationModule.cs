@@ -83,7 +83,7 @@ namespace MidnightBot.Modules.Administration
                     {
                         var conf = SpecificConfigurations.Default.Of(e.Server.Id);
                         conf.AutoDeleteMessagesOnCommand = !conf.AutoDeleteMessagesOnCommand;
-                        Classes.JSONModels.ConfigHandler.SaveConfig();
+                        await Classes.JSONModels.ConfigHandler.SaveConfig().ConfigureAwait(false);
                         if (conf.AutoDeleteMessagesOnCommand)
                             await e.Channel.SendMessage("❗`Ich lösche jetzt automatisch die Befehlsaufrufe.`");
                         else
@@ -687,8 +687,9 @@ namespace MidnightBot.Modules.Administration
                          }
                          if (string.IsNullOrWhiteSpace (e.GetArg ("user_or_num"))) // if nothing is set, clear nadeko's messages, no permissions required
                          {
-                         msgs = (await e.Channel.DownloadMessages(100).ConfigureAwait(false)).Where(m => m.User.Id == e.Server.CurrentUser.Id).ToArray();
-                            if (!msgs.Any())
+                             msgs = (await e.Channel.DownloadMessages(100).ConfigureAwait(false));//.Where(m => m.User.Id == e.Server.CurrentUser.Id).ToArray();
+                             msgs = msgs.Where(m => m.User.Id == e.Server.CurrentUser.Id).ToArray();
+                             if (!msgs.Any())
                                 return;
                             await e.Channel.DeleteMessages(msgs).ConfigureAwait(false);
                              return;
@@ -791,8 +792,8 @@ namespace MidnightBot.Modules.Administration
                          if (string.IsNullOrWhiteSpace(msg))
                             return;
 
-                var ids = e.GetArg("ids").Split('-');
-                        if (ids.Length != 2)
+                         var ids = e.GetArg("ids").Split('|');
+                         if (ids.Length != 2)
                             return;
                         var sid = ulong.Parse(ids[0]);
                         var server = MidnightBot.Client.Servers.Where(s => s.Id == sid).FirstOrDefault();

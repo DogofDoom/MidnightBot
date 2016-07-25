@@ -60,7 +60,7 @@ namespace MidnightBot.Modules.Gambling
             {
                 var guess = guessStr == "KOPF" || guessStr == "K";
                 bool result = false;
-                if (rng.Next(0, 5) == 1)
+                if (rng.Next(0, 3) == 1)
                 {
                     await e.Channel.SendFile("heads.png", Properties.Resources.heads.ToStream(System.Drawing.Imaging.ImageFormat.Png)).ConfigureAwait(false);
                     result = true;
@@ -73,8 +73,8 @@ namespace MidnightBot.Modules.Gambling
                 string str;
                 if (guess == result)
                 {
-                    str = $"{e.User.Mention}`Du hast richtig geraten!` Du hast {amount * 3}{MidnightBot.Config.CurrencySign} gewonnen.";
-                    await FlowersHandler.AddFlowersAsync(e.User, "Betflip Gamble", amount * 3, true).ConfigureAwait(false);
+                    str = $"{e.User.Mention}`Du hast richtig geraten!` Du hast {amount * 2}{MidnightBot.Config.CurrencySign} gewonnen.";
+                    await FlowersHandler.AddFlowersAsync(e.User, "Betflip Gamble", amount * 2, true).ConfigureAwait(false);
 
                 }
                 else
@@ -86,7 +86,7 @@ namespace MidnightBot.Modules.Gambling
             {
                 var guess = guessStr == "ZAHL" || guessStr == "Z";
                 bool result = false;
-                if (rng.Next(0, 5) == 1)
+                if (rng.Next(0, 3) == 1)
                 {
                     await e.Channel.SendFile("tails.png", Properties.Resources.tails.ToStream(System.Drawing.Imaging.ImageFormat.Png)).ConfigureAwait(false);
                     result = true;
@@ -99,8 +99,8 @@ namespace MidnightBot.Modules.Gambling
                 string str;
                 if (guess == result)
                 {
-                    str = $"{e.User.Mention}`Du hast richtig geraten!` Du hast {amount * 3}{MidnightBot.Config.CurrencySign} gewonnen.";
-                    await FlowersHandler.AddFlowersAsync(e.User, "Betflip Gamble", amount * 3, true).ConfigureAwait(false);
+                    str = $"{e.User.Mention}`Du hast richtig geraten!` Du hast {amount * 2}{MidnightBot.Config.CurrencySign} gewonnen.";
+                    await FlowersHandler.AddFlowersAsync(e.User, "Betflip Gamble", amount * 2, true).ConfigureAwait(false);
 
                 }
                 else

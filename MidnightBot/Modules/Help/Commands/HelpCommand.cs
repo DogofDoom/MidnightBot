@@ -5,6 +5,7 @@ using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MidnightBot.Classes.Help.Commands
@@ -94,8 +95,13 @@ namespace MidnightBot.Classes.Help.Commands
             var com = MidnightBot.Client.GetService<CommandService>().AllCommands
                 .FirstOrDefault(c => c.Text.ToLowerInvariant().Equals(comToFind) ||
                                         c.Aliases.Select(a => a.ToLowerInvariant()).Contains(comToFind));
+
+            var str = "";
+                var alias = com.Aliases.FirstOrDefault();
+                if (alias != null)
+                    str = $" / `{ com.Aliases.FirstOrDefault()}`";
             if (com != null)
-                await e.Channel.SendMessage($"**__Hilfe für `{com.Text}`__ / __`{("" + com.Aliases.FirstOrDefault() + "" ?? "")}`__**\n**Beschreibung:** {com.Description.Replace("|", "\n**Benutzung:**")}").ConfigureAwait(false);
+                await e.Channel.SendMessage($@"**__Hilfe für:__ `{com.Text}`**" + str + $"\n**Beschreibung:** {new Regex(@"\|").Replace(com.Description, "\n**Benutzung:**", 1)}").ConfigureAwait(false);
         }).ConfigureAwait(false);
     };
     

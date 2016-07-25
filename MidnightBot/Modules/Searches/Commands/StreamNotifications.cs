@@ -70,7 +70,7 @@ namespace MidnightBot.Modules.Searches.Commands
                     }
                 }
                 catch { }
-                ConfigHandler.SaveConfig ();
+                await ConfigHandler.SaveConfig().ConfigureAwait(false);
             };
 
             checkTimer.Start ();
@@ -257,7 +257,7 @@ namespace MidnightBot.Modules.Searches.Commands
                      }
 
                      config.ObservingStreams.Remove (toRemove);
-                     ConfigHandler.SaveConfig ();
+                     await ConfigHandler.SaveConfig().ConfigureAwait(false);
                      await e.Channel.SendMessage ($":ok: `{toRemove.Username}`'s Stream von Benachrichtigungen entfernt.").ConfigureAwait (false);
                  });
 

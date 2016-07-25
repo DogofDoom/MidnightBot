@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using MidnightBot.Extensions;
 using System.Runtime.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MidnightBot.Classes.JSONModels
 {
@@ -75,6 +77,18 @@ namespace MidnightBot.Classes.JSONModels
         public bool ForwardToAllOwners { get; set; } = false;
         public bool IsRotatingStatus { get; set; } = false;
         public int BufferSize { get; set; } = 4.MiB();
+
+        public string[] RaceAnimals { get; internal set; } = {
+                "🐼",
+                "🐻",
+                "🐧",
+                "🐨",
+                "🐬",
+                "🐞",
+                "🦀",
+                "🦄" };
+
+        [JsonIgnore]
 
         public List<Quote> Quotes { get; set; } = new List<Quote>();
 
@@ -193,12 +207,16 @@ namespace MidnightBot.Classes.JSONModels
 
     public static class ConfigHandler
     {
-        private static readonly object configLock = new object();
-        public static void SaveConfig()
+        private static readonly SemaphoreSlim configLock = new SemaphoreSlim(1, 1);
+        public static async Task SaveConfig()
         {
-            lock (configLock)
+            await configLock.WaitAsync();
+            try
             {
                 File.WriteAllText("data/config.json", JsonConvert.SerializeObject(MidnightBot.Config, Formatting.Indented));
+            }
+            finally {
+                configLock.Release();
             }
         }
 

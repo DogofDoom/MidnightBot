@@ -380,7 +380,7 @@ namespace MidnightBot.Modules.Administration.Commands
                   });
 
             cgb.CreateCommand(Prefix + "logignore")
-                .Alias($"Toggles whether the {Prefix}logserver command ignores this channel. Useful if you have hidden admin channel and public log channel.")
+                .Description($"Toggles whether the {Prefix}logserver command ignores this channel. Useful if you have hidden admin channel and public log channel.")
                 .AddCheck(SimpleCheckers.OwnerOnly())
                 .AddCheck(SimpleCheckers.ManageServer())
                 .Do(async e =>

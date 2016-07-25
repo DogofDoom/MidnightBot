@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MidnightBot.Modules.Games.Commands
@@ -44,8 +45,8 @@ namespace MidnightBot.Modules.Games.Commands
                 if (config.GenerateCurrencyChannels.TryGetValue(e.Channel.Id, out cd))
                     if (!plantpickCooldowns.TryGetValue(e.Channel.Id, out lastSpawned) || (lastSpawned + new TimeSpan(0, cd, 0)) < now)
                     {
-                        var rnd = Math.Abs(GetRandomNumber());
-                        if ((rnd % 2) == 0)
+                        var rnd = Math.Abs(rng.Next(0,101));
+                        if (rnd == 0)
                         {
                             var msgs = new[] { await e.Channel.SendFile(GetRandomCurrencyImagePath()), await e.Channel.SendMessage($"❗ Ein {MidnightBot.Config.CurrencyName} ist aus der Tasche von Mitternacht gefallen! Hebe Ihn schnell mit `>pick` auf, bevor er es bemerkt.") };
                             plantedFlowerChannels.AddOrUpdate(e.Channel.Id, msgs, (u, m) => { m.ForEach(async msgToDelete => { try { await msgToDelete.Delete(); } catch { } }); return msgs; });
@@ -59,7 +60,7 @@ namespace MidnightBot.Modules.Games.Commands
         //channelid/messageid pair
         ConcurrentDictionary<ulong, IEnumerable<Message>> plantedFlowerChannels = new ConcurrentDictionary<ulong, IEnumerable<Message>>();
         public string BotName { get; set; } = MidnightBot.BotName;
-        private object locker = new object ();
+        private SemaphoreSlim locker = new SemaphoreSlim(1, 1);
 
         internal override void Init ( CommandGroupBuilder cgb )
         {
@@ -83,32 +84,34 @@ namespace MidnightBot.Modules.Games.Commands
 
             cgb.CreateCommand (Module.Prefix + "plant")
                 .Description ($"Gib einen {MidnightBot.Config.CurrencyName} aus, um in in diesen Channel zu legen. (Wenn der Bot neustartet, oder crashed, ist der {MidnightBot.Config.CurrencyName} verloren)")
-                .Do(e =>
+                .Do(async e =>
                 {
-                    lock (locker)
+                    await locker.WaitAsync().ConfigureAwait(false);
+                    try
                     {
                         if (plantedFlowerChannels.ContainsKey (e.Channel.Id))
                         {
-                            e.Channel.SendMessage ($"Hier liegt bereits ein {MidnightBot.Config.CurrencyName} in diesem Channel.");
+                            await e.Channel.SendMessage ($"Hier liegt bereits ein {MidnightBot.Config.CurrencyName} in diesem Channel.").ConfigureAwait(false);
                             return;
                         }
-                        var removed = FlowersHandler.RemoveFlowers(e.User, "Planted a flower.", 1, true).GetAwaiter().GetResult();
+                        var removed = await FlowersHandler.RemoveFlowers(e.User, "Planted a flower.", 1, true).ConfigureAwait(false);
                         if (!removed)
                         {
-                            e.Channel.SendMessage ($"Du hast keinen {MidnightBot.Config.CurrencyName}s.").Wait ();
+                            await e.Channel.SendMessage ($"Du hast keinen {MidnightBot.Config.CurrencyName}s.").ConfigureAwait(false);
                             return;
                         }
 
                         var file = GetRandomCurrencyImagePath ();
                         Message msg;
                         if (file == null)
-                            msg = e.Channel.SendMessage (MidnightBot.Config.CurrencySign).GetAwaiter ().GetResult ();
+                            msg = await e.Channel.SendMessage (MidnightBot.Config.CurrencySign).ConfigureAwait(false);
                         else
-                            msg = e.Channel.SendFile (file).GetAwaiter ().GetResult ();
+                            msg = await e.Channel.SendFile (file).ConfigureAwait(false);
                         var vowelFirst = new[] { 'a', 'e', 'i', 'o', 'u' }.Contains(MidnightBot.Config.CurrencyName[0]);
-                        var msg2 = e.Channel.SendMessage($"Oh wie nett! **{e.User.Name}** hinterlies {(vowelFirst ? "einen" : "einen")} {MidnightBot.Config.CurrencyName}. Nimm ihn per {Module.Prefix}pick").GetAwaiter().GetResult();
+                        var msg2 = await e.Channel.SendMessage($"Oh wie nett! **{e.User.Name}** hinterlies {(vowelFirst ? "einen" : "einen")} {MidnightBot.Config.CurrencyName}. Nimm ihn per {Module.Prefix}pick").ConfigureAwait(false);
                         plantedFlowerChannels.TryAdd(e.Channel.Id, new[] { msg, msg2 });
                     }
+                    finally { locker.Release(); }
                 });
 
             cgb.CreateCommand(Prefix + "gencurrency")
@@ -128,12 +131,12 @@ namespace MidnightBot.Modules.Games.Commands
                     int throwaway;
                     if (config.GenerateCurrencyChannels.TryRemove(e.Channel.Id, out throwaway))
                     {
-                        await e.Channel.SendMessage("`Währungs Erstellung deaktiviert in diesem Channel.`");
+                        await e.Channel.SendMessage("`Währungs Erstellung deaktiviert in diesem Channel.`").ConfigureAwait(false);
                     }
                     else
                     {
                         if (config.GenerateCurrencyChannels.TryAdd(e.Channel.Id, cd))
-                            await e.Channel.SendMessage($"`Währungserstellung aktiviert in diesem Channel. Cooldown ist {cd} Minuten.`");
+                            await e.Channel.SendMessage($"`Währungserstellung aktiviert in diesem Channel. Cooldown ist {cd} Minuten.`").ConfigureAwait(false);
                     }
                 });
         }

@@ -233,7 +233,7 @@ namespace MidnightBot.Modules.Sound
             });
             var resolvedSong = await Song.ResolveSong (query,musicType);
             resolvedSong.MusicPlayer = musicPlayer;
-            musicPlayer.AddSong (resolvedSong);
+            musicPlayer.AddSong (resolvedSong, 0);
         }
     }
 }

@@ -68,7 +68,7 @@ namespace MidnightBot.Modules.Permissions.Commands
                             var chan = string.IsNullOrWhiteSpace(chanStr)
                                 ? e.Channel
                                 : PermissionHelper.ValidateChannel(e.Server, chanStr);
-                            PermissionsHandler.SetChannelWordPermission(chan, state);
+                            await PermissionsHandler.SetChannelWordPermission(chan, state).ConfigureAwait(false);
                             await e.Channel.SendMessage($"Wort Filterung wurde **{(state ? "aktiviert" : "deaktiviert")}** für Channel **{chan.Name}**.")
                             .ConfigureAwait (false);
                             return;
@@ -77,7 +77,7 @@ namespace MidnightBot.Modules.Permissions.Commands
 
                         foreach (var curChannel in e.Server.TextChannels)
                         {
-                            PermissionsHandler.SetChannelWordPermission(curChannel, state);
+                            await PermissionsHandler.SetChannelWordPermission(curChannel, state).ConfigureAwait(false);
                         }
                         await e.Channel.SendMessage($"Wort Filterung wurde **{(state ? "aktiviert" : "deaktivert")}** für **ALLE** Channel.")
                         .ConfigureAwait (false);
@@ -101,7 +101,7 @@ namespace MidnightBot.Modules.Permissions.Commands
                        var word = e.GetArg("word");
                        if (string.IsNullOrWhiteSpace(word))
                            return;
-                       PermissionsHandler.AddFilteredWord(e.Server, word.ToLowerInvariant().Trim());
+                       await PermissionsHandler.AddFilteredWord(e.Server, word.ToLowerInvariant().Trim()).ConfigureAwait(false);
                        await e.Channel.SendMessage($"Neues Wort erfolgreich zum Filter hinzugefügt.")
                        .ConfigureAwait (false);
 
@@ -124,7 +124,7 @@ namespace MidnightBot.Modules.Permissions.Commands
                        var word = e.GetArg("word");
                        if (string.IsNullOrWhiteSpace(word))
                            return;
-                       PermissionsHandler.RemoveFilteredWord(e.Server, word.ToLowerInvariant().Trim());
+                       await PermissionsHandler.RemoveFilteredWord(e.Server, word.ToLowerInvariant().Trim()).ConfigureAwait(false);
                        await e.Channel.SendMessage($"Wort erfolgreich von Liste entfernt.")
                        .ConfigureAwait (false);
 
@@ -164,7 +164,7 @@ namespace MidnightBot.Modules.Permissions.Commands
                     try
                     {
                         var state = PermissionHelper.ValidateBool(e.GetArg("bool"));
-                        PermissionsHandler.SetServerWordPermission(e.Server, state);
+                        await PermissionsHandler.SetServerWordPermission(e.Server, state).ConfigureAwait(false);
                         await e.Channel.SendMessage($"Wort Filterung wurde **{(state ? "aktiviert" : "deaktiviert")}** auf diesem Server.")
                         .ConfigureAwait (false);
 

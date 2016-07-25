@@ -2,10 +2,11 @@
 using Discord.Audio;
 using MidnightBot.Extensions;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
 namespace MidnightBot.Modules.Music.Classes
 {
 
@@ -21,22 +22,18 @@ namespace MidnightBot.Modules.Music.Classes
     {
         Resolving,
         Queued,
-        Buffering, //not using it atm
         Playing,
         Completed
     }
 
     public class MusicPlayer
     {
-        public static int MaximumPlaylistSize => 50;
-
         private IAudioClient audioClient { get; set; }
 
-        private readonly List<Song> playlist = new List<Song> ();
+        private readonly List<Song> playlist = new List<Song>();
         public IReadOnlyCollection<Song> Playlist => playlist;
-        private readonly object playlistLock = new object ();
 
-        public Song CurrentSong { get; set; } = default (Song);
+        public Song CurrentSong { get; private set; }
         private CancellationTokenSource SongCancelSource { get; set; }
         private CancellationToken cancelToken { get; set; }
 
@@ -55,100 +52,127 @@ namespace MidnightBot.Modules.Music.Classes
         public bool Autoplay { get; set; } = false;
         public uint MaxQueueSize { get; set; } = 0;
 
-        public MusicPlayer ( Channel startingVoiceChannel,float? defaultVolume )
+        private ConcurrentQueue<Action> actionQueue { get; set; } = new ConcurrentQueue<Action>();
+
+        public MusicPlayer(Channel startingVoiceChannel, float? defaultVolume)
         {
             if (startingVoiceChannel == null)
-                throw new ArgumentNullException (nameof (startingVoiceChannel));
+                throw new ArgumentNullException(nameof(startingVoiceChannel));
             if (startingVoiceChannel.Type != ChannelType.Voice)
-                throw new ArgumentException ("Channel must be of type voice");
+                throw new ArgumentException("Channel must be of type voice");
             Volume = defaultVolume ?? 1.0f;
 
             PlaybackVoiceChannel = startingVoiceChannel;
-            SongCancelSource = new CancellationTokenSource ();
+            SongCancelSource = new CancellationTokenSource();
             cancelToken = SongCancelSource.Token;
 
-            Task.Run (async () =>
+            Task.Run(async () =>
             {
-                while (!Destroyed)
+                try
                 {
-                    try
-                    {
-                        if (audioClient?.State != ConnectionState.Connected)
-                            audioClient = await PlaybackVoiceChannel.JoinAudio ().ConfigureAwait (false);
-                    }
-                    catch
-                    {
-                        await Task.Delay (1000).ConfigureAwait (false);
-                        continue;
-                    }
-                    CurrentSong = GetNextSong ();
-                    var curSong = CurrentSong;
-                    if (curSong != null)
+                    while (!Destroyed)
                     {
                         try
                         {
-                            OnStarted (this,curSong);
-                            await curSong.Play (audioClient,cancelToken).ConfigureAwait (false);
+                            Action action;
+                            if (actionQueue.TryDequeue(out action))
+                            {
+                                action();
+                            }
                         }
-                        catch (OperationCanceledException)
+                        finally
                         {
-                            Console.WriteLine ("Song canceled");
+                            await Task.Delay(100).ConfigureAwait(false);
                         }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine ($"Exception in PlaySong: {ex}");
-                        }
-                        OnCompleted (this,curSong);
-                        curSong = CurrentSong; //to check if its null now
-                        if (curSong != null)
-                            if (RepeatSong)
-                                playlist.Insert (0,curSong);
-                            else if (RepeatPlaylist)
-                                playlist.Insert (playlist.Count,curSong);
-                        SongCancelSource = new CancellationTokenSource ();
-                        cancelToken = SongCancelSource.Token;
                     }
-                    await Task.Delay (1000).ConfigureAwait (false);
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Action queue crashed");
+                    Console.WriteLine(ex);
+                }
+            }).ConfigureAwait(false);
+
+            var t = new Thread(new ThreadStart(async () =>
+            {
+                try
+                {
+                    while (!Destroyed)
+                    {
+                        try
+                        {
+                            if (audioClient?.State != ConnectionState.Connected)
+                            {
+                                audioClient = await PlaybackVoiceChannel.JoinAudio();
+                                continue;
+                            }
+
+                            CurrentSong = GetNextSong();
+                            RemoveSongAt(0);
+
+                            if (CurrentSong == null)
+                                continue;
+
+
+                            OnStarted(this, CurrentSong);
+                            await CurrentSong.Play(audioClient, cancelToken);
+
+                            OnCompleted(this, CurrentSong);
+
+                            if (RepeatPlaylist)
+                                AddSong(CurrentSong, CurrentSong.QueuerName);
+
+                            if (RepeatSong)
+                                AddSong(CurrentSong, 0);
+
+                        }
+                        finally
+                        {
+                            if (!cancelToken.IsCancellationRequested)
+                            {
+                                SongCancelSource.Cancel();
+                            }
+                            SongCancelSource = new CancellationTokenSource();
+                            cancelToken = SongCancelSource.Token;
+                            CurrentSong = null;
+                            await Task.Delay(300).ConfigureAwait(false);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Music thread crashed.");
+                    Console.WriteLine(ex);
+                }
+            }));
+
+            t.Start();
+        }
+
+        public void Next()
+        {
+            actionQueue.Enqueue(() =>
+            {
+                Paused = false;
+                SongCancelSource.Cancel();
             });
         }
 
-        public void Next ()
+        public void Stop()
         {
-            lock (playlistLock)
+            actionQueue.Enqueue(() =>
             {
-                if (!SongCancelSource.IsCancellationRequested)
-                {
-                    Paused = false;
-                    SongCancelSource.Cancel ();
-                }
-            }
-        }
-
-        public void Stop ()
-        {
-            lock (playlistLock)
-            {
-                playlist.Clear ();
-                CurrentSong = null;
                 RepeatPlaylist = false;
                 RepeatSong = false;
+                playlist.Clear();
                 if (!SongCancelSource.IsCancellationRequested)
-                    SongCancelSource.Cancel ();
-            }
+                    SongCancelSource.Cancel();
+            });
         }
 
-        public void TogglePause () => Paused = !Paused;
+        public void TogglePause() => Paused = !Paused;
 
-        public void Shuffle ()
-        {
-            lock (playlistLock)
-            {
-                playlist.Shuffle ();
-            }
-        }
-
-        public int SetVolume ( int volume )
+        public int SetVolume(int volume)
         {
             if (volume < 0)
                 volume = 0;
@@ -159,95 +183,95 @@ namespace MidnightBot.Modules.Music.Classes
             return volume;
         }
 
-        private Song GetNextSong ()
-        {
-            lock (playlistLock)
-            {
-                if (playlist.Count == 0)
-                    return null;
-                var toReturn = playlist[0];
-                playlist.RemoveAt (0);
-                return toReturn;
-            }
-        }
+        private Song GetNextSong() =>
+            playlist.FirstOrDefault();
 
-        public void AddSong ( Song s )
+        public void Shuffle()
         {
-            if (s == null)
-                throw new ArgumentNullException (nameof (s));
-            ThrowIfQueueFull();
-            lock (playlistLock)
+            actionQueue.Enqueue(() =>
             {
-                s.MusicPlayer = this;
-                playlist.Add (s);
-            }
+                playlist.Shuffle();
+            });
         }
 
         public void AddSong(Song s, string username)
         {
             if (s == null)
-                throw new ArgumentNullException (nameof (s));
-            lock (playlistLock)
+                throw new ArgumentNullException(nameof(s));
+            ThrowIfQueueFull();
+            actionQueue.Enqueue(() =>
             {
                 s.MusicPlayer = this;
                 s.QueuerName = username.TrimTo(10);
                 playlist.Add(s);
-            }
+            });
         }
 
-        public void RemoveSong ( Song s )
+        public void AddSong(Song s, int index)
         {
             if (s == null)
-                throw new ArgumentNullException (nameof (s));
-            lock (playlistLock)
+                throw new ArgumentNullException(nameof(s));
+            actionQueue.Enqueue(() =>
             {
-                playlist.Remove (s);
-            }
+                playlist.Insert(index, s);
+            });
         }
 
-        public void RemoveSongAt ( int index )
+        public void RemoveSong(Song s)
         {
-            lock (playlistLock)
+            if (s == null)
+                throw new ArgumentNullException(nameof(s));
+            actionQueue.Enqueue(() =>
+            {
+                playlist.Remove(s);
+            });
+        }
+
+        public void RemoveSongAt(int index)
+        {
+            actionQueue.Enqueue(() =>
             {
                 if (index < 0 || index >= playlist.Count)
-                    throw new ArgumentException ("Invalid index");
-                playlist.RemoveAt (index);
-            }
+                    return;
+                playlist.RemoveAt(index);
+            });
         }
 
-        internal Task MoveToVoiceChannel ( Channel voiceChannel )
+        internal void ClearQueue()
+        {
+            actionQueue.Enqueue(() =>
+            {
+                playlist.Clear();
+            });
+        }
+
+        public void Destroy()
+        {
+            actionQueue.Enqueue(() =>
+            {
+                RepeatPlaylist = false;
+                RepeatSong = false;
+                Destroyed = true;
+                playlist.Clear();
+                if (!SongCancelSource.IsCancellationRequested)
+                    SongCancelSource.Cancel();
+                audioClient.Disconnect();
+            });
+        }
+
+        internal Task MoveToVoiceChannel(Channel voiceChannel)
         {
             if (audioClient?.State != ConnectionState.Connected)
-                throw new InvalidOperationException ("Can't move while bot is not connected to voice channel.");
+                throw new InvalidOperationException("Can't move while bot is not connected to voice channel.");
             PlaybackVoiceChannel = voiceChannel;
-            return PlaybackVoiceChannel.JoinAudio ();
+            return PlaybackVoiceChannel.JoinAudio();
         }
 
-        internal void ClearQueue ()
-        {
-            lock (playlistLock)
-            {
-                playlist.Clear ();
-            }
-        }
+        internal bool ToggleRepeatSong() => this.RepeatSong = !this.RepeatSong;
 
-        public void Destroy ()
-        {
-            lock (playlistLock)
-            {
-                playlist.Clear ();
-                Destroyed = true;
-                CurrentSong = null;
-                if (!SongCancelSource.IsCancellationRequested)
-                    SongCancelSource.Cancel ();
-                audioClient.Disconnect ();
-            }
-        }
+        internal bool ToggleRepeatPlaylist() => this.RepeatPlaylist = !this.RepeatPlaylist;
 
-        internal bool ToggleRepeatSong () => this.RepeatSong = !this.RepeatSong;
-
-        internal bool ToggleRepeatPlaylist () => this.RepeatPlaylist = !this.RepeatPlaylist;
-        internal bool ToggleAutoplay () => this.Autoplay = !this.Autoplay;
+        internal bool ToggleAutoplay() => this.Autoplay = !this.Autoplay;
 
         internal void ThrowIfQueueFull()
         {
@@ -256,5 +280,5 @@ namespace MidnightBot.Modules.Music.Classes
             if (playlist.Count >= MaxQueueSize)
                 throw new PlaylistFullException();
         }
-}
+    }
 }

@@ -74,7 +74,7 @@ namespace MidnightBot.Modules.Permissions.Commands
                             var chan = string.IsNullOrWhiteSpace (chanStr)
                                 ? e.Channel
                                 : PermissionHelper.ValidateChannel (e.Server,chanStr);
-                            PermissionsHandler.SetChannelFilterInvitesPermission (chan,state);
+                            await PermissionsHandler.SetChannelFilterInvitesPermission(chan, state).ConfigureAwait(false);
                             await e.Channel.SendMessage ($"Invite Filter wurde **{(state ? "aktiviert" : "deaktiviert")}** für Channel **{chan.Name}**.")
                             .ConfigureAwait (false);
                             return;
@@ -83,7 +83,7 @@ namespace MidnightBot.Modules.Permissions.Commands
 
                         foreach (var curChannel in e.Server.TextChannels)
                         {
-                            PermissionsHandler.SetChannelFilterInvitesPermission (curChannel,state);
+                            await PermissionsHandler.SetChannelFilterInvitesPermission(curChannel, state).ConfigureAwait(false);
                         }
                         await e.Channel.SendMessage ($"Invite Filter wurde **{(state ? "aktiviert" : "deaktiviert")}** für **ALL** Channel.")
                         .ConfigureAwait (false);
@@ -104,7 +104,7 @@ namespace MidnightBot.Modules.Permissions.Commands
                     try
                     {
                         var state = PermissionHelper.ValidateBool (e.GetArg ("bool"));
-                        PermissionsHandler.SetServerFilterInvitesPermission (e.Server,state);
+                        await PermissionsHandler.SetServerFilterInvitesPermission(e.Server, state).ConfigureAwait(false);
                         await e.Channel.SendMessage ($"Invite Filter wurde **{(state ? "aktiviert" : "deaktiviert")}** für diesen Server.")
                         .ConfigureAwait (false);
 

@@ -42,6 +42,7 @@ namespace MidnightBot
         public static LocalizedStrings Locale { get; set; } = new LocalizedStrings ();
         public static string BotMention { get; set; } = "";
         public static bool Ready { get; set; } = false;
+        public static Action OnReady { get; set; } = delegate { };
 
         private static List<Channel> OwnerPrivateChannels { get; set; }
 
@@ -222,7 +223,15 @@ namespace MidnightBot
                     Console.ReadKey ();
                     return;
                 }
-                await Task.Delay (1000).ConfigureAwait (false);
+                Console.Write("Startvorgang dauert 10 Sekunden: ");
+                for(int i=10;i!=0;i--)
+                {
+                    Console.Write(i + " ");
+                    await Task.Delay(1000).ConfigureAwait(false);
+                }
+                Console.WriteLine();
+                //await Task.Delay(10000).ConfigureAwait(false);
+                
                 Console.WriteLine ("-----------------");
                 Console.WriteLine (await MidnightStats.Instance.GetStats ().ConfigureAwait (false));
                 Console.WriteLine ("-----------------");
@@ -259,6 +268,7 @@ namespace MidnightBot
                 //await Task.Delay(90000);
                 PermissionsHandler.Initialize ();
                 MidnightBot.Ready = true;
+                MidnightBot.OnReady();
             });
             Console.WriteLine ("Beende...");
             Console.ReadKey ();
@@ -312,5 +322,3 @@ namespace MidnightBot
         }
     }
 }
-
-//95520984584429568 meany

@@ -162,7 +162,7 @@ namespace MidnightBot.Modules.Gambling.Helpers
             var orderedPool = cardPool.OrderBy (x => r.Next ());
             cardPool = cardPool as List<Card> ?? orderedPool.ToList ();
         }
-        public override string ToString() => string.Join ("", cardPool.Select (c => c.ToString ())) + Environment.NewLine;
+        public override string ToString() => string.Concat(cardPool.Select(c => c.ToString())) + Environment.NewLine;
 
         private static void InitHandValues()
         {
@@ -242,7 +242,7 @@ namespace MidnightBot.Modules.Gambling.Helpers
             {
                 return kvp.Key;
             }
-            return "High card " + cards.Max ().GetName ();
+            return "High card " + (cards.FirstOrDefault(c => c.Number == 1)?.GetName() ?? cards.Max().GetName());
         }
     }
 }

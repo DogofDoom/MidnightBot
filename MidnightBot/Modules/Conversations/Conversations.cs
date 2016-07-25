@@ -9,13 +9,14 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MidnightBot.Modules.Conversations
 {
     internal class Conversations : DiscordModule
     {
-        private const string firestr = "🔥 ด้้้้้็็็็็้้้้้็็็็็้้้้้้้้็็็็็้้้้้็็ด้้้้้็็็็็้้้้้็็็็็้้้้้้้้็็็็็้้้้้็็็็็้้้้้้้้็็็ด้้้้้็็็็็้้้้้็็็็็้้้้้้้้็็็็็้้้้้็็็็็้้้้ 🔥";
+        private const string firestr = "🔥 ด้้้้้็็็็็้้้้้็็็็็้้้้้้้้็ด้้้้้็็็็็้้้้้็็็็็้้้้้้้้็็็็็้้้้้็็็็็้้้้้้้้็็็ด้้้้้็็็็็้้้้้็็็็็้้้้้้้้็็็็็้้้้้็็็็็้้้้ 🔥";
         private int tester = 0;
         public Conversations ()
         {
@@ -272,22 +273,23 @@ namespace MidnightBot.Modules.Conversations
                     .Parameter ("times",ParameterType.Optional)
                     .Do (async e =>
                     {
-                        var count = 1;
-                        int.TryParse (e.Args[0],out count);
-                        if (count == 0)
+                        int count;
+                        if (string.IsNullOrWhiteSpace(e.Args[0]))
                             count = 1;
+                        else
+                            int.TryParse(e.Args[0], out count);
                         if (count < 1 || count > 12)
                         {
-                            await e.Channel.SendMessage ("Nummer muss zwischen 0 und 12 sein.").ConfigureAwait (false);
+                            await e.Channel.SendMessage ("Nummer muss zwischen 1 und 12 sein.").ConfigureAwait (false);
                             return;
                         }
 
-                        var str = "";
+                        var str = new StringBuilder();
                         for (var i = 0; i < count; i++)
                         {
-                            str += firestr;
+                            str.Append(firestr);
                         }
-                        await e.Channel.SendMessage (str).ConfigureAwait (false);
+                        await e.Channel.SendMessage(str.ToString()).ConfigureAwait(false);
                     });
 
                 cgb.CreateCommand ("dump")

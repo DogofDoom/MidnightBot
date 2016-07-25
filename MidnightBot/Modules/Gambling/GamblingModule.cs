@@ -4,6 +4,7 @@ using Discord.Modules;
 using MidnightBot.Classes;
 using MidnightBot.DataModels;
 using MidnightBot.Extensions;
+using MidnightBot.Modules.Gambling.Commands;
 using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace MidnightBot.Modules.Gambling
             commands.Add (new DrawCommand (this));
             commands.Add (new FlipCoinCommand (this));
             commands.Add (new DiceRollCommand (this));
+            commands.Add(new AnimalRacing(this));
         }
         public string BotName { get; set; } = MidnightBot.BotName;
         public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Gambling;

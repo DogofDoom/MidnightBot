@@ -1,6 +1,8 @@
 ﻿using Discord.Commands;
+using Discord.Net;
 using MidnightBot.Classes;
 using MidnightBot.Modules.Permissions.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -144,7 +146,10 @@ namespace MidnightBot.Modules.Administration.Commands
                     {
                         await e.User.AddRoles(role).ConfigureAwait(false);
                     }
-                    catch
+                    catch(HttpException ex) when (ex.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+                    {
+                    }
+                    catch (Exception)
                     {
                         await e.Channel.SendMessage($":anger:`Ich kann dir diese Rolle nicht hinzufügen. Ich kann Ownern, oder Rängen die in der Hierarchy über mir sind, keine Ränge zuweisen.`").ConfigureAwait (false);
                     }

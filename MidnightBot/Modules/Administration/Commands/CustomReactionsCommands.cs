@@ -40,7 +40,7 @@ namespace MidnightBot.Modules.Administration.Commands
                         MidnightBot.Config.CustomReactions[name].Add (message);
                     else
                         MidnightBot.Config.CustomReactions.Add (name,new System.Collections.Generic.List<string> () { message });
-                    await Task.Run (() => Classes.JSONModels.ConfigHandler.SaveConfig ()).ConfigureAwait (false);
+                    await Classes.JSONModels.ConfigHandler.SaveConfig().ConfigureAwait(false);
                     await e.Channel.SendMessage ($"Hinzugefügt {name} : {message}").ConfigureAwait (false);
 
                 });
@@ -140,7 +140,7 @@ namespace MidnightBot.Modules.Administration.Commands
                     index = index - 1;
                     MidnightBot.Config.CustomReactions[name][index] = msg;
 
-                    await Task.Run(() => Classes.JSONModels.ConfigHandler.SaveConfig()).ConfigureAwait(false);
+                    await Classes.JSONModels.ConfigHandler.SaveConfig().ConfigureAwait(false);
                     await e.Channel.SendMessage($"Antwort #{index + 1} von `{name}` bearbeitet").ConfigureAwait(false);
             });
 
@@ -184,7 +184,7 @@ namespace MidnightBot.Modules.Administration.Commands
                         MidnightBot.Config.CustomReactions.Remove (name);
                         message = $"Custom Reaction: `{name}` gelöscht";
                     }
-                    await Task.Run (() => Classes.JSONModels.ConfigHandler.SaveConfig ());
+                    await Classes.JSONModels.ConfigHandler.SaveConfig().ConfigureAwait(false);
                     await e.Channel.SendMessage (message).ConfigureAwait (false);
                 });
         }

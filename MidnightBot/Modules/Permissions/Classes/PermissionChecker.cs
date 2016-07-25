@@ -26,8 +26,8 @@ namespace MidnightBot.Modules.Permissions.Classes
             {
                 while (true)
                 {
-                    //blacklist is cleared every 1.75 seconds. That is the most time anyone will be blocked
-                    await Task.Delay (1750).ConfigureAwait (false);
+                    //blacklist is cleared every 1.00 second. That is the most time anyone will be blocked
+                    await Task.Delay(1000).ConfigureAwait(false);
                     timeBlackList.Clear ();
                 }
             });
@@ -64,7 +64,7 @@ namespace MidnightBot.Modules.Permissions.Classes
             PermissionsHandler.PermissionsDict.TryGetValue(user.Server.Id, out perms);
 
             AddUserCooldown(user.Server.Id, user.Id, command.Text.ToLower());
-            if (commandCooldowns.Keys.Contains(user.Server.Id+":"+command.Text.ToLower()))
+            if (!MidnightBot.IsOwner(user.Id) && commandCooldowns.Keys.Contains(user.Server.Id+":"+command.Text.ToLower()))
             {
                 if(perms?.Verbose == true)
                     error = $"{user.Mention} Du hast einen Cooldown auf diesem Befehl.";
