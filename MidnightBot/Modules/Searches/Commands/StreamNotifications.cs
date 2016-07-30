@@ -125,7 +125,7 @@ namespace MidnightBot.Modules.Searches.Commands
             cgb.CreateCommand (Module.Prefix + "hitbox")
                 .Alias (Module.Prefix + "hb")
                 .Description ("Benachrichtigt diesen Channek wenn ein bestimmter User anfängt zu streamen." +
-                             " | ~hitbox SomeStreamer")
+                             $" | `{Prefix}hitbox SomeStreamer`")
                 .Parameter ("username",ParameterType.Unparsed)
                 .AddCheck (SimpleCheckers.ManageServer ())
                 .Do (TrackStream (StreamNotificationConfig.StreamType.Hitbox));
@@ -133,7 +133,7 @@ namespace MidnightBot.Modules.Searches.Commands
             cgb.CreateCommand (Module.Prefix + "twitch")
                 .Alias (Module.Prefix + "tw")
                 .Description ("Benachrichtigt diesen Channek wenn ein bestimmter User anfängt zu streamen." +
-                             " | ~twitch SomeStreamer")
+                             $" | `{Prefix}twitch SomeStreamer`")
                 .AddCheck (SimpleCheckers.ManageServer ())
                 .Parameter ("username",ParameterType.Unparsed)
                 .Do (TrackStream (StreamNotificationConfig.StreamType.Twitch));
@@ -141,7 +141,7 @@ namespace MidnightBot.Modules.Searches.Commands
             cgb.CreateCommand (Module.Prefix + "beam")
                 .Alias (Module.Prefix + "bm")
                 .Description ("Benachrichtigt diesen Channek wenn ein bestimmter User anfängt zu streamen." +
-                                " | ~beam SomeStreamer")
+                             $" | `{Prefix}beam SomeStreamer`")
                 .AddCheck (SimpleCheckers.ManageServer ())
                 .Parameter ("username",ParameterType.Unparsed)
                 .Do (TrackStream (StreamNotificationConfig.StreamType.Beam));
@@ -149,7 +149,7 @@ namespace MidnightBot.Modules.Searches.Commands
             cgb.CreateCommand(Module.Prefix + "checkhitbox")
                 .Alias(Module.Prefix + "chhb")
                 .Description("Checkt ob ein bestimmter User auf gerade auf Hitbox streamt." +
-                             " | ~chhb SomeStreamer")
+                             $" | `{Prefix}chhb SomeStreamer`")
                 .Parameter("username", ParameterType.Unparsed)
                 .AddCheck(SimpleCheckers.ManageServer())
                 .Do(async e =>
@@ -178,7 +178,7 @@ namespace MidnightBot.Modules.Searches.Commands
             cgb.CreateCommand(Module.Prefix + "checktwitch")
                 .Alias(Module.Prefix + "chtw")
                 .Description("Checkt ob ein bestimmter User auf gerade auf Twitch streamt." +
-                             " | ~chtw SomeStreamer")
+                             $" | `{Prefix}chtw SomeStreamer`")
                 .AddCheck(SimpleCheckers.ManageServer())
                 .Parameter("username", ParameterType.Unparsed)
                 .Do(async e =>
@@ -207,7 +207,7 @@ namespace MidnightBot.Modules.Searches.Commands
             cgb.CreateCommand(Module.Prefix + "checkbeam")
                 .Alias(Module.Prefix + "chbm")
                 .Description("Checkt ob ein bestimmter User auf gerade auf Beam streamt." +
-                             " | ~chbm SomeStreamer")
+                             $" | `{Prefix}chbm SomeStreamer`")
                 .AddCheck(SimpleCheckers.ManageServer())
                 .Parameter("username", ParameterType.Unparsed)
                 .Do(async e =>
@@ -236,7 +236,7 @@ namespace MidnightBot.Modules.Searches.Commands
             cgb.CreateCommand (Module.Prefix + "removestream")
                 .Alias (Module.Prefix + "rms")
                 .Description ("Entfernt Benachrichtigung eines bestimmten Streamers auf diesem Channel." +
-                             " | ~rms SomeGuy")
+                             $" | `{Prefix}rms SomeGuy`")
                 .AddCheck (SimpleCheckers.ManageServer ())
                 .Parameter ("username",ParameterType.Unparsed)
                 .Do (async e =>
@@ -264,7 +264,7 @@ namespace MidnightBot.Modules.Searches.Commands
             cgb.CreateCommand (Module.Prefix + "liststreams")
                 .Alias (Module.Prefix + "ls")
                 .Description ("Listet alle Streams die du auf diesem Server folgst." +
-                             " | ~ls")
+                             $" | `{Prefix}ls`")
                 .Do (async e =>
                  {
                      var config = SpecificConfigurations.Default.Of (e.Server.Id);

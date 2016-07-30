@@ -89,7 +89,7 @@ namespace MidnightBot.Modules.Administration.Commands
         {
             cgb.CreateCommand (Module.Prefix + "cleanv+t")
                 .Alias (Module.Prefix + "cv+t")
-                .Description ("Löscht alle Text-Channel die auf `-voice` enden für die keine Voicechannels gefunden werden. **Benutzung auf eigene Gefahr.**")
+                .Description ($"Löscht alle Text-Channel die auf `-voice` enden für die keine Voicechannels gefunden werden. **Benutzung auf eigene Gefahr.** | `{Prefix}cleanv+t`")
                 .AddCheck (SimpleCheckers.CanManageRoles)
                 .AddCheck (SimpleCheckers.ManageChannels ())
                 .Do (async e =>
@@ -121,7 +121,7 @@ namespace MidnightBot.Modules.Administration.Commands
             cgb.CreateCommand (Module.Prefix + "voice+text")
                 .Alias (Module.Prefix + "v+t")
                 .Description ("Erstellt einen Text-Channel für jeden Voice-Channel, welchen nur User im dazugehörigen Voice-Channel sehen können." +
-                             "Als Server-Owner sieht du alle Channel, zu jeder Zeit.")
+                             $"Als Server-Owner sieht du alle Channel, zu jeder Zeit. | `{Prefix}voice+text`")
                 .AddCheck (SimpleCheckers.ManageChannels ())
                 .AddCheck (SimpleCheckers.CanManageRoles)
                 .Do (async e =>

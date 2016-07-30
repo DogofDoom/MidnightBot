@@ -152,20 +152,20 @@ Version: `{MidnightStats.Instance.BotVersion}`";
         {
             cgb.CreateCommand (Module.Prefix + "h")
                 .Alias (Module.Prefix + "help",MidnightBot.BotMention + " help",MidnightBot.BotMention + " h","~h")
-                .Description ("Hilfe-Befehl. | '-h !m q' or just '-h' ")
+                .Description ("Hilfe-Befehl. | `-h !m q` oder einfach `-h`")
                 .Parameter ("module",ParameterType.Unparsed)
                 .Do (HelpFunc ());
             cgb.CreateCommand (Module.Prefix + "hh")
-                .Description ("Hilfe-Befehl. | '-hh !m q' or just '-h' ")
+                .Description ("Hilfe-Befehl. | `-hh !m q` or just `-h` ")
                 .Parameter ("command",ParameterType.Unparsed)
                 .Do (NewHelpFunc ());
             cgb.CreateCommand (Module.Prefix + "hgit")
-                .Description ("commandlist.md Datei erstellung. **Bot Owner Only!**")
+                .Description ($"commandlist.md Datei erstellung. **Bot Owner Only!** | `{Prefix}hgit`")
                 .AddCheck (SimpleCheckers.OwnerOnly ())
                 .Do (DoGitFunc ());
             cgb.CreateCommand (Module.Prefix + "readme")
                 .Alias (Module.Prefix + "guide")
-                .Description ("Sendet eine readme und ein Guide verlinkt zum Channel.")
+                .Description ($"Sendet eine readme und ein Guide verlinkt zum Channel. | `{Prefix}readme` or `{Prefix}guide`")
                 .AddCheck (SimpleCheckers.OwnerOnly ())
                 .Do (async e =>
                      await e.Channel.SendMessage (
@@ -179,7 +179,7 @@ Version: `{MidnightStats.Instance.BotVersion}`";
 
             cgb.CreateCommand (Module.Prefix + "donate")
                 .Alias ("~donate")
-                .Description ("Informationen um das Projekt zu unterstützen!")
+                .Description ($"Informationen um das Projekt zu unterstützen! | `{Prefix}donate` or `{Prefix}donate`")
                 .Do (async e =>
                 {
                     await e.Channel.SendMessage (

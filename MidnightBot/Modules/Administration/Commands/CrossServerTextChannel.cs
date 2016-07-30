@@ -64,8 +64,8 @@ namespace MidnightBot.Modules.Administration.Commands
         internal override void Init(CommandGroupBuilder cgb)
         {
             cgb.CreateCommand(Module.Prefix + "scsc")
-                .Description("Startet eine Instanz eines Cross Server Channels. Du bekommst einen Token" +
-                             "den andere Benutzer benutzen müssen, um auf die selbe Instanz zu kommen.")
+                .Description("Startet eine Instanz eines Cross Server Channels. Du bekommst einen Token " +
+                             $"den andere Benutzer benutzen müssen, um auf die selbe Instanz zu kommen.. | `{Prefix}scsc`")
                 .AddCheck(SimpleCheckers.OwnerOnly())
                 .Do(async e => 
                 {
@@ -79,7 +79,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand(Module.Prefix + "jcsc")
-                .Description("Joint derzeitigen Channel einer Instanz des Cross Server Channel durch Benutzung des Tokens.")
+                .Description($"Joint derzeitigen Channel einer Instanz des Cross Server Channel durch Benutzung des Tokens. | `{Prefix}jcsc`")
                 .Parameter("token")
                 .AddCheck(SimpleCheckers.ManageServer())
                 .Do(async e =>
@@ -95,7 +95,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand(Module.Prefix + "lcsc")
-                .Description("Verlässt Cross server Channel Instance von diesem Channel")
+                .Description($"Verlässt Cross server Channel Instance von diesem Channel. | `{Prefix}lcsc`")
                 .AddCheck(SimpleCheckers.ManageServer())
                 .Do(async e =>
                 {

@@ -71,7 +71,7 @@ namespace MidnightBot.Modules.Trello
                 cgb.CreateCommand (Prefix + "bind")
                     .Description ("Bindet einen trello Bot an einen einzigen Server. " +
                                  "Du erhälst Benachrichtigungen, wenn etwas entfernt, oder hinzugefügt wird." +
-                                 " | bind [board_id]")
+                                 $" | `{Prefix}bind [board_id]`")
                     .Parameter ("board_id",Discord.Commands.ParameterType.Required)
                     .Do (async e =>
                     {
@@ -122,7 +122,7 @@ namespace MidnightBot.Modules.Trello
                     });
 
                 cgb.CreateCommand (Prefix + "cards")
-                    .Description ("Lists all cards from the supplied list. You can supply either a name or an index.")
+                    .Description ($"Lists all cards from the supplied list. You can supply either a name or an index. | `{Prefix}cards index`")
                     .Parameter ("list_name",Discord.Commands.ParameterType.Unparsed)
                     .Do (async e =>
                     {

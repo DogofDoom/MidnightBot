@@ -171,22 +171,22 @@ namespace MidnightBot.Modules.Games.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "typestart")
-                .Description ("Startet einen Tipp-Wettbewerb.")
+                .Description ($"Startet einen Tipp-Wettbewerb. | `{Prefix}typestart`")
                 .Do (DoFunc ());
 
             cgb.CreateCommand (Module.Prefix + "typestop")
-                .Description ("Stoppt einen Tipp-Wettbewerb auf dem derzeitigen Channel.")
+                .Description ($"Stoppt einen Tipp-Wettbewerb auf dem derzeitigen Channel. | `{Prefix}typestop`")
                 .Do (QuitFunc ());
 
             cgb.CreateCommand (Module.Prefix + "typeadd")
-                .Description ("Fügt einen neuen Text hinzu. Owner only.")
+                .Description ($"Fügt einen neuen Text hinzu. Owner only. | `{Prefix}typeadd wordswords`")
                 .Parameter ("text",ParameterType.Unparsed)
                 .Do (async e =>
                 {
                     if (!MidnightBot.IsOwner (e.User.Id) || string.IsNullOrWhiteSpace (e.GetArg ("text")))
                         return;
 
-                    DbHandler.Instance.InsertData (new TypingArticle
+                    DbHandler.Instance.Connection.Insert(new TypingArticle
                     {
                         Text = e.GetArg ("text"),
                         DateAdded = DateTime.Now

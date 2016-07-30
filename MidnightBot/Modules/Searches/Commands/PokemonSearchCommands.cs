@@ -22,7 +22,7 @@ namespace MidnightBot.Modules.Searches.Commands
         {
             cgb.CreateCommand (Prefix + "pokemon")
                 .Alias (Prefix + "poke")
-                .Description ("Sucht nach einem Pokemon.")
+                .Description ($"Sucht nach einem Pokemon. | `{Prefix}poke Sylveon`")
                 .Parameter ("pokemon",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -43,7 +43,7 @@ namespace MidnightBot.Modules.Searches.Commands
 
             cgb.CreateCommand (Prefix + "pokemonability")
                 .Alias (Prefix + "pokeab")
-                .Description ("Sucht nach einer Pokemon Fähigkeit.")
+                .Description ($"Sucht nach einer Pokemon Fähigkeit. | `{Prefix}pokeab \"water gun\"`")
                 .Parameter ("abil",ParameterType.Unparsed)
                 .Do (async e =>
                 {

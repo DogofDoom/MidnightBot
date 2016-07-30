@@ -27,16 +27,13 @@ namespace MidnightBot.Classes
     {
         private static DateTime lastRefreshed = DateTime.MinValue;
         private static string token { get; set; } = "";
-        private static readonly HttpClient httpClient = new HttpClient ();
 
         public static async Task<Stream> GetResponseStreamAsync ( string url,
             IEnumerable<KeyValuePair<string,string>> headers = null,RequestHttpMethod method = RequestHttpMethod.Get )
         {
             if (string.IsNullOrWhiteSpace (url))
                 throw new ArgumentNullException (nameof (url));
-            //if its a post or there are no headers, use static httpclient
-            // if there are headers and it's get, it's not threadsafe
-            var cl = headers == null || method == RequestHttpMethod.Post ? httpClient : new HttpClient ();
+            var cl = new HttpClient();
             cl.DefaultRequestHeaders.Clear ();
             try
             {
@@ -466,11 +463,7 @@ namespace MidnightBot.Classes
                 }
 
                 var httpResponse = (await httpWebRequest.GetResponseAsync ().ConfigureAwait (false)) as HttpWebResponse;
-                if (httpResponse == null)
-                    return "HTTP_RESPONSE_ERROR";
                 var responseStream = httpResponse.GetResponseStream ();
-                if (responseStream == null)
-                    return "RESPONSE_STREAM ERROR";
                 using (var streamReader = new StreamReader (responseStream))
                 {
                     var responseText = await streamReader.ReadToEndAsync ().ConfigureAwait (false);
@@ -479,6 +472,7 @@ namespace MidnightBot.Classes
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Shortening of this url failed: " + url);
                 Console.WriteLine (ex.ToString ());
                 return url;
             }

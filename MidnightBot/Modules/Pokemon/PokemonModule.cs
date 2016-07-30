@@ -26,7 +26,7 @@ namespace MidnightBot.Modules.Pokemon
                 cgb.AddCheck (PermissionChecker.Instance);
 
                 cgb.CreateCommand (Prefix + "active")
-                .Description ("Zeigt das aktive Pokemon von jemandem oder einem selbst |{Prefix}active oder {Prefix}active @Someone")
+                .Description ($"Zeigt das aktive Pokemon von jemandem oder einem selbst | `{Prefix}active` oder `{Prefix}active @Someone`")
                 .Parameter ("target",ParameterType.Optional)
                 .Do (async e =>
                 {
@@ -36,7 +36,7 @@ namespace MidnightBot.Modules.Pokemon
                     });
   
                 cgb.CreateCommand(Prefix + "pokehelp")
-                .Description($"Zeigt die Basis Hilfe für Pokemon Kämpfe")
+                .Description($"Zeigt die Basis Hilfe für Pokemon Kämpfe | `{Prefix}pokehelp`")
                 .Alias(Prefix + "ph")
                 .Do(async e =>
                 {
@@ -54,7 +54,7 @@ namespace MidnightBot.Modules.Pokemon
 
                 cgb.CreateCommand(Prefix + "movelist")
                 .Alias(Prefix + "ml")
-                .Description("Zeigt eine Liste der verfügbaren Angriffe. |{Prefix}movelist, {Prefix}ml, {Prefix}ml charmander")
+                .Description($"Zeigt eine Liste der verfügbaren Angriffe. | `{Prefix}movelist` oder `{Prefix}ml` oder `{Prefix}ml charmander`")
                 .Parameter ("name",ParameterType.Optional)
                 .Do(async e =>
                 {
@@ -65,7 +65,7 @@ namespace MidnightBot.Modules.Pokemon
                 });
 
                 cgb.CreateCommand (Prefix + "switch")
-                .Description ($"Setzt dein aktives Pokemon per Nickname |{Prefix}switch mudkip")
+                .Description ($"Setzt dein aktives Pokemon per Nickname | `{Prefix}switch mudkip`")
                 .Parameter ("name",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -113,7 +113,7 @@ namespace MidnightBot.Modules.Pokemon
                 });
 
                 cgb.CreateCommand(Prefix + "allmoves")
-                .Description("Sendet dir eine private Nachticht mit allen Attacken deiner Pokemon. |{Prefix}allmoves, {Prefix}am")
+                .Description($"Sendet dir eine private Nachticht mit allen Attacken deiner Pokemon. | `{Prefix}allmoves` oder `{Prefix}am`")
                 .Alias(Prefix + "am")
                 .Do(async e =>
                 {
@@ -128,7 +128,7 @@ namespace MidnightBot.Modules.Pokemon
                 });
 
                 cgb.CreateCommand (Prefix + "list")
-                .Description ("Gibt eine Liste deiner Pokemon (6) zurück (aktives Pokemon ist unterstrichen)")
+                .Description ($"Gibt eine Liste deiner Pokemon (6) zurück (aktives Pokemon ist unterstrichen) | `{Prefix}list`")
                 .Do (async e =>
                 {
                     var list = PokemonList (e.User);
@@ -152,7 +152,7 @@ namespace MidnightBot.Modules.Pokemon
                 });
 
                 cgb.CreateCommand(Prefix + "elite4")
-                .Description($"Zeigt die 5 stärksten Pokemon. |{Prefix}elite4")
+                .Description($"Zeigt die 5 stärksten Pokemon. | `{Prefix}elite4`")
                 .Alias(Prefix + "e4")
                 .Do(async e =>
                 {
@@ -169,7 +169,7 @@ namespace MidnightBot.Modules.Pokemon
                 });
 
                 cgb.CreateCommand (Prefix + "heal")
-                .Description ($"Heilt dein angegebenes Pokemon (per Nicknamen) oder das aktive Pokemon der gegebenen Person. |{Prefix}heal bulbasaur, {Prefix}heal @user, {Prefix}heal all")
+                .Description ($"Heilt dein angegebenes Pokemon (per Nicknamen) oder das aktive Pokemon der gegebenen Person. | `{Prefix}heal bulbasaur` oder `{Prefix}heal @user` oder `{Prefix}heal all`")
                 .Parameter ("args",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -254,7 +254,7 @@ namespace MidnightBot.Modules.Pokemon
 
                 cgb.CreateCommand (Prefix + "rename")
                 .Alias (Prefix + "rn")
-                .Description ($"Benennt dein aktives Pokemon um. | {Prefix}rename dickbutt, {Prefix}rn Mittens")
+                .Description ($"Benennt dein aktives Pokemon um. | `{Prefix}rename dickbutt` oder `{Prefix}rn Mittens`")
                 .Parameter ("name",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -272,7 +272,7 @@ namespace MidnightBot.Modules.Pokemon
 
 
                 cgb.CreateCommand (Prefix + "reset")
-                .Description ($"Setzt deine Pokemon zurück. KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN |{Prefix}reset true")
+                .Description ($"Setzt deine Pokemon zurück. KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN | `{Prefix}reset true`")
                 .Parameter ("true",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -299,7 +299,7 @@ namespace MidnightBot.Modules.Pokemon
 
                 Random rand = new Random ();
                 cgb.CreateCommand(Prefix + "catch")
-                .Description($"Versucht das derzeitige wilde Pokemon zu fangen. Du musst das Pokemon angeben, welches du ersetzen willst. Kostet einen {MidnightBot.Config.CurrencyName} |{Prefix}catch MyMudkip")
+                .Description($"Versucht das derzeitige wilde Pokemon zu fangen. Du musst das Pokemon angeben, welches du ersetzen willst. Kostet einen {MidnightBot.Config.CurrencyName} | `{Prefix}catch MyMudkip`")
                 .Parameter("replace", ParameterType.Unparsed)
                 .Do(async e =>
                 {
@@ -353,7 +353,7 @@ namespace MidnightBot.Modules.Pokemon
 
                 cgb.CreateCommand (Prefix + "attack")
                 .Alias (Prefix)
-                .Description ($"Greift gegebenes Ziel mit gegebener Attacke an. | {Prefix}attack hyperbeam @user, {Prefix}attack @user flame-charge, {Prefix} sunny-day @user")
+                .Description ($"Greift gegebenes Ziel mit gegebener Attacke an. | `{Prefix}attack hyperbeam @user oder, `{Prefix}attack @user flame-charge, {Prefix} sunny-day @user`")
                 .Parameter ("args",ParameterType.Unparsed)
                 .Do (async e =>
                 {

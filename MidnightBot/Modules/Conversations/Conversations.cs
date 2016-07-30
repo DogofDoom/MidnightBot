@@ -8,9 +8,9 @@ using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace MidnightBot.Modules.Conversations
 {
@@ -35,7 +35,7 @@ namespace MidnightBot.Modules.Conversations
                 cgb.AddCheck (PermissionChecker.Instance);
 
                 cgb.CreateCommand ("..")
-                    .Description ("Fügt ein neues Zitat mit Keyword (einzelnes Wort) und Nachricht (kein Limit). | .. abc My message")
+                    .Description ("Fügt ein neues Zitat mit Keyword (einzelnes Wort) und Nachricht (kein Limit). | `.. abc My message`")
                     .Parameter ("keyword",ParameterType.Required)
                     .Parameter ("text",ParameterType.Unparsed)
                     .Do (async e =>
@@ -44,7 +44,7 @@ namespace MidnightBot.Modules.Conversations
                         if (string.IsNullOrWhiteSpace (text))
                             return;
                         await Task.Run (() =>
-                             Classes.DbHandler.Instance.InsertData (new DataModels.UserQuote ()
+                             Classes.DbHandler.Instance.Connection.Insert(new DataModels.UserQuote()
                              {
                                  DateAdded = DateTime.Now,
                                  Keyword = e.GetArg ("keyword").ToLowerInvariant (),
@@ -57,7 +57,7 @@ namespace MidnightBot.Modules.Conversations
 
 
                 cgb.CreateCommand ("...")
-                    .Description ("Zeigt ein zufälliges Zitat eines Benutzers. | .. abc")
+                    .Description ("Zeigt ein zufälliges Zitat eines Benutzers. | `... abc`")
                     .Parameter ("keyword",ParameterType.Required)
                     .Do (async e =>
                     {
@@ -142,7 +142,7 @@ namespace MidnightBot.Modules.Conversations
                 commands.ForEach (cmd => cmd.Init (cgb));
 
                 cgb.CreateCommand ("die")
-                    .Description ("Funktioniert nur für den Owner. Fährt den Bot herunter.")
+                    .Description ($"Funktioniert nur für den Owner. Fährt den Bot herunter. | `@{BotName} die`")
                     .Do (async e =>
                     {
                         if (MidnightBot.IsOwner (e.User.Id))
@@ -160,7 +160,7 @@ namespace MidnightBot.Modules.Conversations
 
                 cgb.CreateCommand ("do you love me")
                     .Alias ("do you love me?")
-                    .Description ("Antwortet nur dem Owner positiv.")
+                    .Description ($"Antwortet nur dem Owner positiv. | `@{BotName} do you love me`")
                     .Do (async e =>
                     {
                         if (MidnightBot.IsOwner (e.User.Id))
@@ -171,7 +171,7 @@ namespace MidnightBot.Modules.Conversations
 
                 cgb.CreateCommand ("how are you")
                     .Alias ("how are you?")
-                    .Description ("Antwortet nur positiv, wenn der Owner online ist.")
+                    .Description ($"Antwortet nur positiv, wenn der Owner online ist. | `@{BotName} do you love me`")
                     .Do (async e =>
                     {
                         if (MidnightBot.IsOwner (e.User.Id))
@@ -269,7 +269,7 @@ namespace MidnightBot.Modules.Conversations
                     });
 
                 cgb.CreateCommand ("fire")
-                    .Description ($"Zeigt eine unicode Feuer Nachricht. Optionaler Parameter [x] sagt ihm wie oft er das Feuer wiederholen soll. | @{BotName} fire [x]")
+                    .Description ($"Zeigt eine unicode Feuer Nachricht. Optionaler Parameter [x] sagt ihm wie oft er das Feuer wiederholen soll. | `@{BotName} fire [x]`")
                     .Parameter ("times",ParameterType.Optional)
                     .Do (async e =>
                     {
@@ -293,7 +293,7 @@ namespace MidnightBot.Modules.Conversations
                     });
 
                 cgb.CreateCommand ("dump")
-                    .Description ("Dumped alle Einladungen die er findet in dump.txt.** Owner Only.**")
+                    .Description ($"Dumped alle Einladungen die er findet in dump.txt.** Owner Only.** | `@{BotName} dump`")
                     .Do (async e =>
                     {
                         if (!MidnightBot.IsOwner (e.User.Id))
@@ -321,7 +321,7 @@ namespace MidnightBot.Modules.Conversations
                     });
 
                 cgb.CreateCommand ("ab")
-                    .Description ("Versuche 'abalabahaha' zu bekommen")
+                    .Description ($"Versuche 'abalabahaha' zu bekommen.| `@{BotName} ab`")
                     .Do (async e =>
                     {
                         string[] strings = { "ba","la","ha" };

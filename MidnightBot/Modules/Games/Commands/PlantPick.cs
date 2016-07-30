@@ -65,7 +65,7 @@ namespace MidnightBot.Modules.Games.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "pick")
-                .Description ($"Nimmt einen in diesem Channel hinterlegten {MidnightBot.Config.CurrencyName}.")
+                .Description ($"Nimmt einen in diesem Channel hinterlegten {MidnightBot.Config.CurrencyName}. | `{Prefix}pick`")
                 .Do (async e =>
                 {
                     IEnumerable<Message> msgs;
@@ -78,12 +78,19 @@ namespace MidnightBot.Modules.Games.Commands
                         await msgToDelete.Delete().ConfigureAwait(false);
                     await FlowersHandler.AddFlowersAsync (e.User,"Took a dollar.",1,true).ConfigureAwait (false);
                     var msg = await e.Channel.SendMessage($"**{e.User.Name}** hat den {MidnightBot.Config.CurrencyName} aufgehoben!").ConfigureAwait(false);
-                    await Task.Delay (10000).ConfigureAwait (false);
-                    await msg.Delete ().ConfigureAwait (false);
+                    ThreadPool.QueueUserWorkItem(async (state) =>
+                    {
+                        try
+                        {
+                            await Task.Delay(10000).ConfigureAwait(false);
+                            await msg.Delete().ConfigureAwait(false);
+                        }
+                        catch { }
+                    });
                 });
 
             cgb.CreateCommand (Module.Prefix + "plant")
-                .Description ($"Gib einen {MidnightBot.Config.CurrencyName} aus, um in in diesen Channel zu legen. (Wenn der Bot neustartet, oder crashed, ist der {MidnightBot.Config.CurrencyName} verloren)")
+                .Description ($"Gib einen {MidnightBot.Config.CurrencyName} aus, um in in diesen Channel zu legen. (Wenn der Bot neustartet, oder crashed, ist der {MidnightBot.Config.CurrencyName} verloren) | `{Prefix}plant`")
                 .Do(async e =>
                 {
                     await locker.WaitAsync().ConfigureAwait(false);
@@ -116,7 +123,7 @@ namespace MidnightBot.Modules.Games.Commands
 
             cgb.CreateCommand(Prefix + "gencurrency")
                 .Alias(Prefix + "gc")
-                .Description($"Ändert Währungs Erstellung in diesem Channel. Jede geschriebene Nachricht hat eine Chance von 2%, einen {MidnightBot.Config.CurrencyName} zu spawnen. Optionaler Parameter ist die Cooldown Zeit in Minuten. 5 Minuten sind Standard. Benötigt Manage Messages Berechtigungen | `gc` oder `>gc 60`")
+                .Description($"Ändert Währungs Erstellung in diesem Channel. Jede geschriebene Nachricht hat eine Chance von 2%, einen {MidnightBot.Config.CurrencyName} zu spawnen. Optionaler Parameter ist die Cooldown Zeit in Minuten. 5 Minuten sind Standard. Benötigt Manage Messages Berechtigungen | `{Prefix}gc` oder `{Prefix}gc 60`")
                 .AddCheck (SimpleCheckers.ManageMessages ())
                 .Parameter("cd", ParameterType.Unparsed)
                 .Do(async e =>

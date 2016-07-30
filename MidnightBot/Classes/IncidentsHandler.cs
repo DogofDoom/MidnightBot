@@ -22,7 +22,7 @@ namespace MidnightBot.Classes
                 Read = false
             };
 
-            DbHandler.Instance.InsertData<Incident>(incident);
+            DbHandler.Instance.Connection.Insert(incident, typeof(Incident));
         }
     }
 }

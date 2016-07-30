@@ -34,7 +34,7 @@ namespace MidnightBot.Modules.Administration.Commands
         {
             cgb.CreateCommand (Module.Prefix + "autoassignrole")
                 .Alias (Module.Prefix + "aar")
-                .Description ($"Fügt automatisch jedem Benutzer der dem Server joint eine Rolle zu. Gib `.aar` ein um zu deaktivieren, `.aar Rollen Name` um zu aktivieren.")
+                .Description ($"Fügt automatisch jedem Benutzer der dem Server joint eine Rolle zu. Gib `{Prefix}aar` ein um zu deaktivieren, `{Prefix}aar Rollen Name` um zu aktivieren.")
                 .Parameter ("role",ParameterType.Unparsed)
                 .AddCheck (new SimpleCheckers.ManageRoles ())
                 .Do (async e =>

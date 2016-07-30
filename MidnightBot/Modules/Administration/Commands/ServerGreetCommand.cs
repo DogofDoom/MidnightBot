@@ -233,7 +233,7 @@ namespace MidnightBot.Modules.Administration.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand(Module.Prefix + "grdel")
-                .Description("Aktiviert oder deaktiviert automatische Löschung von Willkommens- und Verabschiedungsnachrichten.")
+                .Description($"Aktiviert oder deaktiviert automatische Löschung von Willkommens- und Verabschiedungsnachrichten. | `{Prefix}grdel`")
                 .Do(async e =>
                 {
                     if (!e.User.ServerPermissions.ManageServer) return;
@@ -246,7 +246,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand (Module.Prefix + "greet")
-                .Description ("Aktiviert oder deaktiviert Benachrichtigungen auf dem derzeitigen Channel wenn jemand dem Server beitritt.")
+                .Description ($"Aktiviert oder deaktiviert Benachrichtigungen auf dem derzeitigen Channel wenn jemand dem Server beitritt. | `{Prefix}greet`")
                 .Do (async e =>
                 {
                     if (!e.User.ServerPermissions.ManageServer)return;
@@ -259,7 +259,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand (Module.Prefix + "greetmsg")
-                .Description ("Setzt einen neuen Gruß. Gib %user% ein, wenn du den neuen Benutzer erwähnen möchtest. Ohne nachfolgende Nachricht, zeigt es die derzeitige Nachricht. | .greetmsg Welcome to the server, %user%.")
+                .Description ($"Setzt einen neuen Gruß. Gib %user% ein, wenn du den neuen Benutzer erwähnen möchtest. Ohne nachfolgende Nachricht, zeigt es die derzeitige Nachricht. | `{Prefix}greetmsg Welcome to the server, %user%.´")
                 .Parameter ("msg",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -278,7 +278,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand (Module.Prefix + "bye")
-                .Description ("Aktiviert, oder deaktiviert Benachrichtigungen, wenn ein Benutzer den Server verlässt.")
+                .Description ($"Aktiviert, oder deaktiviert Benachrichtigungen, wenn ein Benutzer den Server verlässt. | `{Prefix}bye`")
                 .Do (async e =>
                 {
                     if (!e.User.ServerPermissions.ManageServer)return;
@@ -291,7 +291,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand (Module.Prefix + "byemsg")
-                .Description ("Setzt eine neue Verabschiedung. Gib %user% ein, wenn du den Benutzer erwähnen möchtest. Ohne nachfolgende Nachricht, zeigt es die derzeitige Nachricht. | .byemsg %user% has left the server.")
+                .Description ($"Setzt eine neue Verabschiedung. Gib %user% ein, wenn du den Benutzer erwähnen möchtest. Ohne nachfolgende Nachricht, zeigt es die derzeitige Nachricht. | `{Prefix}byemsg %user% has left the server.´")
                 .Parameter ("msg",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -311,7 +311,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand (Module.Prefix + "byepm")
-                .Description ("Stellt ein ob die Verabschiedung im Channel, oder per PN geschickt wird.")
+                .Description ($"Stellt ein ob die Verabschiedung im Channel, oder per PN geschickt wird. | `{Prefix}byepm`")
                 .Do (async e =>
                 {
                     if (!e.User.ServerPermissions.ManageServer)return;
@@ -326,7 +326,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand (Module.Prefix + "greetpm")
-                .Description ("Stellt ein ob der Gruß im Channel, oder per PN geschickt wird.")
+                .Description ($"Stellt ein ob der Gruß im Channel, oder per PN geschickt wird. | `{Prefix}greetpm`")
                 .Do (async e =>
                 {
                     if (!e.User.ServerPermissions.ManageServer)return;

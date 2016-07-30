@@ -31,7 +31,7 @@ namespace MidnightBot.Modules.Utility
                 commands.ForEach (cmd => cmd.Init (cgb));
 
                 cgb.CreateCommand (Prefix + "whoplays")
-                    .Description ("Zeigt eine Liste von Benutzern die ein gewähltes Spiel spielen.")
+                    .Description ($"Zeigt eine Liste von Benutzern die ein gewähltes Spiel spielen. | `{Prefix}whoplays Overwatch`")
                     .Parameter ("game",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -52,17 +52,15 @@ namespace MidnightBot.Modules.Utility
                     });
 
                 cgb.CreateCommand (Prefix + "inrole")
-                    .Description ("Listet alle Benutzer von einer angegebenen Rolle, oder Rollen (getrennt mit einem ',') auf diesem Server.")
+                    .Description ($"Listet alle Benutzer von einer angegebenen Rolle, oder Rollen (getrennt mit einem ',') auf diesem Server. Wenn die Liste zu lange für eine Nachricht ist, brauchst du Manage Messages Berechtigungen. | `{Prefix}inrole Role`")
                     .Parameter ("roles",ParameterType.Unparsed)
                     .Do (async e =>
                     {
                         await Task.Run (async () =>
                         {
-                            if (!e.User.ServerPermissions.MentionEveryone)
-                                return;
                             var arg = e.GetArg ("roles").Split (',').Select (r => r.Trim ());
                             string send = $"`Hier ist eine Liste alle Benutzer mit einer bestimmten Rolle:`";
-                            foreach (var roleStr in arg.Where (str => !string.IsNullOrWhiteSpace (str)))
+                            foreach (var roleStr in arg.Where(str => !string.IsNullOrWhiteSpace(str) && str != "@everyone" && str != "everyone"))
                             {
                                 var role = e.Server.FindRoles (roleStr).FirstOrDefault ();
                                 if (role == null)
@@ -73,6 +71,11 @@ namespace MidnightBot.Modules.Utility
 
                             while (send.Length > 2000)
                             {
+                                if (!e.User.ServerPermissions.ManageMessages)
+                                {
+                                    await e.Channel.SendMessage($"{e.User.Mention} du darfst diesen Befehl bei Rollen welche viele Benutzer haben nicht benutzen um Missbrauch vorzubeugen.");
+                                    return;
+                                }
                                 var curstr = send.Substring (0,2000);
                                 await
                                     e.Channel.Send (curstr.Substring (0,
@@ -85,7 +88,7 @@ namespace MidnightBot.Modules.Utility
                     });
 
                 cgb.CreateCommand (Prefix + "checkmyperms")
-                    .Description ("Kontrolliere deine Berechtigungen auf diesem Server.")
+                    .Description ($"Kontrolliere deine Berechtigungen auf diesem Server. | `{Prefix}checkmyperms`")
                     .Do (async e =>
                     {
                         var output = "```\n";
@@ -98,21 +101,21 @@ namespace MidnightBot.Modules.Utility
                     });
 
                 cgb.CreateCommand (Prefix + "stats")
-                    .Description ("Zeigt ein paar Statisitken über MidnightBot.")
+                    .Description ($"Zeigt ein paar Statisitken über MidnightBot. | `{Prefix}stats`")
                     .Do (async e =>
                     {
                         await e.Channel.SendMessage (await MidnightStats.Instance.GetStats ()).ConfigureAwait(false);
                     });
 
                 cgb.CreateCommand (Prefix + "dysyd")
-                    .Description ("Zeigt ein paar Statisitken über MidnightBot.")
+                    .Description ($"Zeigt ein paar Statisitken über MidnightBot. | `{Prefix}dysyd`")
                     .Do (async e =>
                     {
                         await e.Channel.SendMessage ((await MidnightStats.Instance.GetStats ()).Matrix ().TrimTo (1990)).ConfigureAwait (false);
                     });
 
                 cgb.CreateCommand (Prefix + "userid").Alias (Prefix + "uid")
-                    .Description ("Zeigt die ID eines Benutzers.")
+                    .Description ($"Zeigt die ID eines Benutzers. | `{Prefix}uid` oder `{Prefix}uid \"@SomeGuy\"`")
                     .Parameter ("user",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -125,15 +128,15 @@ namespace MidnightBot.Modules.Utility
                     });
 
                 cgb.CreateCommand (Prefix + "channelid").Alias (Prefix + "cid")
-                    .Description ("Zeigt ID des derzeitigen Channels")
+                    .Description ($"Zeigt ID des derzeitigen Channels | `{Prefix}cid`")
                     .Do (async e => await e.Channel.SendMessage ("Die ID des derzeitigen Channels ist " + e.Channel.Id).ConfigureAwait (false));
 
                 cgb.CreateCommand (Prefix + "serverid").Alias (Prefix + "sid")
-                    .Description ("Zeigt ID des derzeitigen Servers.")
+                    .Description ($"Zeigt ID des derzeitigen Servers. | `{Prefix}sid`")
                     .Do (async e => await e.Channel.SendMessage ("Die ID des derzeitigen Servers ist " + e.Server.Id).ConfigureAwait (false));
 
                 cgb.CreateCommand (Prefix + "roles")
-                  .Description ("Listet alle Rollen auf diesem Server, oder die eines Benutzers wenn spezifiziert.")
+                  .Description ($"Listet alle Rollen auf diesem Server, oder die eines Benutzers wenn spezifiziert. | `{Prefix}roles`")
                   .Parameter ("user",ParameterType.Unparsed)
                   .Do (async e =>
                   {

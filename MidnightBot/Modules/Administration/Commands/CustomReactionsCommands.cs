@@ -23,7 +23,7 @@ namespace MidnightBot.Modules.Administration.Commands
 
             cgb.CreateCommand (Prefix + "addcustreact")
                 .Alias (Prefix + "acr")
-                .Description ($"Fügt eine \"Custom Reaction\" hinzu. **Bot Owner Only!** | {Prefix}acr \"hello\" I love saying hello to %user%")
+                .Description ($"Fügt eine \"Custom Reaction\" hinzu. **Bot Owner Only!** | `{Prefix}acr \"hello\" I love saying hello to %user%`")
                 .AddCheck (SimpleCheckers.OwnerOnly ())
                 .Parameter ("name",ParameterType.Required)
                 .Parameter ("message",ParameterType.Unparsed)
@@ -47,7 +47,7 @@ namespace MidnightBot.Modules.Administration.Commands
 
             cgb.CreateCommand (Prefix + "listcustreact")
             .Alias (Prefix + "lcr")
-            .Description($"Listet Custom Reactions auf(Seitenweise mit 30 Befehlen per Seite). Benutze 'all' anstatt einer Seitenzahl um alle Custom Reactions per Privater Nachricht zu erhalten.  |{Prefix}lcr 1")
+            .Description($"Listet Custom Reactions auf(Seitenweise mit 30 Befehlen per Seite). Benutze 'all' anstatt einer Seitenzahl um alle Custom Reactions per Privater Nachricht zu erhalten. | `{Prefix}lcr 1`")
             .Parameter ("num",ParameterType.Required)
             .Do (async e =>
             {
@@ -80,7 +80,7 @@ namespace MidnightBot.Modules.Administration.Commands
 
             cgb.CreateCommand(Prefix + "showcustreact")
                 .Alias(Prefix + "scr")
-                .Description($"Zeigt alle möglichen Reaktionen von einer einzigen Custom Reaction. |{Prefix}scr %mention% bb")
+                .Description($"Zeigt alle möglichen Reaktionen von einer einzigen Custom Reaction. | `{Prefix}scr %mention% bb`")
                 .Parameter("name", ParameterType.Unparsed)
                 .Do(async e =>
                 {
@@ -146,7 +146,7 @@ namespace MidnightBot.Modules.Administration.Commands
 
             cgb.CreateCommand (Prefix + "delcustreact")
             .Alias (Prefix + "dcr")
-            .Description ("Löscht eine \"Custome Reaction\" mit gegebenen Namen (und Index)")
+            .Description ($"Löscht eine \"Custome Reaction\" mit gegebenen Namen (und Index). | `{Prefix}dcr index`")
             .AddCheck (SimpleCheckers.OwnerOnly ())
             .Parameter ("name",ParameterType.Required)
             .Parameter ("index",ParameterType.Optional)

@@ -19,13 +19,13 @@ namespace MidnightBot.Modules.Gambling
         internal override void Init(CommandGroupBuilder cgb)
         {
             cgb.CreateCommand(Module.Prefix + "draw")
-                .Description("Zieht eine Karte vom Stapel.Wenn du eine Nummer angibst [x], werden bis zu 5 Karten vom Stapel gezogen. | $draw [x]")
+                .Description($"Zieht eine Karte vom Stapel.Wenn du eine Nummer angibst [x], werden bis zu 5 Karten vom Stapel gezogen. | `{Prefix}draw [x]´")
                 .Parameter("count", ParameterType.Optional)
                 .Do(DrawCardFunc());
 
             cgb.CreateCommand(Module.Prefix + "shuffle")
                 .Alias(Module.Prefix + "sh")
-                .Description("Mischt alle Karten zurück in den Stapel.")
+                .Description($"Mischt alle Karten zurück in den Stapel. | `{Prefix}shuffle`")
                 .Do(ReshuffleTask());
         }
 

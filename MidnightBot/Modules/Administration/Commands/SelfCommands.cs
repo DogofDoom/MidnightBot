@@ -16,7 +16,7 @@ namespace MidnightBot.Modules.Administration.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "leave")
-                .Description ($"Lässt {BotName} den Server verlassen. Entweder Name, oder ID benötigt. |`.leave 123123123331`")
+                .Description ($"Lässt {BotName} den Server verlassen. Entweder Name, oder ID benötigt. | `{Prefix}leave 123123123331`")
                 .Parameter ("arg",ParameterType.Required)
                 .AddCheck (SimpleCheckers.OwnerOnly ())
                 .Do (async e =>

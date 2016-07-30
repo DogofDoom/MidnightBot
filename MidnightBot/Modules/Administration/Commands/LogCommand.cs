@@ -343,7 +343,7 @@ namespace MidnightBot.Modules.Administration.Commands
         {
 
             cgb.CreateCommand (Module.Prefix + "spmom")
-                .Description ("Toggles whether mentions of other offline users on your server will send a pm to them.")
+                .Description ($"Toggles whether mentions of other offline users on your server will send a pm to them. | `{Prefix}spmom`")
                 .AddCheck (SimpleCheckers.ManageServer ())
                 .Do (async e =>
                 {
@@ -359,7 +359,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand(Module.Prefix + "logserver")
-                  .Description("Toggles logging in this channel. Logs every message sent/deleted/edited on the server. **Bot Owner Only!**")
+                  .Description($"Toggles logging in this channel. Logs every message sent/deleted/edited on the server. **Bot Owner Only!** | `{Prefix}logserver`")
                   .AddCheck (SimpleCheckers.OwnerOnly ())
                   .AddCheck (SimpleCheckers.ManageServer ())
                   .Do(async e =>
@@ -380,7 +380,7 @@ namespace MidnightBot.Modules.Administration.Commands
                   });
 
             cgb.CreateCommand(Prefix + "logignore")
-                .Description($"Toggles whether the {Prefix}logserver command ignores this channel. Useful if you have hidden admin channel and public log channel.")
+                .Description($"Toggles whether the {Prefix}logserver command ignores this channel. Useful if you have hidden admin channel and public log channel. | `{Prefix}logignore`")
                 .AddCheck(SimpleCheckers.OwnerOnly())
                 .AddCheck(SimpleCheckers.ManageServer())
                 .Do(async e =>
@@ -398,7 +398,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand(Module.Prefix + "userpresence")
-                  .Description("Starts logging to this channel when someone from the server goes online/offline/idle. **Bot Owner Only!**")
+                  .Description($"Starts logging to this channel when someone from the server goes online/offline/idle. **Bot Owner Only!** | `{Prefix}userpresence`")
                   .AddCheck (SimpleCheckers.OwnerOnly ())
                   .AddCheck (SimpleCheckers.ManageServer ())
                   .Do(async e =>
@@ -416,7 +416,7 @@ namespace MidnightBot.Modules.Administration.Commands
                   });
 
             cgb.CreateCommand(Module.Prefix + "voicepresence")
-                  .Description("Toggles logging to this channel whenever someone joins or leaves a voice channel you are in right now. **Bot Owner Only!**")
+                  .Description($"Toggles logging to this channel whenever someone joins or leaves a voice channel you are in right now. **Bot Owner Only!** | `{Prefix}voicerpresence`")
                   .Parameter("all", ParameterType.Optional)
                   .AddCheck (SimpleCheckers.OwnerOnly ())
                   .AddCheck (SimpleCheckers.ManageServer ())

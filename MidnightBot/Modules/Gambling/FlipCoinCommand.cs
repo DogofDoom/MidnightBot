@@ -17,7 +17,7 @@ namespace MidnightBot.Modules.Gambling
         internal override void Init(CommandGroupBuilder cgb)
         {
             cgb.CreateCommand(Module.Prefix + "flip")
-                .Description("Wirft eine/mehrere Münze(n) - Kopf oder Zahl, und zeigt ein Bild. | `$flip` or `$flip 3`")
+                .Description($"Wirft eine/mehrere Münze(n) - Kopf oder Zahl, und zeigt ein Bild. | `{Prefix}flip` or `{Prefix}flip 3`")
                 .Parameter("count", ParameterType.Optional)
                 .Do(FlipCoinFunc());
 

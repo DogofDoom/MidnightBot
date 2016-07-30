@@ -48,7 +48,7 @@ namespace MidnightBot.Modules.Games.Commands
                   });
 
             cgb.CreateCommand (Module.Prefix + "tl")
-                .Description ("Zeigt eine Rangliste des derzeitigen Quiz.")
+                .Description ($"Zeigt eine Rangliste des derzeitigen Quiz. | `{Prefix}tl`")
                 .Do (async e =>
                 {
                     TriviaGame trivia;
@@ -59,7 +59,7 @@ namespace MidnightBot.Modules.Games.Commands
                 });
 
             cgb.CreateCommand (Module.Prefix + "tq")
-                .Description ("Beendet Quiz nach der derzeitgen Frage.")
+                .Description ($"Beendet Quiz nach der derzeitgen Frage. | `{Prefix}tq`")
                 .AddCheck(SimpleCheckers.ManageMessages())
                 .Do (async e =>
                 {

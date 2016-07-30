@@ -4,6 +4,8 @@ using MidnightBot.Classes;
 using MidnightBot.Modules.Permissions.Classes;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MidnightBot.Modules.NSFW
 {
@@ -22,30 +24,25 @@ namespace MidnightBot.Modules.NSFW
                 cgb.AddCheck (PermissionChecker.Instance);
 
                 cgb.CreateCommand (Prefix + "hentai")
-                    .Description ($"Zeigt ein zufälliges NSFW Hentai Bild von gelbooru und danbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags) | {Prefix}hentai yuri+kissing")
+                    .Description ($"Zeigt ein zufälliges NSFW Hentai Bild von gelbooru und danbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags) | `{Prefix}hentai yuri+kissing`")
                     .Parameter ("tag",ParameterType.Unparsed)
                     .Do (async e =>
                     {
                         var tag = e.GetArg ("tag")?.Trim () ?? "";
-                        var gel = await SearchHelper.GetGelbooruImageLink ("rating%3Aexplicit+" + tag).ConfigureAwait (false);
-                        if (gel != null)
-                            await e.Channel.SendMessage (":heart: Gelbooru: " + gel)
-                                           .ConfigureAwait (false);
-                        var dan = await SearchHelper.GetDanbooruImageLink ("rating%3Aexplicit+" + tag).ConfigureAwait (false);
-                        if (dan != null)
-                            await e.Channel.SendMessage (":heart: Danbooru: " + dan)
-                                           .ConfigureAwait (false);
-                        var atf = await SearchHelper.GetATFBooruImageLink ("rating%3Aexplicit+" + tag).ConfigureAwait (false);
-                        if (atf != null)
-                            await e.Channel.SendMessage(":heart: ATFbooru: " + atf)
-                                           .ConfigureAwait(false);
-                        if (dan == null && gel == null && atf == null)
+                        var links = await Task.WhenAll(SearchHelper.GetGelbooruImageLink("rating%3Aexplicit+" + tag), SearchHelper.GetDanbooruImageLink("rating%3Aexplicit+" + tag), SearchHelper.GetATFBooruImageLink("rating%3Aexplicit+" + tag)).ConfigureAwait(false);
+
+                        if (links.All(l => l == null))
+                        {
                             await e.Channel.SendMessage ("`Keine Ergebnisse.`");
+                            return;
+                        }
+
+                        await e.Channel.SendMessage(String.Join("\n\n", links)).ConfigureAwait(false);
                     });
 
                 cgb.CreateCommand(Prefix + "atfbooru")
                     .Alias (Prefix + "atf")
-                    .Description($"Shows a random hentai image from atfbooru with a given tag. Tag is optional but preffered. (multiple tags are appended with +) | {Prefix}atf yuri+kissing")
+                    .Description($"Shows a random hentai image from atfbooru with a given tag. Tag is optional but preffered. (multiple tags are appended with +) | `{Prefix}atf yuri+kissing`")
                     .Parameter("tag", ParameterType.Unparsed)
                     .Do(async e =>
                     {
@@ -58,7 +55,7 @@ namespace MidnightBot.Modules.NSFW
                     });
 
                 cgb.CreateCommand (Prefix + "danbooru")
-                    .Description ($"Zeigt ein zufälliges Hentai Bild von danbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags) | {Prefix}danbooru yuri+kissing")
+                    .Description ($"Zeigt ein zufälliges Hentai Bild von danbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags) | `{Prefix}danbooru yuri+kissing`")
                     .Parameter ("tag",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -71,7 +68,7 @@ namespace MidnightBot.Modules.NSFW
                     });
 
                 cgb.CreateCommand(Prefix + "r34")
-                .Description($"Zeigt ein zufälliges Hentai Bild von rule34.paheal.net mit einem gegebenen Tag. | {Prefix}r34 bacon")
+                .Description($"Zeigt ein zufälliges Hentai Bild von rule34.paheal.net mit einem gegebenen Tag. | `{Prefix}r34 bacon`")
                 .Parameter("tag", ParameterType.Unparsed)
                 .Do(async e =>
                 {
@@ -84,7 +81,7 @@ namespace MidnightBot.Modules.NSFW
                 });
 
                 cgb.CreateCommand (Prefix + "gelbooru")
-                    .Description ($"Zeigt ein zufälliges Hentai Bild von gelbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags) | {Prefix}gelbooru yuri+kissing")
+                    .Description ($"Zeigt ein zufälliges Hentai Bild von gelbooru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. (mehrere Tags mit + zwischen den Tags) | `{Prefix}gelbooru yuri+kissing`")
                     .Parameter ("tag",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -96,7 +93,7 @@ namespace MidnightBot.Modules.NSFW
                             await e.Channel.SendMessage (link).ConfigureAwait (false);
                     });
                 cgb.CreateCommand (Prefix + "rule34")
-                    .Description ($"Zeigt ein zufälliges Hentai Bild von rule34.xx  mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze + für mehrere Tags. | {Prefix}rule34 yuri+kissing")
+                    .Description ($"Zeigt ein zufälliges Hentai Bild von rule34.xx  mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze + für mehrere Tags. | `{Prefix}rule34 yuri+kissing`")
                     .Parameter ("tag",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -108,7 +105,7 @@ namespace MidnightBot.Modules.NSFW
                             await e.Channel.SendMessage (link).ConfigureAwait (false);
                     });
                 cgb.CreateCommand (Prefix + "e621")
-                    .Description ($"Zeigt ein zufälliges Hentai Bild von e621.net mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze Leerzeichen für mehrere Tags. | {Prefix}e621 yuri+kissing")
+                    .Description ($"Zeigt ein zufälliges Hentai Bild von e621.net mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze Leerzeichen für mehrere Tags. | `{Prefix}e621 yuri+kissing`")
                     .Parameter ("tag",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -116,7 +113,7 @@ namespace MidnightBot.Modules.NSFW
                         await e.Channel.SendMessage (await SearchHelper.GetE621ImageLink (tag).ConfigureAwait (false)).ConfigureAwait (false);
                     });
                 cgb.CreateCommand (Prefix + "derpi")
-                    .Description ($"Zeigt ein zufälliges Hentai Bild von derpiboo.ru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze + für mehrere Tags. | {Prefix}derpi yuri+kissing")
+                    .Description ($"Zeigt ein zufälliges Hentai Bild von derpiboo.ru mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze + für mehrere Tags. | `{Prefix}derpi yuri+kissing`")
                     .Parameter ("tag",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -126,7 +123,7 @@ namespace MidnightBot.Modules.NSFW
                     });
 
                 cgb.CreateCommand (Prefix + "boobs")
-                    .Description ("Erwachsenen Inhalt.")
+                    .Description ($"Erwachsenen Inhalt. | `{Prefix}boobs`")
                     .Do (async e =>
                     {
                         try
@@ -139,9 +136,10 @@ namespace MidnightBot.Modules.NSFW
                             await e.Channel.SendMessage ($"💢 {ex.Message}").ConfigureAwait (false);
                         }
                     });
+
                 cgb.CreateCommand (Prefix + "butts")
                     .Alias (Prefix + "ass",Prefix + "butt")
-                    .Description ("Erwachsenen Inhalt.")
+                    .Description ($"Erwachsenen Inhalt. | `{Prefix}butts` oder `{Prefix}ass`")
                     .Do (async e =>
                     {
                         try

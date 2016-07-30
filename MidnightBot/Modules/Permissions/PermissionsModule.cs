@@ -61,7 +61,7 @@ namespace MidnightBot.Modules.Permissions
 
                 cgb.CreateCommand (Prefix + "rolepermscopy")
                     .Alias (Prefix + "rpc")
-                    .Description ($"Kopiert BOT BERECHTIGUNGEN (nicht Discord Berechtigungen) von einer Rolle zu einer anderen. |`{Prefix}rpc Some Role ~ Some other role`")
+                    .Description ($"Kopiert BOT BERECHTIGUNGEN (nicht Discord Berechtigungen) von einer Rolle zu einer anderen. | `{Prefix}rpc Some Role ~ Some other role`")
                     .Parameter ("from_to",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -90,7 +90,7 @@ namespace MidnightBot.Modules.Permissions
 
                 cgb.CreateCommand (Prefix + "chnlpermscopy")
                     .Alias (Prefix + "cpc")
-                    .Description ($"Kopiert BOT BERECHTIGUNGEN (nicht Discord Berechtigungen) von einem Channel zu einem anderen. |`{Prefix}cpc Some Channel ~ Some other channel`")
+                    .Description ($"Kopiert BOT BERECHTIGUNGEN (nicht Discord Berechtigungen) von einem Channel zu einem anderen. | `{Prefix}cpc Some Channel ~ Some other channel`")
                     .Parameter ("from_to",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -119,7 +119,7 @@ namespace MidnightBot.Modules.Permissions
 
                 cgb.CreateCommand (Prefix + "usrpermscopy")
                     .Alias (Prefix + "upc")
-                    .Description ($"Kopiert BOT BERECHTIGUNGEN (nicht Discord Berechtigungen) von einem Benutzer, zu einem anderen. |`{Prefix}upc @SomeUser ~ @SomeOtherUser`")
+                    .Description ($"Kopiert BOT BERECHTIGUNGEN (nicht Discord Berechtigungen) von einem Benutzer, zu einem anderen. | `{Prefix}upc @SomeUser ~ @SomeOtherUser`")
                     .Parameter ("from_to",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -148,7 +148,7 @@ namespace MidnightBot.Modules.Permissions
 
                 cgb.CreateCommand (Prefix + "verbose")
                     .Alias (Prefix + "v")
-                    .Description ("Ändert ob das blocken/entblocken eines Modules/Befehls angezeigt wird. | ;verbose true")
+                    .Description ($"Ändert ob das blocken/entblocken eines Modules/Befehls angezeigt wird. | `{Prefix}verbose true`")
                     .Parameter ("arg",ParameterType.Required)
                     .Do (async e =>
                     {
@@ -171,7 +171,7 @@ namespace MidnightBot.Modules.Permissions
 
                 cgb.CreateCommand (Prefix + "roleperms")
                     .Alias (Prefix + "rp")
-                    .Description ("Zeigt gebannt Berechtigungen für eine bestimmte Rolle. Kein Argument bedeutet für alle. | ;rp AwesomeRole")
+                    .Description ($"Zeigt gebannt Berechtigungen für eine bestimmte Rolle. Kein Argument bedeutet für alle. | `{Prefix}rp AwesomeRole`")
                     .Parameter ("role",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -197,7 +197,7 @@ namespace MidnightBot.Modules.Permissions
 
                 cgb.CreateCommand (Prefix + "chnlperms")
                     .Alias (Prefix + "cp")
-                    .Description ("Zeigt gebannte Berechtigungen für einen bestimmten Channel. Kein Argument für derzeitigen Channel. | ;cp #dev")
+                    .Description ($"Zeigt gebannte Berechtigungen für einen bestimmten Channel. Kein Argument für derzeitigen Channel. | `{Prefix}cp #dev`")
                     .Parameter ("channel",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -222,7 +222,7 @@ namespace MidnightBot.Modules.Permissions
 
                 cgb.CreateCommand (Prefix + "userperms")
                     .Alias (Prefix + "up")
-                    .Description ("Zeigt gebannte Berechtigungen für einen bestimmten Benutzer. Keine Argumente für sich selber. | ;up Kwoth")
+                    .Description ($"Zeigt gebannte Berechtigungen für einen bestimmten Benutzer. Keine Argumente für sich selber. | `{Prefix}up Kwoth`")
                     .Parameter ("user",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -248,7 +248,7 @@ namespace MidnightBot.Modules.Permissions
                     .Alias (Prefix + "sm")
                     .Parameter ("module",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
-                    .Description ("Setzt die Berechtigung eines Moduls auf Serverlevel. | ;sm \"module name\" enable")
+                    .Description ($"Setzt die Berechtigung eines Moduls auf Serverlevel. | `{Prefix}sm \"module name\" enable`")
                     .Do (async e =>
                     {
                         try
@@ -272,7 +272,7 @@ namespace MidnightBot.Modules.Permissions
                 cgb.CreateCommand (Prefix + "srvrcmd").Alias (Prefix + "sc")
                     .Parameter ("command",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
-                    .Description ("Setzt die Berechtigung eines Befehls auf Serverlevel. | ;sc \"command name\" disable")
+                    .Description ($"Setzt die Berechtigung eines Befehls auf Serverlevel. | `{Prefix}sc \"command name\" disable`")
                     .Do (async e =>
                     {
                         try
@@ -297,7 +297,7 @@ namespace MidnightBot.Modules.Permissions
                     .Parameter ("module",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("role",ParameterType.Unparsed)
-                    .Description ("Setzt die Berechtigung eines Moduls auf Rollenlevel. | ;rm \"module name\" enable MyRole")
+                    .Description ($"Setzt die Berechtigung eines Moduls auf Rollenlevel. | `{Prefix}rm \"module name\" enable MyRole`")
                     .Do (async e =>
                     {
                         try
@@ -335,7 +335,7 @@ namespace MidnightBot.Modules.Permissions
                     .Parameter ("command",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("role",ParameterType.Unparsed)
-                    .Description ("Setzt die Berechtigung eines Befehls auf Rollenlevel. | ;rc \"command name\" disable MyRole")
+                    .Description ($"Setzt die Berechtigung eines Befehls auf Rollenlevel. | `{Prefix}rc \"command name\" disable MyRole`")
                     .Do (async e =>
                     {
                         try
@@ -373,7 +373,7 @@ namespace MidnightBot.Modules.Permissions
                     .Parameter ("module",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("channel",ParameterType.Unparsed)
-                    .Description ("Setzt die Berechtigung eines Moduls auf Channellevel. | ;cm \"module name\" enable SomeChannel")
+                    .Description ($"Setzt die Berechtigung eines Moduls auf Channellevel. | `{Prefix}cm \"module name\" enable SomeChannel`")
                     .Do (async e =>
                     {
                         try
@@ -417,7 +417,7 @@ namespace MidnightBot.Modules.Permissions
                     .Parameter ("command",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("channel",ParameterType.Unparsed)
-                    .Description ("Setzt die Berechtigung eines Befehls auf Channellevel. | ;cc \"command name\" enable SomeChannel")
+                    .Description ($"Setzt die Berechtigung eines Befehls auf Channellevel. | `{Prefix}cc \"command name\" enable SomeChannel`")
                     .Do (async e =>
                     {
                         try
@@ -455,7 +455,7 @@ namespace MidnightBot.Modules.Permissions
                     .Parameter ("module",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("user",ParameterType.Unparsed)
-                    .Description ("Setzt die Berechtigung eines Moduls auf Benutzerlevel. | ;um \"module name\" enable [user_name]")
+                    .Description ($"Setzt die Berechtigung eines Moduls auf Benutzerlevel. | `{Prefix}um \"module name\" enable [user_name]`")
                     .Do (async e =>
                     {
                         try
@@ -481,7 +481,7 @@ namespace MidnightBot.Modules.Permissions
                     .Parameter ("command",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("user",ParameterType.Unparsed)
-                    .Description ("Setzt die Berechtigung eines Befehls auf Benutzerlevel. | ;uc \"command name\" enable [user_name]")
+                    .Description ($"Setzt die Berechtigung eines Befehls auf Benutzerlevel. | `{Prefix}uc \"command name\" enable [user_name]`")
                     .Do (async e =>
                     {
                         try
@@ -505,7 +505,7 @@ namespace MidnightBot.Modules.Permissions
 
                 cgb.CreateCommand (Prefix + "allsrvrmdls").Alias (Prefix + "asm")
                     .Parameter ("bool",ParameterType.Required)
-                    .Description ("Setzt die Berechtigung aller Module auf Serverlevel. | ;asm [enable/disable]")
+                    .Description ($"Setzt die Berechtigung aller Module auf Serverlevel. | `{Prefix}asm [enable/disable]`")
                     .Do (async e =>
                     {
                         try
@@ -531,7 +531,7 @@ namespace MidnightBot.Modules.Permissions
                 cgb.CreateCommand (Prefix + "allsrvrcmds").Alias (Prefix + "asc")
                     .Parameter ("module",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
-                    .Description ("Setzt Berechtigungen für alle Befehle eines bestimmten Moduls auf Serverlevel. | ;asc \"module name\" [enable/disable]")
+                    .Description ($"Setzt Berechtigungen für alle Befehle eines bestimmten Moduls auf Serverlevel. | `{Prefix}asc \"module name\" [enable/disable]`")
                     .Do (async e =>
                     {
                         try
@@ -558,7 +558,7 @@ namespace MidnightBot.Modules.Permissions
                 cgb.CreateCommand (Prefix + "allchnlmdls").Alias (Prefix + "acm")
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("channel",ParameterType.Unparsed)
-                    .Description ("Setzt Berechtigungen für alle Module auf Channellevel. | ;acm [enable/disable] SomeChannel")
+                    .Description ($"Setzt Berechtigungen für alle Module auf Channellevel. | `{Prefix}acm [enable/disable] SomeChannel`")
                     .Do (async e =>
                     {
                         try
@@ -587,7 +587,7 @@ namespace MidnightBot.Modules.Permissions
                     .Parameter ("module",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("channel",ParameterType.Unparsed)
-                    .Description ("Setzt Berechtigungen für alle Befehle eines bestimmten Moduls auf Channellevel. | ;acc \"module name\" [enable/disable] SomeChannel")
+                    .Description ($"Setzt Berechtigungen für alle Befehle eines bestimmten Moduls auf Channellevel. | `{Prefix}acc \"module name\" [enable/disable] SomeChannel`")
                     .Do (async e =>
                     {
                         try
@@ -614,7 +614,7 @@ namespace MidnightBot.Modules.Permissions
                 cgb.CreateCommand (Prefix + "allrolemdls").Alias (Prefix + "arm")
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("role",ParameterType.Unparsed)
-                    .Description ("Setzt Berechtigung von allen Modulen auf Rollenlevel. | ;arm [enable/disable] MyRole")
+                    .Description ($"Setzt Berechtigung von allen Modulen auf Rollenlevel. | `{Prefix}arm [enable/disable] MyRole`")
                     .Do (async e =>
                     {
                         try
@@ -642,7 +642,7 @@ namespace MidnightBot.Modules.Permissions
                     .Parameter ("module",ParameterType.Required)
                     .Parameter ("bool",ParameterType.Required)
                     .Parameter ("role",ParameterType.Unparsed)
-                    .Description ("Setzt Berechtigungen für alle Befehle eines bestimmten Moduls auf Rollenlevel. | ;arc \"module name\" [enable/disable] MyRole")
+                    .Description ($"Setzt Berechtigungen für alle Befehle eines bestimmten Moduls auf Rollenlevel. | `{Prefix}arc \"module name\" [enable/disable] MyRole`")
                     .Do (async e =>
                     {
                         try
@@ -682,7 +682,7 @@ namespace MidnightBot.Modules.Permissions
                     });
 
                 cgb.CreateCommand (Prefix + "ubl")
-                    .Description ("Blacklists einen Benutzer. | ;ubl [user_mention]")
+                    .Description ($"Blacklists einen Benutzer. | `{Prefix}ubl [user_mention]`")
                     .Parameter ("user",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
@@ -699,7 +699,7 @@ namespace MidnightBot.Modules.Permissions
                     });
 
                 cgb.CreateCommand (Prefix + "uubl")
-                   .Description ($"Unblacklisted einen erwähnten Benutzer. | {Prefix}uubl [user_mention]")
+                   .Description ($"Unblacklisted einen erwähnten Benutzer. | `{Prefix}uubl [user_mention]`")
                    .Parameter ("user",ParameterType.Unparsed)
                    .AddCheck (SimpleCheckers.OwnerOnly ())
                    .Do (async e =>
@@ -725,7 +725,7 @@ namespace MidnightBot.Modules.Permissions
 
 
                 cgb.CreateCommand (Prefix + "cbl")
-                    .Description ("Blacklists einen erwähnten Channel (#general zum Beispiel). | ;ubl #some_channel")
+                    .Description ($"Blacklists einen erwähnten Channel (#general zum Beispiel). | `{Prefix}cbl #some_channel`")
                     .Parameter ("channel",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
@@ -742,7 +742,7 @@ namespace MidnightBot.Modules.Permissions
                     });
 
                 cgb.CreateCommand (Prefix + "cubl")
-                    .Description ("Unblacklists einen erwähnten Channel (#general zum Beispiel). | ;cubl #some_channel")
+                    .Description ($"Unblacklists einen erwähnten Channel (#general zum Beispiel). | `{Prefix}cubl #some_channel`")
                     .Parameter ("channel",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -758,7 +758,7 @@ namespace MidnightBot.Modules.Permissions
                     });
 
                 cgb.CreateCommand (Prefix + "sbl")
-                    .Description ("Blacklists einen Server per Name, oder ID (#general zum Beispiel). | ;usl [servername/serverid]")
+                    .Description ($"Blacklists einen Server per Name, oder ID (#general zum Beispiel). | `{Prefix}sbl [servername/serverid]`")
                     .Parameter ("server",ParameterType.Unparsed)
                     .AddCheck (SimpleCheckers.OwnerOnly ())
                     .Do (async e =>
@@ -790,7 +790,7 @@ namespace MidnightBot.Modules.Permissions
                     });
 
                 cgb.CreateCommand (Prefix + "subl")
-                    .Description ("Unblacklists einen erwähnten Server (#general zum Beispiel). | ;cubl #some_channel")
+                    .Description ($"Unblacklists einen erwähnten Server (#general zum Beispiel). | `{Prefix}subl #some_channel`")
                     .Parameter ("server",ParameterType.Unparsed)
                     .Do (async e =>
                     {

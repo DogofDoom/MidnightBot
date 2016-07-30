@@ -27,7 +27,7 @@ namespace MidnightBot.Modules.Help
 
                 cgb.CreateCommand(Prefix + "modules")
                     .Alias(".modules")
-                    .Description("Listet alle Module des Bots.")
+                    .Description($"Listet alle Module des Bots. | `{Prefix}modules` or `.modules`")
                     .Do(async e =>
                    {
                        await e.Channel.SendMessage("`Liste der Module:` \n• " + string.Join("\n• ", MidnightBot.Client.GetService<ModuleService>().Modules.Select(m => m.Name)) + $"\n`Gib den Befehl \"{Prefix}commands module_name\" ein um eine Liste der Befehle dieses Moduls zu bekommen.`")
@@ -36,7 +36,7 @@ namespace MidnightBot.Modules.Help
 
                 cgb.CreateCommand(Prefix + "commands")
                     .Alias(".commands")
-                    .Description("Listet alle Befehle eines bestimmten Moduls.")
+                    .Description($"Listet alle Befehle eines bestimmten Moduls. | `{Prefix}commands` or `.commands`")
                     .Parameter("module", ParameterType.Unparsed)
                     .Do(async e =>
                    {

@@ -13,7 +13,7 @@ namespace MidnightBot.Modules.Translator
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand(Module.Prefix + "translangs")
-                .Description ("Listet die verfügbaren Sprachen zur Übersetzung.")
+                .Description ($"Listet die verfügbaren Sprachen zur Übersetzung. | `{Prefix}translangs` oder `{Prefix}translangs language`")
                 .Parameter ("search",ParameterType.Optional)
                 .Do ( ListLanguagesFunc());
         }

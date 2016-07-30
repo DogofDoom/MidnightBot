@@ -1,5 +1,6 @@
 ﻿using Discord.Commands;
 using MidnightBot.Classes;
+using MidnightBot.Extensions;
 using System.Text;
 
 //taken from 
@@ -696,12 +697,12 @@ namespace MidnightBot.Modules.Games.Commands
                 }
                 #endregion
             }
-            return sb.ToString (); // Return result.
+            return sb.ToString().TrimTo(1995); // Return result.
         }
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "leet")
-                .Description ($"Konvertiert einen Text zu Leetspeak mit 6 (1-6) Stärke-Graden. | {Module.Prefix}leet 3 Hallo")
+                .Description ($"Konvertiert einen Text zu Leetspeak mit 6 (1-6) Stärke-Graden. | `{Module.Prefix}leet 3 Hallo`")
                 .Parameter ("level",ParameterType.Required)
                 .Parameter ("text",ParameterType.Unparsed)
                 .Do (async e =>

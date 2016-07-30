@@ -14,16 +14,11 @@ namespace MidnightBot.Modules.Games.Commands
     {
 
         public static ConcurrentDictionary<Server,Poll> ActivePolls = new ConcurrentDictionary<Server,Poll> ();
-
-        public Func<CommandEventArgs,Task> DoFunc ()
-        {
-            throw new NotImplementedException ();
-        }
-
+        
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "poll")
-                  .Description ("Startet eine Umfrage, Nur Personen mit 'Manage Server' Berechtigungen können dies tun. | >poll Question?;Answer1;Answ 2;A_3")
+                  .Description ($"Startet eine Umfrage, Nur Personen mit 'Manage Server' Berechtigungen können dies tun. | `{Prefix}poll Question?;Answer1;Answ 2;A_3`")
                   .Parameter ("allargs",ParameterType.Unparsed)
                   .Do (async e =>
                   {
@@ -48,7 +43,7 @@ namespace MidnightBot.Modules.Games.Commands
                       }).ConfigureAwait (false);
                   });
             cgb.CreateCommand (Module.Prefix + "pollend")
-                  .Description ("Stoppt derzeitige Umfrage und gibt das Ergebnis aus.")
+                  .Description ($"Stoppt derzeitige Umfrage und gibt das Ergebnis aus. | `{Prefix}pollend`")
                   .Do (async e =>
                   {
                       if (!e.User.ServerPermissions.ManageChannels)

@@ -33,7 +33,7 @@ namespace MidnightBot.Modules.Gambling
                commands.ForEach (com => com.Init (cgb));
 
                cgb.CreateCommand (Prefix + "raffle")
-                   .Description ("Schreibt den Namen und die ID eines zufälligen Benutzers aus der Online Liste einer (optionalen) Rolle.")
+                   .Description ($"Schreibt den Namen und die ID eines zufälligen Benutzers aus der Online Liste einer (optionalen) Rolle. | `{Prefix}raffle` oder `{Prefix}raffle RoleName`")
                    .Parameter ("role",ParameterType.Optional)
                    .Do (async e =>
                    {
@@ -62,7 +62,7 @@ namespace MidnightBot.Modules.Gambling
                     });
 
                cgb.CreateCommand (Prefix + "award")
-                   .Description (string.Format ($"Gibt jemanden eine bestimmte Anzahl an {MidnightBot.Config.CurrencyName}. **Bot Owner Only!** | $award 5 @Benutzer"))
+                   .Description (string.Format ($"Gibt jemanden eine bestimmte Anzahl an {MidnightBot.Config.CurrencyName}. **Bot Owner Only!** | `{Prefix}award 5 @Benutzer`"))
                    .AddCheck (SimpleCheckers.OwnerOnly ())
                    .Parameter ("amount",ParameterType.Required)
                    .Parameter ("receiver",ParameterType.Unparsed)
@@ -83,7 +83,7 @@ namespace MidnightBot.Modules.Gambling
                    });
 
                cgb.CreateCommand(Prefix + "dailymoney")
-                   .Description($"Tägliches Geld (50 Euro, wird um 0 Uhr zurückgesetzt.)")
+                   .Description($"Tägliches Geld (20 Euro, wird um 0 Uhr zurückgesetzt.) | `{Prefix}dailymoney`")
                    .Do(async e =>
                    {
                        DateTime today = DateTime.Today;
@@ -117,7 +117,7 @@ namespace MidnightBot.Modules.Gambling
                    });
 
                cgb.CreateCommand (Prefix + "take")
-                   .Description (string.Format ($"Entfernt eine bestimmte Anzahl an {MidnightBot.Config.CurrencyName} von jemanden. **Bot Owner Only!** | $take 5 @Benutzer"))
+                   .Description (string.Format ($"Entfernt eine bestimmte Anzahl an {MidnightBot.Config.CurrencyName} von jemanden. **Bot Owner Only!** | `{Prefix}take 1 \"@someguy\"`"))
                    .AddCheck (SimpleCheckers.OwnerOnly ())
                    .Parameter ("amount",ParameterType.Required)
                    .Parameter ("rektperson",ParameterType.Unparsed)
@@ -139,7 +139,7 @@ namespace MidnightBot.Modules.Gambling
                    });
 
                cgb.CreateCommand (Prefix + "give")
-                        .Description (string.Format ($"Gibt jemanden eine Anzahl {MidnightBot.Config.CurrencyName}. | $give 5 @Benutzer"))
+                        .Description ($"Gibt jemanden eine Anzahl {MidnightBot.Config.CurrencyName}. |`{Prefix}give 1 \"@SomeGuy\"`")
                         .Parameter ("amount",ParameterType.Required)
                         .Parameter ("receiver",ParameterType.Unparsed)
                         .Do (async e =>
@@ -172,7 +172,7 @@ namespace MidnightBot.Modules.Gambling
 
                cgb.CreateCommand(Prefix + "betroll")
                     .Alias(Prefix + "br")
-                    .Description($"Wettet einen bestimmten Betrag an {MidnightBot.Config.CurrencyName} und wirft einen Würfel. Bei über 66 Punkten: x2 {MidnightBot.Config.CurrencyName}, über 90 Punkte: x3 und 100 x10. | {Prefix}br 5")
+                    .Description($"Wettet einen bestimmten Betrag an {MidnightBot.Config.CurrencyName} und wirft einen Würfel. Bei über 66 Punkten: x2 {MidnightBot.Config.CurrencyName}, über 90 Punkte: x3 und 100 x10. | `{Prefix}br 5`")
                     .Parameter("amount",ParameterType.Required)
                     .Do(async e =>
                     {
@@ -219,6 +219,7 @@ namespace MidnightBot.Modules.Gambling
 
                cgb.CreateCommand (Prefix + "leaderboard")
                     .Alias (Prefix + "lb")
+                    .Description($"Displays bot currency leaderboard | {Prefix}lb")
                     .Do (async e =>
                     {
                         var richestTemp = DbHandler.Instance.GetTopRichest ();

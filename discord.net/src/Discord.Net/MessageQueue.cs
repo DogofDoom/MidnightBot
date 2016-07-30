@@ -126,6 +126,7 @@ namespace Discord.Net
                                 {
                                     msg.RawText = text;
                                     msg.Text = msg.Resolve(text);
+
                                     var request = new SendMessageRequest(msg.Channel.Id)
                                     {
                                         Content = msg.RawText,

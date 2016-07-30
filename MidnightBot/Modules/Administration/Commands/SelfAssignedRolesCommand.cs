@@ -19,7 +19,7 @@ namespace MidnightBot.Modules.Administration.Commands
         {
             cgb.CreateCommand (Module.Prefix + "asar")
                 .Description ("Adds a role, or list of roles separated by whitespace" +
-                             "(use quotations for multiword roles) to the list of self-assignable roles. | .asar Gamer")
+                             $"(use quotations for multiword roles) to the list of self-assignable roles. | ´{Prefix}asar Gamer´")
                 .Parameter ("roles",ParameterType.Multiple)
                 .AddCheck (SimpleCheckers.CanManageRoles)
                 .Do (async e =>
@@ -46,7 +46,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand (Module.Prefix + "rsar")
-                .Description ("Removes a specified role from the list of self-assignable roles.")
+                .Description ($"Removes a specified role from the list of self-assignable roles. | `{Prefix}rsar`")
                 .Parameter ("role",ParameterType.Unparsed)
                 .AddCheck (SimpleCheckers.CanManageRoles)
                 .Do (async e =>
@@ -71,7 +71,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand (Module.Prefix + "lsar")
-                .Description ("Lists all self-assignable roles.")
+                .Description ("$Lists all self-assignable roles. | `{Prefix}lsar`")
                 .Parameter ("roles",ParameterType.Multiple)
                 .Do (async e =>
                 {
@@ -98,8 +98,8 @@ namespace MidnightBot.Modules.Administration.Commands
                     await e.Channel.SendMessage (msg.ToString ()).ConfigureAwait (false);
                 });
 
-            cgb.CreateCommand(Module.Prefix + "togglexclsar").Alias(Module.Prefix +"tesar")
-                .Description("Ändert ob die Self-Assigned Roles exklusiv, oder nicht exklusiv sind.")
+            cgb.CreateCommand(Module.Prefix + "togglexclsar").Alias(Module.Prefix + "tesar")
+                .Description($"Ändert ob die Self-Assigned Roles exklusiv, oder nicht exklusiv sind. | `{Prefix}tesar`")
                 .AddCheck(SimpleCheckers.CanManageRoles)
                 .Do(async e =>
                 {
@@ -112,7 +112,7 @@ namespace MidnightBot.Modules.Administration.Commands
             cgb.CreateCommand (Module.Prefix + "iam")
                 .Description ("Adds a role to you that you choose. " +
                              "Role must be on a list of self-assignable roles." +
-                             " | .iam Gamer")
+                             $" | ´{Prefix}iam Gamer´")
                 .Parameter ("role",ParameterType.Unparsed)
                 .Do (async e =>
                 {
@@ -146,12 +146,13 @@ namespace MidnightBot.Modules.Administration.Commands
                     {
                         await e.User.AddRoles(role).ConfigureAwait(false);
                     }
-                    catch(HttpException ex) when (ex.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+                    catch (HttpException ex) when (ex.StatusCode == System.Net.HttpStatusCode.InternalServerError)
                     {
                     }
                     catch (Exception)
                     {
                         await e.Channel.SendMessage($":anger:`Ich kann dir diese Rolle nicht hinzufügen. Ich kann Ownern, oder Rängen die in der Hierarchy über mir sind, keine Ränge zuweisen.`").ConfigureAwait (false);
+                        return;
                     }
                     var msg = await e.Channel.SendMessage ($":ok:Du hast jetzt den {role.Name} Rang.").ConfigureAwait (false);
                     await Task.Delay(3000).ConfigureAwait(false);
@@ -167,7 +168,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 .Alias (Module.Prefix + "iamn")
                 .Description ("Removes a role to you that you choose. " +
                               "Role must be on a list of self-assignable roles." +
-                              " | .iamn Gamer")
+                              $" | ´{Prefix}iamn Gamer´")
                 .Parameter ("role",ParameterType.Unparsed)
                 .Do (async e =>
                 {

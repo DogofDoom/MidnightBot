@@ -18,7 +18,7 @@ namespace MidnightBot.Modules.Utility.Commands
         {
             cgb.CreateCommand (Module.Prefix + "serverinfo")
                 .Alias (Module.Prefix + "sinfo")
-                .Description ($"Zeigt Infos über den Server, auf dem der Bot läuft. Falls kein Server ausgewählt, derzeitiger wird ausgewählt. |{Module.Prefix}sinfo Some Server")
+                .Description ($"Zeigt Infos über den Server, auf dem der Bot läuft. Falls kein Server ausgewählt, derzeitiger wird ausgewählt. | `{Module.Prefix}sinfo Some Server`")
                 .Parameter ("server",ParameterType.Optional)
                 .Do (async e =>
                 {
@@ -49,7 +49,7 @@ namespace MidnightBot.Modules.Utility.Commands
 
             cgb.CreateCommand (Module.Prefix + "channelinfo")
                 .Alias (Module.Prefix + "cinfo")
-                .Description ($"Zeigt Infos über einen Channel. Wenn kein Channel ausgewählt, derzeitiger wird angegeben. |{Module.Prefix}cinfo #some-channel")
+                .Description ($"Zeigt Infos über einen Channel. Wenn kein Channel ausgewählt, derzeitiger wird angegeben. | `{Module.Prefix}cinfo #some-channel`")
                 .Parameter ("channel",ParameterType.Optional)
                 .Do (async e =>
                 {
@@ -71,7 +71,7 @@ namespace MidnightBot.Modules.Utility.Commands
 
             cgb.CreateCommand (Module.Prefix + "userinfo")
                 .Alias (Module.Prefix + "uinfo")
-                .Description ($"Zeigt eine Info über den User. Wenn kein User angegeben, User der den Befehl eingibt. |{Module.Prefix}uinfo @SomeUser")
+                .Description ($"Zeigt eine Info über den User. Wenn kein User angegeben, User der den Befehl eingibt. | `{Module.Prefix}uinfo @SomeUser`")
                 .Parameter ("user",ParameterType.Optional)
                 .Do (async e =>
                 {

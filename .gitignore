@@ -36,8 +36,9 @@ Tests/
 #!**/packages/repositories.config
 MidnightBot/bin/Debug/data/MidnightBot.sqlite
 MidnightBot/bin/Debug/data/config.json
-MidnightBot/bin/Debug/data/incidents/*
-MidnightBot/bin/Debug/data/permissions/*
+MidnightBot/bin/Debug/data/incidents
+MidnightBot/bin/debug/data/musicdata
+MidnightBot/bin/Debug/data/permissions
 MidnightBot/bin/Debug/data/ServerSpecificConfigs.json
 MidnightBot/bin/Debug/credentials.json
 MidnightBot.sln.iml

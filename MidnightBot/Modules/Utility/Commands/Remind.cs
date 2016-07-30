@@ -87,7 +87,7 @@ namespace MidnightBot.Modules.Utility.Commands
                 .Description ("Sendet nach einer bestimmten Zeit eine Nachricht in den Channel. " +
                               "Erstes Argument ist me/here/'channelname'. Zweites Argument ist die Zeit in absteigender Reihenfolge (mo>w>d>h>m) Beispiel: 1w5d3h10m. " +
                               "Drittes Argument ist eine (Multiwort)Nachricht. " +
-                              " | `.remind me 1d5h Do something` or `.remind #general Start now!`")
+                              $" | `{Prefix}remind me 1d5h Do something` oder `{Prefix}remind #general Start now!`")
                 .Parameter ("meorchannel",ParameterType.Required)
                 .Parameter ("time",ParameterType.Required)
                 .Parameter ("message",ParameterType.Unparsed)
@@ -171,7 +171,7 @@ namespace MidnightBot.Modules.Utility.Commands
                         UserId = (long)e.User.Id,
                         ServerId = (long)e.Server.Id
                     };
-                    DbHandler.Instance.InsertData (rem);
+                    DbHandler.Instance.Connection.Insert(rem);
 
                     reminders.Add (StartNewReminder (rem));
 
@@ -180,7 +180,7 @@ namespace MidnightBot.Modules.Utility.Commands
             cgb.CreateCommand (Module.Prefix + "remindmsg")
                 .Description ("Setzt Nachricht, wenn die Erinnerung ausgelöst wird. " +
                     " Verfügbare Platzhalter sind %user% - Benutzer der den Command ausgeführt hat, %message% -" +
-                    " Nachricht spezifiziert in Erinnerung, %target% - Ziel Channel der Erinnerung. **Bot Owner Only!**")
+                    $" Nachricht spezifiziert in Erinnerung, %target% - Ziel Channel der Erinnerung. **Bot Owner Only!** | `{Prefix}remindmsg do something else`")
                 .Parameter ("msg",ParameterType.Unparsed)
                 .AddCheck (SimpleCheckers.OwnerOnly ())
                 .Do (async e =>

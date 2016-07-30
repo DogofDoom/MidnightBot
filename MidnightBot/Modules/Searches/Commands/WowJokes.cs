@@ -20,7 +20,7 @@ namespace MidnightBot.Modules.Searches.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "wowjoke")
-                .Description ("Get one of Kwoth's penultimate WoW jokes.")
+                .Description ($"Get one of Kwoth's penultimate WoW jokes. | `{Prefix}wowjoke`")
                 .Do (async e =>
                 {
                     if (!jokes.Any ())

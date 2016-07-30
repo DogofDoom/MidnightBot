@@ -85,7 +85,6 @@ namespace MidnightBot.Modules.Extra
                cgb.CreateCommand (Prefix + "rip")
                    .Description ("RIP")
                    .Parameter ("text",ParameterType.Required)
-                   .AddCheck (SimpleCheckers.OwnerOnly ())
                    .Do (async e =>
                    {
                        var targetStr = "";

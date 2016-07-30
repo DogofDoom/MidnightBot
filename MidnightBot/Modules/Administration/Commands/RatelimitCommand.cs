@@ -42,7 +42,7 @@ namespace MidnightBot.Modules.Administration.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "slowmode")
-                .Description ("Schaltet Slow Mode um. Wenn AN, Benutzer können nur alle 5 Sekunden eine Nachricht schicken.")
+                .Description ($"Schaltet Slow Mode um. Wenn AN, Benutzer können nur alle 5 Sekunden eine Nachricht schicken. | `{Prefix}slowmode`")
                 .AddCheck (SimpleCheckers.ManageMessages ())
                 .Do (async e =>
                 {

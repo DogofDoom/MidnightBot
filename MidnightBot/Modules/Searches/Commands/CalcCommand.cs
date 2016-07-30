@@ -17,12 +17,12 @@ namespace MidnightBot.Modules.Searches.Commands
         {
             cgb.CreateCommand (Module.Prefix + "calculate")
                 .Alias (Module.Prefix + "calc")
-                .Description ("Berechnet eine mathematische Angabe")
+                .Description ($"Berechnet eine mathematische Angabe. | `{Prefix}calc 1+1`")
                 .Parameter ("expression",ParameterType.Unparsed)
                 .Do (EvalFunc ());
 
             cgb.CreateCommand(Module.Prefix + "calclist")
-                .Description("List operations of parser")
+                .Description($"List operations of parser. | `{Prefix}calclist`")
                 .Do(async e=> {
                     await e.Channel.SendMessage (string.Join ("\n",parser.OperatorList) + "\n" + string.Join ("\n",parser.LocalFunctions.Keys));
                 });

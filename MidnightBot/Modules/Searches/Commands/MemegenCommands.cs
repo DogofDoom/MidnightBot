@@ -17,7 +17,7 @@ namespace MidnightBot.Modules.Searches.Commands
         internal override void Init(CommandGroupBuilder cgb)
         {
             cgb.CreateCommand(Prefix + "memelist")
-                .Description("Zeigt eine Liste von Memes, die du mit `~memegen` benutzen kannst, von http://memegen.link/templates/")
+                .Description($"Zeigt eine Liste von Memes, die du mit `~memegen` benutzen kannst, von http://memegen.link/templates/ | `{Prefix}memelist`")
                 .Do(async e =>
                 {
                     int i = 0;
@@ -30,7 +30,7 @@ namespace MidnightBot.Modules.Searches.Commands
                 });
 
             cgb.CreateCommand(Prefix + "memegen")
-                .Description("Erstellt ein Meme von Memelist mit Top und Bottom Text. | `~memegen biw \"gets iced coffee\" \"in the winter\"`")
+                .Description($"Erstellt ein Meme von Memelist mit Top und Bottom Text. | `{Prefix}memegen biw \"gets iced coffee\" \"in the winter\"`")
                 .Parameter("meme", ParameterType.Required)
                 .Parameter("toptext", ParameterType.Required)
                 .Parameter("bottext", ParameterType.Required)

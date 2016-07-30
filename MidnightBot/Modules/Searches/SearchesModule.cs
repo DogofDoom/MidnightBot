@@ -49,7 +49,7 @@ namespace MidnightBot.Modules.Searches
                 commands.ForEach (cmd => cmd.Init (cgb));
 
                 cgb.CreateCommand (Prefix + "we")
-                .Description ($"Zeigt Wetter-Daten für eine genannte Stadt und ein Land. BEIDES IST BENÖTIGT. Wetter Api ist sehr zufällig, wenn du einen Fehler machst.\n**Benutzung**: {Prefix}we Moskau RF")
+                .Description ($"Zeigt Wetter-Daten für eine genannte Stadt und ein Land. BEIDES IST BENÖTIGT. Wetter Api ist sehr zufällig, wenn du einen Fehler machst. | `{Prefix}we Moskau RF`")
                 .Parameter ("city",ParameterType.Required)
                 .Parameter ("country",ParameterType.Required)
                 .Do (async e =>
@@ -72,7 +72,7 @@ namespace MidnightBot.Modules.Searches
 
                 cgb.CreateCommand (Prefix + "yt")
                    .Parameter ("query",ParameterType.Unparsed)
-                   .Description ("Durchsucht Youtube und zeigt das erste Ergebnis.")
+                   .Description ($"Durchsucht Youtube und zeigt das erste Ergebnis. | `{Prefix}yt query`")
                    .Do (async e =>
                    {
                        if (!(await SearchHelper.ValidateQuery (e.Channel,e.GetArg ("query"))))
@@ -91,7 +91,7 @@ namespace MidnightBot.Modules.Searches
                 cgb.CreateCommand (Prefix + "ani")
                     .Alias (Prefix + "anime",Prefix + "aq")
                     .Parameter ("query",ParameterType.Unparsed)
-                    .Description ("Durchsucht anilist nach einem Anime und zeigt das erste Ergebnis.")
+                    .Description ($"Durchsucht anilist nach einem Anime und zeigt das erste Ergebnis. | `{Prefix}aq aquerion evol`")
                     .Do (async e =>
                      {
                          if (!(await SearchHelper.ValidateQuery (e.Channel,e.GetArg ("query")).ConfigureAwait (false)))
@@ -112,7 +112,7 @@ namespace MidnightBot.Modules.Searches
 
                 cgb.CreateCommand (Prefix + "imdb")
                     .Parameter ("query",ParameterType.Unparsed)
-                    .Description ("Durchsucht IMDB nach Filmen oder Serien und zeigt erstes Ergebnis.")
+                    .Description ($"Durchsucht IMDB nach Filmen oder Serien und zeigt erstes Ergebnis. | `{Prefix}imdb query`")
                     .Do (async e =>
                     {
                         if (!(await SearchHelper.ValidateQuery (e.Channel,e.GetArg ("query")).ConfigureAwait (false)))
@@ -138,7 +138,7 @@ namespace MidnightBot.Modules.Searches
                 cgb.CreateCommand (Prefix + "mang")
                     .Alias (Prefix + "manga").Alias (Prefix + "mq")
                     .Parameter ("query",ParameterType.Unparsed)
-                    .Description ("Durchsucht anilist nach einem Manga und zeigt das erste Ergebnis.")
+                    .Description ($"Durchsucht anilist nach einem Manga und zeigt das erste Ergebnis. | `{Prefix}mq query`")
                     .Do (async e =>
                      {
                          if (!(await SearchHelper.ValidateQuery (e.Channel,e.GetArg ("query")).ConfigureAwait (false)))
@@ -158,7 +158,7 @@ namespace MidnightBot.Modules.Searches
 
                 cgb.CreateCommand (Prefix + "randomcat")
                     .Alias (Prefix + "meow")
-                    .Description ("Zeigt ein zufälliges Katzenbild.")
+                    .Description ($"Zeigt ein zufälliges Katzenbild. | `{Prefix}meow`")
                     .Do (async e =>
                      {
                          await e.Channel.SendMessage (JObject.Parse (
@@ -168,14 +168,14 @@ namespace MidnightBot.Modules.Searches
 
                 cgb.CreateCommand(Prefix + "randomdog")
                     .Alias(Prefix + "woof")
-                    .Description("Zeigt ein zufälliges Hundebild.")
+                    .Description($"Zeigt ein zufälliges Hundebild. | `{Prefix}woof`")
                     .Do(async e =>
                     {
                         await e.Channel.SendMessage("http://random.dog/" + await SearchHelper.GetResponseStringAsync("http://random.dog/woof").ConfigureAwait(false)).ConfigureAwait(false);
                     });
 
                 cgb.CreateCommand (Prefix + "i")
-                   .Description ("Zeigt das erste Ergebnis für eine Suche. Benutze ~ir für unterschiedliche Ergebnisse.\n**Benutzung**: ~i cute kitten")
+                   .Description ($"Zeigt das erste Ergebnis für eine Suche. Benutze ~ir für unterschiedliche Ergebnisse. | `{Prefix}i cute kitten`")
                    .Parameter ("query",ParameterType.Unparsed)
                        .Do (async e =>
                         {
@@ -184,7 +184,7 @@ namespace MidnightBot.Modules.Searches
                                 return;
                             try
                             {
-                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString (e.GetArg ("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&fields=items%2Flink&key={MidnightBot.GetRndGoogleAPIKey ()}";
+                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString (e.GetArg ("query"))}&cx=018084019232060951019%3Ahs5piey28-e&safe=medium&num=1&searchType=image&fields=items%2Flink&key={MidnightBot.GetRndGoogleAPIKey ()}";
                                 var obj = JObject.Parse (await SearchHelper.GetResponseStringAsync (reqString).ConfigureAwait (false));
 
                                 await e.Channel.SendMessage (obj["items"][0]["link"].ToString ()).ConfigureAwait (false);
@@ -203,7 +203,7 @@ namespace MidnightBot.Modules.Searches
                         });
 
                 cgb.CreateCommand (Prefix + "ir")
-                   .Description ("Zeigt ein zufälliges Bild bei einem angegeben Suchwort.\n**Benutzung**: ~ir cute kitten")
+                   .Description ($"Zeigt ein zufälliges Bild bei einem angegeben Suchwort. | `{Prefix}ir cute kitten`")
                    .Parameter ("query",ParameterType.Unparsed)
                        .Do (async e =>
                         {
@@ -214,7 +214,7 @@ namespace MidnightBot.Modules.Searches
                                 return;
                             try
                             {
-                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString(e.GetArg("query"))}&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={rng.Next(1,50)}&fields=items%2Flink&key={apikey}";
+                                var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString(e.GetArg("query"))}&cx=018084019232060951019%3Ahs5piey28-e&safe=medium&num=1&searchType=image&start={rng.Next(1,50)}&fields=items%2Flink&key={apikey}";
                                 var obj = JObject.Parse (await SearchHelper.GetResponseStringAsync (reqString).ConfigureAwait (false));
                                 var items = obj["items"] as JArray;
                                 await e.Channel.SendMessage (items[0]["link"].ToString ()).ConfigureAwait (false);
@@ -234,7 +234,7 @@ namespace MidnightBot.Modules.Searches
                         });
 
                 cgb.CreateCommand (Prefix + "lmgtfy")
-                    .Description ("Google etwas für einen Idioten.")
+                    .Description ($"Google etwas für einen Idioten. | `{Prefix}lmgtfy query`")
                     .Parameter ("ffs",ParameterType.Unparsed)
                     .Do (async e =>
                      {
@@ -246,7 +246,7 @@ namespace MidnightBot.Modules.Searches
 
                 cgb.CreateCommand(Prefix + "google")
                     .Alias(Prefix + "g")
-                    .Description("Gibt einen Google-Suchlink für einen Begriff zurück.")
+                    .Description($"Gibt einen Google-Suchlink für einen Begriff zurück. | `{Prefix}google query`")
                     .Parameter("terms", ParameterType.Unparsed)
                     .Do(async e =>
                     {
@@ -258,7 +258,7 @@ namespace MidnightBot.Modules.Searches
                     });
 
                 cgb.CreateCommand (Prefix + "hs")
-                  .Description ("Sucht eine Heartstone-Karte und zeigt ihr Bild. Braucht eine Weile zum beenden.\n**Benutzung**:~hs Ysera")
+                  .Description ($"Sucht eine Heartstone-Karte und zeigt ihr Bild. Braucht eine Weile zum beenden. | `{Prefix}hs Ysera`")
                   .Parameter ("name",ParameterType.Unparsed)
                   .Do (async e =>
                    {
@@ -299,7 +299,7 @@ namespace MidnightBot.Modules.Searches
                    });
 
                 cgb.CreateCommand (Prefix + "ud")
-                  .Description ("Durchsucht das Urban Dictionary nach einem Wort.\n**Benutzung**:~ud Pineapple")
+                  .Description ($"Durchsucht das Urban Dictionary nach einem Wort. | `{Prefix}ud Pineapple`")
                   .Parameter ("query",ParameterType.Unparsed)
                   .Do (async e =>
                    {
@@ -328,7 +328,7 @@ namespace MidnightBot.Modules.Searches
                    });
                 // thanks to Blaubeerwald
                 cgb.CreateCommand (Prefix + "#")
-                 .Description ("Durchsucht Tagdef.com nach einem Hashtag.\n**Benutzung**:~# ff")
+                 .Description ($"Durchsucht Tagdef.com nach einem Hashtag. | `{Prefix}# ff`")
                  .Parameter ("query",ParameterType.Unparsed)
                  .Do (async e =>
                    {
@@ -357,7 +357,7 @@ namespace MidnightBot.Modules.Searches
                    });
 
                 cgb.CreateCommand (Prefix + "quote")
-                .Description ("Zeigt ein zufälliges Zitat.")
+                .Description ($"Zeigt ein zufälliges Zitat. | `{Prefix}quote`")
                 .Do (async e =>
                  {
                      var quote = MidnightBot.Config.Quotes[rng.Next (0,MidnightBot.Config.Quotes.Count)].ToString ();
@@ -365,7 +365,7 @@ namespace MidnightBot.Modules.Searches
                  });
 
                 cgb.CreateCommand (Prefix + "catfact")
-                     .Description ("Zeigt einen zufälligen Katzenfakt von <http://catfacts-api.appspot.com/api/facts>")
+                     .Description ($"Zeigt einen zufälligen Katzenfakt von <http://catfacts-api.appspot.com/api/facts> | `{Prefix}catfact`")
                      .Do (async e =>
                      {
                          var response = await SearchHelper.GetResponseStringAsync ("http://catfacts-api.appspot.com/api/facts").ConfigureAwait (false);
@@ -376,7 +376,7 @@ namespace MidnightBot.Modules.Searches
 
                 cgb.CreateCommand (Prefix + "yomama")
                     .Alias (Prefix + "ym")
-                    .Description ("Zeigt einen zufälligen Witz von <http://api.yomomma.info/>")
+                    .Description ($"Zeigt einen zufälligen Witz von <http://api.yomomma.info/> | `{Prefix}ym`")
                     .Do (async e =>
                     {
                         var response = await SearchHelper.GetResponseStringAsync ("http://api.yomomma.info/").ConfigureAwait (false);
@@ -385,7 +385,7 @@ namespace MidnightBot.Modules.Searches
 
                 cgb.CreateCommand (Prefix + "randjoke")
                     .Alias (Prefix + "rj")
-                    .Description ("Zeigt einen zufälligen Witz von <http://tambal.azurewebsites.net/joke/random>")
+                    .Description ($"Zeigt einen zufälligen Witz von <http://tambal.azurewebsites.net/joke/random> | `{Prefix}rj`")
                     .Do (async e =>
                     {
                         var response = await SearchHelper.GetResponseStringAsync ("http://tambal.azurewebsites.net/joke/random").ConfigureAwait (false);
@@ -394,7 +394,7 @@ namespace MidnightBot.Modules.Searches
 
                 cgb.CreateCommand (Prefix + "chucknorris")
                    .Alias (Prefix + "cn")
-                   .Description ("Zeigt einen zufälligen Chuck Norris Witz von <http://tambal.azurewebsites.net/joke/random>")
+                   .Description ($"Zeigt einen zufälligen Chuck Norris Witz von <http://tambal.azurewebsites.net/joke/random> | `{Prefix}cn`")
                    .Do (async e =>
                    {
                        var response = await SearchHelper.GetResponseStringAsync ("http://api.icndb.com/jokes/random/").ConfigureAwait (false);
@@ -402,7 +402,7 @@ namespace MidnightBot.Modules.Searches
                    });
                 
                 cgb.CreateCommand (Prefix + "stardew")
-                    .Description ($"Gibt einen Link zum Stardew Valley Wiki mit gegebenem Topic zurück.\n**Benutzung**: {Prefix}stardew Cow")
+                    .Description ($"Gibt einen Link zum Stardew Valley Wiki mit gegebenem Topic zurück. | `{Prefix}stardew Cow`")
                     .Parameter ("topic",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -418,7 +418,7 @@ namespace MidnightBot.Modules.Searches
 
                 cgb.CreateCommand (Prefix + "magicitem")
                 .Alias (Prefix + "mi")
-                   .Description ("Zeigt ein zufälliges Magic-Item von <https://1d4chan.org/wiki/List_of_/tg/%27s_magic_items>")
+                   .Description ($"Zeigt ein zufälliges Magic-Item von <https://1d4chan.org/wiki/List_of_/tg/%27s_magic_items> | `{Prefix}mi`")
                    .Do (async e =>
                    {
                        var magicItems = JsonConvert.DeserializeObject<List<MagicItem>> (File.ReadAllText ("data/magicitems.json"));
@@ -428,7 +428,7 @@ namespace MidnightBot.Modules.Searches
                    });
 
                 cgb.CreateCommand (Prefix + "revav")
-                   .Description ("Gibt ein Google Reverse Image Search für das Profilbild einer Person zurück.")
+                   .Description ($"Gibt ein Google Reverse Image Search für das Profilbild einer Person zurück. | `{Prefix}revav \"@SomeGuy\"`")
                    .Parameter ("user",ParameterType.Unparsed)
                    .Do (async e =>
                    {
@@ -446,7 +446,7 @@ namespace MidnightBot.Modules.Searches
                    });
 
                 cgb.CreateCommand (Prefix + "revimg")
-                   .Description ($"Gibt eine 'Google Reverse Image Search' für ein Bild von einem Link zurück.")
+                   .Description ($"Gibt eine 'Google Reverse Image Search' für ein Bild von einem Link zurück. | `{Prefix}revav Image link`")
                    .Parameter ("image",ParameterType.Unparsed)
                    .Do (async e =>
                    {
@@ -458,7 +458,7 @@ namespace MidnightBot.Modules.Searches
                    });
 
                 cgb.CreateCommand (Prefix + "safebooru")
-                    .Description ("Zeigt ein zufälliges Hentai Bild von safebooru  mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze + für mehrere Tags.\n**Benutzung**: ~safebooru yuri +kissing")
+                    .Description ($"Zeigt ein zufälliges Hentai Bild von safebooru  mit einem gegebenen Tag. Ein Tag ist optional aber bevorzugt. Benutze + für mehrere Tags. | `{Prefix}safebooru yuri +kissing`")
                     .Parameter ("tag",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -472,7 +472,7 @@ namespace MidnightBot.Modules.Searches
 
                 cgb.CreateCommand(Prefix + "pony")
                     .Alias(Prefix + "broni")
-                    .Description("Shows a random image from bronibooru with a given tag. Tag is optional but preferred. (multiple tags are appended with +)\n**Benutzung**: ~pony scootaloo")
+                    .Description($"Shows a random image from bronibooru with a given tag. Tag is optional but preferred. (multiple tags are appended with +) | `{Prefix}pony scootaloo`")
                     .Parameter("tag", ParameterType.Unparsed)
                     .Do(async e =>
                     {
@@ -498,7 +498,7 @@ namespace MidnightBot.Modules.Searches
                     });
 
                 cgb.CreateCommand (Prefix + "clr")
-                    .Description ("Zeigt dir die zum Hex zugehörige Farbe.\n**Benutzung**: `~clr 00ff00`")
+                    .Description ($"Zeigt dir die zum Hex zugehörige Farbe.\n**Benutzung**: `{Prefix}clr 00ff00`")
                     .Parameter ("color",ParameterType.Unparsed)
                     .Do (async e =>
                     {
@@ -522,7 +522,7 @@ namespace MidnightBot.Modules.Searches
                     });
 
                 cgb.CreateCommand(Prefix + "videocall")
-                  .Description("Erstellt einen privaten <http://www.appear.in> Video Anruf Link für dich und andere erwähnte Personen. Der Link wird allen erwähnten Personen per persönlicher Nachricht geschickt.")
+                  .Description($"Erstellt einen privaten <http://www.appear.in> Video Anruf Link für dich und andere erwähnte Personen. Der Link wird allen erwähnten Personen per persönlicher Nachricht geschickt. | `{Prefix}videocall \"@SomeGuy\"`")
                   .Parameter("arg", ParameterType.Unparsed)
                   .Do(async e =>
                   {
@@ -545,7 +545,7 @@ namespace MidnightBot.Modules.Searches
 
                 cgb.CreateCommand (Prefix + "av").Alias (Prefix + "avatar")
                     .Parameter ("mention",ParameterType.Required)
-                    .Description ("Zeigt den Avatar einer erwähnten Person.\n **Benutzung**: ~av @X")
+                    .Description ($"Zeigt den Avatar einer erwähnten Person. | `{Prefix}av @X`")
                     .Do (async e =>
                     {
                         var usr = e.Channel.FindUsers (e.GetArg ("mention")).FirstOrDefault ();

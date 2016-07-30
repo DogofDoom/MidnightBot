@@ -1,14 +1,13 @@
-﻿using MidnightBot.Classes;
+﻿using Discord;
+using Discord.Commands;
+using MidnightBot.Classes;
+using MidnightBot.Extensions;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Discord.Commands;
-using System.Collections.Concurrent;
-using Discord;
-using MidnightBot.Extensions;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace MidnightBot.Modules.Gambling.Commands
 {
@@ -23,8 +22,9 @@ namespace MidnightBot.Modules.Gambling.Commands
         internal override void Init(CommandGroupBuilder cgb)
         {
             cgb.CreateCommand(Prefix + "race")
-                .Description("Startet ein neues Tier-Rennen.")
-                .Do(e => {
+                .Description($"Startet ein neues Tier-Rennen. | `{Prefix}race`")
+                .Do(e =>
+                {
                     var ar = new AnimalRace(e.Server.Id, e.Channel);
                     if (ar.Fail)
                     {
@@ -34,15 +34,33 @@ namespace MidnightBot.Modules.Gambling.Commands
 
             cgb.CreateCommand(Prefix + "joinrace")
                 .Alias(Prefix + "jr")
-                .Description("Tritt einem neuem Rennen bei")
-                .Do(async e => {
+                .Description($"Tritt einem Rennen bei. Du kannst eine Anzahl an {MidnightBot.Config.CurrencyName} zum Wetten setzen (Optional). Du bekommst deine Wette*(Teilnehmer-1) zurück, wenn du gewinnst. | `{Prefix}jr` oder `{Prefix}jr 5`")
+                .Parameter("amount", ParameterType.Optional)
+                .Do(async e =>
+                {
+                    int amount;
+                    if (!int.TryParse(e.GetArg("amount"), out amount) || amount < 0)
+                        amount = 0;
+
+                    var userFlowers = GamblingModule.GetUserFlowers(e.User.Id);
+
+                    if (userFlowers < amount)
+                    {
+                        await e.Channel.SendMessage($"{e.User.Mention} Du hast nicht genug {MidnightBot.Config.CurrencyName}. Du hast nur {userFlowers}{MidnightBot.Config.CurrencySign}.").ConfigureAwait(false);
+                        return;
+                    }
+
+                    if (amount > 0)
+                        await FlowersHandler.RemoveFlowers(e.User, "BetRace", (int)amount, true).ConfigureAwait(false);
+
                     AnimalRace ar;
 
                     if (!AnimalRaces.TryGetValue(e.Server.Id, out ar))
                     {
                         await e.Channel.SendMessage("Es existiert kein Rennen auf diesem Server.");
+                        return;
                     }
-                    await ar.JoinRace(e.User);
+                    await ar.JoinRace(e.User, amount);
                 });
         }
 
@@ -73,26 +91,33 @@ namespace MidnightBot.Modules.Gambling.Commands
                 var fullgame = CheckForFullGameAsync(token);
                 Task.Run(async () =>
                 {
-                    await raceChannel.SendMessage($"🏁`Rennen startet in 20 Sekunden oder wenn der Raum voll ist. Gib $jr ein, um dem Rennen beizutreten.`");
-                    var t = await Task.WhenAny(Task.Delay(20000, token), fullgame);
-                    Started = true;
-                    cancelSource.Cancel();
-                    if (t == fullgame)
+                    try
                     {
-                        await raceChannel.SendMessage("🏁`Rennen ist voll, wird gestartet!`");
-                    }
-                    else if (participants.Count > 1)
-                    {
-                        await raceChannel.SendMessage("🏁`Spiel startet mit " + participants.Count + " Teilnehmern.`");
-                    }
-                    else
-                    {
-                        await raceChannel.SendMessage("🏁`Rennen konnte nicht starten da es nicht genug Teilnehmer gab.`");
+                        await raceChannel.SendMessage($"🏁`Rennen startet in 20 Sekunden oder wenn der Raum voll ist. Gib {MidnightBot.Config.CommandPrefixes.Gambling}jr ein, um dem Rennen beizutreten.`");
+                        var t = await Task.WhenAny(Task.Delay(20000, token), fullgame);
+                        Started = true;
+                        cancelSource.Cancel();
+                        if (t == fullgame)
+                        {
+                            await raceChannel.SendMessage("🏁`Rennen ist voll, wird gestartet!`");
+                        }
+                        else if (participants.Count > 1)
+                        {
+                            await raceChannel.SendMessage("🏁`Spiel startet mit " + participants.Count + " Teilnehmern.`");
+                        }
+                        else
+                        {
+                            await raceChannel.SendMessage("🏁`Rennen konnte nicht starten da es nicht genug Teilnehmer gab.`");
+                            var p = participants.FirstOrDefault();
+                            if (p != null)
+                                await FlowersHandler.AddFlowersAsync(p.User, "BetRace", p.AmountBet, true).ConfigureAwait(false);
+                            End();
+                            return;
+                        }
+                        await Task.Run(StartRace);
                         End();
-                        return;
                     }
-                    await Task.Run(StartRace);
-                    End();
+                    catch { }
                 });
             }
 
@@ -107,6 +132,7 @@ namespace MidnightBot.Modules.Gambling.Commands
                 var rng = new Random();
                 Participant winner = null;
                 Message msg = null;
+                Message msg2 = null;
                 int place = 1;
                 try
                 {
@@ -130,7 +156,15 @@ namespace MidnightBot.Modules.Gambling.Commands
                             }
                         });
                         //draw the state
-
+                            var names = $@"**Teilnehmer**
+{String.Join("\n", participants.Select(p => $"{p.User} | {p.Animal}"))}
+";
+                        if (msg2 == null || messagesSinceGameStarted >= 10) // also resend the message if channel was spammed
+                        {
+                            if (msg2 != null)
+                                try { await msg2.Delete(); } catch { }
+                            msg2 = await raceChannel.SendMessage(names);
+                        }
                         var text = $@"|🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🔚|
 {String.Join("\n", participants.Select(p => $"{(int)(p.Total / 60f * 100),-2}%|{p.ToString()}"))}
 |🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🔚|";
@@ -151,14 +185,23 @@ namespace MidnightBot.Modules.Gambling.Commands
                 {
                     MidnightBot.Client.MessageReceived -= Client_MessageReceived;
                 }
-                await raceChannel.SendMessage($"🏁 {winner.User.Mention} als {winner.Animal} `hat das Rennen gewonnen!`");
+
+                    if (winner.AmountBet > 0)
+                {
+                    var wonAmount = winner.AmountBet * (participants.Count - 1);
+                    await FlowersHandler.AddFlowersAsync(winner.User, "Won a Race", wonAmount).ConfigureAwait(false);
+                    await raceChannel.SendMessage($"🏁 {winner.User.Mention} as {winner.Animal} **Hat das Rennen gewonnen und bekommt daher {wonAmount}{MidnightBot.Config.CurrencySign}!**");
+                }
+                else
+                {
+                    await raceChannel.SendMessage($"🏁 {winner.User.Mention} als {winner.Animal} **hat das Rennen gewonnen!**");
+                }
             }
 
             private void Client_MessageReceived(object sender, MessageEventArgs e)
             {
-                if (e.Message.IsAuthor)
+                if (e.Message.IsAuthor || e.Channel.IsPrivate || e.Channel != raceChannel)
                     return;
-                Console.WriteLine("Nachricht erhalten " + messagesSinceGameStarted);
                 messagesSinceGameStarted++;
             }
 
@@ -170,15 +213,15 @@ namespace MidnightBot.Modules.Gambling.Commands
                 }
             }
 
-            public async Task<bool> JoinRace(User u)
+            public async Task<bool> JoinRace(User u, int amount = 0)
             {
                 var animal = "";
                 if (!animals.TryDequeue(out animal))
                 {
-                    await raceChannel.SendMessage($"{u.Mention} `Es gibt kein laufenedes Rennen auf diesem Server.`");
+                    await raceChannel.SendMessage($"{u.Mention} `Es gibt kein laufendes Rennen auf diesem Server.`");
                     return false;
                 }
-                var p = new Participant(u, animal);
+                var p = new Participant(u, animal, amount);
                 if (participants.Contains(p))
                 {
                     await raceChannel.SendMessage($"{u.Mention} `Du nimmst bereits an diesem Rennen teil.`");
@@ -190,7 +233,7 @@ namespace MidnightBot.Modules.Gambling.Commands
                     return false;
                 }
                 participants.Add(p);
-                await raceChannel.SendMessage($"{u.Mention} **trat dem Rennen als {p.Animal} bei**");
+                await raceChannel.SendMessage($"{u.Mention} **trat dem Rennen als {p.Animal} bei" + (amount > 0 ? $" und wettet um {amount} {MidnightBot.Config.CurrencyName.SnPl(amount)}!**" : "**"));
                 return true;
             }
         }
@@ -199,16 +242,18 @@ namespace MidnightBot.Modules.Gambling.Commands
         {
             public User User { get; set; }
             public string Animal { get; set; }
+            public int AmountBet { get; set; }
 
             public float Coeff { get; set; }
             public int Total { get; set; }
 
             public int Place { get; set; } = 0;
 
-            public Participant(User u, string a)
+            public Participant(User u, string a, int amount)
             {
                 this.User = u;
                 this.Animal = a;
+                this.AmountBet = amount;
             }
 
             public override int GetHashCode()
@@ -231,19 +276,19 @@ namespace MidnightBot.Modules.Gambling.Commands
                     return str;
                 if (Place == 1)
                 {
-                    return str + "🏆";
+                    return str + $"🏆 {User}";
                 }
                 else if (Place == 2)
                 {
-                    return str + "`2nd`";
+                    return str + $"`2nd` {User}";
                 }
                 else if (Place == 3)
                 {
-                    return str + "`3rd`";
+                    return str + $"`3rd` {User}";
                 }
                 else
                 {
-                    return str + $"`{Place}th`";
+                    return str + $"`{Place}th` {User}";
                 }
             }
         }
