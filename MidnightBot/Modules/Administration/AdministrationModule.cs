@@ -709,8 +709,8 @@ namespace MidnightBot.Modules.Administration
                              if (val <= 0)
                                  return;
                              val++;
-                             await e.Channel.DeleteMessages((await e.Channel.DownloadMessages(val).ConfigureAwait(false)).ToArray()).ConfigureAwait(false);
-                             return;
+                                 await e.Channel.DeleteMessages((await e.Channel.DownloadMessages(val).ConfigureAwait(false)).ToArray()).ConfigureAwait(false);
+                                 return;
                          }
                          //else if first argument is user
                          var usr = e.Server.FindUsers (e.GetArg ("user_or_num")).FirstOrDefault ();

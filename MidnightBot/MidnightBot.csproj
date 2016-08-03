@@ -164,6 +164,10 @@
     <Compile Include="Modules\Conversations\Commands\RipCommand.cs" />
     <Compile Include="Modules\CustomReactions\CustomReactions.cs" />
     <Compile Include="Modules\Gambling\Commands\AnimalRacing.cs" />
+    <Compile Include="Modules\Level\Classes\JoinHandler.cs" />
+    <Compile Include="Modules\Level\Classes\MessageHandler.cs" />
+    <Compile Include="Modules\Level\Commands\RankCommand.cs" />
+    <Compile Include="Modules\Level\LevelModule.cs" />
     <Compile Include="Modules\Meme\MemeModule.cs" />
     <Compile Include="Modules\Music\Classes\PlaylistFullException.cs" />
     <Compile Include="Modules\Pokemon\PokemonAttack.cs" />
@@ -190,6 +194,7 @@
     <Compile Include="SQLiteAsync.cs" />
     <Compile Include="_Models\DataModels\DailyMoneyModel.cs" />
     <Compile Include="_Models\DataModels\Incident.cs" />
+    <Compile Include="_Models\DataModels\LevelDataModel.cs" />
     <Compile Include="_Models\DataModels\PokemonSprite.cs" />
     <Compile Include="_Models\DataModels\TestDataModel.cs" />
     <Compile Include="_Models\JSONModels\AnimeResult.cs" />

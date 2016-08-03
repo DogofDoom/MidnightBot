@@ -179,9 +179,9 @@ namespace MidnightBot.Modules.Administration.Commands
                     return;
                 if (!string.IsNullOrWhiteSpace(e.Message.Text))
                 {
-                    await ch.SendMessage(
-                    $@"🕔`{prettyCurrentTime}` **Neue Nachricht** `#{e.Channel.Name}`
-                    👤`{e.User?.ToString() ?? ("NULL")}` {e.Message.Text.Unmention()}").ConfigureAwait(false);
+                    //await ch.SendMessage(
+                    //$@"🕔`{prettyCurrentTime}` **Neue Nachricht** `#{e.Channel.Name}`
+                    //👤`{e.User?.ToString() ?? ("NULL")}` {e.Message.Text.Unmention()}").ConfigureAwait(false);
                 }
                 else
                 {

@@ -110,6 +110,9 @@ namespace MidnightBot.Classes.JSONModels
              119174277298782216,
               143515953525817344
           };
+        public HashSet<ulong> ListenChannels { get; set; } = new HashSet<ulong>() {
+             
+          };
 
         [OnDeserialized]
         internal void OnDeserialized(StreamingContext context)
@@ -203,6 +206,7 @@ namespace MidnightBot.Classes.JSONModels
         public string Programming { get; set; } = "%";
         public string Pokemon { get; set; } = ">";
         public string Utility { get; set; } = ".";
+        public string Level { get; set; } = "/";
     }
 
     public static class ConfigHandler
@@ -229,6 +233,8 @@ namespace MidnightBot.Classes.JSONModels
         public static bool IsChannelBlacklisted(ulong id) => MidnightBot.Config.ChannelBlacklist.Contains(id);
 
         public static bool IsUserBlacklisted(ulong id) => MidnightBot.Config.UserBlacklist.Contains(id);
+
+        public static bool IsListenChannels(ulong id) => MidnightBot.Config.ListenChannels.Contains(id);
     }
 
     public class Quote

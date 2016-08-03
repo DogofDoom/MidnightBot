@@ -82,7 +82,8 @@
     "Permissions": ";",
     "Programming": "%",
     "Pokemon": ">",
-    "Utility": "."
+    "Utility": ".",
+    "Level": "/"
   },
   "ServerBlacklist": [],
   "ChannelBlacklist": [],
@@ -91,6 +92,7 @@
     119174277298782216,
     143515953525817344
   ],
+  "ListenChannels": [],
   "_8BallResponses": [
     "Ganz sicher ja",
     "Aber sicher",

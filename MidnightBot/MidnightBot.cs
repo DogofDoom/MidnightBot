@@ -13,6 +13,7 @@ using MidnightBot.Modules.Gambling;
 using MidnightBot.Modules.Games;
 using MidnightBot.Modules.Games.Commands;
 using MidnightBot.Modules.Help;
+using MidnightBot.Modules.Level;
 using MidnightBot.Modules.Meme;
 using MidnightBot.Modules.Music;
 using MidnightBot.Modules.NSFW;
@@ -195,6 +196,7 @@ namespace MidnightBot
             modules.Add (new Conversations (),"Conversations",ModuleFilter.None);
             modules.Add (new GamblingModule (),"Gambling",ModuleFilter.None);
             modules.Add (new GamesModule (),"Games",ModuleFilter.None);
+            modules.Add(new LevelModule(), "Level", ModuleFilter.None);
             modules.Add (new MusicModule(), "Music", ModuleFilter.None);
             modules.Add (new SearchesModule (),"Searches",ModuleFilter.None);
             modules.Add (new ExtraModule (),"Extra",ModuleFilter.None);
