@@ -18,7 +18,7 @@ namespace MidnightBot.Modules.Level.Classes
                 if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
                     return;
 
-                var uid = (long)e.User.Id;
+                var uid =(long)e.User.Id;
                 
                 LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
@@ -42,10 +42,9 @@ namespace MidnightBot.Modules.Level.Classes
                         }
 
                         ldm.Level += 1;
-                        ldm.XPForNextLevel = ldm.Level * 30 + 5;
+                        ldm.XPForNextLevel = 5 * (ldm.Level ^ 2) + 50 * ldm.Level + 100;
                         await e.Channel.SendMessage($"Herzlichen Glückwunsch { e.User.Mention }, du hast Level { ldm.Level } erreicht!");
                     }
-
                     DbHandler.Instance.Save(ldm);
                 }
                 else
