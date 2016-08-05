@@ -179,7 +179,7 @@ Check the guides for your platform on how to setup ffmpeg correctly:
                     if (read == 0)
                         if (attempt++ == 20)
                         {
-                            voiceClient.Wait();
+                            await voiceClient.Wait();
                             break;
                         }
                         else
@@ -191,7 +191,7 @@ Check the guides for your platform on how to setup ffmpeg correctly:
                         await Task.Delay(200, cancelToken).ConfigureAwait(false);
 
                     buffer = AdjustVolume(buffer, MusicPlayer.Volume);
-                    voiceClient.Send(buffer, 0, read);
+                    await voiceClient.Send(buffer, 0, read);
                 }
             }
             finally

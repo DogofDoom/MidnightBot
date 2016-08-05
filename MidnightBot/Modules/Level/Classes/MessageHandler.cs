@@ -18,15 +18,14 @@ namespace MidnightBot.Modules.Level.Classes
                 if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
                     return;
 
+                Random rnd = new Random();
                 var uid = Convert.ToInt64(e.User.Id);
                 
                 LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
                 if(ldm != null)
                 {
-                    var xpToGet= e.Message.RawText.Length;
-                    if (xpToGet > 25)
-                        xpToGet = 25;
+                    var xpToGet = rnd.Next(15, 26);
                     ldm.CurrentXP += xpToGet;
                     ldm.TotalXP += xpToGet;
 
@@ -42,7 +41,7 @@ namespace MidnightBot.Modules.Level.Classes
                         }
 
                         ldm.Level += 1;
-                        ldm.XPForNextLevel = ldm.Level * 30 + 5;
+                        ldm.XPForNextLevel = 5 * (ldm.Level ^ 2) + 50 * ldm.Level + 100;
                         await e.Channel.SendMessage($"Herzlichen Glückwunsch { e.User.Mention }, du hast Level { ldm.Level } erreicht!");
                     }
 
@@ -50,9 +49,7 @@ namespace MidnightBot.Modules.Level.Classes
                 }
                 else
                 {
-                    var xpToGet = e.Message.RawText.Length;
-                    if (xpToGet > 25)
-                        xpToGet = 25;
+                    var xpToGet = rnd.Next(15, 26);
                     ldm = new LevelData();
 
                     ldm.UserId = uid;
@@ -74,6 +71,7 @@ namespace MidnightBot.Modules.Level.Classes
                 return;
             if (MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
             {
+                var levelChanged = false;
                 var uid = (long)e.User.Id;
                 LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
@@ -111,12 +109,15 @@ namespace MidnightBot.Modules.Level.Classes
                             break;
                         }
                     }
+                    if (ldm.Level > calculatedLevel)
+                        levelChanged = true;
 
                     ldm.Level = calculatedLevel;
                     ldm.XPForNextLevel =5 * (calculatedLevel ^ 2) + 50 * calculatedLevel + 100;
 
                     DbHandler.Instance.Save(ldm);
 
+                    if(levelChanged)
                     await e.Channel.SendMessage($"Schade { e.User.Mention }, deine Nachricht wurde gelöscht. Daher wird dein Level runtergesetzt. Informationen bekommst du mit {MidnightBot.Config.CommandPrefixes.Level}rank");
                 }
             }

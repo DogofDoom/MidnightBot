@@ -46,7 +46,7 @@ namespace MidnightBot.Modules.Level.Commands
                     else
                     {
                         
-                        var usr = e.Server.FindUsers(e.GetArg("user_or_num")).FirstOrDefault();
+                        var usr = e.Server.FindUsers(e.GetArg("user")).FirstOrDefault();
                         if (usr == null)
                         {
                             e.Channel.SendMessage($"{ e.User.Mention }, diesen User kenne ich nicht.");
@@ -58,14 +58,13 @@ namespace MidnightBot.Modules.Level.Commands
                             LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
                             if (ldm != null)
                             {
-                                e.Channel.SendMessage($"{ e.User.Mention }: **{usr.Name}**\'s rank > LEVEL { ldm.Level } | XP { ldm.CurrentXP }/{ ldm.XPForNextLevel } | TOTAL XP { ldm.TotalXP }");
+                                e.Channel.SendMessage($"{ e.User.Mention }: **{usr.Name}**\'s Rang > LEVEL { ldm.Level } | XP { ldm.CurrentXP }/{ ldm.XPForNextLevel } | TOTAL XP { ldm.TotalXP }");
 
                             }
                             else
                             {
                                 e.Channel.SendMessage($"{ e.User.Mention }, dich kenne ich nicht.");
                             }
-                            
                         }
                     }
                 });
