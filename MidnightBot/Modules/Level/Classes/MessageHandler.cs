@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Commands;
+using Discord.Modules;
 using MidnightBot;
 using MidnightBot.DataModels;
 using MidnightBot.Classes;
@@ -16,6 +18,9 @@ namespace MidnightBot.Modules.Level.Classes
             if(MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
             {
                 if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
+                    return;
+
+                if (this.isCommand(e.Message.RawText))
                     return;
 
                 long uid = Convert.ToInt64(e.User.Id);
@@ -56,7 +61,6 @@ namespace MidnightBot.Modules.Level.Classes
 
                     ldm = new LevelData();
                     ldm.UserId = uid;
-                    ldm.UniqueTag = (int)e.User.Discriminator;
                     ldm.Level = 1;
                     ldm.TotalXP = xpToGet;
                     ldm.CurrentXP = xpToGet;
@@ -205,6 +209,28 @@ namespace MidnightBot.Modules.Level.Classes
                     DbHandler.Instance.Save(ldm);
                 }
             }
+        }
+
+        public bool isCommand(string text)
+        {
+            var enumerable = MidnightBot.Client.GetService<CommandService>().AllCommands;
+
+            foreach(Discord.Commands.Command cmd in enumerable)
+            {
+                if(text.StartsWith(cmd.Text))
+                {
+                    return true;
+                } else
+                {
+                    foreach(string alias in cmd.Aliases)
+                    {
+                        if (text.StartsWith(alias))
+                            return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

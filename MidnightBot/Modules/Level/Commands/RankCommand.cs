@@ -80,9 +80,9 @@ namespace MidnightBot.Modules.Level.Commands
         int GetRank(LevelData ldm)
         {
             IList<LevelData> data = DbHandler.Instance.FindAll<LevelData>(p => true);
-            data.OrderByDescending(p => p.TotalXP);
+            data = data.OrderByDescending(p => p.TotalXP).ToList();
 
-            return data.IndexOf(ldm);
+            return data.IndexOf(ldm) + 1;
         }
 
     }
