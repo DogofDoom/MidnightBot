@@ -2,12 +2,17 @@
 {
     class LevelData : IDataModel
     {
+        [SQLite.Unique]
         public long UserId { get; set; }
-        public int UniqueTag { get; set; }
 
         public int Level { get; set; }
         public int TotalXP { get; set; }
         public int CurrentXP { get; set; }
         public int XPForNextLevel { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return (obj is LevelData && ((LevelData)obj).UserId == this.UserId);
+        }
     }
 }
