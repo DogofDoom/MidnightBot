@@ -72,6 +72,18 @@
     <ApplicationIcon>bot.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Discord.Net">
+      <HintPath>..\..\Discord.Net\src\Discord.Net.Net45\bin\Release\Discord.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Discord.Net.Audio">
+      <HintPath>..\..\Discord.Net\src\Discord.Net.Audio.Net45\bin\Release\Discord.Net.Audio.dll</HintPath>
+    </Reference>
+    <Reference Include="Discord.Net.Commands">
+      <HintPath>..\..\Discord.Net\src\Discord.Net.Modules.Net45\bin\Release\Discord.Net.Commands.dll</HintPath>
+    </Reference>
+    <Reference Include="Discord.Net.Modules">
+      <HintPath>..\..\Discord.Net\src\Discord.Net.Modules.Net45\bin\Release\Discord.Net.Modules.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <HintPath>..\packages\Selenium.WebDriver.PhantomJS.Xplatform.2.45.0.1\lib\net40\Ionic.Zip.dll</HintPath>
       <Private>True</Private>
@@ -522,24 +534,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\images\cards\2_of_clubs.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\discord.net\src\Discord.Net.Audio.Net45\Discord.Net.Audio.csproj">
-      <Project>{7bfef748-b934-4621-9b11-6302e3a9f6b3}</Project>
-      <Name>Discord.Net.Audio</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\discord.net\src\Discord.Net.Commands.Net45\Discord.Net.Commands.csproj">
-      <Project>{1b5603b4-6f8f-4289-b945-7baae523d740}</Project>
-      <Name>Discord.Net.Commands</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\discord.net\src\Discord.Net.Modules.Net45\Discord.Net.Modules.csproj">
-      <Project>{3091164f-66ae-4543-a63d-167c1116241d}</Project>
-      <Name>Discord.Net.Modules</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\discord.net\src\Discord.Net.Net45\Discord.Net.csproj">
-      <Project>{8d71a857-879a-4a10-859e-5ff824ed6688}</Project>
-      <Name>Discord.Net</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\packages\PhantomJS.2.1.1\tools\phantomjs\phantomjs.exe">

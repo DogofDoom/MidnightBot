@@ -18,14 +18,17 @@ namespace MidnightBot.Modules.Level.Classes
                 if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
                     return;
 
-                Random rnd = new Random();
-                var uid = Convert.ToInt64(e.User.Id);
+                long uid = Convert.ToInt64(e.User.Id);
                 
                 LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
                 if(ldm != null)
                 {
-                    var xpToGet = rnd.Next(15, 26);
+                    //Ein Random Wert würde dafür sorgen, dass Update und Delete nicht mehr funktionieren, da die Berechnungen falsch währen.
+                    //Außerdem brauchst du var nur bei Umwandlungen nutzen. Da wir hier nur longs oder ints verwenden ist das unnötig.
+                    //var xpToGet = rnd.Next(15, 26);
+                    int xpToGet = (e.Message.RawText.Length > 25 ? 25 : e.Message.RawText.Length);
+
                     ldm.CurrentXP += xpToGet;
                     ldm.TotalXP += xpToGet;
 
@@ -49,9 +52,9 @@ namespace MidnightBot.Modules.Level.Classes
                 }
                 else
                 {
-                    var xpToGet = rnd.Next(15, 26);
-                    ldm = new LevelData();
+                    int xpToGet = (e.Message.RawText.Length > 25 ? 25 : e.Message.RawText.Length);
 
+                    ldm = new LevelData();
                     ldm.UserId = uid;
                     ldm.UniqueTag = (int)e.User.Discriminator;
                     ldm.Level = 1;
@@ -67,12 +70,16 @@ namespace MidnightBot.Modules.Level.Classes
 
         public async void messageDeleted(object sender, MessageEventArgs e)
         {
+            if (e == null || e.Message == null || e.User == null || e.Channel == null || e.Server == null)
+                return;
+
             if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
                 return;
             if (MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
             {
                 var levelChanged = false;
-                var uid = (long)e.User.Id;
+
+                var uid = Convert.ToInt64(e.User.Id);
                 LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
                 if(ldm != null)
@@ -118,13 +125,15 @@ namespace MidnightBot.Modules.Level.Classes
                     DbHandler.Instance.Save(ldm);
 
                     if(levelChanged)
-                    await e.Channel.SendMessage($"Schade { e.User.Mention }, deine Nachricht wurde gelöscht. Daher wird dein Level runtergesetzt. Informationen bekommst du mit {MidnightBot.Config.CommandPrefixes.Level}rank");
+                      await e.Channel.SendMessage($"Schade { e.User.Mention }, deine Nachricht wurde gelöscht. Daher wird dein Level runtergesetzt. Informationen bekommst du mit {MidnightBot.Config.CommandPrefixes.Level}rank");
                 }
             }
         }
 
         public async void messageUpdated(object sender, MessageUpdatedEventArgs e)
         {
+            if (e == null || e.Before == null || e.After == null || e.User == null || e.Channel == null || e.Server == null)
+                return;
             if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
                 return;
             if (MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
@@ -171,8 +180,10 @@ namespace MidnightBot.Modules.Level.Classes
                     ldm.XPForNextLevel = 5 * (calculatedLevel ^ 2) + 50 * calculatedLevel + 100;
 
                     //Add New Levels
-                    ldm.CurrentXP += e.After.RawText.Length;
-                    ldm.TotalXP += e.After.RawText.Length;
+                    int xpToGet = (e.After.RawText.Length > 25 ? 25 : e.After.RawText.Length);
+
+                    ldm.CurrentXP += xpToGet;
+                    ldm.TotalXP += xpToGet;
 
                     if (ldm.CurrentXP >= ldm.XPForNextLevel)
                     {
