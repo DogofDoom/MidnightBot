@@ -47,7 +47,7 @@ namespace MidnightBot.Modules.Level.Classes
 
                     Console.WriteLine(seconds);
 
-                    if (seconds < 0)
+                    if (seconds < 60)
                         return;
 
                     ldm.CurrentXP += xpToGet;
