@@ -18,7 +18,7 @@ namespace MidnightBot.Modules.Level.Classes
                 if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
                     return;
 
-                var uid =(long)e.User.Id;
+                var uid = Convert.ToInt64(e.User.Id);
                 
                 LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
@@ -42,9 +42,10 @@ namespace MidnightBot.Modules.Level.Classes
                         }
 
                         ldm.Level += 1;
-                        ldm.XPForNextLevel = 5 * (ldm.Level ^ 2) + 50 * ldm.Level + 100;
+                        ldm.XPForNextLevel = ldm.Level * 30 + 5;
                         await e.Channel.SendMessage($"Herzlichen Glückwunsch { e.User.Mention }, du hast Level { ldm.Level } erreicht!");
                     }
+
                     DbHandler.Instance.Save(ldm);
                 }
                 else
@@ -67,156 +68,131 @@ namespace MidnightBot.Modules.Level.Classes
             }
         }
 
-        //public async void messageDeleted(object sender, MessageEventArgs e)
-        //{
-        //    if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
-        //        return;
-        //    if (MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
-        //    {
-        //        var uid = (long)e.User.Id;
-        //        LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
+        public async void messageDeleted(object sender, MessageEventArgs e)
+        {
+            if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
+                return;
+            if (MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
+            {
+                var uid = (long)e.User.Id;
+                LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
-        //        if(ldm != null)
-        //        {
-        //            string rawText = e.Message.RawText;
+                if(ldm != null)
+                {
+                    int xpToGet = (e.Message.RawText.Length > 25 ? 25 : e.Message.RawText.Length);
 
-        //            if((ldm.CurrentXP - rawText.Length) <= 0)
-        //            {
-        //                ldm.CurrentXP = 0;
-        //            }
-        //            else
-        //            {
-        //                ldm.CurrentXP -= rawText.Length;
-        //            }
+                    if((ldm.TotalXP - xpToGet) <= 0)
+                    {
+                        ldm.TotalXP = 0;
+                    }
+                    else
+                    {
+                        ldm.TotalXP -= xpToGet;
+                    }
 
-        //            if((ldm.TotalXP - rawText.Length) <= 0)
-        //            {
-        //                ldm.TotalXP = 0;
-        //            }
-        //            else
-        //            {
-        //                ldm.TotalXP -= rawText.Length;
-        //            }
+                    //Calculate new level
+                    int copyOfTotalXP = ldm.TotalXP;
+                    int calculatedLevel = 1;
 
-        //            //Reset Level to 1
-        //            ldm.Level = 1;
+                    while(copyOfTotalXP > 0)
+                    {
+                        int xpNeededForNextLevel = 5 * (calculatedLevel ^ 2) + 50 * calculatedLevel + 100;
 
-        //            //Calculate new level
-        //            int copyOfTotalXP = ldm.TotalXP;
-        //            int calculatedLevel = 0;
+                        if (copyOfTotalXP > xpNeededForNextLevel)
+                        {
+                            calculatedLevel++;
 
-        //            while(copyOfTotalXP > 0)
-        //            {
-        //                int xpNeededForNextLevel = 5 * (calculatedLevel) + 50 * calculatedLevel + 100;
+                            copyOfTotalXP -= xpNeededForNextLevel;
+                        }
+                        else
+                        {
+                            ldm.CurrentXP = copyOfTotalXP;
 
-        //                if (copyOfTotalXP > xpNeededForNextLevel)
-        //                {
-        //                    calculatedLevel++;
+                            break;
+                        }
+                    }
 
-        //                    copyOfTotalXP -= xpNeededForNextLevel;
-        //                }
-        //                else
-        //                {
-        //                    //Calculation error... Set Current XP to remaining total xp
-        //                    ldm.CurrentXP = copyOfTotalXP;
+                    ldm.Level = calculatedLevel;
+                    ldm.XPForNextLevel =5 * (calculatedLevel ^ 2) + 50 * calculatedLevel + 100;
 
-        //                    break;
-        //                }
-        //            }
+                    DbHandler.Instance.Save(ldm);
 
-        //            ldm.Level = calculatedLevel;
+                    await e.Channel.SendMessage($"Schade { e.User.Mention }, deine Nachricht wurde gelöscht. Daher wird dein Level runtergesetzt. Informationen bekommst du mit {MidnightBot.Config.CommandPrefixes.Level}rank");
+                }
+            }
+        }
 
-        //            DbHandler.Instance.Save(ldm);
+        public async void messageUpdated(object sender, MessageUpdatedEventArgs e)
+        {
+            if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
+                return;
+            if (MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
+            {
+                var uid = Convert.ToInt64(e.User.Id);
+                LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
-        //            await e.Channel.SendMessage($"Schade { e.User.Mention }, deine Nachricht wurde gelöscht. Daher wird dein Level runtergesetzt. Informationen bekommst du mit {MidnightBot.Config.CommandPrefixes.Level}rank");
-        //        }
-        //    }
-        //}
+                if (ldm != null)
+                {
+                    int xpToRemove = (e.Before.RawText.Length > 25 ? 25 : e.Before.RawText.Length);
 
-        //public async void messageUpdated(object sender, MessageUpdatedEventArgs e)
-        //{
-        //    if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
-        //        return;
-        //    if (MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
-        //    {
-        //        var uid = (long)e.User.Id;
-        //        LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
+                    if ((ldm.TotalXP - xpToRemove) <= 0)
+                    {
+                        ldm.TotalXP = 0;
+                    }
+                    else
+                    {
+                        ldm.TotalXP -= xpToRemove;
+                    }
 
-        //        if (ldm != null)
-        //        {
-        //            string rawText = e.Before.RawText;
+                    //Calculate new level
+                    int copyOfTotalXP = ldm.TotalXP;
+                    int calculatedLevel = 1;
 
-        //            if ((ldm.CurrentXP - rawText.Length) <= 0)
-        //            {
-        //                ldm.CurrentXP = 0;
-        //            }
-        //            else
-        //            {
-        //                ldm.CurrentXP -= rawText.Length;
-        //            }
+                    while (copyOfTotalXP > 0)
+                    {
+                        int xpNeededForNextLevel = 5 * (calculatedLevel ^ 2) + 50 * calculatedLevel + 100;
 
-        //            if ((ldm.TotalXP - rawText.Length) <= 0)
-        //            {
-        //                ldm.TotalXP = 0;
-        //            }
-        //            else
-        //            {
-        //                ldm.TotalXP -= rawText.Length;
-        //            }
+                        if (copyOfTotalXP > xpNeededForNextLevel)
+                        {
+                            calculatedLevel++;
 
-        //            //Reset Level to 1
-        //            ldm.Level = 1;
+                            copyOfTotalXP -= xpNeededForNextLevel;
+                        }
+                        else
+                        {
+                            ldm.CurrentXP = copyOfTotalXP;
 
-        //            //Calculate new level
-        //            int copyOfTotalXP = ldm.TotalXP;
-        //            int calculatedLevel = 0;
+                            break;
+                        }
+                    }
 
-        //            while (copyOfTotalXP > 0)
-        //            {
-        //                int xpNeededForNextLevel = 5 * (calculatedLevel ^ 2) + 50 * calculatedLevel + 100;
+                    ldm.Level = calculatedLevel;
+                    ldm.XPForNextLevel = 5 * (calculatedLevel ^ 2) + 50 * calculatedLevel + 100;
 
-        //                if (copyOfTotalXP > xpNeededForNextLevel)
-        //                {
-        //                    calculatedLevel++;
+                    //Add New Levels
+                    ldm.CurrentXP += e.After.RawText.Length;
+                    ldm.TotalXP += e.After.RawText.Length;
 
-        //                    copyOfTotalXP -= xpNeededForNextLevel;
-        //                }
-        //                else
-        //                {
-        //                    //Calculation error... Set Current XP to remaining total xp
-        //                    ldm.CurrentXP = copyOfTotalXP;
+                    if (ldm.CurrentXP >= ldm.XPForNextLevel)
+                    {
+                        if (ldm.CurrentXP > ldm.XPForNextLevel)
+                        {
+                            ldm.CurrentXP = (ldm.XPForNextLevel - ldm.CurrentXP);
+                        }
+                        else
+                        {
+                            ldm.CurrentXP = 0;
+                        }
 
-        //                    break;
-        //                }
-        //            }
+                        ldm.Level += 1;
+                        ldm.XPForNextLevel = 5 * (ldm.Level ^ 2) + 50 * ldm.Level + 100;
 
-        //            ldm.Level = calculatedLevel;
+                        await e.Channel.SendMessage($"Herzlichen Glückwunsch { e.User.Mention }, du hast Level { ldm.Level } erreicht!");
+                    }
 
-
-        //            //Add New Levels
-        //            ldm.CurrentXP += e.After.RawText.Length;
-        //            ldm.TotalXP += e.After.RawText.Length;
-
-        //            if (ldm.CurrentXP >= ldm.XPForNextLevel)
-        //            {
-        //                if (ldm.CurrentXP > ldm.XPForNextLevel)
-        //                {
-        //                    ldm.CurrentXP = (ldm.XPForNextLevel - ldm.CurrentXP);
-        //                }
-        //                else
-        //                {
-        //                    ldm.CurrentXP = 0;
-        //                }
-
-        //                ldm.Level += 1;
-        //                ldm.XPForNextLevel = 5 * (ldm.Level ^ 2) + 50 * ldm.Level + 100;
-
-        //                await e.Channel.SendMessage($"Herzlichen Glückwunsch { e.User.Mention }, du hast Level { ldm.Level } erreicht!");
-        //            }
-
-        //            DbHandler.Instance.Save(ldm);
-        //        }
-        //    }
-        //}
+                    DbHandler.Instance.Save(ldm);
+                }
+            }
+        }
     }
 }

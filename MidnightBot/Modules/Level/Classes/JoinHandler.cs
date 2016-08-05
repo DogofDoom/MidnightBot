@@ -22,7 +22,7 @@ namespace MidnightBot.Modules.Level.Classes
             {
                 ldm = new LevelData();
 
-                ldm.UserId = (long)e.User.Id;
+                ldm.UserId = Convert.ToInt64(e.User.Id);
                 ldm.UniqueTag = (int)e.User.Discriminator;
                 ldm.Level = 1;
                 ldm.TotalXP = 0;

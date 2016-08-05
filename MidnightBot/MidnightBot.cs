@@ -57,6 +57,7 @@ namespace MidnightBot
     private static void Main ()
         {
             Console.OutputEncoding = Encoding.Unicode;
+            Console.Title = "Midnight Bot | Starting...";
             
             try
             {
@@ -214,6 +215,8 @@ namespace MidnightBot
             //run the bot
             Client.ExecuteAndWait (async () =>
             {
+                Console.WriteLine("Bitte warte während der Bot startet...");
+
                 try
                 {
                     await Client.Connect (Creds.Token).ConfigureAwait (false);
@@ -225,13 +228,13 @@ namespace MidnightBot
                     Console.ReadKey ();
                     return;
                 }
-                Console.Write("Startvorgang dauert 10 Sekunden: ");
-                for(int i=10;i!=0;i--)
-                {
-                    Console.Write(i + " ");
-                    await Task.Delay(1000).ConfigureAwait(false);
-                }
-                Console.WriteLine();
+                //Console.Write("Startvorgang dauert 10 Sekunden: ");
+                //for(int i=10;i!=0;i--)
+                //{
+                //    Console.Write(i + " ");
+                //    await Task.Delay(1000).ConfigureAwait(false);
+                //}
+                //Console.WriteLine();
                 //await Task.Delay(10000).ConfigureAwait(false);
                 
                 Console.WriteLine ("-----------------");
@@ -269,6 +272,11 @@ namespace MidnightBot
 
                 //await Task.Delay(90000);
                 PermissionsHandler.Initialize ();
+
+                Console.Title = "Midnight Bot | Connected";
+                Console.WriteLine("Bot ist initialisiert.");
+
+
                 MidnightBot.Ready = true;
                 MidnightBot.OnReady();
             });

@@ -557,6 +557,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="bot.ico" />
+    <Content Include="Classes\lib\ScaredFingers.UnitsConversion.dll" />
     <Content Include="phantomjs-license.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
