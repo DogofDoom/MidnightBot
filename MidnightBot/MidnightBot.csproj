@@ -524,6 +524,18 @@
     <None Include="resources\images\cards\2_of_clubs.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\packages\PhantomJS.2.1.1\tools\phantomjs\phantomjs.exe">
+      <Link>phantomjs.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="bot.ico" />
+    <Content Include="Classes\lib\ScaredFingers.UnitsConversion.dll" />
+    <Content Include="phantomjs-license.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="resources\images\rose_overlay.png" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\discord.net\src\Discord.Net.Audio.Net45\Discord.Net.Audio.csproj">
       <Project>{7bfef748-b934-4621-9b11-6302e3a9f6b3}</Project>
       <Name>Discord.Net.Audio</Name>
@@ -541,19 +553,6 @@
       <Name>Discord.Net</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\packages\PhantomJS.2.1.1\tools\phantomjs\phantomjs.exe">
-      <Link>phantomjs.exe</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="bot.ico" />
-    <Content Include="Classes\lib\ScaredFingers.UnitsConversion.dll" />
-    <Content Include="phantomjs-license.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="resources\images\rose_overlay.png" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

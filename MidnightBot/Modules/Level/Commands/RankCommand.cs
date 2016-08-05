@@ -29,14 +29,16 @@ namespace MidnightBot.Modules.Level.Commands
                 {
                     if (string.IsNullOrWhiteSpace(e.GetArg("user")))
                     {
-                        var uid = (long)e.User.Id;
+                        long uid = Convert.ToInt64(e.User.Id);
 
                         LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
                         if (ldm != null)
                         {
-                            e.Channel.SendMessage($"{ e.User.Mention }: LEVEL { ldm.Level } | XP { ldm.CurrentXP }/{ ldm.XPForNextLevel } | TOTAL XP { ldm.TotalXP }");
+                            int total = DbHandler.Instance.FindAll<LevelData>(p => true).Count;
+                            int rank = GetRank(ldm);
 
+                            e.Channel.SendMessage($"{ e.User.Mention }: LEVEL { ldm.Level } | XP { ldm.CurrentXP }/{ ldm.XPForNextLevel } | TOTAL XP { ldm.TotalXP } | RANK { rank }/{ total }");
                         }
                         else
                         {
@@ -53,13 +55,18 @@ namespace MidnightBot.Modules.Level.Commands
                         }
                         else
                         {
-                            var uid = (long)usr.Id;
+                            long uid = Convert.ToInt64(usr.Id);
 
                             LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
+
+                            
+
                             if (ldm != null)
                             {
-                                e.Channel.SendMessage($"{ e.User.Mention }: **{usr.Name}**\'s Rang > LEVEL { ldm.Level } | XP { ldm.CurrentXP }/{ ldm.XPForNextLevel } | TOTAL XP { ldm.TotalXP }");
+                                int total = DbHandler.Instance.FindAll<LevelData>(p => true).Count;
+                                int rank = GetRank(ldm);
 
+                                e.Channel.SendMessage($"{ e.User.Mention }: **{usr.Name}**\'s Rang > LEVEL { ldm.Level } | XP { ldm.CurrentXP }/{ ldm.XPForNextLevel } | TOTAL XP { ldm.TotalXP } | RANK { rank }/{ total }");
                             }
                             else
                             {
@@ -68,6 +75,14 @@ namespace MidnightBot.Modules.Level.Commands
                         }
                     }
                 });
+        }
+
+        int GetRank(LevelData ldm)
+        {
+            IList<LevelData> data = DbHandler.Instance.FindAll<LevelData>(p => true);
+            data.OrderByDescending(p => p.TotalXP);
+
+            return data.IndexOf(ldm);
         }
 
     }
