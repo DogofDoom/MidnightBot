@@ -1,6 +1,6 @@
 [submodule "discord.net"] 
 	path = discord.net 
-	url = git://github.com/rogueexception/discord.net.git
+	url = git@github.com:Midnight-Myth/Discord.Net.git
 [submodule "ffmpeg-installer"]
 	path = ffmpeg-installer
 	url = https://github.com/kwoth/ffmpeg-installer
