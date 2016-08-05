@@ -733,7 +733,8 @@ namespace MidnightBot.Modules.Administration
                     {
                         await e.Channel.SendMessage ("`Fährt herunter.`").ConfigureAwait (false);
                         await Task.Delay (2000).ConfigureAwait (false);
-                        Environment.Exit (0);
+
+                        MidnightBot.shutdownGracefully();
                     });
 
                 cgb.CreateCommand (Prefix + "setname")

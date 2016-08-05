@@ -163,7 +163,9 @@
     <Compile Include="Modules\Conversations\Commands\RipCommand.cs" />
     <Compile Include="Modules\CustomReactions\CustomReactions.cs" />
     <Compile Include="Modules\Gambling\Commands\AnimalRacing.cs" />
+    <Compile Include="Modules\Level\Classes\LevelHandler.cs" />
     <Compile Include="Modules\Level\Classes\JoinHandler.cs" />
+    <Compile Include="Modules\Level\Classes\LevelChangedEventArgs.cs" />
     <Compile Include="Modules\Level\Classes\MessageHandler.cs" />
     <Compile Include="Modules\Level\Commands\RankCommand.cs" />
     <Compile Include="Modules\Level\LevelModule.cs" />

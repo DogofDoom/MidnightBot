@@ -189,6 +189,11 @@ namespace MidnightBot
                 Bitrate = 128,
             }));
 
+            AppDomain.CurrentDomain.ProcessExit += (s, e) =>
+            {
+                MidnightBot.shutdownGracefully();
+            };
+
             //install modules
             modules.Add (new HelpModule (),"Help",ModuleFilter.None);
             modules.Add (new AdministrationModule (),"Administration",ModuleFilter.None);
@@ -276,12 +281,24 @@ namespace MidnightBot
                 Console.Title = "Midnight Bot | Connected";
                 Console.WriteLine("Bot ist initialisiert.");
 
-
                 MidnightBot.Ready = true;
                 MidnightBot.OnReady();
             });
             Console.WriteLine ("Beende...");
             Console.ReadKey ();
+        }
+
+        public static void shutdownGracefully()
+        {
+            try
+            {
+                Client.SetStatus(UserStatus.Offline);
+
+                Client.Disconnect();
+            } catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
 
         public static string BotName { get; set; }

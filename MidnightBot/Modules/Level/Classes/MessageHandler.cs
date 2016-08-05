@@ -14,6 +14,14 @@ namespace MidnightBot.Modules.Level.Classes
 {
     class MessageHandler
     {
+        LevelModule module { get; set; }
+
+
+        public MessageHandler(LevelModule module)
+        {
+            this.module = module;
+        }
+
         public async void messageReceived(object sender, MessageEventArgs e) {
             if(MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
             {
@@ -34,8 +42,17 @@ namespace MidnightBot.Modules.Level.Classes
                     //var xpToGet = rnd.Next(15, 26);
                     int xpToGet = (e.Message.RawText.Length > 25 ? 25 : e.Message.RawText.Length);
 
+                    long currentTick = DateTime.Now.Ticks;
+                    long seconds = (currentTick - ldm.timestamp.Ticks) / TimeSpan.TicksPerSecond;
+
+                    Console.WriteLine(seconds);
+
+                    if (seconds < 0)
+                        return;
+
                     ldm.CurrentXP += xpToGet;
                     ldm.TotalXP += xpToGet;
+                    ldm.timestamp = DateTime.Now;
 
                     if(ldm.CurrentXP >= ldm.XPForNextLevel)
                     {
@@ -50,6 +67,9 @@ namespace MidnightBot.Modules.Level.Classes
 
                         ldm.Level += 1;
                         ldm.XPForNextLevel = 5 * (ldm.Level ^ 2) + 50 * ldm.Level + 100;
+
+                        module.OnLevelChanged(this, new LevelChangedEventArgs(e.Channel, e.User, ldm.Level));
+
                         await e.Channel.SendMessage($"Herzlichen Glückwunsch { e.User.Mention }, du hast Level { ldm.Level } erreicht!");
                     }
 
@@ -66,6 +86,7 @@ namespace MidnightBot.Modules.Level.Classes
                     ldm.CurrentXP = xpToGet;
                     ldm.XPForNextLevel = 5 * (ldm.Level ^ 2) + 50 * ldm.Level + 100;
                     ldm.DateAdded = DateTime.Now;
+                    ldm.timestamp = DateTime.Now;
 
                     DbHandler.Instance.Save(ldm);
                 }
@@ -147,6 +168,7 @@ namespace MidnightBot.Modules.Level.Classes
 
                 if (ldm != null)
                 {
+
                     int xpToRemove = (e.Before.RawText.Length > 25 ? 25 : e.Before.RawText.Length);
 
                     if ((ldm.TotalXP - xpToRemove) <= 0)

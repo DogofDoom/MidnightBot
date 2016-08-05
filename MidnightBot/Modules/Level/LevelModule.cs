@@ -23,6 +23,8 @@ namespace MidnightBot.Modules.Level
             commands.Add(new RankCommand(this));
         }
 
+        public event EventHandler<LevelChangedEventArgs> LevelChanged;
+
         public override string Prefix { get; } = MidnightBot.Config.CommandPrefixes.Level;
 
         public override void Install (ModuleManager manager)
@@ -34,7 +36,7 @@ namespace MidnightBot.Modules.Level
                 commands.ForEach(cmd => cmd.Init(cgb));
             });
 
-            MessageHandler handler = new MessageHandler();
+            MessageHandler handler = new MessageHandler(this);
 
             manager.MessageReceived += handler.messageReceived;
             manager.MessageDeleted += handler.messageDeleted;
@@ -43,6 +45,15 @@ namespace MidnightBot.Modules.Level
             JoinHandler joinHandler = new JoinHandler();
 
             manager.UserJoined += joinHandler.serverJoined;
+
+            LevelHandler levelHandler = new LevelHandler();
+
+            LevelChanged += levelHandler.levelChanged;
+        }
+
+        public void OnLevelChanged(object sender, LevelChangedEventArgs e)
+        {
+            LevelChanged(this, e);
         }
 
     }
