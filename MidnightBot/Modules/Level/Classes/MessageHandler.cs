@@ -9,13 +9,13 @@ using Discord.Modules;
 using MidnightBot;
 using MidnightBot.DataModels;
 using MidnightBot.Classes;
+using System.Collections.Concurrent;
 
 namespace MidnightBot.Modules.Level.Classes
 {
     class MessageHandler
     {
         LevelModule module { get; set; }
-
 
         public MessageHandler(LevelModule module)
         {
@@ -31,16 +31,16 @@ namespace MidnightBot.Modules.Level.Classes
                 if (this.isCommand(e.Message.RawText))
                     return;
 
+                if (e.Message.RawText.Length <= 10)
+                    return;
+
                 long uid = Convert.ToInt64(e.User.Id);
-                
+
                 LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
                 if(ldm != null)
                 {
-                    //Ein Random Wert würde dafür sorgen, dass Update und Delete nicht mehr funktionieren, da die Berechnungen falsch währen.
-                    //Außerdem brauchst du var nur bei Umwandlungen nutzen. Da wir hier nur longs oder ints verwenden ist das unnötig.
-                    //var xpToGet = rnd.Next(15, 26);
-                    int xpToGet = (e.Message.RawText.Length > 25 ? 25 : e.Message.RawText.Length);
+                    int xpToGet = (e.Message.RawText.Length > 35 ? 35 : e.Message.RawText.Length);
 
                     long currentTick = DateTime.Now.Ticks;
                     long seconds = (currentTick - ldm.timestamp.Ticks) / TimeSpan.TicksPerSecond;
@@ -54,11 +54,11 @@ namespace MidnightBot.Modules.Level.Classes
                     ldm.TotalXP += xpToGet;
                     ldm.timestamp = DateTime.Now;
 
-                    if(ldm.CurrentXP >= ldm.XPForNextLevel)
+                    if(ldm.CurrentXP >= getXPForNextLevel(ldm.Level))
                     {
-                        if(ldm.CurrentXP > ldm.XPForNextLevel)
+                        if(ldm.CurrentXP > getXPForNextLevel(ldm.Level))
                         {
-                            ldm.CurrentXP = (ldm.CurrentXP - ldm.XPForNextLevel);
+                            ldm.CurrentXP = (ldm.CurrentXP - getXPForNextLevel(ldm.Level));
                         }
                         else
                         {
@@ -66,7 +66,6 @@ namespace MidnightBot.Modules.Level.Classes
                         }
 
                         ldm.Level += 1;
-                        ldm.XPForNextLevel = 5 * (ldm.Level ^ 2) + 50 * ldm.Level + 100;
 
                         module.OnLevelChanged(this, new LevelChangedEventArgs(e.Channel, e.User, ldm.Level));
 
@@ -77,14 +76,13 @@ namespace MidnightBot.Modules.Level.Classes
                 }
                 else
                 {
-                    int xpToGet = (e.Message.RawText.Length > 25 ? 25 : e.Message.RawText.Length);
+                    int xpToGet = (e.Message.RawText.Length > 35 ? 35 : e.Message.RawText.Length);
 
                     ldm = new LevelData();
                     ldm.UserId = uid;
-                    ldm.Level = 1;
+                    ldm.Level = 0;
                     ldm.TotalXP = xpToGet;
                     ldm.CurrentXP = xpToGet;
-                    ldm.XPForNextLevel = 5 * (ldm.Level ^ 2) + 50 * ldm.Level + 100;
                     ldm.DateAdded = DateTime.Now;
                     ldm.timestamp = DateTime.Now;
 
@@ -100,6 +98,9 @@ namespace MidnightBot.Modules.Level.Classes
 
             if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
                 return;
+            if (e.Message.RawText.Length <= 10)
+                return;
+
             if (MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
             {
                 var levelChanged = false;
@@ -109,7 +110,7 @@ namespace MidnightBot.Modules.Level.Classes
 
                 if(ldm != null)
                 {
-                    int xpToGet = (e.Message.RawText.Length > 25 ? 25 : e.Message.RawText.Length);
+                    int xpToGet = (e.Message.RawText.Length > 35 ? 35 : e.Message.RawText.Length);
 
                     if((ldm.TotalXP - xpToGet) <= 0)
                     {
@@ -122,11 +123,11 @@ namespace MidnightBot.Modules.Level.Classes
 
                     //Calculate new level
                     int copyOfTotalXP = ldm.TotalXP;
-                    int calculatedLevel = 1;
+                    int calculatedLevel = 0;
 
                     while(copyOfTotalXP > 0)
                     {
-                        int xpNeededForNextLevel = 5 * (calculatedLevel ^ 2) + 50 * calculatedLevel + 100;
+                        int xpNeededForNextLevel = getXPForNextLevel(calculatedLevel);
 
                         if (copyOfTotalXP > xpNeededForNextLevel)
                         {
@@ -145,7 +146,6 @@ namespace MidnightBot.Modules.Level.Classes
                         levelChanged = true;
 
                     ldm.Level = calculatedLevel;
-                    ldm.XPForNextLevel =5 * (calculatedLevel ^ 2) + 50 * calculatedLevel + 100;
 
                     DbHandler.Instance.Save(ldm);
 
@@ -161,6 +161,9 @@ namespace MidnightBot.Modules.Level.Classes
                 return;
             if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
                 return;
+            if (e.After.RawText.Length <= 10 && e.Before.RawText.Length <= 10)
+                return;
+
             if (MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
             {
                 var uid = Convert.ToInt64(e.User.Id);
@@ -169,7 +172,7 @@ namespace MidnightBot.Modules.Level.Classes
                 if (ldm != null)
                 {
 
-                    int xpToRemove = (e.Before.RawText.Length > 25 ? 25 : e.Before.RawText.Length);
+                    int xpToRemove = (e.Before.RawText.Length > 35 ? 35 : e.Before.RawText.Length);
 
                     if ((ldm.TotalXP - xpToRemove) <= 0)
                     {
@@ -182,11 +185,11 @@ namespace MidnightBot.Modules.Level.Classes
 
                     //Calculate new level
                     int copyOfTotalXP = ldm.TotalXP;
-                    int calculatedLevel = 1;
+                    int calculatedLevel = 0;
 
                     while (copyOfTotalXP > 0)
                     {
-                        int xpNeededForNextLevel = 5 * (calculatedLevel ^ 2) + 50 * calculatedLevel + 100;
+                        int xpNeededForNextLevel = getXPForNextLevel(calculatedLevel);
 
                         if (copyOfTotalXP > xpNeededForNextLevel)
                         {
@@ -203,19 +206,18 @@ namespace MidnightBot.Modules.Level.Classes
                     }
 
                     ldm.Level = calculatedLevel;
-                    ldm.XPForNextLevel = 5 * (calculatedLevel ^ 2) + 50 * calculatedLevel + 100;
 
                     //Add New Levels
-                    int xpToGet = (e.After.RawText.Length > 25 ? 25 : e.After.RawText.Length);
+                    int xpToGet = (e.After.RawText.Length > 35 ? 35 : e.After.RawText.Length);
 
                     ldm.CurrentXP += xpToGet;
                     ldm.TotalXP += xpToGet;
 
-                    if (ldm.CurrentXP >= ldm.XPForNextLevel)
+                    if (ldm.CurrentXP >= getXPForNextLevel(ldm.Level))
                     {
-                        if (ldm.CurrentXP > ldm.XPForNextLevel)
+                        if (ldm.CurrentXP > getXPForNextLevel(ldm.Level))
                         {
-                            ldm.CurrentXP = (ldm.XPForNextLevel - ldm.CurrentXP);
+                            ldm.CurrentXP = (ldm.CurrentXP - getXPForNextLevel(ldm.Level));
                         }
                         else
                         {
@@ -223,7 +225,6 @@ namespace MidnightBot.Modules.Level.Classes
                         }
 
                         ldm.Level += 1;
-                        ldm.XPForNextLevel = 5 * (ldm.Level ^ 2) + 50 * ldm.Level + 100;
 
                         await e.Channel.SendMessage($"Herzlichen Glückwunsch { e.User.Mention }, du hast Level { ldm.Level } erreicht!");
                     }
@@ -253,6 +254,11 @@ namespace MidnightBot.Modules.Level.Classes
             }
 
             return false;
+        }
+
+        public int getXPForNextLevel (int level)
+        {
+            return 5 * (level ^ 2) + 50 * level + 100;
         }
     }
 }

@@ -149,7 +149,8 @@ namespace MidnightBot.Modules.Permissions.Classes
                 return false;
             }
         }
-        public void AddUserCooldown(ulong serverId, ulong userId, string commandName) {
+        public void AddUserCooldown(ulong serverId, ulong userId, string commandName)
+        {
             commandCooldowns.TryAdd(commandName, userId);
             var tosave = serverId + ":" + commandName;
             Task.Run(async () =>

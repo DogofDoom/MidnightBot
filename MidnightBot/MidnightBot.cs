@@ -295,6 +295,7 @@ namespace MidnightBot
                 Client.SetStatus(UserStatus.Offline);
 
                 Client.Disconnect();
+                Console.Title = "Midnight Bot | Disconnected";
             } catch(Exception ex)
             {
                 Console.WriteLine(ex.ToString());

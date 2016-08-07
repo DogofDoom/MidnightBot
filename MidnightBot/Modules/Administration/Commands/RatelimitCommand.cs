@@ -54,7 +54,7 @@ namespace MidnightBot.Modules.Administration.Commands
                     }
                     if (RatelimitingChannels.TryAdd (e.Channel.Id,new ConcurrentDictionary<ulong,DateTime> ()))
                     {
-                        await e.Channel.SendMessage ("Slow Mode aktivier. " +
+                        await e.Channel.SendMessage ("Slow Mode aktiviert. " +
                                                     "Benutzer können nicht mehr als 1 Nachricht, alle 5 Sekunden schicken.")
                                                     .ConfigureAwait (false);
                     }

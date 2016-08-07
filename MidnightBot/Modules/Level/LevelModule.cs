@@ -56,5 +56,6 @@ namespace MidnightBot.Modules.Level
             LevelChanged(this, e);
         }
 
+        
     }
 }

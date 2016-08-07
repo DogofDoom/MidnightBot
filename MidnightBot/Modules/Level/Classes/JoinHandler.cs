@@ -23,10 +23,9 @@ namespace MidnightBot.Modules.Level.Classes
                 ldm = new LevelData();
 
                 ldm.UserId = Convert.ToInt64(e.User.Id);
-                ldm.Level = 1;
+                ldm.Level = 0;
                 ldm.TotalXP = 0;
                 ldm.CurrentXP = 0;
-                ldm.XPForNextLevel = 5 * (ldm.Level ^ 2) + 50 * ldm.Level + 100;
                 ldm.DateAdded = DateTime.Now;
 
                 DbHandler.Instance.Save(ldm);

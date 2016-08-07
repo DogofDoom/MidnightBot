@@ -10,7 +10,7 @@ using MidnightBot;
 using MidnightBot.Classes;
 using MidnightBot.Modules.Permissions.Classes;
 using MidnightBot.Modules.Level.Classes;
-using MidnightBot.Modules.Level.Commands;
+using MidnightBot.Modules.Level;
 using MidnightBot.DataModels;
 
 namespace MidnightBot.Modules.Level.Commands
@@ -38,7 +38,7 @@ namespace MidnightBot.Modules.Level.Commands
                             int total = DbHandler.Instance.FindAll<LevelData>(p => true).Count;
                             int rank = GetRank(ldm);
 
-                            e.Channel.SendMessage($"{ e.User.Mention }: LEVEL { ldm.Level } | XP { ldm.CurrentXP }/{ ldm.XPForNextLevel } | TOTAL XP { ldm.TotalXP } | RANK { rank }/{ total }");
+                            e.Channel.SendMessage($"{ e.User.Mention }: LEVEL { ldm.Level } | XP { ldm.CurrentXP }/{ getXPForNextLevel(ldm.Level) } | TOTAL XP { ldm.TotalXP } | RANK { rank }/{ total }");
                         }
                         else
                         {
@@ -66,7 +66,7 @@ namespace MidnightBot.Modules.Level.Commands
                                 int total = DbHandler.Instance.FindAll<LevelData>(p => true).Count;
                                 int rank = GetRank(ldm);
 
-                                e.Channel.SendMessage($"{ e.User.Mention }: **{usr.Name}**\'s Rang > LEVEL { ldm.Level } | XP { ldm.CurrentXP }/{ ldm.XPForNextLevel } | TOTAL XP { ldm.TotalXP } | RANK { rank }/{ total }");
+                                e.Channel.SendMessage($"{ e.User.Mention }: **{usr.Name}**\'s Rang > LEVEL { ldm.Level } | XP { ldm.CurrentXP }/{ getXPForNextLevel(ldm.Level) } | TOTAL XP { ldm.TotalXP } | RANK { rank }/{ total }");
                             }
                             else
                             {
@@ -85,5 +85,9 @@ namespace MidnightBot.Modules.Level.Commands
             return data.IndexOf(ldm) + 1;
         }
 
+        public int getXPForNextLevel(int level)
+        {
+            return 5 * (level ^ 2) + 50 * level + 100;
+        }
     }
 }
