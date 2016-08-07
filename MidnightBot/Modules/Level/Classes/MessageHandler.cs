@@ -40,8 +40,7 @@ namespace MidnightBot.Modules.Level.Classes
 
                 if(ldm != null)
                 {
-                    int xpToGet = (e.Message.RawText.Length > 35 ? 35 : e.Message.RawText.Length);
-
+                    int xpToGet = (e.Message.RawText.Length > 25 ? 25 : e.Message.RawText.Length);
                     long currentTick = DateTime.Now.Ticks;
                     long seconds = (currentTick - ldm.timestamp.Ticks) / TimeSpan.TicksPerSecond;
 
@@ -56,14 +55,7 @@ namespace MidnightBot.Modules.Level.Classes
 
                     if(ldm.CurrentXP >= getXPForNextLevel(ldm.Level))
                     {
-                        if(ldm.CurrentXP > getXPForNextLevel(ldm.Level))
-                        {
-                            ldm.CurrentXP = (ldm.CurrentXP - getXPForNextLevel(ldm.Level));
-                        }
-                        else
-                        {
-                            ldm.CurrentXP = 0;
-                        }
+                        ldm.CurrentXP = (ldm.CurrentXP - getXPForNextLevel(ldm.Level));
 
                         ldm.Level += 1;
 
@@ -76,7 +68,7 @@ namespace MidnightBot.Modules.Level.Classes
                 }
                 else
                 {
-                    int xpToGet = (e.Message.RawText.Length > 35 ? 35 : e.Message.RawText.Length);
+                    int xpToGet = (e.Message.RawText.Length > 25 ? 25 : e.Message.RawText.Length);
 
                     ldm = new LevelData();
                     ldm.UserId = uid;
@@ -110,7 +102,7 @@ namespace MidnightBot.Modules.Level.Classes
 
                 if(ldm != null)
                 {
-                    int xpToGet = (e.Message.RawText.Length > 35 ? 35 : e.Message.RawText.Length);
+                    int xpToGet = (e.Message.RawText.Length > 25 ? 25 : e.Message.RawText.Length);
 
                     if((ldm.TotalXP - xpToGet) <= 0)
                     {
@@ -172,7 +164,7 @@ namespace MidnightBot.Modules.Level.Classes
                 if (ldm != null)
                 {
 
-                    int xpToRemove = (e.Before.RawText.Length > 35 ? 35 : e.Before.RawText.Length);
+                    int xpToRemove = (e.Before.RawText.Length > 25 ? 25 : e.Before.RawText.Length);
 
                     if ((ldm.TotalXP - xpToRemove) <= 0)
                     {
@@ -208,7 +200,7 @@ namespace MidnightBot.Modules.Level.Classes
                     ldm.Level = calculatedLevel;
 
                     //Add New Levels
-                    int xpToGet = (e.After.RawText.Length > 35 ? 35 : e.After.RawText.Length);
+                    int xpToGet = (e.After.RawText.Length > 25 ? 25 : e.After.RawText.Length);
 
                     ldm.CurrentXP += xpToGet;
                     ldm.TotalXP += xpToGet;
@@ -258,7 +250,9 @@ namespace MidnightBot.Modules.Level.Classes
 
         public int getXPForNextLevel (int level)
         {
-            return 5 * (level ^ 2) + 50 * level + 100;
+            double levelXP = 5 * (Math.Pow((double)level, 2)) + 50 * level + 100;
+
+            return (int)levelXP;
         }
     }
 }
