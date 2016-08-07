@@ -90,6 +90,8 @@ namespace MidnightBot.Modules.Level.Classes
 
             if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
                 return;
+            if (this.isCommand(e.Message.RawText))
+                return;
             if (e.Message.RawText.Length <= 10)
                 return;
 
@@ -152,6 +154,8 @@ namespace MidnightBot.Modules.Level.Classes
             if (e == null || e.Before == null || e.After == null || e.User == null || e.Channel == null || e.Server == null)
                 return;
             if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
+                return;
+            if (this.isCommand(e.Before.RawText))
                 return;
             if (e.After.RawText.Length <= 10 && e.Before.RawText.Length <= 10)
                 return;
