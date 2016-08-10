@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Modules;
@@ -115,9 +116,12 @@ namespace MidnightBot.Modules.Level.Commands
                         sb.AppendLine("`");
                         rankStrings[stringCount] = sb.ToString();
                     }
-                    for (int idx = 0;idx<=stringCount;idx++)
+
+                    foreach (string s in rankStrings)
                     {
-                        await e.User.SendMessage(rankStrings[idx]);
+                        await e.User.SendMessage(s);
+
+                        Thread.Sleep(250);
                     }
                     //foreach(string s in rankStrings)
                     //{
