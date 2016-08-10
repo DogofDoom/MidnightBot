@@ -12,14 +12,14 @@ using MidnightBot.Modules.Permissions.Classes;
 using MidnightBot.Modules.Level.Classes;
 using MidnightBot.Modules.Level;
 using MidnightBot.DataModels;
+using MidnightBot.Extensions;
 
 namespace MidnightBot.Modules.Level.Commands
 {
     class RankCommand : DiscordCommand
     {
-        
         public RankCommand( DiscordModule module ) : base(module) { }
-
+        
         internal override void Init(CommandGroupBuilder cgb)
         {
             cgb.CreateCommand(Module.Prefix + "rank")
@@ -47,7 +47,7 @@ namespace MidnightBot.Modules.Level.Commands
                     }
                     else
                     {
-                        
+
                         var usr = e.Server.FindUsers(e.GetArg("user")).FirstOrDefault();
                         if (usr == null)
                         {
@@ -59,7 +59,7 @@ namespace MidnightBot.Modules.Level.Commands
 
                             LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
-                            
+
 
                             if (ldm != null)
                             {
@@ -74,6 +74,55 @@ namespace MidnightBot.Modules.Level.Commands
                             }
                         }
                     }
+                });
+
+            cgb.CreateCommand(Module.Prefix + "ranks")
+                .Alias(Module.Prefix + "levels")
+                .Description("Schickt eine Rangliste per PN.")
+                .Do(async e =>
+                {
+                    int stringCount = 0;
+                    int formatCounter = 0;
+                    IList<LevelData> data = DbHandler.Instance.FindAll<LevelData>(p => true);
+                    data = data.OrderByDescending(p => p.TotalXP).ToList();
+                    string[] rankStrings = new string[20];
+                    var sb = new StringBuilder();
+                    sb.AppendLine("__**Rangliste**__");
+                    foreach(LevelData user in data)
+                    {
+                        if (formatCounter == 0)
+                        {
+                            sb.AppendLine("`");
+                            sb.AppendLine($"{GetRank(user),3}. | {(e.Server.Users.Where(u => u.Id == (ulong)user.UserId).FirstOrDefault()?.Name.TrimTo(18, true) ?? user.UserId.ToString()),-20} | LEVEL { user.Level,2 } | XP { user.CurrentXP,6 }/{ getXPForNextLevel(user.Level),6 } | TOTAL XP { user.TotalXP,8 }");
+                            formatCounter++;
+                        }
+                        else if (formatCounter == 20)
+                        {
+                            sb.AppendLine($"{GetRank(user),3}. | {(e.Server.Users.Where(u => u.Id == (ulong)user.UserId).FirstOrDefault()?.Name.TrimTo(18, true) ?? user.UserId.ToString()),-20} | LEVEL { user.Level,2 } | XP { user.CurrentXP,6 }/{ getXPForNextLevel(user.Level),6 } | TOTAL XP { user.TotalXP,8 }`");
+                            formatCounter = 0;
+                            rankStrings[stringCount] = sb.ToString();
+                            sb.Clear();
+                            stringCount++;
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{GetRank(user),3}. | {(e.Server.Users.Where(u => u.Id == (ulong)user.UserId).FirstOrDefault()?.Name.TrimTo(18, true) ?? user.UserId.ToString()),-20} | LEVEL { user.Level,2 } | XP { user.CurrentXP,6 }/{ getXPForNextLevel(user.Level),6 } | TOTAL XP { user.TotalXP,8 }");
+                            formatCounter++;
+                        }
+                    }
+                    if (formatCounter != 0)
+                    {
+                        sb.AppendLine("`");
+                        rankStrings[stringCount] = sb.ToString();
+                    }
+                    for (int idx = 0;idx<=stringCount;idx++)
+                    {
+                        await e.User.SendMessage(rankStrings[idx]);
+                    }
+                    //foreach(string s in rankStrings)
+                    //{
+                    //    await e.User.SendMessage(s);
+                    //}
                 });
         }
 

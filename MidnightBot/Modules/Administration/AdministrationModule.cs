@@ -720,7 +720,7 @@ namespace MidnightBot.Modules.Administration
                          if (!int.TryParse (e.GetArg ("num"),out val))
                              val = 100;
 
-                         var mesgs = (await e.Channel.DownloadMessages(100).ConfigureAwait(false)).Where(m => m.User?.Id == usr.Id).Take(val);
+                         var mesgs = (await e.Channel.DownloadMessages(val).ConfigureAwait(false)).Where(m => m.User?.Id == usr.Id).Take(val);
                          if (mesgs == null || !mesgs.Any())
                              return;
                          await e.Channel.DeleteMessages(mesgs as Message[] ?? mesgs.ToArray()).ConfigureAwait(false);

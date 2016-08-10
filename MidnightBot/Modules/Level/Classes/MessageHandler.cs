@@ -44,8 +44,6 @@ namespace MidnightBot.Modules.Level.Classes
                     long currentTick = DateTime.Now.Ticks;
                     long seconds = (currentTick - ldm.timestamp.Ticks) / TimeSpan.TicksPerSecond;
 
-                    Console.WriteLine(seconds);
-
                     if (seconds < 60)
                         return;
 

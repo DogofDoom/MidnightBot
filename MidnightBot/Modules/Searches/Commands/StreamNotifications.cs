@@ -53,6 +53,7 @@ namespace MidnightBot.Modules.Searches.Commands
                             var channel = server?.GetChannel (stream.ChannelId);
                             if (channel == null)
                                 continue;
+                            await channel.DeleteMessages((await channel.DownloadMessages(3).ConfigureAwait(false)).ToArray()).ConfigureAwait(false);
                             var msg = $"`{stream.Username}`'s Stream ist nun " +
                                       $"**{(data.Item1 ? "ONLINE" : "OFFLINE")}** mit " +
                                       $"**{data.Item2}** Zuschauern.";
