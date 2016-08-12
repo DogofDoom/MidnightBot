@@ -275,7 +275,7 @@ namespace MidnightBot.Classes
                 tag = "flat_chest";
 
             var link = $"http://danbooru.donmai.us/posts?" +
-                        $"tags=order:random+";//$"page={rng.Next(0, 15)}";
+                        $"tags=order:random+-guro+";//$"page={rng.Next(0, 15)}";
             if (!string.IsNullOrWhiteSpace (tag))
                 link += $"{tag.Replace (" ","_")}";
 
@@ -295,7 +295,7 @@ namespace MidnightBot.Classes
             var max = 101;
             var rng = new Random ();
             GETIMAGE:
-            var url = $"https://derpiboo.ru/search.json?q=explicit";
+            var url = $"https://derpiboo.ru/search.json?q=explicit%2C-guro";
             if (!string.IsNullOrWhiteSpace (tags))
                 url += ($"%2C{(tags.Replace ("+","%2C").Replace (" ","+"))}");
             url += ($"&page={rng.Next (0,max)}&key=h-jh3W2FA7xpssjyyt1y");
@@ -318,7 +318,7 @@ namespace MidnightBot.Classes
             var rng = new Random ();
 
             var link = $"http://atfbooru.ninja/posts?" +
-                        $"tags=order:random+";//"page={rng.Next(0, 15)}";
+                        $"tags=order:random+-guro+";//"page={rng.Next(0, 15)}";
             if (!string.IsNullOrWhiteSpace ( tag))
                 link += $"{tag.Replace (" ","_")}";
 
@@ -360,7 +360,7 @@ namespace MidnightBot.Classes
                 {"User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.202 Safari/535.1"},
                 {"Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" },
             };
-            var url = $"http://gelbooru.com/index.php?page=dapi&s=post&q=index&limit=100&tags={tag.Replace (" ","_")}";
+            var url = $"http://gelbooru.com/index.php?page=dapi&s=post&q=index&limit=100&tags=-guro+{tag.Replace (" ","_")}";
             var webpage = await GetResponseStringAsync (url,headers).ConfigureAwait (false);
             var matches = Regex.Matches (webpage,"file_url=\"(?<url>.*?)\"");
             if (matches.Count == 0)
@@ -373,7 +373,7 @@ namespace MidnightBot.Classes
         public static async Task<string> GetSafebooruImageLink ( string tag )
         {
             var rng = new Random ();
-            var url = $"http://safebooru.org/index.php?page=dapi&s=post&q=index&limit=100&tags={tag.Replace (" ","_")}";
+            var url = $"http://safebooru.org/index.php?page=dapi&s=post&q=index&limit=100&tags=-guro+{tag.Replace (" ","_")}";
             var webpage = await GetResponseStringAsync (url).ConfigureAwait (false);
             var matches = Regex.Matches (webpage,"file_url=\"(?<url>.*?)\"");
             if (matches.Count == 0)
@@ -385,7 +385,7 @@ namespace MidnightBot.Classes
         public static async Task<string> GetRule34ImageLink ( string tag )
         {
             var rng = new Random ();
-            var url = $"http://rule34.xxx/index.php?page=dapi&s=post&q=index&limit=100&tags={tag.Replace (" ","_")}";
+            var url = $"http://rule34.xxx/index.php?page=dapi&s=post&q=index&limit=100&tags=-guro+{tag.Replace (" ","_")}";
             var webpage = await GetResponseStringAsync (url).ConfigureAwait (false);
             var matches = Regex.Matches (webpage,"file_url=\"(?<url>.*?)\"");
             if (matches.Count == 0)
@@ -403,7 +403,7 @@ namespace MidnightBot.Classes
                     {"Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" },
                 };
                 var data = await GetResponseStreamAsync (
-                    "http://e621.net/post/index.xml?tags=" + Uri.EscapeUriString (tags) + "%20order:random&limit=1",
+                    "http://e621.net/post/index.xml?tags=" + Uri.EscapeUriString (tags) + "%20-guro%20order:random&limit=1",
                     headers);
                 var doc = XDocument.Load (data);
                 return doc.Descendants ("file_url").FirstOrDefault ().Value;

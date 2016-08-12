@@ -224,14 +224,14 @@ namespace MidnightBot.Modules.Conversations
 
                             tester = 0;
                             //var msgs = (await e.Channel.DownloadMessages (100)).Where (m => m.User.Id == MidnightBot.client.CurrentUser.Id);
-                            foreach (var m in (await e.Channel.DownloadMessages (10)).Where (m => m.User.Id == e.User.Id))
-                            {
-                                if (tester == 0)
-                                {
-                                    await m.Delete ();
-                                    tester++;
-                                }
-                            }
+                            //foreach (var m in (await e.Channel.DownloadMessages (10)).Where (m => m.User.Id == e.User.Id))
+                            //{
+                            //    if (tester == 0)
+                            //    {
+                            //        await m.Delete ();
+                            //        tester++;
+                            //    }
+                            //}
                             await e.Channel.SendMessage (u.Mention + MidnightBot.Locale.Insults[rng.Next (0,MidnightBot.Locale.Insults.Length)])
                             .ConfigureAwait (false);
                         }
