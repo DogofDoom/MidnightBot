@@ -8,7 +8,6 @@ using Discord.Modules;
 using Discord.Commands;
 using MidnightBot.Classes;
 using MidnightBot.Modules.Permissions.Classes;
-
 using MidnightBot.Modules.Level.Classes;
 using MidnightBot.Modules.Level.Commands;
 using MidnightBot.Extensions;

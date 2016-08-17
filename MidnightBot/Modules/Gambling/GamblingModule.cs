@@ -30,7 +30,7 @@ namespace MidnightBot.Modules.Gambling
            {
                cgb.AddCheck (PermissionChecker.Instance);
 
-               commands.ForEach (com => com.Init (cgb));
+               commands.ForEach (cmd => cmd.Init (cgb));
 
                cgb.CreateCommand (Prefix + "raffle")
                    .Description ($"Schreibt den Namen und die ID eines zufälligen Benutzers aus der Online Liste einer (optionalen) Rolle. | `{Prefix}raffle` oder `{Prefix}raffle RoleName`")

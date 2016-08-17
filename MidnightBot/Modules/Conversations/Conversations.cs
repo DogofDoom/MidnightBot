@@ -17,7 +17,6 @@ namespace MidnightBot.Modules.Conversations
     internal class Conversations : DiscordModule
     {
         private const string firestr = "🔥 ด้้้้้็็็็็้้้้้็็็็็้้้้้้้้็ด้้้้้็็็็็้้้้้็็็็็้้้้้้้้็็็็็้้้้้็็็็็้้้้้้้้็็็ด้้้้้็็็็็้้้้้็็็็็้้้้้้้้็็็็็้้้้้็็็็็้้้้ 🔥";
-        private int tester = 0;
         public Conversations ()
         {
             commands.Add (new RipCommand (this));
@@ -221,17 +220,6 @@ namespace MidnightBot.Modules.Conversations
                         }
                         else
                         {
-
-                            tester = 0;
-                            //var msgs = (await e.Channel.DownloadMessages (100)).Where (m => m.User.Id == MidnightBot.client.CurrentUser.Id);
-                            //foreach (var m in (await e.Channel.DownloadMessages (10)).Where (m => m.User.Id == e.User.Id))
-                            //{
-                            //    if (tester == 0)
-                            //    {
-                            //        await m.Delete ();
-                            //        tester++;
-                            //    }
-                            //}
                             await e.Channel.SendMessage (u.Mention + MidnightBot.Locale.Insults[rng.Next (0,MidnightBot.Locale.Insults.Length)])
                             .ConfigureAwait (false);
                         }

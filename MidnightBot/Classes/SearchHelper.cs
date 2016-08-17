@@ -360,7 +360,7 @@ namespace MidnightBot.Classes
                 {"User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.202 Safari/535.1"},
                 {"Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" },
             };
-            var url = $"http://gelbooru.com/index.php?page=dapi&s=post&q=index&limit=100&tags=-guro+{tag.Replace (" ","_")}";
+            var url = $"http://gelbooru.com/index.php?page=dapi&s=post&q=index&limit=100&tags=-guro%20{tag.Replace (" ","_")}";
             var webpage = await GetResponseStringAsync (url,headers).ConfigureAwait (false);
             var matches = Regex.Matches (webpage,"file_url=\"(?<url>.*?)\"");
             if (matches.Count == 0)
@@ -373,7 +373,7 @@ namespace MidnightBot.Classes
         public static async Task<string> GetSafebooruImageLink ( string tag )
         {
             var rng = new Random ();
-            var url = $"http://safebooru.org/index.php?page=dapi&s=post&q=index&limit=100&tags=-guro+{tag.Replace (" ","_")}";
+            var url = $"http://safebooru.org/index.php?page=dapi&s=post&q=index&limit=100&tags=-guro%20{tag.Replace (" ","_")}";
             var webpage = await GetResponseStringAsync (url).ConfigureAwait (false);
             var matches = Regex.Matches (webpage,"file_url=\"(?<url>.*?)\"");
             if (matches.Count == 0)
@@ -385,7 +385,7 @@ namespace MidnightBot.Classes
         public static async Task<string> GetRule34ImageLink ( string tag )
         {
             var rng = new Random ();
-            var url = $"http://rule34.xxx/index.php?page=dapi&s=post&q=index&limit=100&tags=-guro+{tag.Replace (" ","_")}";
+            var url = $"http://rule34.xxx/index.php?page=dapi&s=post&q=index&limit=100&tags=-guro%20{tag.Replace (" ","_")}";
             var webpage = await GetResponseStringAsync (url).ConfigureAwait (false);
             var matches = Regex.Matches (webpage,"file_url=\"(?<url>.*?)\"");
             if (matches.Count == 0)

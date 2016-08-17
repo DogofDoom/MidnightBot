@@ -29,7 +29,7 @@ namespace MidnightBot.Modules.NSFW
                     .Do (async e =>
                     {
                         var tag = e.GetArg ("tag")?.Trim () ?? "";
-                        var links = await Task.WhenAll(SearchHelper.GetGelbooruImageLink("rating%3Aexplicit+" + tag), SearchHelper.GetDanbooruImageLink("rating%3Aexplicit+" + tag), SearchHelper.GetATFBooruImageLink("rating%3Aexplicit+" + tag)).ConfigureAwait(false);
+                        var links = await Task.WhenAll(SearchHelper.GetGelbooruImageLink("rating%3Aexplicit+-guro+" + tag), SearchHelper.GetATFBooruImageLink("rating%3Aexplicit+-guro+" + tag)).ConfigureAwait(false);
 
                         if (links.All(l => l == null))
                         {

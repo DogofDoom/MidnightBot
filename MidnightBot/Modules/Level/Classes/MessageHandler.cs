@@ -23,7 +23,9 @@ namespace MidnightBot.Modules.Level.Classes
         }
 
         public async void messageReceived(object sender, MessageEventArgs e) {
-            if(MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
+            if (!MidnightBot.Config.ListenServers.Contains(e.Server.Id))
+                return;
+            if (MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
             {
                 if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
                     return;
@@ -92,7 +94,8 @@ namespace MidnightBot.Modules.Level.Classes
                 return;
             if (e.Message.RawText.Length <= 10)
                 return;
-
+            if (!MidnightBot.Config.ListenServers.Contains(e.Server.Id))
+                return;
             if (MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
             {
                 var levelChanged = false;
@@ -153,11 +156,10 @@ namespace MidnightBot.Modules.Level.Classes
                 return;
             if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
                 return;
-            if (this.isCommand(e.Before.RawText))
-                return;
             if (e.After.RawText.Length <= 10 && e.Before.RawText.Length <= 10)
                 return;
-
+            if (!MidnightBot.Config.ListenServers.Contains(e.Server.Id))
+                return;
             if (MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
             {
                 var uid = Convert.ToInt64(e.User.Id);

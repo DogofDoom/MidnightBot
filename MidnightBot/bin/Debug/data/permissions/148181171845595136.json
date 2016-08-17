@@ -7,7 +7,9 @@
     "Modules": {
       "NSFW": true
     },
-    "Commands": {},
+    "Commands": {
+      "!ranks": false
+    },
     "FilterInvites": true,
     "FilterWords": false
   },
@@ -47,5 +49,6 @@
       "FilterInvites": true,
       "FilterWords": false
     }
-  }
+  },
+  "CommandCooldowns": {}
 }
