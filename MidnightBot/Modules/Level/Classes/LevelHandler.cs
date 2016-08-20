@@ -27,11 +27,11 @@ namespace MidnightBot.Modules.Level.Classes
                 {
                     if (enumerable.Count() > 0)
                     {
-                        KeyValuePair<int, string> keyValue = enumerable.First();
+                        KeyValuePair<int, string> keyValue = enumerable.FirstOrDefault();
 
                         string rankId = keyValue.Value;
 
-                        Role role = e.Channel.Server.FindRoles(rankId).First();
+                        Role role = e.Channel.Server.FindRoles(rankId).FirstOrDefault();
 
                         if (role != null)
                         {
@@ -40,9 +40,9 @@ namespace MidnightBot.Modules.Level.Classes
 
                             try
                             {
-                                await e.User.AddRoles(e.Channel.Server.FindRoles(rankId).FirstOrDefault()).ConfigureAwait(false);
+                                await e.User.AddRoles(role).ConfigureAwait(false);
 
-                                await e.Channel.SendMessage($"Herzlichen Glückwunsch { e.User.Mention }, du bist nun { e.Channel.Server.FindRoles(rankId).FirstOrDefault().Mention }").ConfigureAwait(false);
+                                await e.Channel.SendMessage($"Herzlichen Glückwunsch { e.User.Mention }, du bist nun { role.Mention }").ConfigureAwait(false);
                             }
                             catch (Exception ex)
                             {
