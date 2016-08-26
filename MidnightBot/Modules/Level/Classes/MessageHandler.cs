@@ -20,11 +20,11 @@ namespace MidnightBot.Modules.Level.Classes
         public MessageHandler(LevelModule module)
         {
             this.module = module;
+
         }
 
-        public async void messageReceived(object sender, MessageEventArgs e) {
-            if (!MidnightBot.Config.ListenServers.Contains(e.Server.Id))
-                return;
+        public async void messageReceived(object sender, MessageEventArgs e)
+        {
             if (MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
             {
                 if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
@@ -40,7 +40,7 @@ namespace MidnightBot.Modules.Level.Classes
 
                 LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
-                if(ldm != null)
+                if (ldm != null)
                 {
                     int xpToGet = (e.Message.RawText.Length > 25 ? 25 : e.Message.RawText.Length);
                     long currentTick = DateTime.Now.Ticks;
@@ -53,7 +53,7 @@ namespace MidnightBot.Modules.Level.Classes
                     ldm.TotalXP += xpToGet;
                     ldm.timestamp = DateTime.Now;
 
-                    if(ldm.CurrentXP >= getXPForNextLevel(ldm.Level))
+                    if (ldm.CurrentXP >= getXPForNextLevel(ldm.Level))
                     {
                         ldm.CurrentXP = (ldm.CurrentXP - getXPForNextLevel(ldm.Level));
 
@@ -94,8 +94,6 @@ namespace MidnightBot.Modules.Level.Classes
                 return;
             if (e.Message.RawText.Length <= 10)
                 return;
-            if (!MidnightBot.Config.ListenServers.Contains(e.Server.Id))
-                return;
             if (MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
             {
                 var levelChanged = false;
@@ -103,11 +101,11 @@ namespace MidnightBot.Modules.Level.Classes
                 var uid = Convert.ToInt64(e.User.Id);
                 LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
-                if(ldm != null)
+                if (ldm != null)
                 {
                     int xpToGet = (e.Message.RawText.Length > 25 ? 25 : e.Message.RawText.Length);
 
-                    if((ldm.TotalXP - xpToGet) <= 0)
+                    if ((ldm.TotalXP - xpToGet) <= 0)
                     {
                         ldm.TotalXP = 0;
                     }
@@ -120,7 +118,7 @@ namespace MidnightBot.Modules.Level.Classes
                     int copyOfTotalXP = ldm.TotalXP;
                     int calculatedLevel = 0;
 
-                    while(copyOfTotalXP > 0)
+                    while (copyOfTotalXP > 0)
                     {
                         int xpNeededForNextLevel = getXPForNextLevel(calculatedLevel);
 
@@ -144,8 +142,8 @@ namespace MidnightBot.Modules.Level.Classes
 
                     DbHandler.Instance.Save(ldm);
 
-                    if(levelChanged)
-                      await e.Channel.SendMessage($"Schade { e.User.Mention }, deine Nachricht wurde gelöscht. Daher wird dein Level runtergesetzt. Informationen bekommst du mit {MidnightBot.Config.CommandPrefixes.Level}rank");
+                    if (levelChanged)
+                        await e.Channel.SendMessage($"Schade { e.User.Mention }, deine Nachricht wurde gelöscht. Daher wird dein Level runtergesetzt. Informationen bekommst du mit {MidnightBot.Config.CommandPrefixes.Level}rank");
                 }
             }
         }
@@ -157,8 +155,6 @@ namespace MidnightBot.Modules.Level.Classes
             if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
                 return;
             if (e.After.RawText.Length <= 10 && e.Before.RawText.Length <= 10)
-                return;
-            if (!MidnightBot.Config.ListenServers.Contains(e.Server.Id))
                 return;
             if (MidnightBot.Config.ListenChannels.Contains(e.Channel.Id))
             {

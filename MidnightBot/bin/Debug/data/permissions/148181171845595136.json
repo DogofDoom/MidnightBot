@@ -5,7 +5,8 @@
   "Permissions": {
     "Name": "Testserver",
     "Modules": {
-      "NSFW": true
+      "NSFW": true,
+      "Level": false
     },
     "Commands": {
       "!ranks": false
@@ -21,6 +22,15 @@
       "Modules": {},
       "Commands": {
         "~ir": true
+      },
+      "FilterInvites": true,
+      "FilterWords": false
+    },
+    "162884830068080641": {
+      "Name": "test",
+      "Modules": {},
+      "Commands": {
+        "!rank": true
       },
       "FilterInvites": true,
       "FilterWords": false

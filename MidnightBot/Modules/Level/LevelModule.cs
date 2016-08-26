@@ -28,9 +28,9 @@ namespace MidnightBot.Modules.Level
 
         public override void Install (ModuleManager manager)
         {
-            manager.CreateCommands ("", cgb =>
+            manager.CreateCommands("", cgb =>
             {
-                cgb.AddCheck (PermissionChecker.Instance);
+                cgb.AddCheck(PermissionChecker.Instance);
 
                 commands.ForEach(cmd => cmd.Init(cgb));
             });

@@ -28,8 +28,6 @@ namespace MidnightBot.Modules.Level.Commands
                 .Parameter("user", ParameterType.Unparsed)
                 .Do(e =>
                 {
-                    if (!MidnightBot.Config.ListenServers.Contains(e.Server.Id))
-                        return;
                     if (string.IsNullOrWhiteSpace(e.GetArg("user")))
                     {
                         long uid = Convert.ToInt64(e.User.Id);
@@ -84,8 +82,6 @@ namespace MidnightBot.Modules.Level.Commands
                 .Description("Schickt eine Rangliste per PN.")
                 .Do(async e =>
                 {
-                    if (!MidnightBot.Config.ListenServers.Contains(e.Server.Id))
-                        return;
                     int stringCount = 0;
                     int formatCounter = 0;
                     IList<LevelData> data = DbHandler.Instance.FindAll<LevelData>(p => true);
