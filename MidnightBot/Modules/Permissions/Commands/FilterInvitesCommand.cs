@@ -38,6 +38,31 @@ namespace MidnightBot.Modules.Permissions.Commands
                 }
                 catch { }
             };
+
+            MidnightBot.Client.MessageUpdated += async (sender, args) =>
+            {
+                if (args.Channel.IsPrivate || args.User.Id == MidnightBot.Client.CurrentUser.Id)
+                    return;
+                try
+                {
+                    Classes.ServerPermissions serverPerms;
+                    if (!IsChannelOrServerFiltering(args.Channel, out serverPerms))
+                        return;
+
+                    if (filterRegex.IsMatch(args.After.RawText))
+                    {
+                        await args.After.Delete().ConfigureAwait(false);
+                        IncidentsHandler.Add(args.Server.Id, args.Channel.Id, $"Benutzer [{args.User.Name}/{args.User.Id}] hat einen " +
+                                                             $"EINLADUNGS LINK im [{args.Channel.Name}/{args.Channel.Id}] Channel gepostet.\n" +
+                                                             $"`Ganze Nachricht:` {args.After.Text}");
+                        if (serverPerms.Verbose)
+                            await args.Channel.SendMessage($"{args.User.Mention} Invite Links sind " +
+                                                           $"in diesem Channel nicht erlaubt.")
+                                                           .ConfigureAwait(false);
+                    }
+                }
+                catch { }
+            };
         }
 
         private static bool IsChannelOrServerFiltering ( Channel channel,out Classes.ServerPermissions serverPerms )
