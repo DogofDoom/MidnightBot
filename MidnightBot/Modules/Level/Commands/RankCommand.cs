@@ -124,6 +124,51 @@ namespace MidnightBot.Modules.Level.Commands
                         Thread.Sleep(250);
                     }
                 });
+
+            cgb.CreateCommand(Module.Prefix + "addxp")
+                .Description("Addet XP zu einem User")
+                .AddCheck(SimpleCheckers.OwnerOnly())
+                .Parameter("xpToGet", ParameterType.Required)
+                .Parameter("user", ParameterType.Unparsed)
+                .Do(async e =>
+                {
+                    var usr = e.Server.FindUsers(e.GetArg("user")).FirstOrDefault();
+                    if (usr == null)
+                    {
+                        await e.Channel.SendMessage($"{ e.User.Mention }, diesen User kenne ich nicht.");
+                    }
+                    else
+                    {
+                        long uid = Convert.ToInt64(e.User.Id);
+
+                        LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
+
+                        if (ldm != null)
+                        {
+                            int xpToGet = Convert.ToInt32(e.GetArg("xpToGet"));
+                            long currentTick = DateTime.Now.Ticks;
+
+                            ldm.CurrentXP += xpToGet;
+                            ldm.TotalXP += xpToGet;
+                            ldm.timestamp = DateTime.Now;
+
+                            if (ldm.CurrentXP >= getXPForNextLevel(ldm.Level))
+                            {
+                                ldm.CurrentXP = (ldm.CurrentXP - getXPForNextLevel(ldm.Level));
+
+                                ldm.Level += 1;
+                            }
+
+                            DbHandler.Instance.Save(ldm);
+                        }
+                        else
+                        {
+                            await e.Channel.SendMessage("User noch nicht vorhanden.");
+                        }
+                    }
+
+                    
+                });
         }
 
         int GetRank(LevelData ldm)
