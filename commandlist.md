@@ -2,7 +2,7 @@
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
 #MidnightBot List Of Commands  
-Version: `MidnightBot v0.9.6055.36267`
+Version: `MidnightBot v0.9.6093.29755`
 ### Help  
 Befehl und Alternativen |  Beschreibung |  Benutzung
 ----------------|--------------|-------
@@ -181,9 +181,9 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 `$shuffle`, `$sh`  |  Mischt alle Karten zurück in den Stapel. |  `$shuffle`
 `$flip`  |  Wirft eine/mehrere Münze(n) - Kopf oder Zahl, und zeigt ein Bild. |  `$flip` or `$flip 3`
 `$betflip`, `$bf`  |  Wette auf das Ergebnis: Kopf, oder Zahl. Beim richtigen Raten werden die gesetzten Euro verdoppelt. |  `$bf 5 kopf` or `$bf 3 z`
-`$roll`  |  Würfelt von 0-100. Wenn du eine Zahl [x] angibst werden bis zu 30 normale Würfel geworfen. Wenn du 2 Zahlen mit einem d trennst (xdy) werden x Würfel von 0 bis y geworfen. |  ´`$roll´ oder ´`$roll´ 7 oder ´`$roll 3d5´
-`$nroll`  |  Würfelt in einer gegebenen Zahlenreichweite. |  `$nroll 5` (rolls 0-5) or `$nroll 5-15`
-`$rolluo`  |  Würfelt von 0-100. Wenn du eine Zahl [x] angibst werden bis zu 30 normale Würfel geworfen. Wenn du 2 Zahlen mit einem d trennst (xdy) werden x Würfel von 0 bis y geworfen. |  ´$rolluo´ oder ´$rolluo 7´ oder ´$rolluo 3d5´
+`$roll`  |  Rolls 0-100. If you supply a number [x] it rolls up to 30 normal dice. If you split 2 numbers with letter d (xdy) it will roll x dice from 1 to y. |  `$roll` or `$roll 7` or `$roll 3d5`
+`$rolluo`  |  Rolls 0-100. If you supply a number [x] it rolls up to 30 normal dice (unordered). If you split 2 numbers with letter d (xdy) it will roll x dice from 1 to y. |  `$roll` or `$roll` 7 or `$roll 3d5`
+`$nroll`  |  Rolls in a given range. |  `$nroll 5` (rolls 0-5) or `$nroll 5-15`
 `$race`  |  Startet ein neues Tier-Rennen. |  `$race`
 `$joinrace`, `$jr`  |  Tritt einem Rennen bei. Du kannst eine Anzahl an Euro zum Wetten setzen (Optional). Du bekommst deine Wette*(Teilnehmer-1) zurück, wenn du gewinnst. |  `$jr` oder `$jr 5`
 `$raffle`  |  Schreibt den Namen und die ID eines zufälligen Benutzers aus der Online Liste einer (optionalen) Rolle. |  `$raffle` oder `$raffle RoleName`
@@ -214,6 +214,13 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 `>helix`  |  Stell dem allmächtigen Helix Fossil eine Ja/Nein Frage. |  `>helix should i do something`
 `>rps`  |  Spiel eine Runde Stein, Schere, Papier mit . |  `>rps scissors`
 `>linux`  |  Prints a customizable Linux interjection. |  `{Prefix}linux Spyware Windows`
+
+### Level  
+Befehl und Alternativen |  Beschreibung |  Benutzung
+----------------|--------------|-------
+`!rank`  |  Zeigt deinen zurzeitigen Rang an.
+`!ranks`, `!levels`  |  Schickt eine Rangliste per PN.
+`!addxp`  |  Addet XP zu einem User
 
 ### Music  
 Befehl und Alternativen |  Beschreibung |  Benutzung
@@ -405,3 +412,4 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 `@BotName disguise`, `<@!186940149148418048> disguise`  |  Custom Reaction. | %mention% disguise
 `Da ist die Tür`  |  Custom Reaction. | Da ist die Tür
 `please stop`  |  Custom Reaction. | please stop
+`Ich sage hallo zu dir`  |  Custom Reaction. | Ich sage hallo zu dir
