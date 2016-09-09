@@ -64,7 +64,7 @@ namespace MidnightBot.Classes
             await saveLock.WaitAsync();
             try
             {
-                File.WriteAllText(filePath, JsonConvert.SerializeObject(configs, Formatting.Indented));
+                await Task.Run(() => File.WriteAllText(filePath, JsonConvert.SerializeObject(configs, Formatting.Indented)));
             }
             finally
             {
@@ -300,7 +300,7 @@ namespace MidnightBot.Classes
         }
 
         public bool Equals(StreamNotificationConfig other) =>
-        this.Username.ToLower ().Trim () == other.Username.ToLower ().Trim () &&
+        this.Username.ToUpperInvariant().Trim() == other.Username.ToUpperInvariant().Trim() &&
         this.Type == other.Type &&
         this.ServerId == other.ServerId;
 

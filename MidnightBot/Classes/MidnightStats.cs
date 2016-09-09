@@ -256,6 +256,7 @@ namespace MidnightBot
         {
             commandTracker.TryAdd(e.Message.Id, DateTime.UtcNow);
             Console.WriteLine($">>COMMAND STARTED\nCmd: {e.Command.Text}\nMsg: {e.Message.Text}\nUsr: {e.User.Name} [{e.User.Id}]\nSrvr: {e.Server?.Name ?? "PRIVATE"} [{e.Server?.Id}]\n-----");
+            commandsRan++;
             await Task.Run (() =>
              {
                  try

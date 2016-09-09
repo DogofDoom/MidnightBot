@@ -10,7 +10,7 @@ namespace MidnightBot.Modules.Administration.Commands
     {
         public AutoAssignRole ( DiscordModule module ) : base (module)
         {
-            MidnightBot.Client.UserJoined += ( s,e ) =>
+            MidnightBot.OnReady += () => MidnightBot.Client.UserJoined += (s, e) =>
             {
                 try
                 {

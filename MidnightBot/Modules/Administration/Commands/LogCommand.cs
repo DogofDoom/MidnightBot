@@ -14,6 +14,8 @@ namespace MidnightBot.Modules.Administration.Commands
 
         public LogCommand(DiscordModule module) : base(module)
         {
+            MidnightBot.OnReady += () =>
+            {
             MidnightBot.Client.MessageReceived += MsgRecivd;
             MidnightBot.Client.MessageDeleted += MsgDltd;
             MidnightBot.Client.MessageUpdated += MsgUpdtd;
@@ -26,26 +28,27 @@ namespace MidnightBot.Modules.Administration.Commands
             MidnightBot.Client.ChannelDestroyed += ChannelDestroyed;
             MidnightBot.Client.ChannelUpdated += ChannelUpdated;
 
-            MidnightBot.Client.MessageReceived += async (s, e) => 
-            {
-                if (e.Channel.IsPrivate || e.User.Id == MidnightBot.Client.CurrentUser.Id)
-                    return;
-                    if (!SpecificConfigurations.Default.Of (e.Server.Id).SendPrivateMessageOnMention)
-                    return;
-                try
+                MidnightBot.Client.MessageReceived += async (s, e) =>
                 {
-                    if (e.Channel.IsPrivate)
+                    if (e.Channel.IsPrivate || e.User.Id == MidnightBot.Client.CurrentUser.Id)
                         return;
-                    var usr = e.Message.MentionedUsers.FirstOrDefault (u => u != e.User);
-                    if (usr?.Status != UserStatus.Offline)
+                    if (!SpecificConfigurations.Default.Of(e.Server.Id).SendPrivateMessageOnMention)
                         return;
+                    try
+                    {
+                        if (e.Channel.IsPrivate)
+                            return;
+                        var usr = e.Message.MentionedUsers.FirstOrDefault(u => u != e.User);
+                        if (usr?.Status != UserStatus.Offline)
+                            return;
                     //await e.Channel.SendMessage ($"Benutzer `{usr.Name}` ist offline. PM gesendet.").ConfigureAwait (false);
-                    await usr.SendMessage (
-                    $"Benutzer `{e.User.Name}` hat dich erwähnt auf dem Server " +
-                    $"`{e.Server.Name}` während du offline warst.\n" +
-                    $"`Nachricht:` {e.Message.Text}").ConfigureAwait (false);
-                }
-                catch { }
+                    await usr.SendMessage(
+                        $"Benutzer `{e.User.Name}` hat dich erwähnt auf dem Server " +
+                        $"`{e.Server.Name}` während du offline warst.\n" +
+                        $"`Nachricht:` {e.Message.Text}").ConfigureAwait(false);
+                    }
+                    catch { }
+                };
             };
         }
 

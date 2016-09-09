@@ -2,6 +2,7 @@
 using Discord.Audio;
 using Discord.Commands;
 using Discord.Modules;
+using MidnightBot.Classes;
 using MidnightBot.Classes.Help.Commands;
 using MidnightBot.Classes.JSONModels;
 using MidnightBot.Modules.Administration;
@@ -144,7 +145,7 @@ namespace MidnightBot
             Client = new DiscordClient (new DiscordConfigBuilder ()
             {
                 MessageCacheSize = 10,
-                ConnectionTimeout = 120000,
+                ConnectionTimeout = int.MaxValue,
                 LogLevel = LogSeverity.Warning,
                 LogHandler = ( s,e ) =>
                     Console.WriteLine ($"Severity: {e.Severity}" +
@@ -171,9 +172,6 @@ namespace MidnightBot
                     catch { }
                 }
             });
-
-            //reply to personal messages and forward if enabled.
-            Client.MessageReceived += Client_MessageReceived;
 
             //add command service
             Client.AddService<CommandService> (commandService);
@@ -220,11 +218,20 @@ namespace MidnightBot
             //run the bot
             Client.ExecuteAndWait (async () =>
             {
+                await Task.Run(() =>
+                {
+                    Console.WriteLine("Specific config started initializing.");
+                    var x = SpecificConfigurations.Default;
+                    Console.WriteLine("Specific config done initializing.");
+                });
+
+                PermissionsHandler.Initialize();
+
                 Console.WriteLine("Bitte warte während der Bot startet...");
 
                 try
                 {
-                    await Client.Connect (Creds.Token).ConfigureAwait (false);
+                    await Client.Connect(Creds.Token, TokenType.Bot).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -276,13 +283,15 @@ namespace MidnightBot
                 };
 
                 //await Task.Delay(90000);
-                PermissionsHandler.Initialize ();
 
                 Console.Title = "Midnight Bot | Connected";
                 Console.WriteLine("Bot ist initialisiert.");
 
                 MidnightBot.Ready = true;
                 MidnightBot.OnReady();
+                Console.WriteLine("Ready!");
+                //reply to personal messages and forward if enabled.
+                Client.MessageReceived += Client_MessageReceived;
             });
             Console.WriteLine ("Beende...");
             Console.ReadKey ();
