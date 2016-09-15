@@ -139,7 +139,7 @@ namespace MidnightBot.Modules.Level.Commands
                     }
                     else
                     {
-                        long uid = Convert.ToInt64(e.User.Id);
+                        long uid = Convert.ToInt64(usr.Id);
 
                         LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
@@ -184,7 +184,7 @@ namespace MidnightBot.Modules.Level.Commands
                     }
                     else
                     {
-                        long uid = Convert.ToInt64(e.User.Id);
+                        long uid = Convert.ToInt64(usr.Id);
 
                         LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
@@ -197,14 +197,14 @@ namespace MidnightBot.Modules.Level.Commands
                             ldm.TotalXP -= xpToLose;
                             ldm.timestamp = DateTime.Now;
 
-                            if (ldm.CurrentXP >= getXPForNextLevel(ldm.Level))
+                            if (ldm.CurrentXP <= 0)
                             {
-                                ldm.CurrentXP = (ldm.CurrentXP - getXPForNextLevel(ldm.Level));
-
-                                ldm.Level += 1;
+                                ldm.Level -= 1;
+                                ldm.CurrentXP = (getXPForNextLevel(ldm.Level) - ldm.CurrentXP);
                             }
 
                             DbHandler.Instance.Save(ldm);
+                            await e.Channel.SendMessage("XP entfernt.");
                         }
                         else
                         {
