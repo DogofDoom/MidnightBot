@@ -122,7 +122,7 @@ namespace MidnightBot.Modules.Administration.Commands
                     var role = e.Server.FindRoles (roleName).FirstOrDefault ();
                     if (role == null)
                     {
-                        await e.Channel.SendMessage (":anger:Dieser Rang nicht.").ConfigureAwait (false);
+                        await e.Channel.SendMessage ($":anger:Der Rang {roleName} existiert nicht.").ConfigureAwait (false);
                         return;
                     }
                     var config = SpecificConfigurations.Default.Of (e.Server.Id);
