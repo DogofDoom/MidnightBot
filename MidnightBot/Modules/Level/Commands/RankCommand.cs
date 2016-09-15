@@ -169,6 +169,51 @@ namespace MidnightBot.Modules.Level.Commands
 
                     
                 });
+
+            cgb.CreateCommand(Module.Prefix + "removexp")
+                .Description("Entfernt XP von einem User")
+                .AddCheck(SimpleCheckers.OwnerOnly())
+                .Parameter("xpToLose", ParameterType.Required)
+                .Parameter("user", ParameterType.Unparsed)
+                .Do(async e =>
+                {
+                    var usr = e.Server.FindUsers(e.GetArg("user")).FirstOrDefault();
+                    if (usr == null)
+                    {
+                        await e.Channel.SendMessage($"{ e.User.Mention }, diesen User kenne ich nicht.");
+                    }
+                    else
+                    {
+                        long uid = Convert.ToInt64(e.User.Id);
+
+                        LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
+
+                        if (ldm != null)
+                        {
+                            int xpToLose = Convert.ToInt32(e.GetArg("xpToLose"));
+                            long currentTick = DateTime.Now.Ticks;
+
+                            ldm.CurrentXP -= xpToLose;
+                            ldm.TotalXP -= xpToLose;
+                            ldm.timestamp = DateTime.Now;
+
+                            if (ldm.CurrentXP >= getXPForNextLevel(ldm.Level))
+                            {
+                                ldm.CurrentXP = (ldm.CurrentXP - getXPForNextLevel(ldm.Level));
+
+                                ldm.Level += 1;
+                            }
+
+                            DbHandler.Instance.Save(ldm);
+                        }
+                        else
+                        {
+                            await e.Channel.SendMessage("User noch nicht vorhanden.");
+                        }
+                    }
+
+
+                });
         }
 
         int GetRank(LevelData ldm)
