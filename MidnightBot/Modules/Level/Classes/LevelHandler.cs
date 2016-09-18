@@ -12,7 +12,6 @@ namespace MidnightBot.Modules.Level.Classes
 {
     class LevelHandler
     {
-
         public async void levelChanged(object sender, LevelChangedEventArgs e)
         {
             try
@@ -42,7 +41,7 @@ namespace MidnightBot.Modules.Level.Classes
                             {
                                 await e.User.AddRoles(role).ConfigureAwait(false);
 
-                                await e.Channel.SendMessage($"Herzlichen Glückwunsch { e.User.Mention }, du bist nun { role.Mention }").ConfigureAwait(false);
+                                await e.Channel.SendMessage($"Herzlichen Glückwunsch { e.User.Mention }, du bist nun { role.Name }").ConfigureAwait(false);
                             }
                             catch (Exception ex)
                             {

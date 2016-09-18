@@ -1,26 +1,28 @@
 {
   "PermissionsControllerRole": "Admin",
-  "Verbose": true,
+  "Verbose": false,
   "Id": 147439310096826368,
   "Permissions": {
     "Name": "GommeHD.net-Plauderkonfi",
     "Modules": {
-      "Conversations": false,
-      "Customreactions": false,
-      "Games": false,
-      "Sounds": false,
-      "Extra": false,
-      "Help": false,
-      "Pokegame": false,
-      "NSFW": false,
-      "ClashOfClans": false,
-      "Permissions": false,
-      "Music": false,
-      "Searches": false,
       "Translator": false,
-      "Memes": false,
+      "Conversations": false,
+      "Administration": false,
+      "Help": false,
+      "Level": false,
+      "Sounds": false,
+      "NSFW": false,
       "Gambling": false,
-      "Administration": false
+      "Pokegame": false,
+      "Searches": false,
+      "Extra": false,
+      "Memes": false,
+      "Customreactions": false,
+      "Permissions": false,
+      "ClashOfClans": false,
+      "Games": false,
+      "Utility": false,
+      "Music": false
     },
     "Commands": {},
     "FilterInvites": false,
@@ -86,15 +88,15 @@
     "164452617542434816": {
       "Name": "pokemonkampf",
       "Modules": {
-        "Gambling": false,
         "Games": false,
+        "Gambling": false,
         "ClashOfClans": false,
         "Pokegame": true,
         "Sounds": false,
         "Extra": false,
         "Searches": false,
-        "Conversations": false,
         "Translator": false,
+        "Conversations": false,
         "Music": false
       },
       "Commands": {},
@@ -180,18 +182,18 @@
         "$take": false,
         "~liststreams": false,
         "~we": false,
-        "~yt": false,
-        "$shuffle": false,
         "~hitbox": false,
+        "$shuffle": false,
+        "~yt": false,
         "~mang": false,
         "~chucknorris": false,
         "~catfact": false,
         ">pick": true,
         "$$$": true,
-        ">t": false,
         ">tq": false,
-        "~clr": false,
-        "~lmgtfy": false
+        ">t": false,
+        "~lmgtfy": false,
+        "~clr": false
       },
       "FilterInvites": true,
       "FilterWords": false
@@ -320,5 +322,6 @@
       "FilterInvites": true,
       "FilterWords": false
     }
-  }
+  },
+  "CommandCooldowns": {}
 }

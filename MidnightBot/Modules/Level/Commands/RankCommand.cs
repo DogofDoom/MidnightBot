@@ -200,7 +200,7 @@ namespace MidnightBot.Modules.Level.Commands
                             if (ldm.CurrentXP <= 0)
                             {
                                 ldm.Level -= 1;
-                                ldm.CurrentXP = (getXPForNextLevel(ldm.Level) - ldm.CurrentXP);
+                                ldm.CurrentXP = (getXPForNextLevel(ldm.Level) + ldm.CurrentXP);
                             }
 
                             DbHandler.Instance.Save(ldm);

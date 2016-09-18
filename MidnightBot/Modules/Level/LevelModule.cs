@@ -39,7 +39,7 @@ namespace MidnightBot.Modules.Level
 
             manager.MessageReceived += handler.messageReceived;
             manager.MessageDeleted += handler.messageDeleted;
-            //manager.MessageUpdated += handler.messageUpdated;
+            manager.MessageUpdated += handler.messageUpdated;
 
             JoinHandler joinHandler = new JoinHandler();
 
