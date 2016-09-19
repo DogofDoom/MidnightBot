@@ -146,20 +146,43 @@ namespace MidnightBot.Modules.Level.Commands
                         if (ldm != null)
                         {
                             int xpToGet = Convert.ToInt32(e.GetArg("xpToGet"));
-                            long currentTick = DateTime.Now.Ticks;
-
-                            ldm.CurrentXP += xpToGet;
+                            
                             ldm.TotalXP += xpToGet;
-                            ldm.timestamp = DateTime.Now;
+                            
+                            //Calculate new level
+                            int copyOfTotalXP = ldm.TotalXP;
+                            int calculatedLevel = 0;
 
-                            if (ldm.CurrentXP >= getXPForNextLevel(ldm.Level))
+                            while (copyOfTotalXP > 0)
                             {
-                                ldm.CurrentXP = (ldm.CurrentXP - getXPForNextLevel(ldm.Level));
+                                int xpNeededForNextLevel = getXPForNextLevel(calculatedLevel);
 
-                                ldm.Level += 1;
+                                if (copyOfTotalXP > xpNeededForNextLevel)
+                                {
+                                    calculatedLevel++;
+                                    copyOfTotalXP -= xpNeededForNextLevel;
+                                }
+                                else
+                                {
+                                    ldm.CurrentXP = copyOfTotalXP;
+                                    copyOfTotalXP = 0;
+                                }
                             }
+                            //long currentTick = DateTime.Now.Ticks;
+
+                            //ldm.CurrentXP += xpToGet;
+                            //ldm.TotalXP += xpToGet;
+                            //ldm.timestamp = DateTime.Now;
+
+                            //if (ldm.CurrentXP >= getXPForNextLevel(ldm.Level))
+                            //{
+                            //    ldm.CurrentXP = (ldm.CurrentXP - getXPForNextLevel(ldm.Level));
+
+                            //    ldm.Level += 1;
+                            //}
 
                             DbHandler.Instance.Save(ldm);
+                            await e.Channel.SendMessage("XP geaddet.");
                         }
                         else
                         {
@@ -191,17 +214,44 @@ namespace MidnightBot.Modules.Level.Commands
                         if (ldm != null)
                         {
                             int xpToLose = Convert.ToInt32(e.GetArg("xpToLose"));
-                            long currentTick = DateTime.Now.Ticks;
-
-                            ldm.CurrentXP -= xpToLose;
-                            ldm.TotalXP -= xpToLose;
-                            ldm.timestamp = DateTime.Now;
-
-                            if (ldm.CurrentXP <= 0)
+                            if ((ldm.TotalXP - xpToLose) <= 0)
                             {
-                                ldm.Level -= 1;
-                                ldm.CurrentXP = (getXPForNextLevel(ldm.Level) + ldm.CurrentXP);
+                                ldm.TotalXP = 0;
                             }
+                            else
+                            {
+                                ldm.TotalXP -= xpToLose;
+                            }
+                            //Calculate new level
+                            int copyOfTotalXP = ldm.TotalXP;
+                            int calculatedLevel = 0;
+
+                            while (copyOfTotalXP > 0)
+                            {
+                                int xpNeededForNextLevel = getXPForNextLevel(calculatedLevel);
+
+                                if (copyOfTotalXP > xpNeededForNextLevel)
+                                {
+                                    calculatedLevel++;
+                                    copyOfTotalXP -= xpNeededForNextLevel;
+                                }
+                                else
+                                {
+                                    ldm.CurrentXP = copyOfTotalXP;
+                                    copyOfTotalXP = 0;
+                                }
+                            }
+                            //int xpToLose = Convert.ToInt32(e.GetArg("xpToLose"));
+
+                            //ldm.CurrentXP -= xpToLose;
+                            //ldm.TotalXP -= xpToLose;
+                            //ldm.timestamp = DateTime.Now;
+
+                            //if (ldm.CurrentXP <= 0)
+                            //{
+                            //    ldm.Level -= 1;
+                            //    ldm.CurrentXP = (getXPForNextLevel(ldm.Level) + ldm.CurrentXP);
+                            //}
 
                             DbHandler.Instance.Save(ldm);
                             await e.Channel.SendMessage("XP entfernt.");
