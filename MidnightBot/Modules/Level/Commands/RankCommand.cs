@@ -168,21 +168,8 @@ namespace MidnightBot.Modules.Level.Commands
                                     copyOfTotalXP = 0;
                                 }
                             }
-                            //long currentTick = DateTime.Now.Ticks;
-
-                            //ldm.CurrentXP += xpToGet;
-                            //ldm.TotalXP += xpToGet;
-                            //ldm.timestamp = DateTime.Now;
-
-                            //if (ldm.CurrentXP >= getXPForNextLevel(ldm.Level))
-                            //{
-                            //    ldm.CurrentXP = (ldm.CurrentXP - getXPForNextLevel(ldm.Level));
-
-                            //    ldm.Level += 1;
-                            //}
-
-                            DbHandler.Instance.Save(ldm);
                             await e.Channel.SendMessage("XP geaddet.");
+                            DbHandler.Instance.Save(ldm);
                         }
                         else
                         {
@@ -241,20 +228,8 @@ namespace MidnightBot.Modules.Level.Commands
                                     copyOfTotalXP = 0;
                                 }
                             }
-                            //int xpToLose = Convert.ToInt32(e.GetArg("xpToLose"));
-
-                            //ldm.CurrentXP -= xpToLose;
-                            //ldm.TotalXP -= xpToLose;
-                            //ldm.timestamp = DateTime.Now;
-
-                            //if (ldm.CurrentXP <= 0)
-                            //{
-                            //    ldm.Level -= 1;
-                            //    ldm.CurrentXP = (getXPForNextLevel(ldm.Level) + ldm.CurrentXP);
-                            //}
-
-                            DbHandler.Instance.Save(ldm);
                             await e.Channel.SendMessage("XP entfernt.");
+                            DbHandler.Instance.Save(ldm);
                         }
                         else
                         {
