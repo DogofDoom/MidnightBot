@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Discord;
-using MidnightBot;
-using MidnightBot.DataModels;
-using MidnightBot.Classes;
 
 namespace MidnightBot.Modules.Level.Classes
 {

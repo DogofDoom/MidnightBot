@@ -3,15 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Discord;
-using Discord.Modules;
 using Discord.Commands;
-using MidnightBot;
 using MidnightBot.Classes;
-using MidnightBot.Modules.Permissions.Classes;
-using MidnightBot.Modules.Level.Classes;
-using MidnightBot.Modules.Level;
 using MidnightBot.DataModels;
 using MidnightBot.Extensions;
 
@@ -123,121 +116,6 @@ namespace MidnightBot.Modules.Level.Commands
 
                         Thread.Sleep(250);
                     }
-                });
-
-            cgb.CreateCommand(Module.Prefix + "addxp")
-                .Description("Addet XP zu einem User")
-                .AddCheck(SimpleCheckers.OwnerOnly())
-                .Parameter("xpToGet", ParameterType.Required)
-                .Parameter("user", ParameterType.Unparsed)
-                .Do(async e =>
-                {
-                    var usr = e.Server.FindUsers(e.GetArg("user")).FirstOrDefault();
-                    if (usr == null)
-                    {
-                        await e.Channel.SendMessage($"{ e.User.Mention }, diesen User kenne ich nicht.");
-                    }
-                    else
-                    {
-                        long uid = Convert.ToInt64(usr.Id);
-
-                        LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
-
-                        if (ldm != null)
-                        {
-                            int xpToGet = Convert.ToInt32(e.GetArg("xpToGet"));
-                            
-                            ldm.TotalXP += xpToGet;
-                            
-                            //Calculate new level
-                            int copyOfTotalXP = ldm.TotalXP;
-                            int calculatedLevel = 0;
-
-                            while (copyOfTotalXP > 0)
-                            {
-                                int xpNeededForNextLevel = getXPForNextLevel(calculatedLevel);
-
-                                if (copyOfTotalXP > xpNeededForNextLevel)
-                                {
-                                    calculatedLevel++;
-                                    copyOfTotalXP -= xpNeededForNextLevel;
-                                }
-                                else
-                                {
-                                    ldm.CurrentXP = copyOfTotalXP;
-                                    copyOfTotalXP = 0;
-                                }
-                            }
-                            await e.Channel.SendMessage("XP geaddet.");
-                            DbHandler.Instance.Save(ldm);
-                        }
-                        else
-                        {
-                            await e.Channel.SendMessage("User noch nicht vorhanden.");
-                        }
-                    }
-
-                    
-                });
-
-            cgb.CreateCommand(Module.Prefix + "removexp")
-                .Description("Entfernt XP von einem User")
-                .AddCheck(SimpleCheckers.OwnerOnly())
-                .Parameter("xpToLose", ParameterType.Required)
-                .Parameter("user", ParameterType.Unparsed)
-                .Do(async e =>
-                {
-                    var usr = e.Server.FindUsers(e.GetArg("user")).FirstOrDefault();
-                    if (usr == null)
-                    {
-                        await e.Channel.SendMessage($"{ e.User.Mention }, diesen User kenne ich nicht.");
-                    }
-                    else
-                    {
-                        long uid = Convert.ToInt64(usr.Id);
-
-                        LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
-
-                        if (ldm != null)
-                        {
-                            int xpToLose = Convert.ToInt32(e.GetArg("xpToLose"));
-                            if ((ldm.TotalXP - xpToLose) <= 0)
-                            {
-                                ldm.TotalXP = 0;
-                            }
-                            else
-                            {
-                                ldm.TotalXP -= xpToLose;
-                            }
-                            //Calculate new level
-                            int copyOfTotalXP = ldm.TotalXP;
-                            int calculatedLevel = 0;
-
-                            while (copyOfTotalXP > 0)
-                            {
-                                int xpNeededForNextLevel = getXPForNextLevel(calculatedLevel);
-
-                                if (copyOfTotalXP > xpNeededForNextLevel)
-                                {
-                                    calculatedLevel++;
-                                    copyOfTotalXP -= xpNeededForNextLevel;
-                                }
-                                else
-                                {
-                                    ldm.CurrentXP = copyOfTotalXP;
-                                    copyOfTotalXP = 0;
-                                }
-                            }
-                            await e.Channel.SendMessage("XP entfernt.");
-                            DbHandler.Instance.Save(ldm);
-                        }
-                        else
-                        {
-                            await e.Channel.SendMessage("User noch nicht vorhanden.");
-                        }
-                    }
-
-
                 });
         }
 
