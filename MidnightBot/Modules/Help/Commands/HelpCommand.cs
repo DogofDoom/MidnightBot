@@ -154,10 +154,6 @@ Version: `{MidnightStats.Instance.BotVersion}`";
                 .Alias (Module.Prefix + "help",MidnightBot.BotMention + " help",MidnightBot.BotMention + " h","~h")
                 .Description ("Hilfe-Befehl. | `-h !m q` oder einfach `-h`")
                 .Parameter ("module",ParameterType.Unparsed)
-                .Do (HelpFunc ());
-            cgb.CreateCommand (Module.Prefix + "hh")
-                .Description ("Hilfe-Befehl. | `-hh !m q` or just `-h` ")
-                .Parameter ("command",ParameterType.Unparsed)
                 .Do (NewHelpFunc ());
             cgb.CreateCommand (Module.Prefix + "hgit")
                 .Description ($"commandlist.md Datei erstellung. **Bot Owner Only!** | `{Prefix}hgit`")

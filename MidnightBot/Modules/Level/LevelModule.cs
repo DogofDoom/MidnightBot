@@ -20,6 +20,7 @@ namespace MidnightBot.Modules.Level
         public LevelModule ()
         {
             commands.Add(new RankCommand(this));
+            commands.Add(new XPCommand(this));
         }
 
         public event EventHandler<LevelChangedEventArgs> LevelChanged;

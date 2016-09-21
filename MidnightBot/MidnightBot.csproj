@@ -168,7 +168,7 @@
     <Compile Include="Modules\Level\Classes\LevelChangedEventArgs.cs" />
     <Compile Include="Modules\Level\Classes\MessageHandler.cs" />
     <Compile Include="Modules\Level\Commands\RankCommand.cs" />
-    <Compile Include="Modules\Level\Commands\XpCommand.cs" />
+    <Compile Include="Modules\Level\Commands\XPCommand.cs" />
     <Compile Include="Modules\Level\LevelModule.cs" />
     <Compile Include="Modules\Meme\MemeModule.cs" />
     <Compile Include="Modules\Music\Classes\PlaylistFullException.cs" />

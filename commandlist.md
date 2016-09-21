@@ -2,12 +2,11 @@
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
 #MidnightBot List Of Commands  
-Version: `MidnightBot v0.9.6093.29755`
+Version: `MidnightBot v0.9.6108.26944`
 ### Help  
 Befehl und Alternativen |  Beschreibung |  Benutzung
 ----------------|--------------|-------
 `-h`, `-help`, `@BotName help`, `@BotName h`, `~h`  |  Hilfe-Befehl. |  `-h !m q` oder einfach `-h`
-`-hh`  |  Hilfe-Befehl. |  `-hh !m q` or just `-h` 
 `-hgit`  |  commandlist.md Datei erstellung. **Bot Owner Only!** |  `-hgit`
 `-readme`, `-guide`  |  Sendet eine readme und ein Guide verlinkt zum Channel. |  `-readme` or `-guide`
 `-donate`, `~donate`  |  Informationen um das Projekt zu unterstützen! |  `-donate` or `-donate`
@@ -221,6 +220,8 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 `!rank`  |  Zeigt deinen zurzeitigen Rang an.
 `!ranks`, `!levels`  |  Schickt eine Rangliste per PN.
 `!addxp`  |  Addet XP zu einem User
+`!removexp`  |  Entfernt XP von einem User
+`!turnToXP`  |  Tauscht Euro in XP um. Ratio 1/5
 
 ### Music  
 Befehl und Alternativen |  Beschreibung |  Benutzung
