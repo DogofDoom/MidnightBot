@@ -57,6 +57,7 @@ namespace MidnightBot.Modules.Level.Commands
                                     copyOfTotalXP = 0;
                                 }
                             }
+                            ldm.Level = calculatedLevel;
                             await e.Channel.SendMessage("XP geaddet.");
                             DbHandler.Instance.Save(ldm);
                         }
@@ -117,6 +118,7 @@ namespace MidnightBot.Modules.Level.Commands
                                     copyOfTotalXP = 0;
                                 }
                             }
+                            ldm.Level = calculatedLevel;
                             await e.Channel.SendMessage("XP entfernt.");
                             DbHandler.Instance.Save(ldm);
                         }
@@ -132,6 +134,7 @@ namespace MidnightBot.Modules.Level.Commands
                 .Parameter("moneyToSpend", ParameterType.Required)
                 .Do(async e =>
                 {
+                    var levelChanged = false;
                     long uid = Convert.ToInt64(e.User.Id);
                     int moneyToSpend = Convert.ToInt32(e.GetArg("moneyToSpend"));
 
@@ -164,7 +167,11 @@ namespace MidnightBot.Modules.Level.Commands
                                     copyOfTotalXP = 0;
                                 }
                             }
+                            ldm.Level = calculatedLevel;
                             DbHandler.Instance.Save(ldm);
+
+                            if (levelChanged)
+                                await e.Channel.SendMessage($"{e.User.Mention} Dein neuer Level ist {calculatedLevel}");
                         } 
                     }
                     else
