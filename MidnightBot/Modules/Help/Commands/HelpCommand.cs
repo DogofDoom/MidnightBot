@@ -84,7 +84,7 @@ namespace MidnightBot.Classes.Help.Commands
         #region NewHelp
         public Func<CommandEventArgs,Task> NewHelpFunc () => async e =>
         {
-            var comToFind = e.GetArg("command")?.ToLowerInvariant();
+            var comToFind = e.GetArg("module")?.ToLowerInvariant();
         if (string.IsNullOrWhiteSpace(comToFind))
         {
             await e.User.Send(HelpString).ConfigureAwait(false);

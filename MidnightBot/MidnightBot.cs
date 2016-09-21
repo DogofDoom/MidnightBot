@@ -301,7 +301,7 @@ namespace MidnightBot
         {
             try
             {
-                Client.SetStatus(UserStatus.Offline);
+                //Client.SetStatus(UserStatus.Offline);
 
                 Client.Disconnect();
                 Console.Title = "Midnight Bot | Disconnected";
