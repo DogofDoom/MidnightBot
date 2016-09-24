@@ -16,7 +16,7 @@ namespace MidnightBot.Modules.Administration.Commands
         {
             MidnightBot.OnReady += () =>
             {
-            MidnightBot.Client.MessageReceived += MsgRecivd;
+            //MidnightBot.Client.MessageReceived += MsgRecivd;
             MidnightBot.Client.MessageDeleted += MsgDltd;
             MidnightBot.Client.MessageUpdated += MsgUpdtd;
             MidnightBot.Client.UserUpdated += UsrUpdtd;
@@ -167,34 +167,34 @@ namespace MidnightBot.Modules.Administration.Commands
             catch { }
         }
 
-        private async void MsgRecivd(object sender, MessageEventArgs e)
-        {
-            try
-            {
-                if (e.Server == null || e.Channel.IsPrivate || e.User.Id == MidnightBot.Client.CurrentUser.Id)
-                    return;
-                var config = SpecificConfigurations.Default.Of(e.Server.Id);
-                var chId = config.LogServerChannel;
-                if (chId == null || e.Channel.Id == chId || config.LogserverIgnoreChannels.Contains(e.Channel.Id))
-                    return;
-                Channel ch;
-                if ((ch = e.Server.TextChannels.Where (tc => tc.Id == chId).FirstOrDefault ()) == null)
-                    return;
-                if (!string.IsNullOrWhiteSpace(e.Message.Text))
-                {
-                    //await ch.SendMessage(
-                    //$@"🕔`{prettyCurrentTime}` **Neue Nachricht** `#{e.Channel.Name}`
-                    //👤`{e.User?.ToString() ?? ("NULL")}` {e.Message.Text.Unmention()}").ConfigureAwait(false);
-                }
-                else
-                {
-                    await ch.SendMessage(
-                    $@"🕔`{prettyCurrentTime}` **Datei hochgeladen** `#{e.Channel.Name}`
-                    👤`{e.User?.ToString() ?? ("NULL")}` {e.Message.Attachments.FirstOrDefault()?.ProxyUrl}").ConfigureAwait(false);
-                }
-            }
-            catch { }
-        }
+        //private async void MsgRecivd(object sender, MessageEventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (e.Server == null || e.Channel.IsPrivate || e.User.Id == MidnightBot.Client.CurrentUser.Id)
+        //            return;
+        //        var config = SpecificConfigurations.Default.Of(e.Server.Id);
+        //        var chId = config.LogServerChannel;
+        //        if (chId == null || e.Channel.Id == chId || config.LogserverIgnoreChannels.Contains(e.Channel.Id))
+        //            return;
+        //        Channel ch;
+        //        if ((ch = e.Server.TextChannels.Where (tc => tc.Id == chId).FirstOrDefault ()) == null)
+        //            return;
+        //        if (!string.IsNullOrWhiteSpace(e.Message.Text))
+        //        {
+        //            await ch.SendMessage(
+        //            $@"🕔`{prettyCurrentTime}` **Neue Nachricht** `#{e.Channel.Name}`
+        //            👤`{e.User?.ToString() ?? ("NULL")}` {e.Message.Text.Unmention()}").ConfigureAwait(false);
+        //        }
+        //        else
+        //        {
+        //            await ch.SendMessage(
+        //            $@"🕔`{prettyCurrentTime}` **Datei hochgeladen** `#{e.Channel.Name}`
+        //            👤`{e.User?.ToString() ?? ("NULL")}` {e.Message.Attachments.FirstOrDefault()?.ProxyUrl}").ConfigureAwait(false);
+        //        }
+        //    }
+        //    catch { }
+        //}
         private async void MsgDltd(object sender, MessageEventArgs e)
         {
             try
@@ -228,6 +228,8 @@ namespace MidnightBot.Modules.Administration.Commands
             try
             {
                 if (e.Server == null || e.Channel.IsPrivate || e.User?.Id == MidnightBot.Client.CurrentUser.Id)
+                    return;
+                if (e.Before.RawText == e.After.RawText)
                     return;
                 var config = SpecificConfigurations.Default.Of(e.Server.Id);
                 var chId = config.LogServerChannel;
