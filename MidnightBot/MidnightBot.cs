@@ -200,7 +200,7 @@ namespace MidnightBot
             modules.Add (new Conversations (),"Conversations",ModuleFilter.None);
             modules.Add (new GamblingModule (),"Gambling",ModuleFilter.None);
             modules.Add (new GamesModule (),"Games",ModuleFilter.None);
-            modules.Add(new LevelModule(), "Level", ModuleFilter.None);
+            modules.Add(new module(), "Level", ModuleFilter.None);
             modules.Add (new MusicModule(), "Music", ModuleFilter.None);
             modules.Add (new SearchesModule (),"Searches",ModuleFilter.None);
             modules.Add (new ExtraModule (),"Extra",ModuleFilter.None);

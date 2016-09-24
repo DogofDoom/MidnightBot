@@ -14,10 +14,10 @@ using MidnightBot.Extensions;
 
 namespace MidnightBot.Modules.Level
 {
-    internal class LevelModule : DiscordModule
+    internal class module : DiscordModule
     {
 
-        public LevelModule ()
+        public module ()
         {
             commands.Add(new RankCommand(this));
             commands.Add(new XPCommand(this));

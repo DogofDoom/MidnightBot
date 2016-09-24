@@ -5,6 +5,7 @@ using Discord.Commands;
 using MidnightBot.Classes;
 using MidnightBot.Modules.Permissions.Classes;
 using MidnightBot.DataModels;
+using MidnightBot.Modules.Level.Classes;
 
 namespace MidnightBot.Modules.Level.Commands
 {
@@ -172,6 +173,7 @@ namespace MidnightBot.Modules.Level.Commands
                                 }
                                 ldm.Level = calculatedLevel;
                                 DbHandler.Instance.Save(ldm);
+                                
 
                                 if (calculatedLevel!=userLevel)
                                     await e.Channel.SendMessage($"{e.User.Mention} Dein neuer Level ist {calculatedLevel}");
