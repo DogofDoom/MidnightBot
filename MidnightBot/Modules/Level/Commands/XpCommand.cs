@@ -135,7 +135,6 @@ namespace MidnightBot.Modules.Level.Commands
                 .Parameter("moneyToSpend", ParameterType.Required)
                 .Do(async e =>
                 {
-                    var levelChanged = false;
                     long uid = Convert.ToInt64(e.User.Id);
                     int moneyToSpend = Convert.ToInt32(e.GetArg("moneyToSpend"));
                     var userMoney = DbHandler.Instance.GetStateByUserId((long)e.User.Id)?.Value ?? 0;
@@ -149,7 +148,7 @@ namespace MidnightBot.Modules.Level.Commands
                             if (ldm != null)
                             {
                                 await FlowersHandler.RemoveFlowers(e.User, $"Traded for XP.({e.User.Name}/{e.User.Id})", (int)moneyToSpend, true).ConfigureAwait(false);
-
+                                int userLevel = ldm.Level;
                                 ldm.TotalXP += (moneyToSpend * 5);
 
                                 //Calculate new level
@@ -174,7 +173,7 @@ namespace MidnightBot.Modules.Level.Commands
                                 ldm.Level = calculatedLevel;
                                 DbHandler.Instance.Save(ldm);
 
-                                if (levelChanged)
+                                if (calculatedLevel!=userLevel)
                                     await e.Channel.SendMessage($"{e.User.Mention} Dein neuer Level ist {calculatedLevel}");
                             }
                         }
