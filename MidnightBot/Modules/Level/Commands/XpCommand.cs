@@ -137,49 +137,57 @@ namespace MidnightBot.Modules.Level.Commands
                     var levelChanged = false;
                     long uid = Convert.ToInt64(e.User.Id);
                     int moneyToSpend = Convert.ToInt32(e.GetArg("moneyToSpend"));
+                    var userMoney = DbHandler.Instance.GetStateByUserId((long)e.User.Id)?.Value ?? 0;
 
-                    if (moneyToSpend>0)
+                    if (userMoney>=moneyToSpend)
                     {
-                        LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
-
-                        if (ldm != null)
+                        if (moneyToSpend > 0)
                         {
-                            await FlowersHandler.RemoveFlowers(e.User, $"Traded for XP.({e.User.Name}/{e.User.Id})", (int)moneyToSpend, true).ConfigureAwait(false);
+                            LevelData ldm = DbHandler.Instance.FindOne<LevelData>(p => p.UserId == uid);
 
-                            ldm.TotalXP += (moneyToSpend * 5);
-
-                            //Calculate new level
-                            int copyOfTotalXP = ldm.TotalXP;
-                            int calculatedLevel = 0;
-
-                            while (copyOfTotalXP > 0)
+                            if (ldm != null)
                             {
-                                int xpNeededForNextLevel = getXPForNextLevel(calculatedLevel);
+                                await FlowersHandler.RemoveFlowers(e.User, $"Traded for XP.({e.User.Name}/{e.User.Id})", (int)moneyToSpend, true).ConfigureAwait(false);
 
-                                if (copyOfTotalXP > xpNeededForNextLevel)
+                                ldm.TotalXP += (moneyToSpend * 5);
+
+                                //Calculate new level
+                                int copyOfTotalXP = ldm.TotalXP;
+                                int calculatedLevel = 0;
+
+                                while (copyOfTotalXP > 0)
                                 {
-                                    calculatedLevel++;
-                                    copyOfTotalXP -= xpNeededForNextLevel;
+                                    int xpNeededForNextLevel = getXPForNextLevel(calculatedLevel);
+
+                                    if (copyOfTotalXP > xpNeededForNextLevel)
+                                    {
+                                        calculatedLevel++;
+                                        copyOfTotalXP -= xpNeededForNextLevel;
+                                    }
+                                    else
+                                    {
+                                        ldm.CurrentXP = copyOfTotalXP;
+                                        copyOfTotalXP = 0;
+                                    }
                                 }
-                                else
-                                {
-                                    ldm.CurrentXP = copyOfTotalXP;
-                                    copyOfTotalXP = 0;
-                                }
+                                ldm.Level = calculatedLevel;
+                                DbHandler.Instance.Save(ldm);
+
+                                if (levelChanged)
+                                    await e.Channel.SendMessage($"{e.User.Mention} Dein neuer Level ist {calculatedLevel}");
                             }
-                            ldm.Level = calculatedLevel;
-                            DbHandler.Instance.Save(ldm);
+                        }
+                        else
+                        {
+                            await e.Channel.SendMessage($"{e.User.Mention} Du musst mindestens 1 {MidnightBot.Config.CurrencySign} umtauschen.");
+                        }
 
-                            if (levelChanged)
-                                await e.Channel.SendMessage($"{e.User.Mention} Dein neuer Level ist {calculatedLevel}");
-                        } 
+                        await e.Channel.SendMessage($"{e.User.Mention} hat erfolgreich {moneyToSpend} {MidnightBot.Config.CurrencySign} in {moneyToSpend * 5} XP umgewandelt."); 
                     }
                     else
                     {
-                        await e.Channel.SendMessage($"{e.User.Mention} Du musst mindestens 1 {MidnightBot.Config.CurrencySign} umtauschen.");
+                        await e.Channel.SendMessage($"{e.User.Mention} Du hast nicht genug {MidnightBot.Config.CurrencyName}. Du hast nur {userMoney} {MidnightBot.Config.CurrencySign}");
                     }
-
-                    await e.Channel.SendMessage($"{e.User.Mention} hat erfolgreich {moneyToSpend} {MidnightBot.Config.CurrencySign} in {moneyToSpend*5} XP umgewandelt.");
                 });
             
         }
