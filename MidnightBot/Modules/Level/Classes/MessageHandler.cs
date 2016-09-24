@@ -80,7 +80,6 @@ namespace MidnightBot.Modules.Level.Classes
         {
             if (e == null || e.Message == null || e.User == null || e.Channel == null || e.Server == null)
                 return;
-
             if (MidnightBot.Client.CurrentUser.Id == e.User.Id)
                 return;
             if (this.isCommand(e.Message.RawText))
@@ -96,6 +95,8 @@ namespace MidnightBot.Modules.Level.Classes
 
                 if (ldm != null)
                 {
+                    if (e.Message.RawText == null)
+                        return;
                     int xpToGet = (e.Message.RawText.Length > 25 ? 25 : e.Message.RawText.Length);
 
                     if ((ldm.TotalXP - xpToGet) <= 0)
@@ -164,6 +165,8 @@ namespace MidnightBot.Modules.Level.Classes
                 if (ldm != null)
                 {
                     Console.WriteLine("test8");
+                    if (e.Before.RawText == null)
+                        return;
                     int xpToRemove = (e.Before.RawText.Length > 25 ? 25 : e.Before.RawText.Length);
                     Console.WriteLine("test9");
                     if ((ldm.TotalXP - xpToRemove) <= 0)

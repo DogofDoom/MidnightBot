@@ -96,13 +96,13 @@ namespace MidnightBot.Modules.Searches.Commands
                     cachedStatuses.TryAdd (hitboxUrl,result);
                     return result;
                 case StreamNotificationConfig.StreamType.Twitch:
-                    var twitchUrl = $"https://api.twitch.tv/kraken/streams/{Uri.EscapeUriString (stream.Username)}";
+                    var twitchUrl = $"https://api.twitch.tv/kraken/streams/{Uri.EscapeUriString(stream.Username)}?client_id=67w6z9i09xv2uoojdm9l0wsyph4hxo6";
                     if (checkCache && cachedStatuses.TryGetValue (twitchUrl,out result))
                         return result;
                     response = await SearchHelper.GetResponseStringAsync (twitchUrl).ConfigureAwait (false);
                     data = JObject.Parse (response);
                     isLive = !string.IsNullOrWhiteSpace (data["stream"].ToString ());
-                    result = new Tuple<bool,string> (isLive,isLive ? data["stream"]["viewers"].ToString () : "0");
+                    result = new Tuple<bool, string>(isLive, isLive ? data["stream"]["viewers"].ToString() : stream.Username);
                     cachedStatuses.TryAdd (twitchUrl,result);
                     return result;
                 case StreamNotificationConfig.StreamType.Beam:
@@ -118,7 +118,7 @@ namespace MidnightBot.Modules.Searches.Commands
                 default:
                     break;
             }
-            return new Tuple<bool,string> (false,"0");
+            return new Tuple<bool, string>(false, "NOT_FOUND");
         }
 
         internal override void Init ( CommandGroupBuilder cgb )
@@ -167,7 +167,11 @@ namespace MidnightBot.Modules.Searches.Commands
                         }));
                         if (streamStatus.Item1)
                         {
-                            await e.Channel.SendMessage($"`Streamer {streamStatus.Item2} ist online.`");
+                            await e.Channel.SendMessage($"`Streamer {stream} ist online mit {streamStatus.Item2} Zuschauern.`");
+                        }
+                        else
+                        {
+                            await e.Channel.SendMessage($"`Streamer {stream} ist offline.`");
                         }
                     }
                     catch
@@ -225,7 +229,11 @@ namespace MidnightBot.Modules.Searches.Commands
                         }));
                         if (streamStatus.Item1)
                         {
-                            await e.Channel.SendMessage($"`Streamer {streamStatus.Item2} ist online.`");
+                            await e.Channel.SendMessage($"`Streamer {stream} ist online mit {streamStatus.Item2} Zuschauern.`");
+                        }
+                        else
+                        {
+                            await e.Channel.SendMessage($"`Streamer {stream} ist offline.`");
                         }
                     }
                     catch

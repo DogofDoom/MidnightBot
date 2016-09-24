@@ -129,8 +129,9 @@ namespace MidnightBot.Modules.Level.Commands
                     }
                 });
 
-            cgb.CreateCommand(Module.Prefix + "turnToXP")
-                .Description($"Tauscht {MidnightBot.Config.CurrencyName} in XP um. Ratio 1/5")
+            cgb.CreateCommand(Module.Prefix + "turntoxp")
+                .Alias(Module.Prefix + "turntoexp")
+                .Description($"Tauscht {MidnightBot.Config.CurrencyName} in XP um. Ratio 1/5 | {Module.Prefix}turntoxp 10")
                 .Parameter("moneyToSpend", ParameterType.Required)
                 .Do(async e =>
                 {
