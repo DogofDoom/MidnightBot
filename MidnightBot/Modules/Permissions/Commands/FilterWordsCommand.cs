@@ -13,21 +13,29 @@ namespace MidnightBot.Modules.Permissions.Commands
         {
             MidnightBot.Client.MessageReceived += async (sender, args) =>
             {
-                if (args.Channel.IsPrivate || args.User.Id == MidnightBot.Client.CurrentUser.Id) return;
+                var user = args.User;
+                var channel = args.Channel;
+                var server = args.Server;
+                var message = args.Message;
+
+                if (user == null || channel == null || server == null || message == null)
+                    return;
+
+                if (channel.IsPrivate || user.Id == MidnightBot.Client.CurrentUser.Id) return;
                 try
                 {
                     Classes.ServerPermissions serverPerms;
-                    if (!IsChannelOrServerFiltering(args.Channel, out serverPerms)|| args.User.ServerPermissions.ManageMessages) return;
+                    if (!IsChannelOrServerFiltering(channel, out serverPerms)|| user.ServerPermissions.ManageMessages) return;
 
-                    var wordsInMessage = args.Message.RawText.ToLowerInvariant().Split(' ');
+                    var wordsInMessage = message.RawText.ToLowerInvariant().Split(' ');
                     if (serverPerms.Words.Any(w => wordsInMessage.Contains(w)))
                     {
                         await args.Message.Delete().ConfigureAwait (false);
-                        IncidentsHandler.Add(args.Server.Id,args.Channel.Id,$"Benutzer [{args.User.Name}/{args.User.Id}] schrieb ein " +
-                                                             $"gebanntes Wort im Channel [{args.Channel.Name}/{args.Channel.Id}].\n" +
-                                                             $"`Ganze Nachricht:` {args.Message.Text}");
+                        IncidentsHandler.Add(server.Id,channel.Id,$"Benutzer [{user.Name}/{user.Id}] schrieb ein " +
+                                                             $"gebanntes Wort im Channel [{channel.Name}/{channel.Id}].\n" +
+                                                             $"`Ganze Nachricht:` {message.Text}");
                         if (serverPerms.Verbose)
-                            await args.Channel.SendMessage($"{args.User.Mention} Ein, oder mehrere Wörter " +
+                            await channel.SendMessage($"{user.Mention} Ein, oder mehrere Wörter " +
                                                            $"in diesem Satz sind hier nicht erlaubt.")
                                                            .ConfigureAwait (false);
                     }
@@ -37,21 +45,29 @@ namespace MidnightBot.Modules.Permissions.Commands
 
             MidnightBot.Client.MessageUpdated += async (sender, args) =>
             {
-                if (args.Channel.IsPrivate || args.User.Id == MidnightBot.Client.CurrentUser.Id) return;
+                var user = args.User;
+                var channel = args.Channel;
+                var server = args.Server;
+                var after = args.After;
+
+                if (user == null || channel == null || server == null || after == null)
+                    return;
+
+                if (channel.IsPrivate || user.Id == MidnightBot.Client.CurrentUser.Id) return;
                 try
                 {
                     Classes.ServerPermissions serverPerms;
-                    if (!IsChannelOrServerFiltering(args.Channel, out serverPerms) || args.User.ServerPermissions.ManageMessages) return;
+                    if (!IsChannelOrServerFiltering(channel, out serverPerms) || user.ServerPermissions.ManageMessages) return;
 
-                    var wordsInMessage = args.After.RawText.ToLowerInvariant().Split(' ');
+                    var wordsInMessage = after.RawText.ToLowerInvariant().Split(' ');
                     if (serverPerms.Words.Any(w => wordsInMessage.Contains(w)))
                     {
                         await args.After.Delete().ConfigureAwait(false);
-                        IncidentsHandler.Add(args.Server.Id, args.Channel.Id, $"Benutzer [{args.User.Name}/{args.User.Id}] schrieb ein " +
-                                                             $"gebanntes Wort im Channel [{args.Channel.Name}/{args.Channel.Id}].\n" +
-                                                             $"`Ganze Nachricht:` {args.After.Text}");
+                        IncidentsHandler.Add(server.Id, channel.Id, $"Benutzer [{user.Name}/{user.Id}] schrieb ein " +
+                                                             $"gebanntes Wort im Channel [{channel.Name}/{channel.Id}].\n" +
+                                                             $"`Ganze Nachricht:` {after.Text}");
                         if (serverPerms.Verbose)
-                            await args.Channel.SendMessage($"{args.User.Mention} Ein, oder mehrere Wörter " +
+                            await channel.SendMessage($"{user.Mention} Ein, oder mehrere Wörter " +
                                                            $"in diesem Satz sind hier nicht erlaubt.")
                                                            .ConfigureAwait(false);
                     }

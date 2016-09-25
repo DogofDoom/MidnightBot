@@ -16,22 +16,32 @@ namespace MidnightBot.Modules.Permissions.Commands
         {
             MidnightBot.Client.MessageReceived += async ( sender,args ) =>
             {
-                if (args.Channel.IsPrivate || args.User.Id == MidnightBot.Client.CurrentUser.Id)
+                var user = args.User;
+                var channel = args.Channel;
+                var server = args.Server;
+                var message = args.Message;
+
+                if (user == null || channel == null || server == null || message == null)
+                    return;
+
+                if (channel.IsPrivate || user.Id == MidnightBot.Client.CurrentUser.Id)
                     return;
                 try
                 {
                     Classes.ServerPermissions serverPerms;
-                    if (!IsChannelOrServerFiltering (args.Channel,out serverPerms))
+                    if (!IsChannelOrServerFiltering (channel,out serverPerms))
                         return;
 
-                    if (filterRegex.IsMatch (args.Message.RawText))
+                    
+
+                    if (filterRegex.IsMatch (message.RawText))
                     {
                         await args.Message.Delete ().ConfigureAwait (false);
-                        IncidentsHandler.Add (args.Server.Id,args.Channel.Id,$"Benutzer [{args.User.Name}/{args.User.Id}] hat einen " +
-                                                             $"EINLADUNGS LINK im [{args.Channel.Name}/{args.Channel.Id}] Channel gepostet.\n" +
+                        IncidentsHandler.Add (server.Id,channel.Id,$"Benutzer [{user.Name}/{user.Id}] hat einen " +
+                                                             $"EINLADUNGS LINK im [{channel.Name}/{channel.Id}] Channel gepostet.\n" +
                                                              $"`Ganze Nachricht:` {args.Message.Text}");
                         if (serverPerms.Verbose)
-                            await args.Channel.SendMessage ($"{args.User.Mention} Invite Links sind " +
+                            await channel.SendMessage ($"{user.Mention} Invite Links sind " +
                                                            $"in diesem Channel nicht erlaubt.")
                                                            .ConfigureAwait (false);
                     }
@@ -41,22 +51,30 @@ namespace MidnightBot.Modules.Permissions.Commands
 
             MidnightBot.Client.MessageUpdated += async (sender, args) =>
             {
-                if (args.Channel.IsPrivate || args.User.Id == MidnightBot.Client.CurrentUser.Id)
+                var user = args.User;
+                var channel = args.Channel;
+                var server = args.Server;
+                var after = args.After;
+
+                if (user == null || channel == null || server == null || after == null)
+                    return;
+
+                if (channel.IsPrivate || user.Id == MidnightBot.Client.CurrentUser.Id)
                     return;
                 try
                 {
                     Classes.ServerPermissions serverPerms;
-                    if (!IsChannelOrServerFiltering(args.Channel, out serverPerms))
+                    if (!IsChannelOrServerFiltering(channel, out serverPerms))
                         return;
 
-                    if (filterRegex.IsMatch(args.After.RawText))
+                    if (filterRegex.IsMatch(after.RawText))
                     {
                         await args.After.Delete().ConfigureAwait(false);
-                        IncidentsHandler.Add(args.Server.Id, args.Channel.Id, $"Benutzer [{args.User.Name}/{args.User.Id}] hat einen " +
-                                                             $"EINLADUNGS LINK im [{args.Channel.Name}/{args.Channel.Id}] Channel gepostet.\n" +
-                                                             $"`Ganze Nachricht:` {args.After.Text}");
+                        IncidentsHandler.Add(server.Id, channel.Id, $"Benutzer [{user.Name}/{user.Id}] hat einen " +
+                                                             $"EINLADUNGS LINK im [{channel.Name}/{channel.Id}] Channel gepostet.\n" +
+                                                             $"`Ganze Nachricht:` {after.Text}");
                         if (serverPerms.Verbose)
-                            await args.Channel.SendMessage($"{args.User.Mention} Invite Links sind " +
+                            await channel.SendMessage($"{user.Mention} Invite Links sind " +
                                                            $"in diesem Channel nicht erlaubt.")
                                                            .ConfigureAwait(false);
                     }
