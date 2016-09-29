@@ -61,7 +61,7 @@ namespace MidnightBot.Modules.Games
                          try
                          {
                              await e.Channel.SendMessage (
-                                   $":question: `Frage` __**{question}**__ \n🐚 `Helix sagt` __**{MidnightBot.Config._8BallResponses[rng.Next(0, MidnightBot.Config._8BallResponses.Length)]}**__")
+                                   $":question: __**Frage:**__ `{question}` \n🐚 __**Helix sagt:**__ `{MidnightBot.Config._8BallResponses[rng.Next(0, MidnightBot.Config._8BallResponses.Length)]}`")
                                    .ConfigureAwait (false);
                          }
                          catch { }

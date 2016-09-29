@@ -317,7 +317,7 @@ namespace MidnightBot.Classes
             var max = 101;
             var rng = new Random ();
             GETIMAGE:
-            var url = $"https://derpiboo.ru/search.json?q=explicit%2C-guro";
+            var url = $"https://derpibooru.org/search.json?q=explicit%2C-guro";
             if (!string.IsNullOrWhiteSpace (tags))
                 url += ($"%2C{(tags.Replace ("+","%2C").Replace (" ","+"))}");
             url += ($"&page={rng.Next (0,max)}&key=h-jh3W2FA7xpssjyyt1y");

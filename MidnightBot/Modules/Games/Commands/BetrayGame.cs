@@ -19,7 +19,7 @@ namespace MidnightBot.Modules.Games.Commands
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "betray")
-                .Description ($"BETRUGS-SPIEL. Betrüge {BotName} in der nächsten Runde." +
+                .Description ($"BETRUGS-SPIEL. Betrüge {MidnightBot.BotName} in der nächsten Runde." +
                              $"Wenn {BotName} mit dir zusammenarbeitet - Du bekommst Extra-Punkte, {BotName} verliert eine Menge." +
                              $"Wenn {BotName} betrügt - Beide verlieren ein paar Punkte. | `{Prefix}betray`")
                 .Do (async e =>
@@ -29,7 +29,7 @@ namespace MidnightBot.Modules.Games.Commands
 
             cgb.CreateCommand (Module.Prefix + "cooperate")
                 .Description ($"BETRUGS-SPIEL. Arbeite mit {BotName} zusammen in der nächsten Runde." +
-                             $"When {BotName} mit dir zusammenarbeitet - Ihr beide bekommt Bonus-Punkte." +
+                             $"Wenn {BotName} mit dir zusammenarbeitet - Ihr beide bekommt Bonus-Punkte." +
                              $"Wenn {BotName} betrügt - Du verlierst eine Menge, {BotName} bekommt Bonus-Punkte. | `{Prefix}cooperater`")
                 .Do (async e =>
                 {
