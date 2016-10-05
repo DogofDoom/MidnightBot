@@ -92,7 +92,7 @@ namespace MidnightBot.Modules.Level.Commands
                         }
                         else if (formatCounter == 20)
                         {
-                            sb.AppendLine($"{GetRank(user),3}. | {(e.Server.Users.Where(u => u.Id == (ulong)user.UserId).FirstOrDefault()?.Name.TrimTo(18, true) ?? user.UserId.ToString()),-20} | LEVEL { user.Level,2 } | XP { user.CurrentXP,6 }/{ getXPForNextLevel(user.Level),6 } | TOTAL XP { user.TotalXP,8 }`");
+                            sb.AppendLine($"{GetRank(user),3}. | {(e.Server.Users.Where(u => u.Id == (ulong)user.UserId).FirstOrDefault()?.Name.TrimTo(18, true) ?? user.UserId.ToString()),-20} | LEVEL { user.Level,2 } | XP { user.CurrentXP,6 }/{ getXPForNextLevel(user.Level),6 } | TOTAL XP { user.TotalXP,8 }```");
                             formatCounter = 0;
                             rankStrings[stringCount] = sb.ToString();
                             sb.Clear();
