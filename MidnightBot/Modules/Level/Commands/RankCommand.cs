@@ -86,7 +86,7 @@ namespace MidnightBot.Modules.Level.Commands
                     {
                         if (formatCounter == 0)
                         {
-                            sb.AppendLine($"`Liste {stringCount+1}");
+                            sb.AppendLine($"```Liste {stringCount+1}");
                             sb.AppendLine($"{GetRank(user),3}. | {(e.Server.Users.Where(u => u.Id == (ulong)user.UserId).FirstOrDefault()?.Name.TrimTo(18, true) ?? user.UserId.ToString()),-20} | LEVEL { user.Level,2 } | XP { user.CurrentXP,6 }/{ getXPForNextLevel(user.Level),6 } | TOTAL XP { user.TotalXP,8 }");
                             formatCounter++;
                         }
@@ -106,7 +106,7 @@ namespace MidnightBot.Modules.Level.Commands
                     }
                     if (formatCounter != 0)
                     {
-                        sb.AppendLine("`");
+                        sb.AppendLine("```");
                         rankStrings[stringCount] = sb.ToString();
                     }
 

@@ -110,8 +110,11 @@ namespace MidnightBot.Classes.JSONModels
              119174277298782216,
               143515953525817344
           };
-        public HashSet<ulong> ListenChannels { get; set; } = new HashSet<ulong>();
 
+        public HashSet<ulong> NoFilterRoles { get; set; } = new HashSet<ulong>();
+
+        public HashSet<ulong> ListenChannels { get; set; } = new HashSet<ulong>();
+        
         public Dictionary<int, string> LevelRanks { get; set; } = new Dictionary<int, string>();
 
 

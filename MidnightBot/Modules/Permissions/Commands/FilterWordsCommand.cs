@@ -13,6 +13,7 @@ namespace MidnightBot.Modules.Permissions.Commands
         {
             MidnightBot.Client.MessageReceived += async (sender, args) =>
             {
+                var noFilter = false;
                 var user = args.User;
                 var channel = args.Channel;
                 var server = args.Server;
@@ -24,8 +25,17 @@ namespace MidnightBot.Modules.Permissions.Commands
                 if (channel.IsPrivate || user.Id == MidnightBot.Client.CurrentUser.Id) return;
                 try
                 {
+                    var userRoles = args.User.Roles;
+                    foreach(Role role in userRoles)
+                    {
+                        if(MidnightBot.Config.NoFilterRoles.Contains(role.Id))
+                        {
+                            noFilter = true;
+                        }
+                    }
+
                     Classes.ServerPermissions serverPerms;
-                    if (!IsChannelOrServerFiltering(channel, out serverPerms)|| user.ServerPermissions.ManageMessages) return;
+                    if (!IsChannelOrServerFiltering(channel, out serverPerms)|| user.ServerPermissions.ManageMessages || noFilter==true) return;
 
                     var wordsInMessage = message.RawText.ToLowerInvariant().Split(' ');
                     if (serverPerms.Words.Any(w => wordsInMessage.Contains(w)))
