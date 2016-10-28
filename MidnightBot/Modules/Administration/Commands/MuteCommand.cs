@@ -58,7 +58,7 @@ namespace MidnightBot.Modules.Administration.Commands
                             user.PrivateChannel.SendMessage($"Du wurdest von { e.User.Mention } gemuted, aufgrund von { argReason }.");
                         } else
                         {
-                            throw new InvalidOperationException("No role named Mute found!");
+                            e.User.PrivateChannel.SendMessage("No role named Mute found!");
                         }
                     }
                 });
