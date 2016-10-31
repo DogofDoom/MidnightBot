@@ -157,6 +157,7 @@
     <Compile Include="Modules\Administration\Commands\CustomReactionsCommands.cs" />
     <Compile Include="Modules\Administration\Commands\IncidentsCommands.cs" />
     <Compile Include="Modules\Administration\Commands\MuteCommand.cs" />
+    <Compile Include="Modules\Administration\Commands\RoleSave.cs" />
     <Compile Include="Modules\Administration\Commands\SelfCommands.cs" />
     <Compile Include="Modules\ClashOfClans\ClashOfClans.cs" />
     <Compile Include="Classes\DBHandler.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="_Models\DataModels\Incident.cs" />
     <Compile Include="_Models\DataModels\LevelDataModel.cs" />
     <Compile Include="_Models\DataModels\PokemonSprite.cs" />
+    <Compile Include="_Models\DataModels\SavedRolesModel.cs" />
     <Compile Include="_Models\DataModels\TestDataModel.cs" />
     <Compile Include="_Models\JSONModels\AnimeResult.cs" />
     <Compile Include="_Models\JSONModels\APIConfig.cs" />

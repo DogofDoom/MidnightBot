@@ -23,6 +23,7 @@ namespace MidnightBot.Classes
             Connection.CreateTable<Command>();
             Connection.CreateTable<Announcement>();
             Connection.CreateTable<Request>();
+            Connection.CreateTable<SavedRoles>();
             Connection.CreateTable<TypingArticle>();
             Connection.CreateTable<CurrencyState>();
             Connection.CreateTable<CurrencyTransaction>();

@@ -12,6 +12,8 @@ namespace MidnightBot.Modules.Administration.Commands
 {
     class MuteCommand : DiscordCommand
     {
+        private string prettyCurrentTime => $"【{DateTime.Now:HH:mm:ss}】";
+
         public MuteCommand(DiscordModule module) : base (module)
         {
             MidnightBot.OnReady += () => MidnightBot.Client.MessageReceived += (s, e) =>
@@ -31,13 +33,12 @@ namespace MidnightBot.Modules.Administration.Commands
 
         internal override void Init(CommandGroupBuilder cgb)
         {
-            cgb
-                .CreateCommand(Module.Prefix + "mute")
+            cgb.CreateCommand(Module.Prefix + "mute")
                 .AddCheck(new SimpleCheckers.ManageRoles())
                 .Description("Mute einen Benutzer!")
                 .Parameter("user", ParameterType.Required)
                 .Parameter("reason", ParameterType.Optional)
-                .Do(e =>
+                .Do(async e =>
                 {
                     string argUser = e.GetArg("user");
                     string argReason = e.GetArg("reason");
@@ -53,12 +54,69 @@ namespace MidnightBot.Modules.Administration.Commands
 
                         if(role != null)
                         {
-                            user.AddRoles(role);
+                            if (!user.HasRole(role))
+                            {
+                                await user.AddRoles(role);
 
-                            user.PrivateChannel.SendMessage($"Du wurdest von { e.User.Mention } gemuted, aufgrund von { argReason }.");
+                                var chId = SpecificConfigurations.Default.Of(e.Server.Id).LogServerChannel;
+                                if (chId == null)
+                                    return;
+                                Channel ch;
+                                if ((ch = e.Server.TextChannels.Where(tc => tc.Id == chId).FirstOrDefault()) == null)
+                                    return;
+                                await ch.SendMessage($"❗`{prettyCurrentTime}` **{user.Name}** wurde von **{ e.User.Name }** gemuted, aufgrund von **{ argReason }**.");
+
+                               await user.PrivateChannel.SendMessage($"Du wurdest von { e.User.Mention } gemuted, aufgrund von { argReason }.");
+                            }
+                            else
+                            {
+                                await e.Channel.SendMessage("User ist bereits gemuted.");
+                            }
                         } else
                         {
-                            e.User.PrivateChannel.SendMessage("No role named Mute found!");
+                            throw new InvalidOperationException("No role named Mute found!");
+                        }
+                    }
+                });
+
+            cgb.CreateCommand(Module.Prefix + "unmute")
+                .AddCheck(new SimpleCheckers.ManageRoles())
+                .Description("Entmute einen Benutzer!")
+                .Parameter("user", ParameterType.Required)
+                .Do(async e =>
+                {
+                    string argUser = e.GetArg("user");
+
+                    User user = e.Server.FindUsers(argUser).FirstOrDefault();
+
+                    if (user != null)
+                    {
+                        Role role = e.Server.FindRoles("Mute").FirstOrDefault();
+
+                        if (role != null)
+                        {
+                            if (user.HasRole(role))
+                            {
+                                await user.RemoveRoles(role);
+
+                                var chId = SpecificConfigurations.Default.Of(e.Server.Id).LogServerChannel;
+                                if (chId == null)
+                                    return;
+                                Channel ch;
+                                if ((ch = e.Server.TextChannels.Where(tc => tc.Id == chId).FirstOrDefault()) == null)
+                                    return;
+                                await ch.SendMessage($"❗`{prettyCurrentTime}` **{user.Name}** wurde von **{ e.User.Name }** entmuted.");
+
+                                await user.PrivateChannel.SendMessage($"Du wurdest entmuted."); 
+                            }
+                            else
+                            {
+                                await e.Channel.SendMessage("User ist nicht gemuted.");
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("No role named Mute found!");
                         }
                     }
                 });
