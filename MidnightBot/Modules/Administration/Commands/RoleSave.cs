@@ -6,6 +6,7 @@ using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace MidnightBot.Modules.Administration.Commands
 {
@@ -37,6 +38,9 @@ namespace MidnightBot.Modules.Administration.Commands
                     }
                     else
                     {
+                        string[] roles = rs.roles.Split(',');
+                        int anzahlRollen = roles.GetLength(0);
+                        Role[] allRoles = new Role[0];
                         var configs = SpecificConfigurations.Default.Of(e.Server.Id);
 
                         var autoRole = e.Server.Roles.Where(r => r.Id == configs.AutoAssignedRole).FirstOrDefault();
@@ -44,13 +48,57 @@ namespace MidnightBot.Modules.Administration.Commands
                         if (autoRole != null)
                             e.User.RemoveRoles(autoRole);
 
-                        string[] roles = rs.roles.Split(',');
                         foreach (var rl in roles)
                         {
                             Role role = e.Server.FindRoles(rl).FirstOrDefault();
                             if (role == null)
                                 return;
-                            e.User.AddRoles(role);
+                            Array.Resize(ref allRoles, allRoles.Length + 1);
+                            allRoles[allRoles.Length - 1] = role;
+                            //e.User.AddRoles(role);
+                            //Thread.Sleep(1000);
+                        }
+
+                        e.User.AddRoles(allRoles);
+
+                        var sb = new StringBuilder();
+                        if (rs != null)
+                        {
+                            DbHandler.Instance.Delete<SavedRoles>(Convert.ToInt32(rs.Id));
+                            rs = new SavedRoles();
+
+                            rs.UserId = Convert.ToInt64(e.User.Id);
+
+                            DbHandler.Instance.Save(rs);
+                        }
+                        else
+                        {
+                            rs = new SavedRoles();
+
+                            rs.UserId = Convert.ToInt64(e.User.Id);
+
+                            DbHandler.Instance.Save(rs);
+                        }
+                        foreach (var rls in roles)
+                        {
+                            if (rs.roles == null)
+                            {
+                                rs.roles = $"{rls}";
+
+                                DbHandler.Instance.Save(rs);
+                            }
+                            else
+                            {
+                                string[] rols = rs.roles.Split(',');
+                                foreach (string st in rols)
+                                {
+                                    sb.Append(st + ",");
+                                }
+                                sb.Append(rls);
+                                rs.roles = Convert.ToString(sb);
+                                sb.Clear();
+                                DbHandler.Instance.Save(rs);
+                            }
                         }
                     }
                 }
