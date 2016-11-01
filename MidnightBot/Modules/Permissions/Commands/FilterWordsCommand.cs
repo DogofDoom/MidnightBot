@@ -4,6 +4,7 @@ using MidnightBot.Classes;
 using MidnightBot.Modules.Permissions.Classes;
 using System;
 using System.Linq;
+using System.Text;
 
 namespace MidnightBot.Modules.Permissions.Commands
 {
@@ -26,28 +27,48 @@ namespace MidnightBot.Modules.Permissions.Commands
                 try
                 {
                     var userRoles = args.User.Roles;
-                    foreach(Role role in userRoles)
+                    foreach (Role role in userRoles)
                     {
-                        if(MidnightBot.Config.NoFilterRoles.Contains(role.Id))
+                        if (MidnightBot.Config.NoFilterRoles.Contains(role.Id))
                         {
                             noFilter = true;
                         }
                     }
 
                     Classes.ServerPermissions serverPerms;
-                    if (!IsChannelOrServerFiltering(channel, out serverPerms)|| user.ServerPermissions.ManageMessages || noFilter==true) return;
+                    if (!IsChannelOrServerFiltering(channel, out serverPerms) || user.ServerPermissions.ManageMessages || noFilter == true) return;
 
                     var wordsInMessage = message.RawText.ToLowerInvariant().Split(' ');
                     if (serverPerms.Words.Any(w => wordsInMessage.Contains(w)))
                     {
-                        await args.Message.Delete().ConfigureAwait (false);
-                        IncidentsHandler.Add(server.Id,channel.Id,$"Benutzer [{user.Name}/{user.Id}] schrieb ein " +
+                        string bufferString = "";
+                        var sb = new StringBuilder();
+                        foreach (var w in wordsInMessage)
+                        {
+                            foreach (var word in serverPerms.Words)
+                            {
+                                if (w == word)
+                                {
+                                    foreach (char c in w)
+                                    {
+                                        bufferString += "*";
+                                    }
+                                    sb.Append(bufferString + " ");
+                                }
+                                else
+                                {
+                                    sb.Append(w + " ");
+                                }
+                            }
+                        }
+
+                        await args.Message.Delete().ConfigureAwait(false);
+                        IncidentsHandler.Add(server.Id, channel.Id, $"Benutzer [{user.Name}/{user.Id}] schrieb ein " +
                                                              $"gebanntes Wort im Channel [{channel.Name}/{channel.Id}].\n" +
                                                              $"`Ganze Nachricht:` {message.Text}");
                         if (serverPerms.Verbose)
-                            await channel.SendMessage($"{user.Mention} Ein, oder mehrere Wörter " +
-                                                           $"in diesem Satz sind hier nicht erlaubt.")
-                                                           .ConfigureAwait (false);
+                            await channel.SendMessage($"**{user.Nickname}**: ```{sb.ToString()}```")
+                                                           .ConfigureAwait(false);
                     }
                 }
                 catch { }
@@ -55,6 +76,7 @@ namespace MidnightBot.Modules.Permissions.Commands
 
             MidnightBot.Client.MessageUpdated += async (sender, args) =>
             {
+                var noFilter = false;
                 var user = args.User;
                 var channel = args.Channel;
                 var server = args.Server;
@@ -66,19 +88,48 @@ namespace MidnightBot.Modules.Permissions.Commands
                 if (channel.IsPrivate || user.Id == MidnightBot.Client.CurrentUser.Id) return;
                 try
                 {
+                    var userRoles = args.User.Roles;
+                    foreach (Role role in userRoles)
+                    {
+                        if (MidnightBot.Config.NoFilterRoles.Contains(role.Id))
+                        {
+                            noFilter = true;
+                        }
+                    }
+
                     Classes.ServerPermissions serverPerms;
-                    if (!IsChannelOrServerFiltering(channel, out serverPerms) || user.ServerPermissions.ManageMessages) return;
+                    if (!IsChannelOrServerFiltering(channel, out serverPerms) || user.ServerPermissions.ManageMessages || noFilter == true) return;
 
                     var wordsInMessage = after.RawText.ToLowerInvariant().Split(' ');
                     if (serverPerms.Words.Any(w => wordsInMessage.Contains(w)))
                     {
+                        string bufferString = "";
+                        var sb = new StringBuilder();
+                        foreach (var w in wordsInMessage)
+                        {
+                            foreach (var word in serverPerms.Words)
+                            {
+                                if (w == word)
+                                {
+                                    foreach (char c in w)
+                                    {
+                                        bufferString += "*";
+                                    }
+                                    sb.Append(bufferString + " ");
+                                }
+                                else
+                                {
+                                    sb.Append(w + " ");
+                                }
+                            }
+                        }
+
                         await args.After.Delete().ConfigureAwait(false);
                         IncidentsHandler.Add(server.Id, channel.Id, $"Benutzer [{user.Name}/{user.Id}] schrieb ein " +
                                                              $"gebanntes Wort im Channel [{channel.Name}/{channel.Id}].\n" +
                                                              $"`Ganze Nachricht:` {after.Text}");
                         if (serverPerms.Verbose)
-                            await channel.SendMessage($"{user.Mention} Ein, oder mehrere Wörter " +
-                                                           $"in diesem Satz sind hier nicht erlaubt.")
+                            await channel.SendMessage($"**{user.Nickname}**: ```{sb.ToString()}```")
                                                            .ConfigureAwait(false);
                     }
                 }
