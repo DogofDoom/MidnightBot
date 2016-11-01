@@ -423,57 +423,57 @@ namespace MidnightBot.Modules.Administration
                          }
                      });
 
-                //cgb.CreateCommand (Prefix + "mute")
-                //    .Description ($"Mutet erwähnte Benutzer. | `{Prefix}mute \"@Someguy\"` oder `{Prefix}mute \"@Someguy\" \"@Someguy\"`")
-                //    .Parameter ("throwaway",ParameterType.Unparsed)
-                //    .Do (async e =>
-                //     {
-                //         if (!e.User.ServerPermissions.MuteMembers)
-                //         {
-                //             await e.Channel.SendMessage ("Du hast nicht genug Berechtigungen dies zu tun.").ConfigureAwait (false);
-                //             return;
-                //         }
-                //         if (!e.Message.MentionedUsers.Any ())
-                //             return;
-                //         try
-                //         {
-                //             foreach (var u in e.Message.MentionedUsers)
-                //             {
-                //                 await u.Edit (isMuted: true).ConfigureAwait (false);
-                //             }
-                //             await e.Channel.SendMessage ("Mute erfolgreich").ConfigureAwait (false);
-                //         }
-                //         catch
-                //         {
-                //             await e.Channel.SendMessage ("Ich habe keine Berechtigungen dafür.").ConfigureAwait (false);
-                //         }
-                //     });
+                cgb.CreateCommand(Prefix + "vmute")
+                    .Description($"Mutet erwähnte Benutzer. | `{Prefix}mute \"@Someguy\"` oder `{Prefix}mute \"@Someguy\" \"@Someguy\"`")
+                    .Parameter("throwaway", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        if (!e.User.ServerPermissions.MuteMembers)
+                        {
+                            await e.Channel.SendMessage("Du hast nicht genug Berechtigungen dies zu tun.").ConfigureAwait(false);
+                            return;
+                        }
+                        if (!e.Message.MentionedUsers.Any())
+                            return;
+                        try
+                        {
+                            foreach (var u in e.Message.MentionedUsers)
+                            {
+                                await u.Edit(isMuted: true).ConfigureAwait(false);
+                            }
+                            await e.Channel.SendMessage("Mute erfolgreich").ConfigureAwait(false);
+                        }
+                        catch
+                        {
+                            await e.Channel.SendMessage("Ich habe keine Berechtigungen dafür.").ConfigureAwait(false);
+                        }
+                    });
 
-                //cgb.CreateCommand (Prefix + "unmute")
-                //    .Description ($"Entmutet erwähnte Benutzer. | `{Prefix}unmute \"@Someguy\"` oder `{Prefix}unmute \"@Someguy\" \"@Someguy\"`")
-                //    .Parameter ("throwaway",ParameterType.Unparsed)
-                //    .Do (async e =>
-                //     {
-                //         if (!e.User.ServerPermissions.MuteMembers)
-                //         {
-                //             await e.Channel.SendMessage ("Du hast nicht genug Berechtigungen dies zu tun.").ConfigureAwait (false);
-                //             return;
-                //         }
-                //         if (!e.Message.MentionedUsers.Any ())
-                //             return;
-                //         try
-                //         {
-                //             foreach (var u in e.Message.MentionedUsers)
-                //             {
-                //                 await u.Edit (isMuted: false).ConfigureAwait (false);
-                //             }
-                //             await e.Channel.SendMessage ("Entmute erfolgreich.").ConfigureAwait (false);
-                //         }
-                //         catch
-                //         {
-                //             await e.Channel.SendMessage ("Ich habe keine Berechtigungen dafür.").ConfigureAwait (false);
-                //         }
-                //     });
+                cgb.CreateCommand(Prefix + "vunmute")
+                    .Description($"Entmutet erwähnte Benutzer. | `{Prefix}unmute \"@Someguy\"` oder `{Prefix}unmute \"@Someguy\" \"@Someguy\"`")
+                    .Parameter("throwaway", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        if (!e.User.ServerPermissions.MuteMembers)
+                        {
+                            await e.Channel.SendMessage("Du hast nicht genug Berechtigungen dies zu tun.").ConfigureAwait(false);
+                            return;
+                        }
+                        if (!e.Message.MentionedUsers.Any())
+                            return;
+                        try
+                        {
+                            foreach (var u in e.Message.MentionedUsers)
+                            {
+                                await u.Edit(isMuted: false).ConfigureAwait(false);
+                            }
+                            await e.Channel.SendMessage("Entmute erfolgreich.").ConfigureAwait(false);
+                        }
+                        catch
+                        {
+                            await e.Channel.SendMessage("Ich habe keine Berechtigungen dafür.").ConfigureAwait(false);
+                        }
+                    });
 
                 cgb.CreateCommand (Prefix + "deafen")
                     .Alias (Prefix + "deaf")

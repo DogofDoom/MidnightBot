@@ -34,7 +34,7 @@ namespace MidnightBot.Modules.Administration.Commands
         internal override void Init(CommandGroupBuilder cgb)
         {
             cgb.CreateCommand(Module.Prefix + "mute")
-                .AddCheck(new SimpleCheckers.ManageRoles())
+                .AddCheck(SimpleCheckers.ManageMessages())
                 .Description("Mute einen Benutzer!")
                 .Parameter("user", ParameterType.Required)
                 .Parameter("reason", ParameterType.Optional)
@@ -80,7 +80,7 @@ namespace MidnightBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand(Module.Prefix + "unmute")
-                .AddCheck(new SimpleCheckers.ManageRoles())
+                .AddCheck(SimpleCheckers.ManageMessages())
                 .Description("Entmute einen Benutzer!")
                 .Parameter("user", ParameterType.Required)
                 .Do(async e =>
