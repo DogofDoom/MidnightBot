@@ -2,7 +2,7 @@
 ######You can donate on paypal: `nadekodiscordbot@gmail.com` or Bitcoin `17MZz1JAqME39akMLrVT4XBPffQJ2n1EPa`
 
 #MidnightBot List Of Commands  
-Version: `MidnightBot v0.9.6108.26944`
+Version: `MidnightBot v0.9.6149.22737`
 ### Help  
 Befehl und Alternativen |  Beschreibung |  Benutzung
 ----------------|--------------|-------
@@ -55,6 +55,9 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 `.leave`  |  Lässt  den Server verlassen. Entweder Name, oder ID benötigt. |  `.leave 123123123331`
 `.listincidents`, `.lin`  |  Listet alle UNGELESENEN Vorfälle und markiert sie als gelesen. |  `.lin`
 `.listallincidents`, `.lain`  |  Sendet dir eine Datei mit allen Vorfällen und markiert sie als gelesen. |  `.lain`
+`.mute`  |  Mute einen Benutzer!
+`.unmute`  |  Entmute einen Benutzer!
+`.saveAllRoles`, `.sar`  |  Speichert alle Rollen der derzeit anwesenden Benutzer
 `.rules`  |  Regeln
 `.delmsgoncmd`  |  Ändert das automatische Löschen von erfolgreichen Befehls Aufrufen um Chat Spam zu verhindern. Server Manager Only. |  `.delmsgoncmd`
 `.restart`  |  Startet den Bot neu. Könnte nicht funktionieren. |  `.restart`
@@ -67,8 +70,6 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 `.ban`, `.b`  |  Bannt einen erwähnten Benutzer. |  `.b "@some Guy" Your behaviour is toxic.`
 `.softban`, `.sb`  |  Bannt und entbannt einen Benutzer per ID, oder Name mit optionaler Nachricht. |  `.sb "@some Guy" Your behaviour is toxic.`
 `.kick`, `.k`  |  Kickt einen erwähnten User. |  `.k "@some Guy" Your behaviour is toxic.`
-`.mute`  |  Mutet erwähnte Benutzer. |  `.mute "@Someguy"` oder `.mute "@Someguy" "@Someguy"`
-`.unmute`  |  Entmutet erwähnte Benutzer. |  `.unmute "@Someguy"` oder `.unmute "@Someguy" "@Someguy"`
 `.deafen`, `.deaf`  |  Stellt erwähnte Benutzer Taub. |  `.deaf "@Someguy"` oder `.deaf "@Someguy" "@Someguy"`
 `.undeafen`, `.undef`  |  Erwähnte Benutzer sind nicht mehr taub. |  `.undef "@Someguy"` oder `.undef "@Someguy" "@Someguy"`
 `.delvoichanl`, `.dvch`  |  Löscht einen Voice-Channel mit einem gegebenen Namen. |  `.dvch VoiceChannelName`
@@ -221,7 +222,7 @@ Befehl und Alternativen |  Beschreibung |  Benutzung
 `!ranks`, `!levels`  |  Schickt eine Rangliste per PN.
 `!addxp`  |  Addet XP zu einem User
 `!removexp`  |  Entfernt XP von einem User
-`!turnToXP`  |  Tauscht Euro in XP um. Ratio 1/5
+`!turntoxp`, `!turntoexp`  |  Tauscht Euro in XP um. Ratio 1/5 |  !turntoxp 10
 
 ### Music  
 Befehl und Alternativen |  Beschreibung |  Benutzung

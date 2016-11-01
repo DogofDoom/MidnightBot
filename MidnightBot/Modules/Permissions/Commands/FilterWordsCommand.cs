@@ -41,6 +41,7 @@ namespace MidnightBot.Modules.Permissions.Commands
                     var wordsInMessage = message.RawText.ToLowerInvariant().Split(' ');
                     if (serverPerms.Words.Any(w => wordsInMessage.Contains(w)))
                     {
+                        var isFilteredWord = false;
                         string bufferString = "";
                         var sb = new StringBuilder();
                         foreach (var w in wordsInMessage)
@@ -49,16 +50,22 @@ namespace MidnightBot.Modules.Permissions.Commands
                             {
                                 if (w == word)
                                 {
-                                    foreach (char c in w)
-                                    {
-                                        bufferString += "*";
-                                    }
-                                    sb.Append(bufferString + " ");
+                                    isFilteredWord = true;
                                 }
-                                else
+                            }
+                            if (isFilteredWord)
+                            {
+                                foreach (char c in w)
                                 {
-                                    sb.Append(w + " ");
+                                    bufferString += "*";
                                 }
+                                sb.Append(bufferString + " ");
+                                isFilteredWord = false;
+                                bufferString = "";
+                            }
+                            else
+                            {
+                                sb.Append(w + " ");
                             }
                         }
 
@@ -66,8 +73,9 @@ namespace MidnightBot.Modules.Permissions.Commands
                         IncidentsHandler.Add(server.Id, channel.Id, $"Benutzer [{user.Name}/{user.Id}] schrieb ein " +
                                                              $"gebanntes Wort im Channel [{channel.Name}/{channel.Id}].\n" +
                                                              $"`Ganze Nachricht:` {message.Text}");
+                        var satz = sb.ToString();
                         if (serverPerms.Verbose)
-                            await channel.SendMessage($"**{user.Nickname}**: ```{sb.ToString()}```")
+                            await channel.SendMessage($"```{user.Name}: {satz}```")
                                                            .ConfigureAwait(false);
                     }
                 }
@@ -103,6 +111,7 @@ namespace MidnightBot.Modules.Permissions.Commands
                     var wordsInMessage = after.RawText.ToLowerInvariant().Split(' ');
                     if (serverPerms.Words.Any(w => wordsInMessage.Contains(w)))
                     {
+                        var isFilteredWord = false;
                         string bufferString = "";
                         var sb = new StringBuilder();
                         foreach (var w in wordsInMessage)
@@ -111,16 +120,22 @@ namespace MidnightBot.Modules.Permissions.Commands
                             {
                                 if (w == word)
                                 {
-                                    foreach (char c in w)
-                                    {
-                                        bufferString += "*";
-                                    }
-                                    sb.Append(bufferString + " ");
+                                    isFilteredWord = true;
                                 }
-                                else
+                            }
+                            if(isFilteredWord)
+                            {
+                                foreach (char c in w)
                                 {
-                                    sb.Append(w + " ");
+                                    bufferString += "*";
                                 }
+                                sb.Append(bufferString + " ");
+                                isFilteredWord = false;
+                                bufferString = "";
+                            }
+                            else
+                            {
+                                sb.Append(w + " ");
                             }
                         }
 
@@ -128,8 +143,9 @@ namespace MidnightBot.Modules.Permissions.Commands
                         IncidentsHandler.Add(server.Id, channel.Id, $"Benutzer [{user.Name}/{user.Id}] schrieb ein " +
                                                              $"gebanntes Wort im Channel [{channel.Name}/{channel.Id}].\n" +
                                                              $"`Ganze Nachricht:` {after.Text}");
+                        var satz = sb.ToString();
                         if (serverPerms.Verbose)
-                            await channel.SendMessage($"**{user.Nickname}**: ```{sb.ToString()}```")
+                            await channel.SendMessage($"```{user.Name}: {satz}```")
                                                            .ConfigureAwait(false);
                     }
                 }

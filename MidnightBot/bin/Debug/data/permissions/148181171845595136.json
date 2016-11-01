@@ -14,7 +14,10 @@
     "FilterInvites": true,
     "FilterWords": false
   },
-  "Words": [],
+  "Words": [
+    "arschloch",
+    "bist"
+  ],
   "UserPermissions": {},
   "ChannelPermissions": {
     "148181171845595136": {
