@@ -36,6 +36,8 @@ namespace MidnightBot.Classes
             Connection.CreateTable<MusicPlaylist>();
             Connection.CreateTable<Incident>();
             Connection.CreateTable<LevelData>();
+            Connection.CreateTable<Warns>();
+            Connection.CreateTable<Mute>();
             Connection.Execute(Queries.TransactionTriggerQuery);
             try
             {

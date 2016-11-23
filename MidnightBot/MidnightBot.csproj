@@ -199,9 +199,11 @@
     <Compile Include="_Models\DataModels\DailyMoneyModel.cs" />
     <Compile Include="_Models\DataModels\Incident.cs" />
     <Compile Include="_Models\DataModels\LevelDataModel.cs" />
+    <Compile Include="_Models\DataModels\MuteModel.cs" />
     <Compile Include="_Models\DataModels\PokemonSprite.cs" />
     <Compile Include="_Models\DataModels\SavedRolesModel.cs" />
     <Compile Include="_Models\DataModels\TestDataModel.cs" />
+    <Compile Include="_Models\DataModels\WarnsModel.cs" />
     <Compile Include="_Models\JSONModels\AnimeResult.cs" />
     <Compile Include="_Models\JSONModels\APIConfig.cs" />
     <Compile Include="_Models\JSONModels\Configuration.cs" />

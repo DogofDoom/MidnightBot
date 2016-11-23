@@ -7,6 +7,7 @@ using Discord;
 using Discord.Commands;
 using MidnightBot.Classes;
 using MidnightBot.Modules.Permissions.Classes;
+using MidnightBot.DataModels;
 
 namespace MidnightBot.Modules.Administration.Commands
 {
@@ -14,19 +15,50 @@ namespace MidnightBot.Modules.Administration.Commands
     {
         private string prettyCurrentTime => $"【{DateTime.Now:HH:mm:ss}】";
 
-        public MuteCommand(DiscordModule module) : base (module)
+        public MuteCommand(DiscordModule module) : base(module)
         {
             MidnightBot.OnReady += () => MidnightBot.Client.MessageReceived += (s, e) =>
             {
                 User user = e.User;
 
-                Role role = e.Server.FindRoles("Mute").FirstOrDefault();
+                DateTime today = DateTime.Now;
+                var uid = (long)e.User.Id;
+                var sid = (long)e.Server.Id;
 
-                if(role != null && user.HasRole(role))
+                var rs = DbHandler.Instance.FindOne<Mute>(dm => dm.UserId == uid && dm.ServerId == sid);
+                if (rs != null)
                 {
-                    e.Message.Delete();
+                    if (DateTime.Compare(rs.MutedUntil,today)<0)
+                    {
+                        Role roleBanned = e.Server.FindRoles("Banned").FirstOrDefault();
 
-                    user.PrivateChannel.SendMessage("Du bist gemuted. Du kannst nicht schreiben in den Channeln des Servers.");
+                        if (roleBanned != null)
+                        {
+                            if (user.HasRole(roleBanned))
+                            {
+                                user.RemoveRoles(roleBanned);
+
+                                var chId = SpecificConfigurations.Default.Of(e.Server.Id).LogServerChannel;
+                                if (chId == null)
+                                    return;
+                                Channel ch;
+                                if ((ch = e.Server.TextChannels.Where(tc => tc.Id == chId).FirstOrDefault()) == null)
+                                    return;
+                                ch.SendMessage($"❗`{prettyCurrentTime}` **{user.Name}** wurde von **{ e.User.Name }** entmuted.");
+
+                                user.PrivateChannel.SendMessage($"Du wurdest entmuted.");
+                                DbHandler.Instance.Delete<SavedRoles>(Convert.ToInt32(rs.Id));
+                            }
+                            else
+                            {
+                                DbHandler.Instance.Delete<SavedRoles>(Convert.ToInt32(rs.Id));
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("No role named Banned found!");
+                        }
+                    }
                 }
             };
         }
@@ -43,7 +75,7 @@ namespace MidnightBot.Modules.Administration.Commands
                     string argUser = e.GetArg("user");
                     string argReason = e.GetArg("reason");
 
-                    
+
 
                     if (argReason == null)
                         argReason = "Regelverstoß";
@@ -56,11 +88,11 @@ namespace MidnightBot.Modules.Administration.Commands
                         return;
                     }
 
-                        if (user != null)
+                    if (user != null)
                     {
                         Role role = e.Server.FindRoles("Banned").FirstOrDefault();
 
-                        if(role != null)
+                        if (role != null)
                         {
                             if (!user.HasRole(role))
                             {
@@ -74,13 +106,14 @@ namespace MidnightBot.Modules.Administration.Commands
                                     return;
                                 await ch.SendMessage($"❗`{prettyCurrentTime}` **{user.Name}** wurde von **{ e.User.Name }** gemuted, aufgrund von **{ argReason }**.");
 
-                               await user.PrivateChannel.SendMessage($"Du wurdest von { e.User.Mention } gemuted, aufgrund von { argReason }.");
+                                await user.PrivateChannel.SendMessage($"Du wurdest von { e.User.Mention } gemuted, aufgrund von { argReason }.");
                             }
                             else
                             {
                                 await e.Channel.SendMessage("User ist bereits gemuted.");
                             }
-                        } else
+                        }
+                        else
                         {
                             throw new InvalidOperationException("No role named Mute found!");
                         }
@@ -98,67 +131,30 @@ namespace MidnightBot.Modules.Administration.Commands
                     string argUser = e.GetArg("user");
                     string argTime = e.GetArg("time");
                     string argReason = e.GetArg("reason");
-                    int days, hours, minutes, seconds;
-                    string sdays = "", shours = "", sminutes = "", sseconds = "";
+                    int days = 0, hours = 0, minutes = 0, seconds = 0;
+                    string sdays = "0", shours = "0", sminutes = "0", sseconds = "0";
 
-                    for (int durchlauf = 0; durchlauf < 4; durchlauf++)
+
+                    if (argTime.Contains('d'))
                     {
-                        if(durchlauf == 0)
-                        {
-                            foreach(char c in argTime)
-                            {
-                                if(Char.IsDigit(c))
-                                {
-                                    sdays += c;
-                                }
-                                if (c == 'd')
-                                    break;
-                            }
+                        sdays = argTime.Split('d')[0];
+                        argTime = argTime.Split('d')[1];
+                    }
 
-                            sdays += '0';
-                        }
-                        else if (durchlauf == 1)
-                        {
-                            foreach (char c in argTime)
-                            {
-                                if (Char.IsDigit(c))
-                                {
-                                    shours += c;
-                                }
-                                if (c == 'h')
-                                    break;
-                            }
-
-                            shours += '0';
-                        }
-                        else if (durchlauf == 2)
-                        {
-                            foreach (char c in argTime)
-                            {
-                                if (Char.IsDigit(c))
-                                {
-                                    sminutes += c;
-                                }
-                                if (c == 'm')
-                                    break;
-                            }
-
-                            sminutes += '0';
-                        }
-                        else if (durchlauf == 3)
-                        {
-                            foreach (char c in argTime)
-                            {
-                                if (Char.IsDigit(c))
-                                {
-                                    sseconds += c;
-                                }
-                                if (c == 's')
-                                    break;
-                            }
-
-                            sseconds += '0';
-                        }
+                    if (argTime.Contains('h'))
+                    {
+                        shours = argTime.Split('h')[0];
+                        argTime = argTime.Split('h')[1];
+                    }
+                    if (argTime.Contains('m'))
+                    {
+                        sminutes = argTime.Split('m')[0];
+                        argTime = argTime.Split('m')[1];
+                    }
+                    if (argTime.Contains('s'))
+                    {
+                        sseconds = argTime.Split('s')[0];
+                        argTime = argTime.Split('s')[1];
                     }
 
                     days = Convert.ToInt32(sdays);
@@ -194,6 +190,25 @@ namespace MidnightBot.Modules.Administration.Commands
                                 Channel ch;
                                 if ((ch = e.Server.TextChannels.Where(tc => tc.Id == chId).FirstOrDefault()) == null)
                                     return;
+
+
+                                TimeSpan timeToAdd = new TimeSpan(days, hours, minutes, seconds);
+                                DateTime today = DateTime.Now;
+
+                                DateTime MuteUntil = today.Add(timeToAdd);
+
+                                var uid = (long)e.User.Id;
+
+                                Mute rs = new Mute();
+
+                                rs.UserId = Convert.ToInt64(e.User.Id);
+
+                                rs.ServerId = (long)e.Server.Id;
+
+                                rs.MutedUntil = MuteUntil;
+
+                                DbHandler.Instance.Save(rs);
+
                                 await ch.SendMessage($"❗`{prettyCurrentTime}` **{user.Name}** wurde von **{ e.User.Name }** gemuted, aufgrund von **{ argReason }** für {days} Tage {hours} Stunden {minutes} Minuten {seconds} Sekunden.");
 
                                 await user.PrivateChannel.SendMessage($"Du wurdest von { e.User.Mention } gemuted, aufgrund von { argReason } für {days} Tage {hours} Stunden {minutes} Minuten {seconds} Sekunden.");
@@ -238,7 +253,7 @@ namespace MidnightBot.Modules.Administration.Commands
                                     return;
                                 await ch.SendMessage($"❗`{prettyCurrentTime}` **{user.Name}** wurde von **{ e.User.Name }** entmuted.");
 
-                                await user.PrivateChannel.SendMessage($"Du wurdest entmuted."); 
+                                await user.PrivateChannel.SendMessage($"Du wurdest entmuted.");
                             }
                             else
                             {

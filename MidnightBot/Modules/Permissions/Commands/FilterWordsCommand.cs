@@ -1,10 +1,13 @@
 ﻿using Discord;
 using Discord.Commands;
 using MidnightBot.Classes;
+using MidnightBot.DataModels;
 using MidnightBot.Modules.Permissions.Classes;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MidnightBot.Modules.Permissions.Commands
 {
@@ -14,11 +17,24 @@ namespace MidnightBot.Modules.Permissions.Commands
         {
             MidnightBot.Client.MessageReceived += async (sender, args) =>
             {
+                var OwnerPrivateChannels = new List<Channel>(MidnightBot.Creds.OwnerIds.Length);
+                foreach (var id in MidnightBot.Creds.OwnerIds)
+                {
+                    try
+                    {
+                        OwnerPrivateChannels.Add(await MidnightBot.Client.CreatePrivateChannel(id).ConfigureAwait(false));
+                    }
+                    catch
+                    {
+                        Console.WriteLine($"Konnte keinen privaten Channel mit dem Owner, welcher mit der ID {id} in der credentials.json gelistet ist");
+                    }
+                }
                 var noFilter = false;
                 var user = args.User;
                 var channel = args.Channel;
                 var server = args.Server;
                 var message = args.Message;
+                bool isKicked = false;
 
                 if (user == null || channel == null || server == null || message == null)
                     return;
@@ -74,7 +90,54 @@ namespace MidnightBot.Modules.Permissions.Commands
                                                              $"gebanntes Wort im Channel [{channel.Name}/{channel.Id}].\n" +
                                                              $"`Ganze Nachricht:` {message.Text}");
                         var satz = sb.ToString();
-                        if (serverPerms.Verbose)
+
+                        var uid = (long)user.Id;
+                        var sid = (long)server.Id;
+                        Warns ldm = DbHandler.Instance.FindOne<Warns>(p => p.UserId == uid && p.ServerId == sid);
+
+                        if (ldm == null)
+                        {
+                            ldm = new Warns();
+
+                            ldm.UserId = Convert.ToInt64(user.Id);
+                            ldm.ServerId = Convert.ToInt64(server.Id);
+                            ldm.timesWarned = 1;
+
+                            DbHandler.Instance.Save(ldm);
+                        }
+                        else
+                        {
+                            ldm.timesWarned += 1;
+                            if(ldm.timesWarned==9)
+                            {
+                                await channel.SendMessage($"{user.Mention} Beim nächsten Verstoß wirst du automatisch gekickt!");
+                            }
+                            if(ldm.timesWarned>=10)
+                            {
+                                await channel.SendMessage($"{user.Name} wurde automatisch gekickt!");
+                                await user.SendMessage($"Du wurdest automatisch vom Server gekickt. Die Admins wurden darüber benachrichtigt.");
+                                if (OwnerPrivateChannels.Any())
+                                {
+                                    if (MidnightBot.Config.ForwardToAllOwners)
+                                        OwnerPrivateChannels.ForEach(async c =>
+                                        {
+                                            try { await c.SendMessage($"{user.Name} wurde aufgrund zu vieler Verwarnungen automatisch vom Server gekickt.").ConfigureAwait(false); } catch { }
+                                        });
+                                    else
+                                    {
+                                        var c = OwnerPrivateChannels.FirstOrDefault();
+                                        if (c != null)
+                                            await c.SendMessage($"{user.Name} wurde aufgrund zu vieler Verwarnungen automatisch vom Server gekickt.").ConfigureAwait(false);
+                                    }
+                                }
+                                await Task.Delay(2000); // temp solution; give time for a message to be send, fu volt
+                                ldm.timesWarned = 0;
+                                await user.Kick().ConfigureAwait(false);
+                                isKicked = true; 
+                            }
+                            DbHandler.Instance.Save(ldm);
+                        }
+                        if (serverPerms.Verbose && isKicked==false)
                             await channel.SendMessage($"```{user.Name}: {satz}```")
                                                            .ConfigureAwait(false);
                     }
@@ -84,11 +147,24 @@ namespace MidnightBot.Modules.Permissions.Commands
 
             MidnightBot.Client.MessageUpdated += async (sender, args) =>
             {
+                var OwnerPrivateChannels = new List<Channel>(MidnightBot.Creds.OwnerIds.Length);
+                foreach (var id in MidnightBot.Creds.OwnerIds)
+                {
+                    try
+                    {
+                        OwnerPrivateChannels.Add(await MidnightBot.Client.CreatePrivateChannel(id).ConfigureAwait(false));
+                    }
+                    catch
+                    {
+                        Console.WriteLine($"Konnte keinen privaten Channel mit dem Owner, welcher mit der ID {id} in der credentials.json gelistet ist");
+                    }
+                }
                 var noFilter = false;
                 var user = args.User;
                 var channel = args.Channel;
                 var server = args.Server;
                 var after = args.After;
+                bool isKicked = false;
 
                 if (user == null || channel == null || server == null || after == null)
                     return;
@@ -144,7 +220,54 @@ namespace MidnightBot.Modules.Permissions.Commands
                                                              $"gebanntes Wort im Channel [{channel.Name}/{channel.Id}].\n" +
                                                              $"`Ganze Nachricht:` {after.Text}");
                         var satz = sb.ToString();
-                        if (serverPerms.Verbose)
+
+                        var uid = (long)user.Id;
+                        var sid = (long)server.Id;
+                        Warns ldm = DbHandler.Instance.FindOne<Warns>(p => p.UserId == uid && p.ServerId == sid);
+
+                        if (ldm == null)
+                        {
+                            ldm = new Warns();
+
+                            ldm.UserId = Convert.ToInt64(user.Id);
+                            ldm.ServerId = Convert.ToInt64(server.Id);
+                            ldm.timesWarned = 1;
+
+                            DbHandler.Instance.Save(ldm);
+                        }
+                        else
+                        {
+                            ldm.timesWarned += 1;
+                            if (ldm.timesWarned == 9)
+                            {
+                                await channel.SendMessage($"{user.Mention} Beim nächsten Verstoß wirst du automatisch gekickt!");
+                            }
+                            if (ldm.timesWarned >= 10)
+                            {
+                                await channel.SendMessage($"{user.Name} wurde automatisch gekickt!");
+                                await user.SendMessage($"Du wurdest automatisch vom Server gekickt. Die Admins wurden darüber benachrichtigt.");
+                                if (OwnerPrivateChannels.Any())
+                                {
+                                    if (MidnightBot.Config.ForwardToAllOwners)
+                                        OwnerPrivateChannels.ForEach(async c =>
+                                        {
+                                            try { await c.SendMessage($"{user.Name} wurde aufgrund zu vieler Verwarnungen automatisch vom Server gekickt.").ConfigureAwait(false); } catch { }
+                                        });
+                                    else
+                                    {
+                                        var c = OwnerPrivateChannels.FirstOrDefault();
+                                        if (c != null)
+                                            await c.SendMessage($"{user.Name} wurde aufgrund zu vieler Verwarnungen automatisch vom Server gekickt.").ConfigureAwait(false);
+                                    }
+                                }
+                                await Task.Delay(2000); // temp solution; give time for a message to be send, fu volt
+                                ldm.timesWarned = 0;
+                                await user.Kick().ConfigureAwait(false);
+                                isKicked = true;
+                            }
+                            DbHandler.Instance.Save(ldm);
+                        }
+                        if (serverPerms.Verbose && isKicked == false)
                             await channel.SendMessage($"```{user.Name}: {satz}```")
                                                            .ConfigureAwait(false);
                     }
