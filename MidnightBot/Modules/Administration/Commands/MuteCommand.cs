@@ -23,12 +23,11 @@ namespace MidnightBot.Modules.Administration.Commands
 
                 DateTime today = DateTime.Now;
                 var uid = (long)e.User.Id;
-                var sid = (long)e.Server.Id;
 
-                var rs = DbHandler.Instance.FindOne<Mute>(dm => dm.UserId == uid && dm.ServerId == sid);
+                var rs = DbHandler.Instance.FindOne<Mute>(dm => dm.UserId == uid);
                 if (rs != null)
                 {
-                    if (DateTime.Compare(rs.MutedUntil,today)<0)
+                    if (DateTime.Compare(rs.MutedUntil,today)<=0)
                     {
                         Role roleBanned = e.Server.FindRoles("Banned").FirstOrDefault();
 
@@ -39,19 +38,18 @@ namespace MidnightBot.Modules.Administration.Commands
                                 user.RemoveRoles(roleBanned);
 
                                 var chId = SpecificConfigurations.Default.Of(e.Server.Id).LogServerChannel;
-                                if (chId == null)
-                                    return;
+                                if (chId != null)
+                                { 
                                 Channel ch;
-                                if ((ch = e.Server.TextChannels.Where(tc => tc.Id == chId).FirstOrDefault()) == null)
-                                    return;
-                                ch.SendMessage($"❗`{prettyCurrentTime}` **{user.Name}** wurde von **{ e.User.Name }** entmuted.");
-
-                                user.PrivateChannel.SendMessage($"Du wurdest entmuted.");
-                                DbHandler.Instance.Delete<SavedRoles>(Convert.ToInt32(rs.Id));
+                                if ((ch = e.Server.TextChannels.Where(tc => tc.Id == chId).FirstOrDefault()) != null)
+                                    ch.SendMessage($"❗`{prettyCurrentTime}` **{user.Name}** wurde entmuted.");
+                                }
+                                user.SendMessage($"Du wurdest entmuted.");
+                                DbHandler.Instance.Delete<Mute>(Convert.ToInt32(rs.Id));
                             }
                             else
                             {
-                                DbHandler.Instance.Delete<SavedRoles>(Convert.ToInt32(rs.Id));
+                                DbHandler.Instance.Delete<Mute>(Convert.ToInt32(rs.Id));
                             }
                         }
                         else
@@ -104,9 +102,9 @@ namespace MidnightBot.Modules.Administration.Commands
                                 Channel ch;
                                 if ((ch = e.Server.TextChannels.Where(tc => tc.Id == chId).FirstOrDefault()) == null)
                                     return;
-                                await ch.SendMessage($"❗`{prettyCurrentTime}` **{user.Name}** wurde von **{ e.User.Name }** gemuted, aufgrund von **{ argReason }**.");
+                                await ch.SendMessage($"❗`{prettyCurrentTime}` **{user.Name}** wurde von **{ e.User.Name }** gemuted..");
 
-                                await user.PrivateChannel.SendMessage($"Du wurdest von { e.User.Mention } gemuted, aufgrund von { argReason }.");
+                                await user.SendMessage($"Du wurdest von { e.User.Mention } gemuted.");
                             }
                             else
                             {
@@ -122,7 +120,7 @@ namespace MidnightBot.Modules.Administration.Commands
 
             cgb.CreateCommand(Module.Prefix + "tmute")
                 .AddCheck(SimpleCheckers.ManageMessages())
-                .Description($"Mute einen Benutzer für eine bestimmte Zeit! (Funktioniert derzeit noch nicht.) | {Prefix}tmute @User 7d5h40m20s")
+                .Description($"Mute einen Benutzer für eine bestimmte Zeit!| {Prefix}tmute @User 7d5h40m20s")
                 .Parameter("user", ParameterType.Required)
                 .Parameter("time", ParameterType.Required)
                 .Parameter("reason", ParameterType.Unparsed)
@@ -163,7 +161,7 @@ namespace MidnightBot.Modules.Administration.Commands
                     seconds = Convert.ToInt32(sseconds);
 
 
-                    if (argReason == null)
+                    if (argReason == "")
                         argReason = "Regelverstoß";
 
                     User user = e.Server.FindUsers(argUser).FirstOrDefault();
@@ -184,12 +182,7 @@ namespace MidnightBot.Modules.Administration.Commands
                             {
                                 await user.AddRoles(role);
 
-                                var chId = SpecificConfigurations.Default.Of(e.Server.Id).LogServerChannel;
-                                if (chId == null)
-                                    return;
-                                Channel ch;
-                                if ((ch = e.Server.TextChannels.Where(tc => tc.Id == chId).FirstOrDefault()) == null)
-                                    return;
+                                
 
 
                                 TimeSpan timeToAdd = new TimeSpan(days, hours, minutes, seconds);
@@ -197,21 +190,24 @@ namespace MidnightBot.Modules.Administration.Commands
 
                                 DateTime MuteUntil = today.Add(timeToAdd);
 
-                                var uid = (long)e.User.Id;
+                                var uid = (long)user.Id;
 
                                 Mute rs = new Mute();
 
-                                rs.UserId = Convert.ToInt64(e.User.Id);
-
-                                rs.ServerId = (long)e.Server.Id;
+                                rs.UserId = Convert.ToInt64(user.Id);
 
                                 rs.MutedUntil = MuteUntil;
 
                                 DbHandler.Instance.Save(rs);
 
-                                await ch.SendMessage($"❗`{prettyCurrentTime}` **{user.Name}** wurde von **{ e.User.Name }** gemuted, aufgrund von **{ argReason }** für {days} Tage {hours} Stunden {minutes} Minuten {seconds} Sekunden.");
-
-                                await user.PrivateChannel.SendMessage($"Du wurdest von { e.User.Mention } gemuted, aufgrund von { argReason } für {days} Tage {hours} Stunden {minutes} Minuten {seconds} Sekunden.");
+                                var chId = SpecificConfigurations.Default.Of(e.Server.Id).LogServerChannel;
+                                if (chId != null)
+                                {
+                                    Channel ch;
+                                    if ((ch = e.Server.TextChannels.Where(tc => tc.Id == chId).FirstOrDefault()) != null)
+                                        await ch.SendMessage($"❗`{prettyCurrentTime}` **{user.Name}** wurde von **{ e.User.Name }** gemuted, für {days} Tage {hours} Stunden {minutes} Minuten {seconds} Sekunden.");
+                                }
+                                await user.SendMessage($"Du wurdest von { e.User.Mention } gemuted. Für {days} Tage {hours} Stunden {minutes} Minuten {seconds} Sekunden.");
                             }
                             else
                             {
@@ -253,7 +249,7 @@ namespace MidnightBot.Modules.Administration.Commands
                                     return;
                                 await ch.SendMessage($"❗`{prettyCurrentTime}` **{user.Name}** wurde von **{ e.User.Name }** entmuted.");
 
-                                await user.PrivateChannel.SendMessage($"Du wurdest entmuted.");
+                                await user.SendMessage($"Du wurdest entmuted.");
                             }
                             else
                             {

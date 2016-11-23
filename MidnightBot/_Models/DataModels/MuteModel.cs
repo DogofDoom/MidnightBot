@@ -8,6 +8,5 @@ namespace MidnightBot.DataModels
         [Unique]
         public long UserId { get; set; }
         public DateTime MutedUntil { get; set; }
-        public long ServerId { get; set; }
     }
 }
