@@ -1,35 +1,39 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using MidnightBot.Classes;
+using MidnightBot.DataModels;
 using MidnightBot.Modules.Permissions.Classes;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MidnightBot.Modules.Administration.Commands
 {
     class AutoAssignRole : DiscordCommand
     {
-        public AutoAssignRole ( DiscordModule module ) : base (module)
+        public AutoAssignRole(DiscordModule module) : base(module)
         {
             MidnightBot.OnReady += () => MidnightBot.Client.UserJoined += (s, e) =>
             {
                 try
                 {
-                    var config = SpecificConfigurations.Default.Of (e.Server.Id);
+                    var config = SpecificConfigurations.Default.Of(e.Server.Id);
 
-                    var role = e.Server.Roles.Where (r => r.Id == config.AutoAssignedRole).FirstOrDefault ();
+                    var role = e.Server.Roles.Where(r => r.Id == config.AutoAssignedRole).FirstOrDefault();
 
                     if (role == null)
                         return;
 
-                    e.User.AddRoles (role);
+                    e.User.AddRoles(role);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine ($"aar exception. {ex}");
+                    Console.WriteLine($"aar exception. {ex}");
                 }
             };
         }
-
         internal override void Init ( CommandGroupBuilder cgb )
         {
             cgb.CreateCommand (Module.Prefix + "autoassignrole")

@@ -106,7 +106,14 @@ namespace MidnightBot.Modules.Gambling
                        {
                            var data = DbHandler.Instance.FindAll<DailyMoney>(d => d.ServerId == sid && d.UserId == uid);
                            DbHandler.Instance.UpdateAll<DailyMoney>(data.Select(i => { i.LastTimeGotten = today; return i; }));
-                           await FlowersHandler.AddFlowersAsync(e.User, $"Daily Reward. ({e.User.Name}/{e.User.Id})", 20,true).ConfigureAwait(false);
+                           if (MidnightBot.IsOwner(e.User.Id))
+                           {
+                               await FlowersHandler.AddFlowersAsync(e.User, $"Daily Reward. ({e.User.Name}/{e.User.Id})", 60, true).ConfigureAwait(false);
+                           }
+                           else
+                           {
+                               await FlowersHandler.AddFlowersAsync(e.User, $"Daily Reward. ({e.User.Name}/{e.User.Id})", 20, true).ConfigureAwait(false);
+                           }
                            await e.Channel.SendMessage($"{e.User.Mention} hat sich seinen täglichen Anteil  von 20 {MidnightBot.Config.CurrencyName} abgeholt.");
                            return;
                        }

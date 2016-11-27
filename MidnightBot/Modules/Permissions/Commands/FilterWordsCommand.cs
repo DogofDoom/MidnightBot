@@ -15,6 +15,23 @@ namespace MidnightBot.Modules.Permissions.Commands
     {
         public FilterWords(DiscordModule module) : base(module)
         {
+            MidnightBot.Client.UserJoined += async (s, e) =>
+            {
+                Channel channel = e.Server.GetChannel(147439310096826368);
+                Classes.ServerPermissions serverPerms;
+                if (!IsChannelOrServerFiltering(channel, out serverPerms)) return;
+
+                var wordsInName = e.User.Name.ToLowerInvariant().Split(' ');
+                if (serverPerms.Words.Any(w => wordsInName.Contains(w)))
+                {
+                    await e.Server.Ban(e.User);
+                    await Task.Delay(3000);
+                    var msgs = (await channel.DownloadMessages(2).ConfigureAwait(false));
+                    var toDelete = msgs as Message[] ?? msgs.ToArray();
+                    await channel.DeleteMessages(toDelete).ConfigureAwait(false);
+                }
+            };
+
             MidnightBot.Client.MessageReceived += async (sender, args) =>
             {
                 var OwnerPrivateChannels = new List<Channel>(MidnightBot.Creds.OwnerIds.Length);
@@ -50,7 +67,6 @@ namespace MidnightBot.Modules.Permissions.Commands
                             noFilter = true;
                         }
                     }
-
                     Classes.ServerPermissions serverPerms;
                     if (!IsChannelOrServerFiltering(channel, out serverPerms) || user.ServerPermissions.ManageMessages || noFilter == true) return;
 
