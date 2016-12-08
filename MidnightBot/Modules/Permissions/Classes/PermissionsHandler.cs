@@ -616,6 +616,7 @@ namespace MidnightBot.Modules.Permissions.Classes
             RolePermissions = new Dictionary<ulong,Permissions> ();
             CommandCooldowns = new ConcurrentDictionary<string, int>();
             Words = new HashSet<string> ();
+            JoinWords = new HashSet<string>();
         }
     }
 }
