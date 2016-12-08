@@ -394,6 +394,15 @@ namespace MidnightBot.Modules.Permissions.Classes
             await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
+        public static async Task SetServerJoinWordPermission(Server server, bool value)
+        {
+            var serverPerms = PermissionsDict.GetOrAdd(server.Id,
+                new ServerPermissions(server.Id, server.Name));
+
+            serverPerms.Permissions.FilterJoinWords = value;
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
+        }
+
         public static async Task SetChannelWordPermission(Channel channel, bool value)
         {
             var server = channel.Server;
@@ -462,6 +471,25 @@ namespace MidnightBot.Modules.Permissions.Classes
             serverPerms.Words.Remove (word);
             await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
+
+        public static async Task AddFilteredJoinWord(Server server, string word)
+        {
+            var serverPerms = PermissionsDict.GetOrAdd(server.Id,
+                new ServerPermissions(server.Id, server.Name));
+            if (serverPerms.JoinWords.Contains(word))
+                throw new InvalidOperationException("Dieses Wort ist schon gebannt.");
+            serverPerms.JoinWords.Add(word);
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
+        }
+        public static async Task RemoveFilteredJoinWord(Server server, string word)
+        {
+            var serverPerms = PermissionsDict.GetOrAdd(server.Id,
+                new ServerPermissions(server.Id, server.Name));
+            if (!serverPerms.JoinWords.Contains(word))
+                throw new InvalidOperationException("Dieses Wort ist nicht gebannt.");
+            serverPerms.JoinWords.Remove(word);
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
+        }
     }
     /// <summary>
     /// Holds a permission list
@@ -495,6 +523,8 @@ namespace MidnightBot.Modules.Permissions.Classes
         /// </summary>
         public bool FilterWords { get; set; }
 
+        public bool FilterJoinWords { get; set; }
+
         public Permissions ( string name )
         {
             Name = name;
@@ -502,6 +532,7 @@ namespace MidnightBot.Modules.Permissions.Classes
             Commands = new ConcurrentDictionary<string,bool> ();
             FilterInvites = true;
             FilterWords = false;
+            FilterJoinWords = true;
         }
 
         public void CopyFrom ( Permissions other )
@@ -514,6 +545,7 @@ namespace MidnightBot.Modules.Permissions.Classes
                 Commands.AddOrUpdate (cp.Key,cp.Value,( s,b ) => cp.Value);
             FilterInvites = other.FilterInvites;
             FilterWords = other.FilterWords;
+            FilterJoinWords = other.FilterJoinWords;
         }
 
 
@@ -560,6 +592,8 @@ namespace MidnightBot.Modules.Permissions.Classes
         /// Banned words, usually profanities, like word "java"
         /// </summary>
         public HashSet<string> Words { get; set; }
+
+        public HashSet<string> JoinWords { get; set; }
 
         public Dictionary<ulong,Permissions> UserPermissions { get; set; }
         public Dictionary<ulong,Permissions> ChannelPermissions { get; set; }

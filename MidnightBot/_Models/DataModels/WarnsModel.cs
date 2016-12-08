@@ -6,6 +6,7 @@ namespace MidnightBot.DataModels
     {
         public long UserId { get; set; }
         public int timesWarned { get; set; }
+        public int totalWarns { get; set; }
         public long ServerId { get; set; }
     }
 }

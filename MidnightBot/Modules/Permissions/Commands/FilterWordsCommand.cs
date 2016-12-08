@@ -19,10 +19,10 @@ namespace MidnightBot.Modules.Permissions.Commands
             {
                 Channel channel = e.Server.GetChannel(147439310096826368);
                 Classes.ServerPermissions serverPerms;
-                if (!IsChannelOrServerFiltering(channel, out serverPerms)) return;
+                if (!IsChannelOrServerJoinFiltering(channel, out serverPerms)) return;
 
                 var wordsInName = e.User.Name.ToLowerInvariant().Split(' ');
-                if (serverPerms.Words.Any(w => wordsInName.Contains(w)))
+                if (serverPerms.JoinWords.Any(w => wordsInName.Contains(w)))
                 {
                     await e.Server.Ban(e.User);
                     await Task.Delay(3000);
@@ -124,7 +124,8 @@ namespace MidnightBot.Modules.Permissions.Commands
                         else
                         {
                             ldm.timesWarned += 1;
-                            if(ldm.timesWarned==9)
+                            ldm.totalWarns += 1;
+                            if (ldm.timesWarned==9)
                             {
                                 await channel.SendMessage($"{user.Mention} Beim nächsten Verstoß wirst du automatisch gekickt!");
                             }
@@ -254,6 +255,7 @@ namespace MidnightBot.Modules.Permissions.Commands
                         else
                         {
                             ldm.timesWarned += 1;
+                            ldm.totalWarns += 1;
                             if (ldm.timesWarned == 9)
                             {
                                 await channel.SendMessage($"{user.Mention} Beim nächsten Verstoß wirst du automatisch gekickt!");
@@ -293,6 +295,17 @@ namespace MidnightBot.Modules.Permissions.Commands
         }
 
         private static bool IsChannelOrServerFiltering(Channel channel,out Classes.ServerPermissions serverPerms )
+        {
+            if (!PermissionsHandler.PermissionsDict.TryGetValue(channel.Server.Id, out serverPerms)) return false;
+
+            if (serverPerms.Permissions.FilterWords)
+                return true;
+
+            Classes.Permissions perms;
+            return serverPerms.ChannelPermissions.TryGetValue(channel.Id, out perms) && perms.FilterWords;
+        }
+
+        private static bool IsChannelOrServerJoinFiltering(Channel channel, out Classes.ServerPermissions serverPerms)
         {
             if (!PermissionsHandler.PermissionsDict.TryGetValue(channel.Server.Id, out serverPerms)) return false;
 
@@ -413,7 +426,7 @@ namespace MidnightBot.Modules.Permissions.Commands
 
             cgb.CreateCommand (Module.Prefix + "srvrfilterwords")
                 .Alias (Module.Prefix + "sfw")
-                .Description($"Aktiviert, oder deaktiviert automatische Löschung von Nachrichten auf dem Server, die verbotene Wörter enthalten. | `{Prefix}sfi disable`")
+                .Description($"Aktiviert, oder deaktiviert automatische Löschung von Nachrichten auf dem Server, die verbotene Wörter enthalten. | `{Prefix}sfw disable`")
                 .Parameter("bool")
                 .Do(async e =>
                 {
@@ -428,6 +441,147 @@ namespace MidnightBot.Modules.Permissions.Commands
                     catch (Exception ex)
                     {
                         await e.Channel.SendMessage($"💢 Fehler: {ex.Message}").ConfigureAwait (false);
+                    }
+                });
+
+            cgb.CreateCommand(Module.Prefix + "addfilterjoinword")
+               .Alias(Module.Prefix + "afjw")
+               .Description("Fügt ein neues Wort zur Liste der gefilterten Wörter hinzu." +
+                            $" | `{Prefix}afjw poop`")
+               .Parameter("word", ParameterType.Unparsed)
+               .Do(async e =>
+               {
+                   try
+                   {
+                       var word = e.GetArg("word");
+                       if (string.IsNullOrWhiteSpace(word))
+                           return;
+                       await PermissionsHandler.AddFilteredJoinWord(e.Server, word.ToLowerInvariant().Trim()).ConfigureAwait(false);
+                       await e.Channel.SendMessage($"Neues Wort erfolgreich zum Filter hinzugefügt.")
+                       .ConfigureAwait(false);
+
+                   }
+                   catch (Exception ex)
+                   {
+                       await e.Channel.SendMessage($"💢 Fehler: {ex.Message}").ConfigureAwait(false);
+                   }
+               });
+
+            cgb.CreateCommand(Module.Prefix + "rmvfilterjoinword")
+               .Alias(Module.Prefix + "rfjw")
+               .Description("Entfernt ein Wort von der Liste der gefilterten Wörter." +
+                            $" | `{Prefix}rfjw poop`")
+               .Parameter("word", ParameterType.Unparsed)
+               .Do(async e =>
+               {
+                   try
+                   {
+                       var word = e.GetArg("word");
+                       if (string.IsNullOrWhiteSpace(word))
+                           return;
+                       await PermissionsHandler.RemoveFilteredJoinWord(e.Server, word.ToLowerInvariant().Trim()).ConfigureAwait(false);
+                       await e.Channel.SendMessage($"Wort erfolgreich von Liste entfernt.")
+                       .ConfigureAwait(false);
+
+                   }
+                   catch (Exception ex)
+                   {
+                       await e.Channel.SendMessage($"💢 Fehler: {ex.Message}").ConfigureAwait(false);
+                   }
+               });
+
+            cgb.CreateCommand(Module.Prefix + "lstfilterjoinwords")
+               .Alias(Module.Prefix + "lfjw")
+               .Description("Zeigt Liste der gefilterten Wörter." +
+                            $" | `{Prefix}lfjw`")
+               .Do(async e =>
+               {
+                   try
+                   {
+                       Classes.ServerPermissions serverPerms;
+                       if (!PermissionsHandler.PermissionsDict.TryGetValue(e.Server.Id, out serverPerms))
+                           return;
+                       await e.Channel.SendMessage($"Es gibt `{serverPerms.JoinWords.Count}` gefilterte Wörter.\n" +
+                           string.Join("\n", serverPerms.JoinWords)).ConfigureAwait(false);
+                   }
+                   catch (Exception ex)
+                   {
+                       await e.Channel.SendMessage($"💢 Fehler: {ex.Message}").ConfigureAwait(false);
+                   }
+               });
+
+            cgb.CreateCommand(Module.Prefix + "srvrfilterjoinwords")
+                .Alias(Module.Prefix + "sfjw")
+                .Description($"Aktiviert, oder deaktiviert automatisches Bannen von Personen die auf den Server joinen, deren Namen die verbotene Wörter enthalten. | `{Prefix}sfjw disable`")
+                .Parameter("bool")
+                .Do(async e =>
+                {
+                    try
+                    {
+                        var state = PermissionHelper.ValidateBool(e.GetArg("bool"));
+                        await PermissionsHandler.SetServerJoinWordPermission(e.Server, state).ConfigureAwait(false);
+                        await e.Channel.SendMessage($"JoinWort Filterung wurde **{(state ? "aktiviert" : "deaktiviert")}** auf diesem Server.")
+                        .ConfigureAwait(false);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        await e.Channel.SendMessage($"💢 Fehler: {ex.Message}").ConfigureAwait(false);
+                    }
+                });
+
+            cgb.CreateCommand(Module.Prefix + "resetWarns")
+                .Alias(Module.Prefix + "rw")
+                .Description($"Resettet die Warn-Punkte.")
+                .AddCheck(SimpleCheckers.OwnerOnly())
+                .Parameter("user", ParameterType.Required)
+                .Do(async e =>
+                {
+                    var user = e.GetArg("user");
+                    var usr = e.Server.FindUsers(user).FirstOrDefault();
+                    if (usr == null)
+                    {
+                        await e.Channel.SendMessage("Benutzer nicht gefunden.").ConfigureAwait(false);
+                        return;
+                    }
+                    var uid = (long)usr.Id;
+                    var sid = (long)e.Server.Id;
+
+                    Warns ldm = DbHandler.Instance.FindOne<Warns>(p => p.UserId == uid && p.ServerId == sid);
+
+                    if (ldm != null)
+                    {
+                        ldm.timesWarned = 0;
+                        DbHandler.Instance.Save(ldm);
+                    }
+                });
+
+            cgb.CreateCommand(Module.Prefix + "showWarnPoints")
+                .Alias(Module.Prefix + "swp")
+                .Description($"Zeigt die Warn-Punkte.")
+                .AddCheck(SimpleCheckers.ManageMessages())
+                .Parameter("user", ParameterType.Required)
+                .Do(async e =>
+                {
+                    var user = e.GetArg("user");
+                    var usr = e.Server.FindUsers(user).FirstOrDefault();
+                    if (usr == null)
+                    {
+                        await e.Channel.SendMessage("Benutzer nicht gefunden.").ConfigureAwait(false);
+                        return;
+                    }
+                    var uid = (long)usr.Id;
+                    var sid = (long)e.Server.Id;
+
+                    Warns ldm = DbHandler.Instance.FindOne<Warns>(p => p.UserId == uid && p.ServerId == sid);
+
+                    if (ldm != null)
+                    {
+                        await e.Channel.SendMessage($"{usr.Mention} hat derzeit {ldm.timesWarned} Punkte. Und hat eine Gesamtanzahl von {ldm.totalWarns} Verwarnungen!");
+                    }
+                    else
+                    {
+                        await e.Channel.SendMessage($"{usr.Mention} wurde noch nie verwarnt.");
                     }
                 });
         }

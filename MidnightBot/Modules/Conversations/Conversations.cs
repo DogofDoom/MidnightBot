@@ -42,13 +42,14 @@ namespace MidnightBot.Modules.Conversations
                         var text = e.GetArg ("text");
                         if (string.IsNullOrWhiteSpace (text))
                             return;
-                        await Task.Run (() =>
-                             Classes.DbHandler.Instance.Connection.Insert(new DataModels.UserQuote()
-                             {
-                                 DateAdded = DateTime.Now,
-                                 Keyword = e.GetArg ("keyword").ToLowerInvariant (),
-                                 Text = text,
-                                 UserName = e.User.Name,
+                        await Task.Run(() =>
+                            Classes.DbHandler.Instance.Connection.Insert(new DataModels.UserQuote()
+                            {
+                                DateAdded = DateTime.Now,
+                                Keyword = e.GetArg("keyword").ToLowerInvariant(),
+                                Text = text,
+                                UserName = e.User.Name,
+                                ID = (long)e.User.Id,
                              })).ConfigureAwait (false);
 
                         await e.Channel.SendMessage ("`Neues Zitat hinzugefügt.`").ConfigureAwait (false);
@@ -80,7 +81,7 @@ namespace MidnightBot.Modules.Conversations
                     .Parameter ("quote",ParameterType.Required)
                     .Do (async e =>
                     {
-                        var text = e.GetArg ("quote")?.Trim ();
+                        var text = e.GetArg ("quote")?.Trim ().ToLowerInvariant();
                         if (string.IsNullOrWhiteSpace (text))
                             return;
                         await Task.Run (() =>
@@ -88,7 +89,7 @@ namespace MidnightBot.Modules.Conversations
                             if (MidnightBot.IsOwner (e.User.Id))
                                 Classes.DbHandler.Instance.DeleteWhere<UserQuote> (uq => uq.Keyword == text);
                             else
-                                Classes.DbHandler.Instance.DeleteWhere<UserQuote> (uq => uq.Keyword == text && uq.UserName == e.User.Name || uq.Keyword == e.User.Name.ToLowerInvariant());
+                                Classes.DbHandler.Instance.DeleteWhere<UserQuote> (uq => uq.Keyword == text && uq.Id == (long)e.User.Id || uq.Keyword == e.User.Name.ToLowerInvariant());
                         }).ConfigureAwait (false);
 
                         await e.Channel.SendMessage ("`Erledigt.`").ConfigureAwait (false);
@@ -113,7 +114,7 @@ namespace MidnightBot.Modules.Conversations
                     .Parameter ("quote",ParameterType.Required)
                     .Do (async e =>
                     {
-                        var text = e.GetArg ("quote")?.Trim ();
+                        var text = e.GetArg ("quote")?.Trim ().ToLowerInvariant();
                         var allQuotes = "";
                         var number = 1;
                         if (string.IsNullOrWhiteSpace (text))
