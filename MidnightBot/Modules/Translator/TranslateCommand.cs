@@ -32,7 +32,7 @@ namespace MidnightBot.Modules.Translator
                     return;
 
                 string translation = await t.Translate (text,from,to).ConfigureAwait (false);
-                await e.Channel.SendMessage ( translation).ConfigureAwait (false);
+                await e.Channel.SendMessage ($"{e.User.Mention} hier ist die Übersetzung:\nUrsprung({from}): {text}\nÜbersetzung({to}):{translation}").ConfigureAwait (false);
             }
             catch (Exception ex)
             {
